@@ -8,11 +8,13 @@ import { MdDialog, MdDialogRef } from '@angular/material';
   styleUrls: ['./quiz-failure-dlg.component.scss']
 })
 export class QuizFailureDlgComponent implements OnInit {
+  public FailureInfos: string[] = [];
 
   constructor(private _dlgsvc: DialogService,
-    public dialogRef: MdDialogRef<QuizFailureDlgComponent>) { }
+    public dialogRef: MdDialogRef<QuizFailureDlgComponent>) { 
+      this.FailureInfos = this._dlgsvc.FailureInfos;
+  }
 
   ngOnInit() {
   }
-
 }
