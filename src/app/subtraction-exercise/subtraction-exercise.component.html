@@ -1,5 +1,5 @@
 <md-card class="demo-kmp demo-basic">
-  <md-toolbar color="primary">{{'Home.MultiplicationExercises' | translate}}</md-toolbar>
+  <md-toolbar color="primary">{{'Home.SubtractionExercises' | translate}}</md-toolbar>
   <md-card-content>
     <div *ngIf="!quizInstance.IsStarted">
       <md-input-container class="demo-full-width">
@@ -42,7 +42,7 @@
         <md-input-container>
           <input mdInput type="number" readonly placeholder="{{'Math.LeftNumber' | translate}}" [value]="quiz.LeftNumber">
         </md-input-container>
-        <span> × </span>
+        <span> - </span>
         <md-input-container>
           <input mdInput type="number" readonly placeholder="{{'Math.RightNumber' | translate}}" [value]="quiz.RightNumber">
         </md-input-container>

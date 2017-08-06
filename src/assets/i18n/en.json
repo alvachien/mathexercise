@@ -9,14 +9,19 @@
         "WelcomeDetail": "Open the sidenav to choose a demo to continue.",
         "MathExercise": "Math Exercise",
         "DivisionExercises": "Division Exercises",
-        "MultiplicationExercies": "Multiplication Exercises",
+        "MultiplicationExercises": "Multiplication Exercises",
+        "AdditionExercises": "Addition Exercises",
+        "SubtractionExercises": "Subtraction Exercises",
 
         "HomePage": "Home",
         "CloseButton": "CLOSE",
         "SubmitButton": "SUBMIT",
         "StartButton": "START",
+        "ContinueButton": "CONTINUE",
         "QuizAmount": "Amount of Quiz",
-        "FailedFactor": "Failed Factor"
+        "FailedFactor": "Failed Factor",
+        "Failure": "Failure",
+        "Summary": "Summary"
     },
     "Math": {
         "Sum": "Sum",
@@ -27,6 +32,8 @@
         "Divisor": "Divisor",
         "Remainder": "Remainder",
         "Numerator": "Numerator",
-        "Denominator": "Denominator"
+        "Denominator": "Denominator",
+        "LeftNumber": "LeftNumber",
+        "RightNumber": "RightNumber"
     }
 }

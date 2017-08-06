@@ -5,17 +5,23 @@
     },
     "Home": {
         "AppTitle": "数学练习",
-        "WelcomeTitle": "基于TypeScript的数据结构及算法的示例程序",
-        "WelcomeDetail": "打开侧边栏以选择一个示例程序。",
+        "WelcomeTitle": "基于TypeScript的数学练习程序",
+        "WelcomeDetail": "打开侧边栏以选择一个测试程序。",
         "MathExercise": "数学测试",
-        "DividExercises": "除法测验",
+        "DivisionExercises": "除法测试",
+        "MultiplicationExercises": "乘法测试",
+        "AdditionExercises": "加法测试",
+        "SubtractionExercises": "减法测试",
 
         "HomePage": "起始页",
         "CloseButton": "关闭",
         "SubmitButton": "提交",
         "StartButton": "开始",
+        "ContinueButton": "继续",
         "QuizAmount": "试题数量",
-        "FailedFactor": "错误因子"
+        "FailedFactor": "错误因子",
+        "Failure": "失败",
+        "Summary": "总结"
     },
     "Math": {
         "Sum": "和",
@@ -26,6 +32,8 @@
         "Divisor": "除数",
         "Remainder": "余数",
         "Numerator": "分子",
-        "Denominator": "分母"
+        "Denominator": "分母",
+        "LeftNumber": "左",
+        "RightNumber": "右"
     }
 }

@@ -1,30 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-
-// 和 sum
-// 差 difference
-// 积 product
-// 商 quotient
-// dividend 被除数  numerator 分子
-// divisor 除数 denominator 分母
-// quotient 商 
-// remainder 余数
-
-class DividedQuiz {
-  public QuizIndex: number;
-  public Dividend: number;
-  public Divisor: number;
-  public Quotient: number;
-  public Remainder: number;
-
-  public InputtedQuotient: number;
-  public InputtedRemainder: number;
-
-  public getFormattedString() :string {
-    return this.QuizIndex.toString() + ": " + this.Dividend.toString() 
-      + " ÷ " + this.Divisor.toString() + " = " + this.Quotient.toString() 
-      + ((this.Remainder === 0)? "" : ("... " + this.Remainder.toString()));
-  }
-}
+import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, DivisionQuizItem } from '../model';
+import { MdDialog } from '@angular/material';
+import { DialogService } from '../dialog.service';
+import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
+import { QuizSummaryComponent } from '../quiz-summary/quiz-summary.component';
 
 @Component({
   selector: 'app-divide-exercise',
@@ -38,65 +17,47 @@ export class DivideExerciseComponent implements OnInit {
   DivisorRangeEnd: number = 10;
   DividendRangeBgn: number = 10;
   DividendRangeEnd: number = 100;
-  IsQuizStarted: boolean = false;
-  IsQuizCompleted: boolean = false;
-  failedQuizs: string[] = [];
-  QuizSummaryInfo: string = '';
   
-  public Quizs: DividedQuiz[] = [];
-  private latestQuizIndex: number;
-  private quizTimeSpent: number;
-  private quizTimeStart: number;
+  quizInstance: PrimarySchoolMathQuiz = null;
+  QuizItems: DivisionQuizItem[] = [];
 
-  constructor() { }
+  constructor(private dialog: MdDialog,
+    private _dlgsvc: DialogService) {
+    this.quizInstance = new PrimarySchoolMathQuiz();
+  }
 
   ngOnInit() {
   }
 
   public onQuizStart(): void {
-    if (this.StartQuizAmount <= 0) {
-      this.IsQuizStarted = false;
-      return;
+    // Start it!
+    this.quizInstance.Start(this.StartQuizAmount, this.FailedQuizFactor);
+
+    // Generated items
+    for (let i = 0; i < this.quizInstance.CurrentRun().ItemsCount; i++) {
+      let dq: DivisionQuizItem = this.generateQuizItem(i + 1);
+
+      this.QuizItems.push(dq);
     }
 
-    this.Quizs = [];
-    this.latestQuizIndex = 0;
-    this.quizTimeSpent = 0;
-    this.quizTimeStart = new Date().getTime(); // Start the time
-    this.IsQuizCompleted = false;
-    for(let i = 0; i < this.StartQuizAmount; i++) {
-
-      let dq: DividedQuiz = this.generateQuiz(i + 1);
-
-      this.Quizs.push(dq);
-    }
-    this.latestQuizIndex = this.StartQuizAmount;
-
-    this.IsQuizStarted = true;
+    // Current run
+    this.quizInstance.CurrentRun().SectionStart();
   }
 
-  private generateQuiz(nIdx: number): DividedQuiz {
-      let dq: DividedQuiz = new DividedQuiz();
-      dq.QuizIndex = nIdx;
-      dq.Dividend = Math.floor(Math.random() * (this.DividendRangeEnd - this.DividendRangeBgn) + this.DividendRangeBgn );
-      dq.Divisor = Math.floor(Math.random() * (this.DivisorRangeEnd - this.DivisorRangeBgn) + this.DivisorRangeBgn );
-      if (dq.Divisor === 0) {
-        dq.Divisor += 1;
-      }
-      dq.Quotient = Math.floor(dq.Dividend / dq.Divisor);
-      dq.Remainder = dq.Dividend % dq.Divisor;
-
-      return dq;
-  }
-  public IsQuizFulfilled(): boolean {
-    if (this.Quizs.length <= 0) {
-      return true;
+  public CanSubmit(): boolean {
+    if (!this.quizInstance.IsStarted) {
+      return false;
     }
-    for(let quiz of this.Quizs) {
+
+    if (this.QuizItems.length <= 0) {
+      return false;
+    }
+
+    for (let quiz of this.QuizItems) {
       if (quiz.InputtedQuotient === undefined
-      || quiz.InputtedRemainder === undefined
-      || quiz.InputtedQuotient === null
-      || quiz.InputtedRemainder === null){
+        || quiz.InputtedQuotient === null
+        || quiz.InputtedRemainder === undefined
+        || quiz.InputtedRemainder === null) {
         return false;
       }
     }
@@ -105,39 +66,54 @@ export class DivideExerciseComponent implements OnInit {
   }
 
   public onQuizSubmit(): void {
-    const end = new Date().getTime();
-    this.quizTimeSpent += (end - this.quizTimeStart);
-
-    this.failedQuizs = [];
-    let failed: DividedQuiz[] = [];
-    for(let quiz of this.Quizs) {
-      if (quiz.InputtedQuotient === quiz.Quotient
-        && quiz.InputtedRemainder === quiz.Remainder) {
-          // Correct!
-      } else {
+    let failed: DivisionQuizItem[] = [];
+    this._dlgsvc.FailureInfos = [];
+    for (let quiz of this.QuizItems) {
+      if (!quiz.IsCorrect()) {
         failed.push(quiz);
-        this.failedQuizs.push(quiz.getFormattedString() + "; inputted is:  "
-          + quiz.InputtedQuotient.toString()  + " ... "
-          + quiz.InputtedRemainder.toString());
+        this._dlgsvc.FailureInfos.push(quiz.getFormattedString());
       }
     }
 
     if (failed.length > 0) {
-      this.Quizs = [];
-      let nNew = failed.length * this.FailedQuizFactor;
-      for(let i = 0; i < nNew; i++) {
-        let dq = this.generateQuiz(i + 1 + this.latestQuizIndex);
-        this.Quizs.push(dq);
+      let dialogRef = this.dialog.open(QuizFailureDlgComponent, {
+        disableClose: false,
+        width: '500px'
+      });
+
+      dialogRef.afterClosed().subscribe(x => {
+        this.quizInstance.SubmitCurrentRun(failed.length);
+        this.QuizItems = [];
+
+        for (let i = 0; i < this.quizInstance.CurrentRun().ItemsCount; i++) {
+          let dq: DivisionQuizItem = this.generateQuizItem(i + 1);
+
+          this.QuizItems.push(dq);
+        }
+
+        // Current run
+        this.quizInstance.CurrentRun().SectionStart();
+      });
+    } else {
+      // Succeed!
+      this.quizInstance.SubmitCurrentRun(0);
+
+      for (let run of this.quizInstance.ElderRuns()) {
+        this._dlgsvc.SummaryInfos.push(run.getSummaryInfo());
       }
 
-      this.latestQuizIndex += nNew;
-      this.quizTimeStart = new Date().getTime();
-    } else {
-      // Quiz is stopped!
-      this.IsQuizStarted = false;
-      this.IsQuizCompleted = true;
-
-      this.QuizSummaryInfo = 'Total spent: ' + (this.quizTimeSpent / 1000).toString() + " second with amount of quizs: " + this.latestQuizIndex.toString();
+      let dialogRef = this.dialog.open(QuizSummaryComponent, {
+        disableClose: false,
+        width: '500px'
+      });
     }
+  }
+
+  private generateQuizItem(nIdx: number): DivisionQuizItem {
+      let dq: DivisionQuizItem = new DivisionQuizItem(Math.floor(Math.random() * (this.DividendRangeEnd - this.DividendRangeBgn) + this.DividendRangeBgn ),
+        Math.floor(Math.random() * (this.DivisorRangeEnd - this.DivisorRangeBgn) + this.DivisorRangeBgn));
+      dq.QuizIndex = nIdx;
+
+      return dq;
   }
 }

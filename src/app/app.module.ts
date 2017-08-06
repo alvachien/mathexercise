@@ -48,6 +48,11 @@ import { AppRoutes } from './app.routes';
 import { Home, AppComponent } from './app.component';
 import { DivideExerciseComponent } from './divide-exercise/divide-exercise.component';
 import { MultiplicationQuizComponent } from './multiplication-quiz/multiplication-quiz.component';
+import { AdditionExerciseComponent } from './addition-exercise/addition-exercise.component';
+import { SubtractionExerciseComponent } from './subtraction-exercise/subtraction-exercise.component';
+import { QuizFailureDlgComponent } from './quiz-failure-dlg/quiz-failure-dlg.component';
+import { QuizSummaryComponent } from './quiz-summary/quiz-summary.component';
+import { DialogService } from './dialog.service';
 
 @NgModule({
   exports: [
@@ -98,8 +103,16 @@ export function HttpLoaderFactory(http: HttpClient) {
     Home,
     AppComponent,
     DivideExerciseComponent,
-    MultiplicationQuizComponent
+    MultiplicationQuizComponent,
+    AdditionExerciseComponent,
+    SubtractionExerciseComponent,
+    QuizFailureDlgComponent,
+    QuizSummaryComponent
   ],
+  entryComponents: [
+    QuizFailureDlgComponent,
+    QuizSummaryComponent
+  ], 
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -118,7 +131,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     HttpModule
   ],
-  providers: [],
+  providers: [DialogService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

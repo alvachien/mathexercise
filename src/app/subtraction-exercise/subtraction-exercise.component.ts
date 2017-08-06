@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, MultiplicationQuizItem } from '../model';
+import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, SubtractionQuizItem } from '../model';
 import { MdDialog } from '@angular/material';
 import { DialogService } from '../dialog.service';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
 import { QuizSummaryComponent } from '../quiz-summary/quiz-summary.component';
 
 @Component({
-  selector: 'app-multiplication-quiz',
-  templateUrl: './multiplication-quiz.component.html',
-  styleUrls: ['./multiplication-quiz.component.scss']
+  selector: 'app-subtraction-exercise',
+  templateUrl: './subtraction-exercise.component.html',
+  styleUrls: ['./subtraction-exercise.component.scss']
 })
-export class MultiplicationQuizComponent implements OnInit {
+export class SubtractionExerciseComponent implements OnInit {
   StartQuizAmount: number = 20;
   FailedQuizFactor: number = 1;
   LeftNumberRangeBgn: number = 1;
@@ -19,7 +19,7 @@ export class MultiplicationQuizComponent implements OnInit {
   RightNumberRangeEnd: number = 10;
 
   quizInstance: PrimarySchoolMathQuiz = null;
-  QuizItems: MultiplicationQuizItem[] = [];
+  QuizItems: SubtractionQuizItem[] = [];
 
   constructor(private dialog: MdDialog,
     private _dlgsvc: DialogService) {
@@ -29,8 +29,8 @@ export class MultiplicationQuizComponent implements OnInit {
   ngOnInit() {
   }
 
-  private generateQuizItem(idx: number): MultiplicationQuizItem {
-    let qz: MultiplicationQuizItem = new MultiplicationQuizItem(Math.floor(Math.random() * (this.LeftNumberRangeEnd - this.LeftNumberRangeBgn) + this.LeftNumberRangeBgn),
+  private generateQuizItem(idx: number): SubtractionQuizItem {
+    let qz: SubtractionQuizItem = new SubtractionQuizItem(Math.floor(Math.random() * (this.LeftNumberRangeEnd - this.LeftNumberRangeBgn) + this.LeftNumberRangeBgn),
       Math.floor(Math.random() * (this.RightNumberRangeEnd - this.RightNumberRangeBgn) + this.RightNumberRangeBgn));
     qz.QuizIndex = idx;
     return qz;
@@ -43,7 +43,7 @@ export class MultiplicationQuizComponent implements OnInit {
     // Generated items
     for (let i = 0; i < this.quizInstance.CurrentRun().ItemsCount; i++) {
 
-      let dq: MultiplicationQuizItem = this.generateQuizItem(i + 1);
+      let dq: SubtractionQuizItem = this.generateQuizItem(i + 1);
 
       this.QuizItems.push(dq);
     }
@@ -72,7 +72,7 @@ export class MultiplicationQuizComponent implements OnInit {
   }
 
   public onQuizSubmit(): void {
-    let failed: MultiplicationQuizItem[] = [];
+    let failed: SubtractionQuizItem[] = [];
     this._dlgsvc.FailureInfos = [];
     for (let quiz of this.QuizItems) {
       if (!quiz.IsCorrect()) {
@@ -84,7 +84,7 @@ export class MultiplicationQuizComponent implements OnInit {
     if (failed.length > 0) {
       let dialogRef = this.dialog.open(QuizFailureDlgComponent, {
         disableClose: false,
-        width: '500px'
+        width: '700px'
       });
 
       dialogRef.afterClosed().subscribe(x => {
@@ -92,7 +92,7 @@ export class MultiplicationQuizComponent implements OnInit {
         this.QuizItems = [];
 
         for (let i = 0; i < this.quizInstance.CurrentRun().ItemsCount; i++) {
-          let dq: MultiplicationQuizItem = this.generateQuizItem(i + 1);
+          let dq: SubtractionQuizItem = this.generateQuizItem(i + 1);
 
           this.QuizItems.push(dq);
         }
@@ -110,7 +110,7 @@ export class MultiplicationQuizComponent implements OnInit {
 
       let dialogRef = this.dialog.open(QuizSummaryComponent, {
         disableClose: false,
-        width: '500px'
+        width: '700px'
       });
     }
   }

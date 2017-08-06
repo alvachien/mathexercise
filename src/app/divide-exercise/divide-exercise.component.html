@@ -2,7 +2,7 @@
   <md-toolbar color="primary">{{'Home.DivisionExercises' | translate}}</md-toolbar>
   <md-card-content>
     <div>
-      <div *ngIf="!IsQuizStarted">
+      <div *ngIf="!quizInstance.IsStarted">
         <md-input-container class="demo-full-width">
           <input mdInput type="number" placeholder="{{'Home.QuizAmount' | translate}}" [(ngModel)]="StartQuizAmount" name="startquizamt" required>
           <md-error>This field is required</md-error>
@@ -29,16 +29,10 @@
         </div>
       </div>
 
-      <div *ngIf="failedQuizs.length > 0" style="border: 1px">
-        <div class="demo-full-width" *ngFor="let fq of failedQuizs">
-          <div style="color:#FF0000;">{{fq}}</div>
-        </div>
-      </div>
-
-      <div *ngIf="IsQuizStarted">
-        <div class="demo-full-width" *ngFor="let quiz of Quizs">
+      <div *ngIf="quizInstance.IsStarted">
+        <div class="demo-full-width" *ngFor="let quiz of QuizItems">
           <md-input-container>
-            <input mdInput type="number" readonly placeholder="Index" [value]="quiz.QuizIndex">
+            <input mdInput type="number" readonly placeholder="#" [value]="quiz.QuizIndex">
           </md-input-container>          
           <md-input-container>
             <input mdInput type="number" readonly placeholder="{{'Math.Dividend' | translate}}" [value]="quiz.Dividend">
@@ -58,14 +52,10 @@
         </div>
       </div>
     </div>
-
-    <div *ngIf="IsQuizCompleted">
-      <p>{{QuizSummaryInfo}}</p>
-    </div>
   </md-card-content>
 
   <md-card-actions>
-    <button md-button (click)="onQuizStart()" [disabled]="IsQuizStarted">{{'Home.StartButton' | translate }}</button>
-    <button md-button (click)="onQuizSubmit()" [disabled]="!IsQuizStarted && IsQuizFulfilled()">{{'Home.SubmitButton' | translate }}</button>
+    <button md-button (click)="onQuizStart()" [disabled]="quizInstance.IsStarted">{{'Home.StartButton' | translate }}</button>
+    <button md-button (click)="onQuizSubmit()" [disabled]="!CanSubmit()">{{'Home.SubmitButton' | translate }}</button>
   </md-card-actions>
 </md-card>

@@ -15,8 +15,10 @@ export class Home { }
 })
 export class AppComponent {
   navItems = [
-    { name: 'Home.DivisionExercises', route: 'divide-exp' },
-    { name: 'Home.MultiplicationExercises', route: 'multi-quiz' },
+    { name: 'Home.AdditionExercises', route: 'add-ex' },
+    { name: 'Home.SubtractionExercises', route: 'sub-ex' },
+    { name: 'Home.MultiplicationExercises', route: 'multi-ex' },
+    { name: 'Home.DivisionExercises', route: 'divide-ex' },
   ];
   selectedLanguage: string;
   availableLanguages = [
