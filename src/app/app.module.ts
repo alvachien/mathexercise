@@ -47,6 +47,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppRoutes } from './app.routes';
 import { Home, AppComponent } from './app.component';
 import { DivideExerciseComponent } from './divide-exercise/divide-exercise.component';
+import { MultiplicationQuizComponent } from './multiplication-quiz/multiplication-quiz.component';
 
 @NgModule({
   exports: [
@@ -96,7 +97,8 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     Home,
     AppComponent,
-    DivideExerciseComponent
+    DivideExerciseComponent,
+    MultiplicationQuizComponent
   ],
   imports: [
     BrowserModule,

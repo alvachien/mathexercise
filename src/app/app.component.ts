@@ -15,7 +15,8 @@ export class Home { }
 })
 export class AppComponent {
   navItems = [
-    { name: 'Divid Exercise', route: 'divide-exp' },
+    { name: 'Home.DivisionExercises', route: 'divide-exp' },
+    { name: 'Home.MultiplicationExercises', route: 'multi-quiz' },
   ];
   selectedLanguage: string;
   availableLanguages = [

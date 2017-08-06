@@ -8,7 +8,8 @@
         "WelcomeTitle": "Welcome to the Math Exercises which written totally in TypeScript!",
         "WelcomeDetail": "Open the sidenav to choose a demo to continue.",
         "MathExercise": "Math Exercise",
-        "DividExercises": "Exercies for Divid",
+        "DivisionExercises": "Division Exercises",
+        "MultiplicationExercies": "Multiplication Exercises",
 
         "HomePage": "Home",
         "CloseButton": "CLOSE",

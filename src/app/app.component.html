@@ -2,7 +2,7 @@
   <md-sidenav #start>
     <md-nav-list>
       <a *ngFor="let navItem of navItems" md-list-item (click)="start.close()" [routerLink]="[navItem.route]">
-        {{navItem.name}}
+        {{navItem.name | translate}}
       </a>
     </md-nav-list>
     <hr />
