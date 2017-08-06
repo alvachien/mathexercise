@@ -4,6 +4,7 @@ import { MdDialog } from '@angular/material';
 import { DialogService } from '../dialog.service';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
 import { QuizSummaryComponent } from '../quiz-summary/quiz-summary.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-divide-exercise',
@@ -22,7 +23,8 @@ export class DivideExerciseComponent implements OnInit {
   QuizItems: DivisionQuizItem[] = [];
 
   constructor(private dialog: MdDialog,
-    private _dlgsvc: DialogService) {
+    private _dlgsvc: DialogService,
+    private _router: Router) {
     this.quizInstance = new PrimarySchoolMathQuiz();
   }
 
@@ -98,14 +100,12 @@ export class DivideExerciseComponent implements OnInit {
       // Succeed!
       this.quizInstance.SubmitCurrentRun(0);
 
-      for (let run of this.quizInstance.ElderRuns()) {
-        this._dlgsvc.SummaryInfos.push(run.getSummaryInfo());
-      }
+      this._dlgsvc.CurrentQuiz = this.quizInstance;
+      // for (let run of this.quizInstance.ElderRuns()) {
+      //   this._dlgsvc.SummaryInfos.push(run.getSummaryInfo());
+      // }
 
-      let dialogRef = this.dialog.open(QuizSummaryComponent, {
-        disableClose: false,
-        width: '500px'
-      });
+      this._router.navigate(['/quiz-sum']);
     }
   }
 

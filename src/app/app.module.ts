@@ -110,8 +110,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     QuizSummaryComponent
   ],
   entryComponents: [
-    QuizFailureDlgComponent,
-    QuizSummaryComponent
+    QuizFailureDlgComponent
   ], 
   imports: [
     BrowserModule,
