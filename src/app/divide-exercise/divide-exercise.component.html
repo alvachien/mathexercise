@@ -1,0 +1,71 @@
+<md-card class="demo-kmp demo-basic">
+  <md-toolbar color="primary">{{'Home.DividExercises' | translate}}</md-toolbar>
+  <md-card-content>
+    <div>
+      <div *ngIf="!IsQuizStarted">
+        <md-input-container class="demo-full-width">
+          <input mdInput type="number" placeholder="{{'Home.QuizAmount' | translate}}" [(ngModel)]="StartQuizAmount" name="startquizamt" required>
+          <md-error>This field is required</md-error>
+        </md-input-container>
+        <md-input-container class="demo-full-width">
+          <input mdInput type="number" placeholder="{{'Home.FailedFactor' | translate }}" [(ngModel)]="FailedQuizFactor" name="fquizfactor" required>
+          <md-error>This field is required</md-error>
+        </md-input-container>
+        <div class="demo-full-width">
+          <md-input-container>
+            <input mdInput type="number" placeholder="{{'Math.Dividend' | translate}}" [(ngModel)]="DividendRangeBgn" name="dvdendrbgn" required>
+          </md-input-container>
+          <md-input-container>
+            <input mdInput type="number" placeholder="{{'Math.Dividend' | translate}}" [(ngModel)]="DividendRangeEnd" name="dvdendrend" required>
+          </md-input-container>
+        </div>
+        <div class="demo-full-width">
+          <md-input-container>
+            <input mdInput type="number" placeholder="{{'Math.Divisor' | translate}}" [(ngModel)]="DivisorRangeBgn" name="dvsorrbgn" required>
+          </md-input-container>
+          <md-input-container>
+            <input mdInput type="number" placeholder="{{'Math.Divisor' | translate}}" [(ngModel)]="DivisorRangeEnd" name="dvsorrend" required>
+          </md-input-container>
+        </div>
+      </div>
+
+      <div *ngIf="failedQuizs.length > 0" style="border: 1px">
+        <div class="demo-full-width" *ngFor="let fq of failedQuizs">
+          <div style="color:#FF0000;">{{fq}}</div>
+        </div>
+      </div>
+
+      <div *ngIf="IsQuizStarted">
+        <div class="demo-full-width" *ngFor="let quiz of Quizs">
+          <md-input-container>
+            <input mdInput type="number" readonly placeholder="Index" [value]="quiz.QuizIndex">
+          </md-input-container>          
+          <md-input-container>
+            <input mdInput type="number" readonly placeholder="{{'Math.Dividend' | translate}}" [value]="quiz.Dividend">
+          </md-input-container>
+          <span> ÷ </span>
+          <md-input-container>
+            <input mdInput type="number" readonly placeholder="{{'Math.Divisor' | translate}}" [value]="quiz.Divisor">
+          </md-input-container>
+          <span> = </span>
+          <md-input-container>
+            <input mdInput type="number" placeholder="{{'Math.Quotient' | translate}}" [(ngModel)]="quiz.InputtedQuotient" name="iptquot">
+          </md-input-container>
+          <span> ... </span>
+          <md-input-container>
+            <input mdInput type="number" placeholder="{{'Math.Remainder' | translate}}" [(ngModel)]="quiz.InputtedRemainder" name="iptrmd">
+          </md-input-container>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="IsQuizCompleted">
+      <p>{{QuizSummaryInfo}}</p>
+    </div>
+  </md-card-content>
+
+  <md-card-actions>
+    <button md-button (click)="onQuizStart()" [disabled]="IsQuizStarted">{{'Home.StartButton' | translate }}</button>
+    <button md-button (click)="onQuizSubmit()" [disabled]="!IsQuizStarted && IsQuizFulfilled()">{{'Home.SubmitButton' | translate }}</button>
+  </md-card-actions>
+</md-card>

@@ -1,0 +1,31 @@
+{
+    "Languages": {
+        "en": "English",
+        "zh": "Simpliled Chinese"
+    },
+    "Home": {
+        "AppTitle": "Math Exercises",
+        "WelcomeTitle": "Welcome to the Math Exercises which written totally in TypeScript!",
+        "WelcomeDetail": "Open the sidenav to choose a demo to continue.",
+        "MathExercise": "Math Exercise",
+        "DividExercises": "Exercies for Divid",
+
+        "HomePage": "Home",
+        "CloseButton": "CLOSE",
+        "SubmitButton": "SUBMIT",
+        "StartButton": "START",
+        "QuizAmount": "Amount of Quiz",
+        "FailedFactor": "Failed Factor"
+    },
+    "Math": {
+        "Sum": "Sum",
+        "Difference": "Difference",
+        "Product": "Product",
+        "Quotient": "Quotient",
+        "Dividend": "Dividend",
+        "Divisor": "Divisor",
+        "Remainder": "Remainder",
+        "Numerator": "Numerator",
+        "Denominator": "Denominator"
+    }
+}
