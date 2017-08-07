@@ -7,11 +7,11 @@
         "AppTitle": "数学练习",
         "WelcomeTitle": "基于TypeScript的数学练习程序",
         "WelcomeDetail": "打开侧边栏以选择一个测试程序。",
-        "MathExercise": "数学测试",
-        "DivisionExercises": "除法测试",
-        "MultiplicationExercises": "乘法测试",
-        "AdditionExercises": "加法测试",
-        "SubtractionExercises": "减法测试",
+        "MathExercise": "数学练习",
+        "DivisionExercises": "除法练习",
+        "MultiplicationExercises": "乘法练习",
+        "AdditionExercises": "加法练习",
+        "SubtractionExercises": "减法练习",
 
         "HomePage": "起始页",
         "CloseButton": "关闭",
@@ -19,9 +19,12 @@
         "StartButton": "开始",
         "ContinueButton": "继续",
         "QuizAmount": "试题数量",
-        "FailedFactor": "错误因子",
+        "FailedFactor": "错误扩散因子",
         "Failure": "失败",
-        "Summary": "总结"
+        "Summary": "总结",
+        "Total": "总计",
+        "TimeSpentInSeconds": "用时 (秒)",
+        "AvgTimeSpentEachInSeconds": "平均每题用时 (秒)"
     },
     "Math": {
         "Sum": "和",

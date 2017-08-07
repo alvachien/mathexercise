@@ -6,8 +6,8 @@
     "Home": {
         "AppTitle": "Math Exercises",
         "WelcomeTitle": "Welcome to the Math Exercises which written totally in TypeScript!",
-        "WelcomeDetail": "Open the sidenav to choose a demo to continue.",
-        "MathExercise": "Math Exercise",
+        "WelcomeDetail": "Open the sidenav to choose an exercise to continue.",
+        "MathExercise": "Math Exercises",
         "DivisionExercises": "Division Exercises",
         "MultiplicationExercises": "Multiplication Exercises",
         "AdditionExercises": "Addition Exercises",
@@ -21,7 +21,10 @@
         "QuizAmount": "Amount of Quiz",
         "FailedFactor": "Failed Factor",
         "Failure": "Failure",
-        "Summary": "Summary"
+        "Summary": "Summary",
+        "Total": "Total",
+        "TimeSpentInSeconds": "Time spent (s)",
+        "AvgTimeSpentEachInSeconds": "Average time spent (s)"
     },
     "Math": {
         "Sum": "Sum",
