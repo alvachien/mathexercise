@@ -1,8 +1,41 @@
-<md-card class="demo-kmp demo-basic">
+<md-card>
   <md-toolbar color="primary">{{'Home.Summary' | translate}}</md-toolbar>
   <md-card-content>
-    <div class="demo-full-width" *ngFor="let fq of SummaryInfos">
-      <div style="color:#00FF00;">{{fq}}</div>
+    <div class="example-container mat-elevation-z8">
+      <md-table #table [dataSource]="dataSource">
+        <!-- ID Column -->
+        <ng-container cdkColumnDef="runid">
+          <md-header-cell *cdkHeaderCellDef>#</md-header-cell>
+          <md-cell *cdkCellDef="let row"> {{row.id}} </md-cell>
+        </ng-container>
+
+        <!-- Total amount Column -->
+        <ng-container cdkColumnDef="totalamt">
+          <md-header-cell *cdkHeaderCellDef>{{'Home.Total' | translate}}</md-header-cell>
+          <md-cell *cdkCellDef="let row"> {{row.totalamt}} </md-cell>
+        </ng-container>
+
+        <!-- Failed Column -->
+        <ng-container cdkColumnDef="failedamt">
+          <md-header-cell *cdkHeaderCellDef> {{'Home.Failure' | translate}} </md-header-cell>
+          <md-cell *cdkCellDef="let row"> {{row.failedamt}} </md-cell>
+        </ng-container>
+
+        <!-- Timespent Column -->
+        <ng-container cdkColumnDef="timespent">
+          <md-header-cell *cdkHeaderCellDef>{{'Home.TimeSpentInSeconds' | translate}}</md-header-cell>
+          <md-cell *cdkCellDef="let row"> {{row.timespent}} </md-cell>
+        </ng-container>
+
+        <!-- TimespentEach Column -->
+        <ng-container cdkColumnDef="avgtimespent">
+          <md-header-cell *cdkHeaderCellDef>{{'Home.AvgTimeSpentEachInSeconds' | translate}}</md-header-cell>
+          <md-cell *cdkCellDef="let row"> {{row.timespent}} </md-cell>
+        </ng-container>
+        
+        <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
+        <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
+      </md-table>
     </div>
   </md-card-content>
 </md-card>

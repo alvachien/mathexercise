@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ElementRef } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -13,7 +13,7 @@ export class Home { }
   styleUrls: ['./app.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   navItems = [
     { name: 'Home.AdditionExercises', route: 'add-ex' },
     { name: 'Home.SubtractionExercises', route: 'sub-ex' },
@@ -34,6 +34,10 @@ export class AppComponent {
       this._translate.use(this.selectedLanguage);
   }
 
+  ngOnInit() {
+    this.updateDocumentTitle();
+  }
+
   public toggleFullscreen(): void {
     const elem = this._element.nativeElement.querySelector('.demo-content');
     if (elem.requestFullscreen) {
@@ -50,6 +54,14 @@ export class AppComponent {
   onLanguageChange() {
     if (this._translate.currentLang !== this.selectedLanguage) {
       this._translate.use(this.selectedLanguage);
+
+      this.updateDocumentTitle();
     }
   }  
+
+  private updateDocumentTitle() {
+    this._translate.get('Home.AppTitle').subscribe(x => {
+      document.title = x;
+    });
+  }
 }

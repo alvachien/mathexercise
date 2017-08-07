@@ -2,16 +2,18 @@
   <md-toolbar color="primary">{{'Home.MultiplicationExercises' | translate}}</md-toolbar>
   <md-card-content>
     <div *ngIf="!quizInstance.IsStarted">
-      <md-input-container class="demo-full-width">
-        <input mdInput type="number" placeholder="{{'Home.QuizAmount' | translate}}" [(ngModel)]="StartQuizAmount" name="startquizamt"
-          required>
-        <md-error>This field is required</md-error>
-      </md-input-container>
-      <md-input-container class="demo-full-width">
-        <input mdInput type="number" placeholder="{{'Home.FailedFactor' | translate }}" [(ngModel)]="FailedQuizFactor" name="fquizfactor"
-          required>
-        <md-error>This field is required</md-error>
-      </md-input-container>
+      <div class="demo-full-width">
+        <md-input-container>
+          <input mdInput type="number" placeholder="{{'Home.QuizAmount' | translate}}" [(ngModel)]="StartQuizAmount" name="startquizamt"
+            required>
+          <md-error>This field is required</md-error>
+        </md-input-container>
+        <md-input-container>
+          <input mdInput type="number" placeholder="{{'Home.FailedFactor' | translate }}" [(ngModel)]="FailedQuizFactor" name="fquizfactor"
+            required>
+          <md-error>This field is required</md-error>
+        </md-input-container>
+      </div>
       <div class="demo-full-width">
         <md-input-container>
           <input mdInput type="number" placeholder="{{'Math.LeftNumber' | translate}}" [(ngModel)]="LeftNumberRangeBgn" name="leftnrbgn"
@@ -48,7 +50,7 @@
         </md-input-container>
         <span> = </span>
         <md-input-container>
-          <input mdInput type="number" placeholder="{{'Math.Sum' | translate}}" [(ngModel)]="quiz.InputtedResult" name="iptquot">
+          <input mdInput type="number" placeholder="{{'Math.Product' | translate}}" [(ngModel)]="quiz.InputtedResult" name="iptquot">
         </md-input-container>
       </div>
     </div>

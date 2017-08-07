@@ -3,28 +3,38 @@
   <md-card-content>
     <div>
       <div *ngIf="!quizInstance.IsStarted">
-        <md-input-container class="demo-full-width">
-          <input mdInput type="number" placeholder="{{'Home.QuizAmount' | translate}}" [(ngModel)]="StartQuizAmount" name="startquizamt" required>
-          <md-error>This field is required</md-error>
-        </md-input-container>
-        <md-input-container class="demo-full-width">
-          <input mdInput type="number" placeholder="{{'Home.FailedFactor' | translate }}" [(ngModel)]="FailedQuizFactor" name="fquizfactor" required>
-          <md-error>This field is required</md-error>
-        </md-input-container>
         <div class="demo-full-width">
           <md-input-container>
-            <input mdInput type="number" placeholder="{{'Math.Dividend' | translate}}" [(ngModel)]="DividendRangeBgn" name="dvdendrbgn" required>
+            <input mdInput type="number" placeholder="{{'Home.QuizAmount' | translate}}" [(ngModel)]="StartQuizAmount" name="startquizamt"
+              required>
+            <md-error>This field is required</md-error>
           </md-input-container>
           <md-input-container>
-            <input mdInput type="number" placeholder="{{'Math.Dividend' | translate}}" [(ngModel)]="DividendRangeEnd" name="dvdendrend" required>
+            <input mdInput type="number" placeholder="{{'Home.FailedFactor' | translate }}" [(ngModel)]="FailedQuizFactor" name="fquizfactor"
+              required>
+            <md-error>This field is required</md-error>
           </md-input-container>
         </div>
+
         <div class="demo-full-width">
           <md-input-container>
-            <input mdInput type="number" placeholder="{{'Math.Divisor' | translate}}" [(ngModel)]="DivisorRangeBgn" name="dvsorrbgn" required>
+            <input mdInput type="number" placeholder="{{'Math.Dividend' | translate}}" [(ngModel)]="DividendRangeBgn" name="dvdendrbgn"
+              required>
           </md-input-container>
           <md-input-container>
-            <input mdInput type="number" placeholder="{{'Math.Divisor' | translate}}" [(ngModel)]="DivisorRangeEnd" name="dvsorrend" required>
+            <input mdInput type="number" placeholder="{{'Math.Dividend' | translate}}" [(ngModel)]="DividendRangeEnd" name="dvdendrend"
+              required>
+          </md-input-container>
+        </div>
+
+        <div class="demo-full-width">
+          <md-input-container>
+            <input mdInput type="number" placeholder="{{'Math.Divisor' | translate}}" [(ngModel)]="DivisorRangeBgn" name="dvsorrbgn"
+              required>
+          </md-input-container>
+          <md-input-container>
+            <input mdInput type="number" placeholder="{{'Math.Divisor' | translate}}" [(ngModel)]="DivisorRangeEnd" name="dvsorrend"
+              required>
           </md-input-container>
         </div>
       </div>
@@ -33,7 +43,7 @@
         <div class="demo-full-width" *ngFor="let quiz of QuizItems">
           <md-input-container>
             <input mdInput type="number" readonly placeholder="#" [value]="quiz.QuizIndex">
-          </md-input-container>          
+          </md-input-container>
           <md-input-container>
             <input mdInput type="number" readonly placeholder="{{'Math.Dividend' | translate}}" [value]="quiz.Dividend">
           </md-input-container>

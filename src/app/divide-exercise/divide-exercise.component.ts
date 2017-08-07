@@ -5,6 +5,13 @@ import { DialogService } from '../dialog.service';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
 import { QuizSummaryComponent } from '../quiz-summary/quiz-summary.component';
 import { Router } from '@angular/router';
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition
+} from '@angular/animations';
 
 @Component({
   selector: 'app-divide-exercise',

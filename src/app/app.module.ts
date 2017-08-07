@@ -111,7 +111,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   entryComponents: [
     QuizFailureDlgComponent
-  ], 
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

@@ -94,7 +94,7 @@ export class AdditionQuizItem extends PrimarySchoolMathQuizItem {
         let rststr = super.getFormattedString();
         return rststr + this.LeftNumber.toString()
             + " + " + this.RightNumber.toString() + " = " + this.Result.toString()
-            + (this.InputtedResult !== undefined && this.InputtedResult !== null)? "; Inputted: " + this.InputtedResult.toString() : "";
+            + ((this.InputtedResult !== undefined && this.InputtedResult !== null)? "; Inputted: " + this.InputtedResult.toString() : "");
     }
 }
 
@@ -138,7 +138,7 @@ export class SubtractionQuizItem extends PrimarySchoolMathQuizItem {
         let rststr = super.getFormattedString();
         return rststr + this.LeftNumber.toString()
             + " - " + this.RightNumber.toString() + " = " + this.Result.toString()
-            + (this.InputtedResult !== undefined && this.InputtedResult !== null)? "; Inputted: " + this.InputtedResult.toString() : "";
+            + ((this.InputtedResult !== undefined && this.InputtedResult !== null)? "; Inputted: " + this.InputtedResult.toString() : "");
     }
 }
 
@@ -182,7 +182,7 @@ export class MultiplicationQuizItem extends PrimarySchoolMathQuizItem {
         let rststr = super.getFormattedString();
         return rststr + this.LeftNumber.toString()
             + " × " + this.RightNumber.toString() + " = " + this.Result.toString()
-            + (this.InputtedResult !== undefined && this.InputtedResult !== null)? "; Inputted: " + this.InputtedResult.toString() : "";
+            + ((this.InputtedResult !== undefined && this.InputtedResult !== null)? "; Inputted: " + this.InputtedResult.toString() : "");
     }
 }
 
@@ -248,8 +248,8 @@ export class DivisionQuizItem extends PrimarySchoolMathQuizItem {
         return rststr + this.LeftNumber.toString()
             + " ÷ " + this.RightNumber.toString() + " = " + this.Quotient.toString()
             + ((this.Remainder === 0) ? "" : ("... " + this.Remainder.toString()))
-            + (this.InputtedQuotient !== undefined && this.InputtedQuotient !== null)? "; Inputted: " + this.InputtedQuotient.toString() : ""
-            + (this.InputtedRemainder !== undefined && this.InputtedRemainder !== null)? " ... " + this.InputtedRemainder.toString() : "";
+            + ((this.InputtedQuotient !== undefined && this.InputtedQuotient !== null)? "; Inputted: " + this.InputtedQuotient.toString() : "")
+            + ((this.InputtedRemainder !== undefined && this.InputtedRemainder !== null)? " ... " + this.InputtedRemainder.toString() : "");
     }
 }
 
