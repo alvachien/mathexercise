@@ -372,14 +372,14 @@ export class PrimarySchoolMathQuizSection {
     }
     public SectionComplete() {
         const stoppnt = new Date().getTime();
-        this._timeSpent = stoppnt - this._startPoint;
+        this._timeSpent = Math.round((stoppnt - this._startPoint) / 1000);
     }
 
     public getSummaryInfo(): string {
         let rst: string = 'BATCH#' + this.SectionNumber.toString() + ';';
         rst = rst + ' total items: ' + this.ItemsCount.toString() + '; '
             + (this.ItemsFailed > 0? ' Failed : ' + this.ItemsFailed.toString() : '');
-        rst = rst += ' Time spent: ' + Math.round(this.TimeSpent / 1000).toString() + ' s';
+        rst = rst += ' Time spent: ' + this.TimeSpent.toString() + ' s';
         return rst;
     }
 }

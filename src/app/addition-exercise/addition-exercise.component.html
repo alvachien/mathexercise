@@ -38,17 +38,7 @@
 
     <div *ngIf="quizInstance.IsStarted">
       <div class="demo-full-width" *ngFor="let quiz of DisplayedQuizItems; trackBy: onQuizItemTrackBy">
-        <md-input-container>
-          <input mdInput type="number" readonly placeholder="#" [value]="quiz.QuizIndex">
-        </md-input-container>
-        <md-input-container>
-          <input mdInput type="number" readonly placeholder="{{'Math.LeftNumber' | translate}}" [value]="quiz.LeftNumber">
-        </md-input-container>
-        <span> + </span>
-        <md-input-container>
-          <input mdInput type="number" readonly placeholder="{{'Math.RightNumber' | translate}}" [value]="quiz.RightNumber">
-        </md-input-container>
-        <span> = </span>
+        <span>({{quiz.QuizIndex}}). {{quiz.LeftNumber}} + {{quiz.RightNumber}} = </span>
         <md-input-container>
           <input mdInput type="number" placeholder="{{'Math.Sum' | translate}}" [(ngModel)]="quiz.InputtedResult" name="iptquot">
         </md-input-container>

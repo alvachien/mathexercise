@@ -41,17 +41,7 @@
 
       <div *ngIf="quizInstance.IsStarted">
         <div class="demo-full-width" *ngFor="let quiz of QuizItems">
-          <md-input-container>
-            <input mdInput type="number" readonly placeholder="#" [value]="quiz.QuizIndex">
-          </md-input-container>
-          <md-input-container>
-            <input mdInput type="number" readonly placeholder="{{'Math.Dividend' | translate}}" [value]="quiz.Dividend">
-          </md-input-container>
-          <span> ÷ </span>
-          <md-input-container>
-            <input mdInput type="number" readonly placeholder="{{'Math.Divisor' | translate}}" [value]="quiz.Divisor">
-          </md-input-container>
-          <span> = </span>
+          <span>({{quiz.QuizIndex}}). {{quiz.Dividen}} ÷ {{quiz.Divisor}} = </span>
           <md-input-container>
             <input mdInput type="number" placeholder="{{'Math.Quotient' | translate}}" [(ngModel)]="quiz.InputtedQuotient" name="iptquot">
           </md-input-container>
