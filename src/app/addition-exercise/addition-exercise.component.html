@@ -37,7 +37,7 @@
     </div>
 
     <div *ngIf="quizInstance.IsStarted">
-      <div class="demo-full-width" *ngFor="let quiz of DisplayedQuizItems">
+      <div class="demo-full-width" *ngFor="let quiz of DisplayedQuizItems; trackBy: onQuizItemTrackBy">
         <md-input-container>
           <input mdInput type="number" readonly placeholder="#" [value]="quiz.QuizIndex">
         </md-input-container>
@@ -54,11 +54,12 @@
         </md-input-container>
       </div>
 
-      <!-- <md-paginator [length]="QuizItems.length"
+      <md-paginator [length]="QuizItems.length"
               [pageSize]="pageSize"
+              [pageIndex]="pageIndex"
               [pageSizeOptions]="[5, 10, 25, 100]"
               (page)="onPageChanged($event)">
-      </md-paginator> -->
+      </md-paginator> 
     </div>
   </md-card-content>
 

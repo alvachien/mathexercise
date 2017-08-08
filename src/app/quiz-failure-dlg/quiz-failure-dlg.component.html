@@ -1,5 +1,9 @@
 <h2 md-dialog-title>{{'Home.Failure' | translate}}</h2>
 <md-dialog-content>
+  <h2 class="demo-full-width">
+    <span>{{'Home.Score' | translate}}</span>
+    <span [style.color]="currentScore > 80 ? 'lightyellow': 'red'">{{currentScore}}</span>
+  </h2>
   <div class="example-container mat-elevation-z8">
     <md-table #table [dataSource]="dataSource">
       <!-- ID Column -->

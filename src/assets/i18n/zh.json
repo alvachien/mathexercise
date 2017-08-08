@@ -26,7 +26,8 @@
         "TimeSpentInSeconds": "用时 (秒)",
         "AvgTimeSpentEachInSeconds": "平均每题用时 (秒)",
         "Expected": "正确答案",
-        "Inputted": "输入答案"
+        "Inputted": "输入答案",
+        "Score": "分数"
     },
     "Math": {
         "Sum": "和",

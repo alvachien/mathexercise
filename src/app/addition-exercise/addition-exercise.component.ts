@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, AdditionQuizItem } from '../model';
+import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, AdditionQuizItem,
+  DefaultQuizAmount, DefaultFailedQuizFactor } from '../model';
 import { MdDialog } from '@angular/material';
 import { DialogService } from '../dialog.service';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
@@ -13,26 +14,34 @@ import { PageEvent } from '@angular/material';
   styleUrls: ['./addition-exercise.component.scss']
 })
 export class AdditionExerciseComponent implements OnInit {
-  StartQuizAmount: number = 20;
-  FailedQuizFactor: number = 1;
+  StartQuizAmount: number = DefaultQuizAmount;
+  FailedQuizFactor: number = DefaultFailedQuizFactor;
+  UsedQuizAmount: number = 0;
+
   LeftNumberRangeBgn: number = 1;
   LeftNumberRangeEnd: number = 10;
   RightNumberRangeBgn: number = 1;
   RightNumberRangeEnd: number = 10;
 
   quizInstance: PrimarySchoolMathQuiz = null;
-  QuizItems: AdditionQuizItem[] = [];  
+  QuizItems: AdditionQuizItem[] = [];
+  DisplayedQuizItems: AdditionQuizItem[] = [];
 
-  pageSize: number;  
+  //pageEvent: PageEvent;
+  pageSize: number;
+  pageIndex: number;
 
   constructor(private dialog: MdDialog,
     private _dlgsvc: DialogService,
     private _router: Router) {
     this.quizInstance = new PrimarySchoolMathQuiz();
-    this.pageSize = 10; // Default page size
   }
 
   ngOnInit() {
+    // Reset the used quiz amount
+    this.UsedQuizAmount = 0;
+    this.pageSize = 10;
+    this.pageIndex = 0;
   }
 
   private generateQuizItem(idx: number): AdditionQuizItem {
@@ -42,26 +51,67 @@ export class AdditionExerciseComponent implements OnInit {
     return qz;
   }
 
+  private generateQuizSection() {
+    this.QuizItems = [];
+
+    for (let i = 0; i < this.quizInstance.CurrentRun().ItemsCount; i++) {
+      let dq: AdditionQuizItem = this.generateQuizItem(this.UsedQuizAmount + i + 1);
+
+      this.QuizItems.push(dq);
+    }
+    this.UsedQuizAmount += this.QuizItems.length;    
+  }
+
   public onPageChanged($event: PageEvent) {
+    this.pageSize = $event.pageSize;
+    this.pageIndex = $event.pageIndex;
+
+    this.submitCurrentPage();
+    this.prepareCurrentPage();
+  }
+
+  private submitCurrentPage() {
+    if (this.DisplayedQuizItems.length > 0 ) {
+      for(let qi of this.DisplayedQuizItems) {
+        for(let qi2 of this.QuizItems) {
+          if (qi.QuizIndex === qi2.QuizIndex) {
+            qi2.InputtedResult = qi.InputtedResult;
+            break;
+          }
+        }
+      }
+    }
+  }
+  private prepareCurrentPage() {
+    let pageStart = this.pageIndex * this.pageSize;
+    let pageEnd = pageStart + this.pageSize;
+
+    this.DisplayedQuizItems = [];
+    for(let i = 0; i < this.QuizItems.length; i ++) {
+      if (i >= pageStart && i < pageEnd) {
+        this.DisplayedQuizItems.push(this.QuizItems[i]);
+      }
+    }
+  }
+
+  public onQuizItemTrackBy(index: number, item: any) {
+    return item.QuizIndex;
   }
 
   public onQuizStart(): void {
     // Start it!
     this.quizInstance.Start(this.StartQuizAmount, this.FailedQuizFactor);
 
-    // Generated items
-    for (let i = 0; i < this.quizInstance.CurrentRun().ItemsCount; i++) {
-
-      let dq: AdditionQuizItem = this.generateQuizItem(i + 1);
-
-      this.QuizItems.push(dq);
-    }
+    // Generated section
+    this.generateQuizSection();
+    this.pageIndex = 0;
+    this.prepareCurrentPage();
 
     // Current run
     this.quizInstance.CurrentRun().SectionStart();
   }
 
-  public CanSubmit(): boolean {
+  public CanSubmit(): boolean {    
     if (!this.quizInstance.IsStarted) {
       return false;
     }
@@ -70,6 +120,7 @@ export class AdditionExerciseComponent implements OnInit {
       return false;
     }
 
+    this.submitCurrentPage();
     for (let quiz of this.QuizItems) {
       if (quiz.InputtedResult === undefined
         || quiz.InputtedResult === null) {
@@ -86,9 +137,10 @@ export class AdditionExerciseComponent implements OnInit {
       if (!quiz.IsCorrect()) {
         this._dlgsvc.FailureItems.push(quiz);
       }
-    }
+    }    
 
     if (this._dlgsvc.FailureItems.length > 0) {
+      this._dlgsvc.CurrentScore = Math.round(100 - 100 * this._dlgsvc.FailureItems.length / this.QuizItems.length);
       let dialogRef = this.dialog.open(QuizFailureDlgComponent, {
         disableClose: false,
         width: '500px'
@@ -96,13 +148,10 @@ export class AdditionExerciseComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe(x => {
         this.quizInstance.SubmitCurrentRun(this._dlgsvc.FailureItems.length);
-        this.QuizItems = [];
 
-        for (let i = 0; i < this.quizInstance.CurrentRun().ItemsCount; i++) {
-          let dq: AdditionQuizItem = this.generateQuizItem(i + 1);
-
-          this.QuizItems.push(dq);
-        }
+        this.generateQuizSection();
+        this.pageIndex = 0;
+        this.prepareCurrentPage();
 
         // Current run
         this.quizInstance.CurrentRun().SectionStart();

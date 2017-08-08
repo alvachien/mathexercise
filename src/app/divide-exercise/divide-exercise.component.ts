@@ -83,6 +83,7 @@ export class DivideExerciseComponent implements OnInit {
     }
 
     if (this._dlgsvc.FailureItems.length > 0) {
+      this._dlgsvc.CurrentScore = Math.round(100 - 100 * this._dlgsvc.FailureItems.length / this.QuizItems.length);
       let dialogRef = this.dialog.open(QuizFailureDlgComponent, {
         disableClose: false,
         width: '500px'
