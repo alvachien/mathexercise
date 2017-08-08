@@ -5,11 +5,17 @@ import { DialogService } from '../dialog.service';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
 import { QuizSummaryComponent } from '../quiz-summary/quiz-summary.component';
 import { Router } from '@angular/router';
+import { slideInOutAnimation } from '../animation';
 
 @Component({
   selector: 'app-multiplication-quiz',
   templateUrl: './multiplication-quiz.component.html',
-  styleUrls: ['./multiplication-quiz.component.scss']
+  styleUrls: ['./multiplication-quiz.component.scss'],
+  // make slide in/out animation available to this component
+  //animations: [slideInOutAnimation],
+
+  // attach the slide in/out animation to the host (root) element of this component
+  //host: { '[@slideInOutAnimation]': '' }
 })
 export class MultiplicationQuizComponent implements OnInit {
   StartQuizAmount: number = 20;
@@ -74,23 +80,21 @@ export class MultiplicationQuizComponent implements OnInit {
   }
 
   public onQuizSubmit(): void {
-    let failed: MultiplicationQuizItem[] = [];
-    this._dlgsvc.FailureInfos = [];
+    this._dlgsvc.FailureItems = [];
     for (let quiz of this.QuizItems) {
       if (!quiz.IsCorrect()) {
-        failed.push(quiz);
-        this._dlgsvc.FailureInfos.push(quiz.getFormattedString());
+        this._dlgsvc.FailureItems.push(quiz);
       }
     }
 
-    if (failed.length > 0) {
+    if (this._dlgsvc.FailureItems.length > 0) {
       let dialogRef = this.dialog.open(QuizFailureDlgComponent, {
         disableClose: false,
         width: '500px'
       });
 
       dialogRef.afterClosed().subscribe(x => {
-        this.quizInstance.SubmitCurrentRun(failed.length);
+        this.quizInstance.SubmitCurrentRun(this._dlgsvc.FailureItems.length);
         this.QuizItems = [];
 
         for (let i = 0; i < this.quizInstance.CurrentRun().ItemsCount; i++) {

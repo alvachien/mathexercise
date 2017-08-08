@@ -30,7 +30,7 @@
         <!-- TimespentEach Column -->
         <ng-container cdkColumnDef="avgtimespent">
           <md-header-cell *cdkHeaderCellDef>{{'Home.AvgTimeSpentEachInSeconds' | translate}}</md-header-cell>
-          <md-cell *cdkCellDef="let row"> {{row.timespent}} </md-cell>
+          <md-cell *cdkCellDef="let row"> {{row.avgtimespent}} </md-cell>
         </ng-container>
         
         <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>

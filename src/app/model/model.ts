@@ -1,4 +1,7 @@
 
+/**
+ * Quiz item
+ */
 export class QuizItem {
     private _index: number;
     get QuizIndex(): number {
@@ -21,6 +24,9 @@ export class QuizItem {
     }
 }
 
+/**
+ * Math quiz item for Primary School
+ */
 export class PrimarySchoolMathQuizItem extends QuizItem {
     private _leftNumber: number;
     private _rightNumber: number;
@@ -52,8 +58,19 @@ export class PrimarySchoolMathQuizItem extends QuizItem {
         let rststr = super.getFormattedString();
         return rststr;
     }
+
+    public getCorrectFormula(): string {
+        return '';
+    }
+
+    public getInputtedForumla(): string {
+        return '';
+    }
 }
 
+/**
+ * Math quiz item for additon part
+ */
 export class AdditionQuizItem extends PrimarySchoolMathQuizItem {
     private _result: number;
     private _inputtedResult: number;
@@ -90,6 +107,16 @@ export class AdditionQuizItem extends PrimarySchoolMathQuizItem {
         this._result = Math.round(this.LeftNumber + this.RightNumber);    
     }
 
+    public getCorrectFormula(): string {
+        return this.LeftNumber.toString()
+            + " + " + this.RightNumber.toString() + " = " + this.Result.toString();
+    }
+
+    public getInputtedForumla(): string {
+        return this.LeftNumber.toString()
+            + " + " + this.RightNumber.toString() + " = " + ((this.InputtedResult !== undefined && this.InputtedResult !== null)? this.InputtedResult.toString() : "");
+    }
+    
     public getFormattedString(): string {
         let rststr = super.getFormattedString();
         return rststr + this.LeftNumber.toString()
@@ -98,6 +125,9 @@ export class AdditionQuizItem extends PrimarySchoolMathQuizItem {
     }
 }
 
+/**
+ * Math quiz item for subtraction part
+ */
 export class SubtractionQuizItem extends PrimarySchoolMathQuizItem {
     private _result: number;
     private _inputtedResult: number;
@@ -134,6 +164,17 @@ export class SubtractionQuizItem extends PrimarySchoolMathQuizItem {
         this._result = Math.round(this.LeftNumber - this.RightNumber);    
     }
 
+    public getCorrectFormula(): string {
+        return this.LeftNumber.toString()
+            + " - " + this.RightNumber.toString() + " = " + this.Result.toString();
+    }
+
+    public getInputtedForumla(): string {
+        return this.LeftNumber.toString()
+            + " - " + this.RightNumber.toString() + " = " 
+            + ((this.InputtedResult !== undefined && this.InputtedResult !== null)? this.InputtedResult.toString() : "");
+    }
+    
     public getFormattedString(): string {
         let rststr = super.getFormattedString();
         return rststr + this.LeftNumber.toString()
@@ -142,6 +183,9 @@ export class SubtractionQuizItem extends PrimarySchoolMathQuizItem {
     }
 }
 
+/**
+ * Math quiz item for multiplication part
+ */
 export class MultiplicationQuizItem extends PrimarySchoolMathQuizItem {
     private _result: number;
     private _inputtedResult: number;
@@ -178,6 +222,18 @@ export class MultiplicationQuizItem extends PrimarySchoolMathQuizItem {
         this._result = Math.round(this.LeftNumber * this.RightNumber);    
     }
 
+    public getCorrectFormula(): string {
+        return this.LeftNumber.toString()
+            + " × " + this.RightNumber.toString() + " = " 
+            + this.Result.toString();
+    }
+
+    public getInputtedForumla(): string {
+        return this.LeftNumber.toString()
+            + " × " + this.RightNumber.toString() + " = " 
+            + ((this.InputtedResult !== undefined && this.InputtedResult !== null)? this.InputtedResult.toString() : "");
+    }
+    
     public getFormattedString(): string {
         let rststr = super.getFormattedString();
         return rststr + this.LeftNumber.toString()
@@ -186,6 +242,9 @@ export class MultiplicationQuizItem extends PrimarySchoolMathQuizItem {
     }
 }
 
+/**
+ * Math quiz item for division  part
+ */
 export class DivisionQuizItem extends PrimarySchoolMathQuizItem {
     private _quotient: number;
     private _remainder: number;
@@ -243,6 +302,19 @@ export class DivisionQuizItem extends PrimarySchoolMathQuizItem {
         return false;
     }
 
+    public getCorrectFormula(): string {
+        return this.LeftNumber.toString()
+            + " ÷ " + this.RightNumber.toString() + " = " + this.Quotient.toString()
+            + ((this.Remainder === 0) ? "" : ("... " + this.Remainder.toString()));
+    }
+
+    public getInputtedForumla(): string {
+        return this.LeftNumber.toString()
+            + " ÷ " + this.RightNumber.toString() + " = " 
+            + ((this.InputtedQuotient !== undefined && this.InputtedQuotient !== null)? this.InputtedQuotient.toString() : "")
+            + ((this.InputtedRemainder !== undefined && this.InputtedRemainder !== null)? " ... " + this.InputtedRemainder.toString() : "");
+    }
+
     public getFormattedString(): string {
         let rststr = super.getFormattedString();
         return rststr + this.LeftNumber.toString()
@@ -253,6 +325,9 @@ export class DivisionQuizItem extends PrimarySchoolMathQuizItem {
     }
 }
 
+/**
+ * Quiz section 
+ */
 export class PrimarySchoolMathQuizSection {
     private _sectionNumber: number;
     get SectionNumber(): number {
@@ -303,6 +378,9 @@ export class PrimarySchoolMathQuizSection {
     }
 }
 
+/**
+ * Math quiz for Primary School
+ */
 export class PrimarySchoolMathQuiz {    
     private _elderRun: PrimarySchoolMathQuizSection[] = [];
     public ElderRuns(): PrimarySchoolMathQuizSection[] {

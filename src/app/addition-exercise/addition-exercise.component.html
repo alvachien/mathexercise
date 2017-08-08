@@ -37,7 +37,7 @@
     </div>
 
     <div *ngIf="quizInstance.IsStarted">
-      <div class="demo-full-width" *ngFor="let quiz of QuizItems">
+      <div class="demo-full-width" *ngFor="let quiz of DisplayedQuizItems">
         <md-input-container>
           <input mdInput type="number" readonly placeholder="#" [value]="quiz.QuizIndex">
         </md-input-container>
@@ -53,6 +53,12 @@
           <input mdInput type="number" placeholder="{{'Math.Sum' | translate}}" [(ngModel)]="quiz.InputtedResult" name="iptquot">
         </md-input-container>
       </div>
+
+      <!-- <md-paginator [length]="QuizItems.length"
+              [pageSize]="pageSize"
+              [pageSizeOptions]="[5, 10, 25, 100]"
+              (page)="onPageChanged($event)">
+      </md-paginator> -->
     </div>
   </md-card-content>
 

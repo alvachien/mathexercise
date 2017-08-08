@@ -1,8 +1,6 @@
-// import the required animation functions from the angular animations module
 import { trigger, state, animate, transition, style } from '@angular/animations';
 
 export const slideInOutAnimation =
-    // trigger name for attaching this animation to an element using the [@triggerName] syntax
     trigger('slideInOutAnimation', [
 
         // end state styles for route container (host)
@@ -21,7 +19,7 @@ export const slideInOutAnimation =
 
             // styles at start of transition
             style({
-                // start with the content positioned off the right of the screen,
+                // start with the content positioned off the right of the screen, 
                 // -400% is required instead of -100% because the negative position adds to the width of the element
                 right: '-400%',
 

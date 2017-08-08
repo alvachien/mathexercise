@@ -74,23 +74,21 @@ export class SubtractionExerciseComponent implements OnInit {
   }
 
   public onQuizSubmit(): void {
-    let failed: SubtractionQuizItem[] = [];
-    this._dlgsvc.FailureInfos = [];
+    this._dlgsvc.FailureItems = [];
     for (let quiz of this.QuizItems) {
       if (!quiz.IsCorrect()) {
-        failed.push(quiz);
-        this._dlgsvc.FailureInfos.push(quiz.getFormattedString());
+        this._dlgsvc.FailureItems.push(quiz);
       }
     }
 
-    if (failed.length > 0) {
+    if (this._dlgsvc.FailureItems.length > 0) {
       let dialogRef = this.dialog.open(QuizFailureDlgComponent, {
         disableClose: false,
         width: '700px'
       });
 
       dialogRef.afterClosed().subscribe(x => {
-        this.quizInstance.SubmitCurrentRun(failed.length);
+        this.quizInstance.SubmitCurrentRun(this._dlgsvc.FailureItems.length);
         this.QuizItems = [];
 
         for (let i = 0; i < this.quizInstance.CurrentRun().ItemsCount; i++) {

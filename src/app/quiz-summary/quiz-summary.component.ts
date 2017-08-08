@@ -68,10 +68,10 @@ export class QuizSummaryDataSource extends DataSource<any> {
   templateUrl: './quiz-summary.component.html',
   styleUrls: ['./quiz-summary.component.scss'],
   // make slide in/out animation available to this component
-  animations: [slideInOutAnimation],
+  //animations: [slideInOutAnimation],
 
   // attach the slide in/out animation to the host (root) element of this component
-  // host: { '[@slideInOutAnimation]': '' }
+  //host: { '[@slideInOutAnimation]': '' }
 })
 export class QuizSummaryComponent implements OnInit {
   displayedColumns = ['runid', 'totalamt', 'failedamt', 'timespent', 'avgtimespent'];

@@ -5,6 +5,7 @@ import { DialogService } from '../dialog.service';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
 import { QuizSummaryComponent } from '../quiz-summary/quiz-summary.component';
 import { Router } from '@angular/router';
+import { PageEvent } from '@angular/material';
 
 @Component({
   selector: 'app-addition-exercise',
@@ -20,12 +21,15 @@ export class AdditionExerciseComponent implements OnInit {
   RightNumberRangeEnd: number = 10;
 
   quizInstance: PrimarySchoolMathQuiz = null;
-  QuizItems: AdditionQuizItem[] = [];
+  QuizItems: AdditionQuizItem[] = [];  
+
+  pageSize: number;  
 
   constructor(private dialog: MdDialog,
     private _dlgsvc: DialogService,
     private _router: Router) {
     this.quizInstance = new PrimarySchoolMathQuiz();
+    this.pageSize = 10; // Default page size
   }
 
   ngOnInit() {
@@ -36,6 +40,9 @@ export class AdditionExerciseComponent implements OnInit {
       Math.floor(Math.random() * (this.RightNumberRangeEnd - this.RightNumberRangeBgn) + this.RightNumberRangeBgn));
     qz.QuizIndex = idx;
     return qz;
+  }
+
+  public onPageChanged($event: PageEvent) {
   }
 
   public onQuizStart(): void {
@@ -74,23 +81,21 @@ export class AdditionExerciseComponent implements OnInit {
   }
 
   public onQuizSubmit(): void {
-    let failed: AdditionQuizItem[] = [];
-    this._dlgsvc.FailureInfos = [];
+    this._dlgsvc.FailureItems = [];
     for (let quiz of this.QuizItems) {
       if (!quiz.IsCorrect()) {
-        failed.push(quiz);
-        this._dlgsvc.FailureInfos.push(quiz.getFormattedString());
+        this._dlgsvc.FailureItems.push(quiz);
       }
     }
 
-    if (failed.length > 0) {
+    if (this._dlgsvc.FailureItems.length > 0) {
       let dialogRef = this.dialog.open(QuizFailureDlgComponent, {
         disableClose: false,
         width: '500px'
       });
 
       dialogRef.afterClosed().subscribe(x => {
-        this.quizInstance.SubmitCurrentRun(failed.length);
+        this.quizInstance.SubmitCurrentRun(this._dlgsvc.FailureItems.length);
         this.QuizItems = [];
 
         for (let i = 0; i < this.quizInstance.CurrentRun().ItemsCount; i++) {

@@ -1,7 +1,28 @@
 <h2 md-dialog-title>{{'Home.Failure' | translate}}</h2>
 <md-dialog-content>
-  <div class="demo-full-width" *ngFor="let fq of FailureInfos">
-    <div style="color:#FF0000;">{{fq}}</div>
+  <div class="example-container mat-elevation-z8">
+    <md-table #table [dataSource]="dataSource">
+      <!-- ID Column -->
+      <ng-container cdkColumnDef="qid">
+        <md-header-cell *cdkHeaderCellDef>#</md-header-cell>
+        <md-cell *cdkCellDef="let row"> {{row.qid}} </md-cell>
+      </ng-container>
+
+      <!-- Expected Column -->
+      <ng-container cdkColumnDef="expected">
+        <md-header-cell *cdkHeaderCellDef>{{'Home.Expected' | translate}}</md-header-cell>
+        <md-cell *cdkCellDef="let row" style="color:#00FF00;"> {{row.expected}} </md-cell>
+      </ng-container>
+
+      <!-- Inputted Column -->
+      <ng-container cdkColumnDef="inputted">
+        <md-header-cell *cdkHeaderCellDef> {{'Home.Inputted' | translate}} </md-header-cell>
+        <md-cell *cdkCellDef="let row" style="color:#FF0000;"> {{row.inputted}} </md-cell>
+      </ng-container>
+
+      <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
+      <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
+    </md-table>
   </div>
 </md-dialog-content>
 <md-dialog-actions>

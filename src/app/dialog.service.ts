@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection } from './model';
+import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, PrimarySchoolMathQuizItem } from './model';
 
 @Injectable()
 export class DialogService {
 
   constructor() { }
 
-  public FailureInfos: string[] = [];
-  //public SummaryInfos: string[] = [];
+  public FailureItems: PrimarySchoolMathQuizItem[] = [];
   public CurrentQuiz: PrimarySchoolMathQuiz = null;
 }
