@@ -24,7 +24,9 @@
         "Summary": "Summary",
         "Total": "Total",
         "TimeSpentInSeconds": "Time spent (s)",
-        "AvgTimeSpentEachInSeconds": "Average time spent (s)"
+        "AvgTimeSpentEachInSeconds": "Average time spent (s)",
+        "Expected": "Expected",
+        "Inputted": "Inputted"
     },
     "Math": {
         "Sum": "Sum",
