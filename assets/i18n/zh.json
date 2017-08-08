@@ -21,7 +21,7 @@
         "QuizAmount": "试题数量",
         "FailedFactor": "错误扩散因子",
         "Failure": "失败",
-        "Summary": "总结",
+        "Summary": "练习总结",
         "Total": "总计",
         "TimeSpentInSeconds": "用时 (秒)",
         "AvgTimeSpentEachInSeconds": "平均每题用时 (秒)",
