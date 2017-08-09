@@ -59,6 +59,12 @@
         "Trapezoid": "梯形",
         "AreaOfTrapezoid": "梯形面积",
         "Cuboid": "长方体",
-        "Cube": "立方体"
+        "Cube": "立方体",
+        "VolumeOfCuboid": "长方体体积",
+        "VolumeOfCube": "立方体体积",
+        "CircumferenceOfCircle": "周长",
+        "AreaOfCircle": "圆面积",
+        "RadiusOfCircle": "半径",
+        "DiameterOfCircle": "直径"
     }
 }

@@ -16,11 +16,11 @@ import {
 import { PageEvent } from '@angular/material';
 
 @Component({
-  selector: 'app-divide-exercise',
-  templateUrl: './divide-exercise.component.html',
-  styleUrls: ['./divide-exercise.component.scss']
+  selector: 'app-division-exercise',
+  templateUrl: './division-exercise.component.html',
+  styleUrls: ['./division-exercise.component.scss']
 })
-export class DivideExerciseComponent implements OnInit {
+export class DivisionExerciseComponent implements OnInit {
   StartQuizAmount: number = DefaultQuizAmount;
   FailedQuizFactor: number = DefaultFailedQuizFactor;
 

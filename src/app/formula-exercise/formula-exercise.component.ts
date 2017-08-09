@@ -11,11 +11,11 @@ import { Router } from '@angular/router';
 import { PageEvent } from '@angular/material';
 
 @Component({
-  selector: 'app-forumla-exercise',
-  templateUrl: './forumla-exercise.component.html',
-  styleUrls: ['./forumla-exercise.component.scss']
+  selector: 'app-formula-exercise',
+  templateUrl: './formula-exercise.component.html',
+  styleUrls: ['./formula-exercise.component.scss']
 })
-export class ForumlaExerciseComponent implements OnInit {
+export class FormulaExerciseComponent implements OnInit {
   StartQuizAmount: number = DefaultQuizAmount;
   FailedQuizFactor: number = DefaultFailedQuizFactor;
   UsedQuizAmount: number = 0;

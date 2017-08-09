@@ -59,6 +59,12 @@
         "Trapezoid": "Trapezoid",
         "AreaOfTrapezoid": "Area of Trapezoid",
         "Cuboid": "Cuboid",
-        "Cube": "Cube"
+        "Cube": "Cube",
+        "VolumeOfCuboid": "Volume of Cuboid",
+        "VolumeOfCube": "Volume of Cube",
+        "CircumferenceOfCircle": "Circumference",
+        "AreaOfCircle": "Area of Circle",
+        "RadiusOfCircle": "Radius of Circle",
+        "DiameterOfCircle": "Diameter of Circle"
     }
 }

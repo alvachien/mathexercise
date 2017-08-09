@@ -46,14 +46,14 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppRoutes } from './app.routes';
 import { Home, AppComponent } from './app.component';
-import { DivideExerciseComponent } from './divide-exercise/';
+import { DivisionExerciseComponent } from './division-exercise/';
 import { MultiplicationQuizComponent } from './multiplication-quiz/';
 import { AdditionExerciseComponent } from './addition-exercise/';
 import { SubtractionExerciseComponent } from './subtraction-exercise/';
 import { QuizFailureDlgComponent } from './quiz-failure-dlg/';
 import { QuizSummaryComponent } from './quiz-summary/';
 import { DialogService } from './dialog.service';
-import { ForumlaExerciseComponent } from './forumla-exercise/';
+import { FormulaExerciseComponent } from './formula-exercise/';
 
 @NgModule({
   exports: [
@@ -103,13 +103,13 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     Home,
     AppComponent,
-    DivideExerciseComponent,
+    DivisionExerciseComponent,
     MultiplicationQuizComponent,
     AdditionExerciseComponent,
     SubtractionExerciseComponent,
     QuizFailureDlgComponent,
     QuizSummaryComponent,
-    ForumlaExerciseComponent
+    FormulaExerciseComponent
   ],
   entryComponents: [
     QuizFailureDlgComponent
