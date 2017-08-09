@@ -40,8 +40,8 @@
       </div>
 
       <div *ngIf="quizInstance.IsStarted">
-        <div class="demo-full-width" *ngFor="let quiz of QuizItems">
-          <span>({{quiz.QuizIndex}}). {{quiz.Dividen}} ÷ {{quiz.Divisor}} = </span>
+        <div class="demo-full-width" *ngFor="let quiz of DisplayedQuizItems; trackBy: onQuizItemTrackBy">
+          <span>({{quiz.QuizIndex}}). {{quiz.Dividend}} ÷ {{quiz.Divisor}} = </span>
           <md-input-container>
             <input mdInput type="number" placeholder="{{'Math.Quotient' | translate}}" [(ngModel)]="quiz.InputtedQuotient" name="iptquot">
           </md-input-container>
@@ -50,6 +50,10 @@
             <input mdInput type="number" placeholder="{{'Math.Remainder' | translate}}" [(ngModel)]="quiz.InputtedRemainder" name="iptrmd">
           </md-input-container>
         </div>
+
+        <md-paginator [length]="QuizItems.length" [pageSize]="pageSize" [pageIndex]="pageIndex" [pageSizeOptions]="[5, 10, 25, 100]"
+          (page)="onPageChanged($event)">
+        </md-paginator>
       </div>
     </div>
   </md-card-content>

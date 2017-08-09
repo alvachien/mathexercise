@@ -5,6 +5,7 @@ import { MultiplicationQuizComponent } from './multiplication-quiz/multiplicatio
 import { AdditionExerciseComponent } from './addition-exercise/addition-exercise.component';
 import { SubtractionExerciseComponent } from './subtraction-exercise/subtraction-exercise.component';
 import { QuizSummaryComponent } from './quiz-summary/quiz-summary.component';
+import { ForumlaExerciseComponent } from './forumla-exercise/';
 
 export const AppRoutes: Routes = [
   { path: '', component: Home },
@@ -13,4 +14,5 @@ export const AppRoutes: Routes = [
   { path: 'divide-ex', component: DivideExerciseComponent },
   { path: 'multi-ex', component: MultiplicationQuizComponent },
   { path: 'quiz-sum', component: QuizSummaryComponent },
+  { path: 'forumla-ex', component: ForumlaExerciseComponent },
 ];

@@ -16,33 +16,40 @@
       </div>
       <div class="demo-full-width">
         <md-input-container>
-          <input mdInput type="number" placeholder="{{'Math.LeftNumber' | translate}}" [(ngModel)]="LeftNumberRangeBgn" name="leftnrbgn"
+          <input mdInput type="number" placeholder="{{'Math.Multiplicand' | translate}}" [(ngModel)]="LeftNumberRangeBgn" name="leftnrbgn"
             required>
         </md-input-container>
         <md-input-container>
-          <input mdInput type="number" placeholder="{{'Math.LeftNumber' | translate}}" [(ngModel)]="LeftNumberRangeEnd" name="leftnrend"
+          <input mdInput type="number" placeholder="{{'Math.Multiplicand' | translate}}" [(ngModel)]="LeftNumberRangeEnd" name="leftnrend"
             required>
         </md-input-container>
       </div>
       <div class="demo-full-width">
         <md-input-container>
-          <input mdInput type="number" placeholder="{{'Math.RightNumber' | translate}}" [(ngModel)]="RightNumberRangeBgn" name="rightnrbgn"
+          <input mdInput type="number" placeholder="{{'Math.Multiplier' | translate}}" [(ngModel)]="RightNumberRangeBgn" name="rightnrbgn"
             required>
         </md-input-container>
         <md-input-container>
-          <input mdInput type="number" placeholder="{{'Math.RightNumber' | translate}}" [(ngModel)]="RightNumberRangeEnd" name="rightnrend"
+          <input mdInput type="number" placeholder="{{'Math.Multiplier' | translate}}" [(ngModel)]="RightNumberRangeEnd" name="rightnrend"
             required>
         </md-input-container>
       </div>
     </div>
 
     <div *ngIf="quizInstance.IsStarted">
-      <div class="demo-full-width" *ngFor="let quiz of QuizItems">
+      <div class="demo-full-width" *ngFor="let quiz of DisplayedQuizItems; trackBy: onQuizItemTrackBy">
         <span>({{quiz.QuizIndex}}). {{quiz.LeftNumber}} × {{quiz.RightNumber}} = </span>
         <md-input-container>
           <input mdInput type="number" placeholder="{{'Math.Product' | translate}}" [(ngModel)]="quiz.InputtedResult" name="iptquot">
         </md-input-container>
       </div>
+
+      <md-paginator [length]="QuizItems.length"
+              [pageSize]="pageSize"
+              [pageIndex]="pageIndex"
+              [pageSizeOptions]="[5, 10, 25, 100]"
+              (page)="onPageChanged($event)">
+      </md-paginator> 
     </div>
   </md-card-content>
 

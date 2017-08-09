@@ -12,6 +12,7 @@
         "MultiplicationExercises": "Multiplication Exercises",
         "AdditionExercises": "Addition Exercises",
         "SubtractionExercises": "Subtraction Exercises",
+        "FormulaExercises": "Formula Exercises",
 
         "HomePage": "Home",
         "CloseButton": "CLOSE",
@@ -40,6 +41,24 @@
         "Numerator": "Numerator",
         "Denominator": "Denominator",
         "LeftNumber": "LeftNumber",
-        "RightNumber": "RightNumber"
+        "RightNumber": "RightNumber",
+        "Minuend": "Minuend",
+        "Subtrahend": "Subtrahend",
+        "Summand": "Summand",
+        "Addend": "Addend",
+        "Multiplicand": "Multiplicand",
+        "Multiplier": "Multiplier",
+        "Triangle": "Triangle",
+        "AreaOfTriangle": "Area of Triangle",
+        "Square": "Square",
+        "AreaOfSquare": "Area of Square",
+        "Rectangle": "Rectangle",
+        "AreaOfRectangle": "Area of Rectangle",
+        "Parallelogram": "Parallelogram",
+        "AreaOfParallelogram": "Area of Parallelogram",
+        "Trapezoid": "Trapezoid",
+        "AreaOfTrapezoid": "Area of Trapezoid",
+        "Cuboid": "Cuboid",
+        "Cube": "Cube"
     }
 }

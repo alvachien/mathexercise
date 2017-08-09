@@ -12,6 +12,7 @@
         "MultiplicationExercises": "乘法练习",
         "AdditionExercises": "加法练习",
         "SubtractionExercises": "减法练习",
+        "FormulaExercises": "公式定理练习",
 
         "HomePage": "起始页",
         "CloseButton": "关闭",
@@ -40,6 +41,24 @@
         "Numerator": "分子",
         "Denominator": "分母",
         "LeftNumber": "左",
-        "RightNumber": "右"
+        "RightNumber": "右",
+        "Minuend": "被减数",
+        "Subtrahend": "减数",
+        "Summand": "被加数",
+        "Addend": "加数",
+        "Multiplicand": "被乘数",
+        "Multiplier": "乘数",
+        "Triangle": "三角形",
+        "AreaOfTriangle": "三角形面积",
+        "Square": "正方形",
+        "AreaOfSquare": "正方形面积",
+        "Rectangle": "长方形",
+        "AreaOfRectangle": "长方形面积",
+        "Parallelogram": "平行四边形",
+        "AreaOfParallelogram": "平行四边形面积",
+        "Trapezoid": "梯形",
+        "AreaOfTrapezoid": "梯形面积",
+        "Cuboid": "长方体",
+        "Cube": "立方体"
     }
 }

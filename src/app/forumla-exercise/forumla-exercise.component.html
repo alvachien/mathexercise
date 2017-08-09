@@ -1,5 +1,5 @@
 <md-card class="demo-kmp demo-basic">
-  <md-toolbar color="primary">{{'Home.SubtractionExercises' | translate}}</md-toolbar>
+  <md-toolbar color="primary">{{'Home.FormulaExercises' | translate}}</md-toolbar>
   <md-card-content>
     <div *ngIf="!quizInstance.IsStarted">
       <div class="demo-full-width">
@@ -14,34 +14,13 @@
           <md-error>This field is required</md-error>
         </md-input-container>
       </div>
-      
-      <div class="demo-full-width">
-        <md-input-container>
-          <input mdInput type="number" placeholder="{{'Math.Minuend' | translate}}" [(ngModel)]="LeftNumberRangeBgn" name="leftnrbgn"
-            required>
-        </md-input-container>
-        <md-input-container>
-          <input mdInput type="number" placeholder="{{'Math.Minuend' | translate}}" [(ngModel)]="LeftNumberRangeEnd" name="leftnrend"
-            required>
-        </md-input-container>
-      </div>
-      <div class="demo-full-width">
-        <md-input-container>
-          <input mdInput type="number" placeholder="{{'Math.Subtrahend' | translate}}" [(ngModel)]="RightNumberRangeBgn" name="rightnrbgn"
-            required>
-        </md-input-container>
-        <md-input-container>
-          <input mdInput type="number" placeholder="{{'Math.Subtrahend' | translate}}" [(ngModel)]="RightNumberRangeEnd" name="rightnrend"
-            required>
-        </md-input-container>
-      </div>
     </div>
 
     <div *ngIf="quizInstance.IsStarted">
       <div class="demo-full-width" *ngFor="let quiz of DisplayedQuizItems; trackBy: onQuizItemTrackBy">
-        <span>({{quiz.QuizIndex}}). {{quiz.LeftNumber}} - {{quiz.RightNumber}} = </span>
+        <span>({{quiz.QuizIndex}}). {{quiz.LeftNumber}} + {{quiz.RightNumber}} = </span>
         <md-input-container>
-          <input mdInput type="number" placeholder="{{'Math.Difference' | translate}}" [(ngModel)]="quiz.InputtedResult" name="iptquot">
+          <input mdInput type="number" placeholder="{{'Math.Sum' | translate}}" [(ngModel)]="quiz.InputtedResult" name="iptquot">
         </md-input-container>
       </div>
 

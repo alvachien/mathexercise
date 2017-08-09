@@ -15,10 +15,12 @@ export class Home { }
 })
 export class AppComponent implements OnInit {
   navItems = [
+    { name: 'Home.HomePage', route: '' },
     { name: 'Home.AdditionExercises', route: 'add-ex' },
     { name: 'Home.SubtractionExercises', route: 'sub-ex' },
     { name: 'Home.MultiplicationExercises', route: 'multi-ex' },
     { name: 'Home.DivisionExercises', route: 'divide-ex' },
+    { name: 'Home.FormulaExercises', route: 'forumla-ex' },
   ];
   selectedLanguage: string;
   availableLanguages = [
