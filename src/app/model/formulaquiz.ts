@@ -1,5 +1,6 @@
 
-import { PrimaySchoolFormulaEnum, PrimarySchoolMathQuizItem } from './';
+import { PrimaySchoolFormulaEnum } from './formuladef';
+import { PrimarySchoolMathQuizItem } from './quizconcept';
 
 export class FormulaQuizItem extends PrimarySchoolMathQuizItem {
     public getForumString(fe: PrimaySchoolFormulaEnum): string {

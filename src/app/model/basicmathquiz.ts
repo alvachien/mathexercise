@@ -1,5 +1,5 @@
 
-import { QuizItem, PrimarySchoolMathQuizItem } from './';
+import { QuizItem, PrimarySchoolMathQuizItem } from './quizconcept';
 
 /**
  * Math quiz item for additon part

@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewEncapsulation, ElementRef } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'home',
@@ -29,7 +30,8 @@ export class AppComponent implements OnInit {
   ];
 
   constructor(private _element: ElementRef,
-    private _translate: TranslateService) {
+    private _translate: TranslateService,
+    private _authService: AuthService) {
       // Setup the translate
       this.selectedLanguage = 'zh';
       this._translate.setDefaultLang('zh');
@@ -39,6 +41,14 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.updateDocumentTitle();
   }
+
+  public onLogon() {
+    this._authService.doLogin();
+  }
+
+  public onLogout() : void {
+    this._authService.doLogout();
+  } 
 
   public toggleFullscreen(): void {
     const elem = this._element.nativeElement.querySelector('.demo-content');
@@ -53,7 +63,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  onLanguageChange() {
+  public onLanguageChange() {
     if (this._translate.currentLang !== this.selectedLanguage) {
       this._translate.use(this.selectedLanguage);
 
