@@ -1,11 +1,12 @@
 import { Routes } from '@angular/router';
 import { Home } from './app.component';
 import { DivisionExerciseComponent } from './division-exercise/';
-import { MultiplicationQuizComponent } from './multiplication-quiz/multiplication-quiz.component';
-import { AdditionExerciseComponent } from './addition-exercise/addition-exercise.component';
-import { SubtractionExerciseComponent } from './subtraction-exercise/subtraction-exercise.component';
-import { QuizSummaryComponent } from './quiz-summary/quiz-summary.component';
+import { MultiplicationQuizComponent } from './multiplication-quiz/';
+import { AdditionExerciseComponent } from './addition-exercise/';
+import { SubtractionExerciseComponent } from './subtraction-exercise/';
+import { QuizSummaryComponent } from './quiz-summary/';
 import { FormulaExerciseComponent } from './formula-exercise/';
+import { FormulaListComponent } from './formula-list/';
 
 export const AppRoutes: Routes = [
   { path: '', component: Home },
@@ -15,4 +16,5 @@ export const AppRoutes: Routes = [
   { path: 'multi-ex', component: MultiplicationQuizComponent },
   { path: 'quiz-sum', component: QuizSummaryComponent },
   { path: 'formula-ex', component: FormulaExerciseComponent },
+  { path: 'formula-list', component: FormulaListComponent },
 ];

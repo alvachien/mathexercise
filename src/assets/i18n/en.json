@@ -13,9 +13,11 @@
         "AdditionExercises": "Addition Exercises",
         "SubtractionExercises": "Subtraction Exercises",
         "FormulaExercises": "Formula Exercises",
+        "FormulaList": "Formula List",
 
         "HomePage": "Home",
         "Logon": "Logon",
+        "Logout": "Logout",
         "CloseButton": "CLOSE",
         "SubmitButton": "SUBMIT",
         "StartButton": "START",

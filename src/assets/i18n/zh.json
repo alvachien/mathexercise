@@ -13,9 +13,11 @@
         "AdditionExercises": "加法练习",
         "SubtractionExercises": "减法练习",
         "FormulaExercises": "公式定理练习",
+        "FormulaList": "公式定理列表",
 
         "HomePage": "起始页",
         "Logon": "登录",
+        "Logout": "登出",
         "CloseButton": "关闭",
         "SubmitButton": "提交",
         "StartButton": "开始",

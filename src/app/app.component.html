@@ -17,9 +17,11 @@
       <div class="demo-toolbar">
         <h1>{{'Home.MathExercise' | translate}}</h1>
         <div>
-          <button md-button (click)="onLogon()" title="Logon">
+          <button md-button *ngIf="!isLoggedIn" (click)="onLogon()" title="Logon">
             {{'Home.Logon' | translate }}
           </button>
+          <button md-button *ngIf="isLoggedIn" (click)="onUserDetail()">{{titleLogin}}</button>
+          <button md-button *ngIf="isLoggedIn" (click)="onLogout()">{{'Home.Logout' | translate}}</button>
           <md-select [(ngModel)]="selectedLanguage" (change)="onLanguageChange()" name="lang">
             <md-option *ngFor="let lang of availableLanguages" [value]="lang.Value">
               {{ lang.DisplayName | translate }}
