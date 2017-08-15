@@ -166,6 +166,7 @@ export class PrimarySchoolMathQuiz {
     }
 
     public SubmitCurrentRun(failcnt: number) {
+        this._curRun.ItemsFailed = failcnt;
         this._curRun.SectionComplete();
         this._elderRun.push(this._curRun);
 
