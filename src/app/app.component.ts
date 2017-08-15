@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
     { name: 'Home.SubtractionExercises', route: 'sub-ex' },
     { name: 'Home.MultiplicationExercises', route: 'multi-ex' },
     { name: 'Home.DivisionExercises', route: 'divide-ex' },
-    { name: 'Home.FormulaExercises', route: 'formula-list' },
+    { name: 'Home.FormulaList', route: 'formula-list' },
     { name: 'Home.FormulaExercises', route: 'formula-ex' },
   ];
   selectedLanguage: string;
