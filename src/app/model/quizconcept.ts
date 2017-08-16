@@ -33,6 +33,13 @@ export class QuizItem {
     public getFormattedString(): string {
         return '#' + this.QuizIndex.toString() + '; ';
     }
+
+    public storeToString(): string {
+        return '';
+    }
+    public restoreFromString(s: string) {
+        
+    }
 }
 
 /**
@@ -62,7 +69,6 @@ export class PrimarySchoolMathQuizItem extends QuizItem {
             return false;
         }
         return true;
-
     }
 
     public getFormattedString(): string {
@@ -76,6 +82,12 @@ export class PrimarySchoolMathQuizItem extends QuizItem {
 
     public getInputtedForumla(): string {
         return '';
+    }
+
+    public storeToString(): string {
+        let rstr = super.storeToString();
+        rstr = rstr + this._leftNumber.toString() + ';' + this._rightNumber.toString();
+        return rstr;
     }
 }
 

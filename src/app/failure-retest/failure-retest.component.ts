@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angular/http';
 import { environment } from '../../environments/environment';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-failure-retest',
@@ -9,15 +10,16 @@ import { environment } from '../../environments/environment';
 })
 export class FailureRetestComponent implements OnInit {
 
-  constructor(private _http: Http) { }
+  constructor(private _http: Http,
+    private _authService: AuthService) { }
 
   ngOnInit() {
-    let apiurl = environment.APIBaseUrl + 'QuizFailure/' + 'tester';
+    let apiurl = environment.APIBaseUrl + 'quizfailure/' + 'tester';
 
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
-    //headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
+    headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
     let options = new RequestOptions({ headers: headers }); // Create a request option
     this._http.get(apiurl, options)
       .map((response: Response) => {

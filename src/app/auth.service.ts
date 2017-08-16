@@ -252,7 +252,7 @@ const AuthSettings: any = {
   redirect_uri: environment.AppLoginCallbackUrl,
   post_logout_redirect_uri: environment.AppLogoutCallbackUrl,
   response_type: "id_token token",
-  scope: "openid profile",
+  scope: "openid profile api.acquiz",
 
   silent_redirect_uri: environment.AppLoginCallbackUrl,
   automaticSilentRenew: true,

@@ -10,6 +10,7 @@ import 'rxjs/add/operator/map';
 import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, MultiplicationQuizItem } from '../model';
 import { slideInOutAnimation } from '../animation';
 import { environment } from '../../environments/environment';
+import { AuthService } from '../auth.service';
 
 export interface QuizSummaryInfo {
   id: number;
@@ -81,6 +82,7 @@ export class QuizSummaryComponent implements OnInit {
   dataSource: QuizSummaryDataSource | null;
 
   constructor(private _dlgsvc: DialogService,
+    private _authService: AuthService,
     private _http: Http) {
   }
 
@@ -94,7 +96,7 @@ export class QuizSummaryComponent implements OnInit {
 
   public onSave(): void {
     // Save it to DB
-    let apiurl = environment.APIBaseUrl + 'Quiz';
+    let apiurl = environment.APIBaseUrl + 'quiz';
 
     let result:any = {};
     result.quizType = this._dlgsvc.CurrentQuiz.QuizType;
@@ -124,7 +126,7 @@ export class QuizSummaryComponent implements OnInit {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
-    //headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
+    headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
     let options = new RequestOptions({ headers: headers }); // Create a request option
     this._http.post(apiurl, data, options)
       .map((response: Response) => {
