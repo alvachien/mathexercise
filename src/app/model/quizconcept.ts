@@ -1,5 +1,16 @@
 
 /**
+ * Quiz type
+ */
+export enum QuizTypeEnum {
+    add     = 1,
+    sub     = 2,
+    multi   = 3,
+    div     = 4,
+    formula = 5
+}
+
+/**
  * Quiz item
  */
 export class QuizItem {
@@ -125,16 +136,19 @@ export class PrimarySchoolMathQuizSection {
  * Math quiz for Primary School
  */
 export class PrimarySchoolMathQuiz {    
+    // Elder runs
     private _elderRun: PrimarySchoolMathQuizSection[] = [];
     public ElderRuns(): PrimarySchoolMathQuizSection[] {
         return this._elderRun;
     }
 
+    // Current run
     private _curRun: PrimarySchoolMathQuizSection;
     public CurrentRun(): PrimarySchoolMathQuizSection {
         return this._curRun;
     }
 
+    // Failed factor
     private _faileFactor: number;
     get FailedFactor(): number {
         return this._faileFactor;
@@ -142,11 +156,29 @@ export class PrimarySchoolMathQuiz {
     set FailedFactor(ff: number) {
         this._faileFactor = ff;
     }
+
+    // Is started
     private _isStarted: boolean;
     get IsStarted(): boolean {
         return this._isStarted;
     }
+
+    // Quiz type
+    private _qtype: QuizTypeEnum;
+    get QuizType(): QuizTypeEnum {
+        return this._qtype;
+    }
+    set QuizType(qt: QuizTypeEnum) {
+        this._qtype = qt;
+    }
+
+    // Current run ID
     private _curRunID: number;
+    // Failed items
+    private _failedItems: PrimarySchoolMathQuizItem[] = [];
+    get FailedItems(): PrimarySchoolMathQuizItem[] {
+        return this._failedItems;
+    }
 
     constructor() {
         this._curRunID = 1;
@@ -165,13 +197,20 @@ export class PrimarySchoolMathQuiz {
         this._isStarted = true;
     }
 
-    public SubmitCurrentRun(failcnt: number) {
-        this._curRun.ItemsFailed = failcnt;
+    public SubmitCurrentRun(failedItems?: PrimarySchoolMathQuizItem[]) {
+        if (failedItems !== undefined && failedItems.length > 0) {
+            this._curRun.ItemsFailed = failedItems.length;
+            for(let fi of failedItems) {
+                this._failedItems.push(fi);
+            }
+        } else {
+            this._curRun.ItemsFailed = 0;            
+        }
         this._curRun.SectionComplete();
         this._elderRun.push(this._curRun);
 
-        if (failcnt > 0) {
-            let ncnt = Math.round(failcnt * this._faileFactor);
+        if (this._curRun.ItemsFailed > 0) {
+            let ncnt = Math.round(this._curRun.ItemsFailed * this._faileFactor);
 
             let curID = this._curRun.SectionNumber;
             this._curRun = new PrimarySchoolMathQuizSection(curID + 1, ncnt);            

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angular/http';
 import { DialogService } from '../dialog.service';
 import { DataSource } from '@angular/cdk';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -8,6 +9,7 @@ import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, MultiplicationQuizItem } from '../model';
 import { slideInOutAnimation } from '../animation';
+import { environment } from '../../environments/environment';
 
 export interface QuizSummaryInfo {
   id: number;
@@ -78,7 +80,8 @@ export class QuizSummaryComponent implements OnInit {
   quizDatabase: QuizSummaryDatabase;
   dataSource: QuizSummaryDataSource | null;
 
-  constructor(private _dlgsvc: DialogService) {
+  constructor(private _dlgsvc: DialogService,
+    private _http: Http) {
   }
 
   ngOnInit() {
@@ -87,5 +90,49 @@ export class QuizSummaryComponent implements OnInit {
     setTimeout(() => {
       this.dataSource = new QuizSummaryDataSource(this.quizDatabase);
     }, 1);
+  }
+
+  public onSave(): void {
+    // Save it to DB
+    let apiurl = environment.APIBaseUrl + 'Quiz';
+
+    let result:any = {};
+    result.quizType = this._dlgsvc.CurrentQuiz.QuizType;
+    result.submitDate = new Date();
+    result.attendUser = 'test';
+
+    result.failLogs = [];
+    for(let fl of this._dlgsvc.CurrentQuiz.FailedItems) {
+      let flog: any = {};
+      flog.quizFailIndex = fl.QuizIndex;
+      flog.expected = fl.getCorrectFormula();
+      flog.inputted = fl.getInputtedForumla();
+      result.failLogs.push(flog);
+    }
+
+    result.sections = [];
+    for(let qs of this._dlgsvc.CurrentQuiz.ElderRuns()) {
+      let qsect: any = {};
+      qsect.sectionID = qs.SectionNumber;
+      qsect.timeSpent = qs.TimeSpent;
+      qsect.totalItems = qs.ItemsCount;
+      qsect.failedItems = qs.ItemsFailed;
+      result.sections.push(qsect);
+    }
+    let data = JSON && JSON.stringify(result);
+
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    //headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
+    let options = new RequestOptions({ headers: headers }); // Create a request option
+    this._http.post(apiurl, data, options)
+      .map((response: Response) => {
+        console.log(response);
+        return response.json();
+      })
+      .subscribe(x => {
+        console.log(x);
+      });
   }
 }

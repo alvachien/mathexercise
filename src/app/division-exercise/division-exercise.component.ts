@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, DivisionQuizItem,
-  DefaultQuizAmount, DefaultFailedQuizFactor } from '../model';
+  DefaultQuizAmount, DefaultFailedQuizFactor, QuizTypeEnum } from '../model';
 import { MdDialog } from '@angular/material';
 import { DialogService } from '../dialog.service';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
@@ -41,6 +41,7 @@ export class DivisionExerciseComponent implements OnInit {
     private _dlgsvc: DialogService,
     private _router: Router) {
     this.quizInstance = new PrimarySchoolMathQuiz();
+    this.quizInstance.QuizType = QuizTypeEnum.div;
   }
 
   ngOnInit() {
@@ -158,7 +159,7 @@ export class DivisionExerciseComponent implements OnInit {
       });
 
       dialogRef.afterClosed().subscribe(x => {
-        this.quizInstance.SubmitCurrentRun(this._dlgsvc.FailureItems.length);
+        this.quizInstance.SubmitCurrentRun(this._dlgsvc.FailureItems);
         
         this.generateQuizSection();
         this.pageIndex = 0;
@@ -169,7 +170,7 @@ export class DivisionExerciseComponent implements OnInit {
       });
     } else {
       // Succeed!
-      this.quizInstance.SubmitCurrentRun(0);
+      this.quizInstance.SubmitCurrentRun();
 
       this._dlgsvc.CurrentQuiz = this.quizInstance;
       // for (let run of this.quizInstance.ElderRuns()) {

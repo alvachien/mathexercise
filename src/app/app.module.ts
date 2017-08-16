@@ -56,6 +56,7 @@ import { DialogService } from './dialog.service';
 import { FormulaExerciseComponent } from './formula-exercise/';
 import { AuthService } from './auth.service';
 import { FormulaListComponent } from './formula-list/';
+import { FailureRetestComponent } from './failure-retest';
 
 @NgModule({
   exports: [
@@ -112,7 +113,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     QuizFailureDlgComponent,
     QuizSummaryComponent,
     FormulaExerciseComponent,
-    FormulaListComponent
+    FormulaListComponent,
+    FailureRetestComponent
   ],
   entryComponents: [
     QuizFailureDlgComponent
