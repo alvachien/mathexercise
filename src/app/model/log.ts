@@ -1,3 +1,4 @@
+// Log level
 export enum LogLevel {
     Crash = 0,
     Error = 1,

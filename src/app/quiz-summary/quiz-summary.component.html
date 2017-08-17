@@ -1,5 +1,8 @@
 <md-card>
-  <md-toolbar color="primary">{{'Home.Summary' | translate}}</md-toolbar>
+  <md-card-header>
+    <md-card-title>{{'Home.Summary' | translate}} - {{quizType | translate}}</md-card-title>
+    <md-card-subtitle>{{quizBaseInfo}}</md-card-subtitle>
+  </md-card-header>
   <md-card-content>
     <div class="example-container mat-elevation-z8">
       <md-table #table [dataSource]="dataSource">
@@ -32,13 +35,16 @@
           <md-header-cell *cdkHeaderCellDef>{{'Home.AvgTimeSpentEachInSeconds' | translate}}</md-header-cell>
           <md-cell *cdkCellDef="let row"> {{row.avgtimespent}} </md-cell>
         </ng-container>
+
+        <!-- AdjTimespentEach Column -->
+        <ng-container cdkColumnDef="avgtimespent">
+          <md-header-cell *cdkHeaderCellDef>{{'Home.AdjAvgTimeSpentEachInSeconds' | translate}}</md-header-cell>
+          <md-cell *cdkCellDef="let row"> {{row.avgtimespent}} </md-cell>
+        </ng-container>
         
         <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
         <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
       </md-table>
     </div>
   </md-card-content>
-  <md-card-actions>
-    <button md-button (click)="onSave()" >{{'Home.SaveButton' | translate }}</button>
-  </md-card-actions>
 </md-card>

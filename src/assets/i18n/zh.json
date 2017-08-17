@@ -31,6 +31,7 @@
         "Total": "总计",
         "TimeSpentInSeconds": "用时 (秒)",
         "AvgTimeSpentEachInSeconds": "平均每题用时 (秒)",
+        "AdjAvgTimeSpentEachInSeconds": "调整后平均每题用时 (秒)",
         "Expected": "正确答案",
         "Inputted": "输入答案",
         "Score": "分数"

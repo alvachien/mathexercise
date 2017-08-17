@@ -29,8 +29,9 @@
         "RetestPreviousFailures": "Retest previous Failures",
         "Summary": "Summary",
         "Total": "Total",
-        "TimeSpentInSeconds": "Time spent (s)",
-        "AvgTimeSpentEachInSeconds": "Average time spent (s)",
+        "TimeSpentInSeconds": "Time spt. (s)",
+        "AvgTimeSpentEachInSeconds": "Avg. time spt. (s)",
+        "AdjAvgTimeSpentEachInSeconds": "Adj. avg. time spt. (s)",
         "Expected": "Expected",
         "Inputted": "Inputted",
         "Score": "Score"

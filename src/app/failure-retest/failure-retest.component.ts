@@ -11,10 +11,13 @@ import { AuthService } from '../auth.service';
 export class FailureRetestComponent implements OnInit {
 
   constructor(private _http: Http,
-    private _authService: AuthService) { }
+    private _authService: AuthService) {
+
+  }
 
   ngOnInit() {
-    let apiurl = environment.APIBaseUrl + 'quizfailure/' + 'tester';
+    let usr = this._authService.authSubject.getValue();
+    let apiurl = environment.APIBaseUrl + 'quizfailure/' + usr;
 
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');

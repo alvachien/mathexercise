@@ -110,6 +110,8 @@ export class DivisionExerciseComponent implements OnInit {
   
   public onQuizStart(): void {
     // Start it!
+    this.quizInstance.BasicInfo = '[' + this.DivisorRangeBgn.toString() + '...' + this.DivisorRangeEnd.toString() + ']'
+      + ' ÷ [' + this.DividendRangeBgn.toString() + '...' + this.DividendRangeEnd.toString() + ']';
     this.quizInstance.Start(this.StartQuizAmount, this.FailedQuizFactor);
 
     // Generated section

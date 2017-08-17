@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
-import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, MultiplicationQuizItem } from '../model';
+import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, MultiplicationQuizItem, QuizTypeEnum2UIString } from '../model';
 import { slideInOutAnimation } from '../animation';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../auth.service';
@@ -18,6 +18,7 @@ export interface QuizSummaryInfo {
   failedamt: number;
   timespent: number;
   avgtimespent: number;
+  adjavgtimespent: number; 
 }
 
 export class QuizSummaryDatabase {
@@ -33,7 +34,8 @@ export class QuizSummaryDatabase {
           totalamt: run.ItemsCount,
           failedamt: run.ItemsFailed,
           timespent: run.TimeSpent,
-          avgtimespent: Math.round(run.TimeSpent / run.ItemsCount)
+          avgtimespent: Math.round(run.TimeSpent / run.ItemsCount),
+          adjavgtimespent: Math.max(0, Math.round(run.TimeSpent / run.ItemsCount - 2))
         });
       }
     }
@@ -80,6 +82,8 @@ export class QuizSummaryComponent implements OnInit {
   displayedColumns = ['runid', 'totalamt', 'failedamt', 'timespent', 'avgtimespent'];
   quizDatabase: QuizSummaryDatabase;
   dataSource: QuizSummaryDataSource | null;
+  quizBaseInfo: string;
+  quizType: string;
 
   constructor(private _dlgsvc: DialogService,
     private _authService: AuthService,
@@ -88,13 +92,18 @@ export class QuizSummaryComponent implements OnInit {
 
   ngOnInit() {
     this.quizDatabase = new QuizSummaryDatabase(this._dlgsvc.CurrentQuiz);
+    this.quizBaseInfo = this._dlgsvc.CurrentQuiz.BasicInfo;
+    this.quizType = QuizTypeEnum2UIString(this._dlgsvc.CurrentQuiz.QuizType);
+
     // Workaround for https://github.com/angular/material2/issues/5593
     setTimeout(() => {
       this.dataSource = new QuizSummaryDataSource(this.quizDatabase);
     }, 1);
+
+    this.onSave();
   }
 
-  public onSave(): void {
+  private onSave(): void {
     // Save it to DB
     let apiurl = environment.APIBaseUrl + 'quiz';
 

@@ -100,8 +100,10 @@ export class AdditionExerciseComponent implements OnInit {
     return item.QuizIndex;
   }
 
-  public onQuizStart(): void {
+  public onQuizStart(): void {    
     // Start it!
+    this.quizInstance.BasicInfo = '[' + this.LeftNumberRangeBgn.toString() + '...' + this.LeftNumberRangeEnd.toString() + ']'
+          + ' + [' + this.RightNumberRangeBgn.toString() + '...' + this.RightNumberRangeEnd.toString() + ']';
     this.quizInstance.Start(this.StartQuizAmount, this.FailedQuizFactor);
 
     // Generated section
