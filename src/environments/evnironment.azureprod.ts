@@ -4,9 +4,9 @@ export const environment = {
     LoggingLevel: 1, // Crash
   
     IDServerUrl: 'http://acidserver.azurewebsites.net/',
-    APIBaseUrl: 'http://localhost:54020/api/',
+    APIBaseUrl: 'http://acquizapi.azurewebsites.net/api/',
     AppLoginCallbackUrl: 'http://acmathexercise.azurewebsites.net/logincallback.html',
     AppLogoutCallbackUrl: 'http://acmathexercise.azurewebsites.net/index.html',
-    AppHost: 'http://acgallery.azurewebsites.net'
+    AppHost: 'http://acmathexercise.azurewebsites.net'
   };
   
