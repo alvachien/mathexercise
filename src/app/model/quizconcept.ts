@@ -52,9 +52,6 @@ export class QuizItem {
     public storeToString(): string {
         return '';
     }
-    public restoreFromString(s: string): string {
-        return s;
-    }
 }
 
 /**
@@ -105,19 +102,15 @@ export class PrimarySchoolMathQuizItem extends QuizItem {
         return rstr;
     }
 
-    public restoreFromString(s: string): string {
-        let rst = super.restoreFromString(s);
-
+    public static restoreFromString(s: string): PrimarySchoolMathQuizItem {
         // Now parse it!
-        let idx = rst.indexOf(QuizSplitter);
-        let idx2 = rst.indexOf(QuizSplitter, idx + 1);
-        this._leftNumber = parseInt(rst.substring(0, idx));
-        this._rightNumber = parseInt(rst.substring(idx + 1, idx2));
-        if (idx2 === s.length - 1) {
-            return '';
-        }
+        let idx = s.indexOf(QuizSplitter);
+        let idx2 = s.indexOf(QuizSplitter, idx + 1);
 
-        return rst.substring(idx2 + 1);
+        let leftNumber = parseInt(s.substring(0, idx));
+        let rightNumber = parseInt(s.substring(idx + 1, idx2));
+
+        return new PrimarySchoolMathQuizItem(leftNumber, rightNumber);
     }
 }
 

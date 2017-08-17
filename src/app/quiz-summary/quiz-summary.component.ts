@@ -109,6 +109,7 @@ export class QuizSummaryComponent implements OnInit {
 
     let result:any = {};
     result.quizType = this._dlgsvc.CurrentQuiz.QuizType;
+    result.basicInfo = this._dlgsvc.CurrentQuiz.BasicInfo;
     result.submitDate = new Date();
     result.attendUser = 'test';
 
@@ -116,7 +117,7 @@ export class QuizSummaryComponent implements OnInit {
     for(let fl of this._dlgsvc.CurrentQuiz.FailedItems) {
       let flog: any = {};
       flog.quizFailIndex = fl.QuizIndex;
-      flog.expected = fl.getCorrectFormula();
+      flog.expected = fl.storeToString();
       flog.inputted = fl.getInputtedForumla();
       result.failLogs.push(flog);
     }
