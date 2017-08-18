@@ -2,9 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angular/http';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../auth.service';
-import { QuizTypeEnum, PrimarySchoolMathQuizItem, 
+import { QuizTypeEnum, PrimarySchoolMathQuizItem, QuizTypeEnum2UIString,
   AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem } from '../model';
-
+import { MdDialog } from '@angular/material';
+import { DialogService } from '../dialog.service';
+import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
+  
 export class QuizFailureItem {
   public quiztype: QuizTypeEnum;
   public quizid: number;
@@ -21,8 +24,11 @@ export class QuizFailureItem {
   styleUrls: ['./failure-retest.component.scss']
 })
 export class FailureRetestComponent implements OnInit {
+  listFailItems: QuizFailureItem[] = [];
 
   constructor(private _http: Http,
+    private dialog: MdDialog,
+    private _dlgsvc: DialogService,
     private _authService: AuthService) {
   }
 
@@ -59,12 +65,128 @@ export class FailureRetestComponent implements OnInit {
               default: break;
             }
             console.log(qi);
+
+            this.listFailItems.push(qi);
           }
         }
       });
   }
 
-  public onQuizSubmit() {
+  public getUIStringForType(qt: QuizTypeEnum): string {
+    return QuizTypeEnum2UIString(qt);
+  }
 
+  public IsASMType(qt: QuizTypeEnum): boolean {
+    return (qt === QuizTypeEnum.add
+      || qt === QuizTypeEnum.sub
+      || qt === QuizTypeEnum.multi);
+  }
+
+  public IsDivType(qt: QuizTypeEnum): boolean {
+    return qt === QuizTypeEnum.div;
+  }
+
+  public CanSubmit(): boolean {
+    if (this.listFailItems.length <= 0) {
+      return false;
+    }
+
+    for(let fi of this.listFailItems) {
+      switch(fi.quiztype) {
+        case QuizTypeEnum.add: {
+          let aqi: AdditionQuizItem = <AdditionQuizItem>fi.qsInstance;
+          if (aqi.InputtedResult === undefined
+            || aqi.InputtedResult === null) {
+              return false;
+          }
+        }
+        break;
+
+        case QuizTypeEnum.sub: {
+          let sqi: SubtractionQuizItem = <SubtractionQuizItem>fi.qsInstance;
+          if (sqi.InputtedResult === undefined 
+          || sqi.InputtedResult === null) {
+            return false;
+          }
+        }
+        break;
+
+        case QuizTypeEnum.multi: {
+          let mqi: MultiplicationQuizItem = <MultiplicationQuizItem>fi.qsInstance;
+          if (mqi.InputtedResult === undefined
+            || mqi.InputtedResult === null) {
+              return false;
+          }
+        }
+        break;
+
+        case QuizTypeEnum.div: {
+          let dqi: DivisionQuizItem = <DivisionQuizItem>fi.qsInstance;
+          if (dqi.InputtedQuotient === undefined || dqi.InputtedQuotient === null
+            || dqi.InputtedRemainder === undefined || dqi.InputtedRemainder === null) {
+              return false;
+          }
+        }
+        break;
+
+        default:
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  public onQuizSubmit() {
+    this._dlgsvc.FailureItems = [];
+    for(let fi of this.listFailItems) {
+      switch(fi.quiztype) {
+        case QuizTypeEnum.add: {
+          let aqi: AdditionQuizItem = <AdditionQuizItem>fi.qsInstance;
+          if (!aqi.IsCorrect()) {
+            this._dlgsvc.FailureItems.push(aqi);
+          }
+        }
+        break;
+
+        case QuizTypeEnum.sub: {
+          let sqi: SubtractionQuizItem = <SubtractionQuizItem>fi.qsInstance;
+          if (!sqi.IsCorrect()) {
+            this._dlgsvc.FailureItems.push(sqi);
+          }
+        }
+        break;
+
+        case QuizTypeEnum.multi: {
+          let mqi: MultiplicationQuizItem = <MultiplicationQuizItem>fi.qsInstance;
+          if (!mqi.IsCorrect()) {
+            this._dlgsvc.FailureItems.push(mqi);
+          }
+        }
+        break;
+
+        case QuizTypeEnum.div: {
+          let dqi: DivisionQuizItem = <DivisionQuizItem>fi.qsInstance;
+          if (!dqi.IsCorrect()) {
+            this._dlgsvc.FailureItems.push(dqi);
+          }
+        }
+        break;
+
+        default: break;
+      }
+
+      if (this._dlgsvc.FailureItems.length > 0) {
+        this._dlgsvc.CurrentScore = Math.round(100 - 100 * this._dlgsvc.FailureItems.length / this.listFailItems.length);
+        let dialogRef = this.dialog.open(QuizFailureDlgComponent, {
+          disableClose: false,
+          width: '500px'
+        });
+  
+        dialogRef.afterClosed().subscribe(x => {
+          // Do nothing!
+        });
+      }
+    }
   }
 }

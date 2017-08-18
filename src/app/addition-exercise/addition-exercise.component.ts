@@ -115,7 +115,7 @@ export class AdditionExerciseComponent implements OnInit {
     this.quizInstance.CurrentRun().SectionStart();
   }
 
-  public CanSubmit(): boolean {    
+  public CanSubmit(): boolean {
     if (!this.quizInstance.IsStarted) {
       return false;
     }

@@ -53,8 +53,12 @@ export class AdditionQuizItem extends PrimarySchoolMathQuizItem {
     public getFormattedString(): string {
         let rststr = super.getFormattedString();
         return rststr + this.LeftNumber.toString()
-            + " + " + this.RightNumber.toString() + " = " + this.Result.toString()
-            + ((this.InputtedResult !== undefined && this.InputtedResult !== null)? "; Inputted: " + this.InputtedResult.toString() : "");
+            + " + " + this.RightNumber.toString() + " = ";
+    }
+
+    public static restoreFromString(s: string): AdditionQuizItem {
+        let qi: PrimarySchoolMathQuizItem = super.restoreFromString(s);
+        return new AdditionQuizItem(qi.LeftNumber, qi.RightNumber);
     }
 }
 
@@ -111,9 +115,13 @@ export class SubtractionQuizItem extends PrimarySchoolMathQuizItem {
     public getFormattedString(): string {
         let rststr = super.getFormattedString();
         return rststr + this.LeftNumber.toString()
-            + " - " + this.RightNumber.toString() + " = " + this.Result.toString()
-            + ((this.InputtedResult !== undefined && this.InputtedResult !== null)? "; Inputted: " + this.InputtedResult.toString() : "");
+            + " - " + this.RightNumber.toString() + " = ";
     }
+
+    public static restoreFromString(s: string): SubtractionQuizItem {
+        let qi: PrimarySchoolMathQuizItem = super.restoreFromString(s);
+        return new SubtractionQuizItem(qi.LeftNumber, qi.RightNumber);
+    }    
 }
 
 /**
@@ -170,9 +178,13 @@ export class MultiplicationQuizItem extends PrimarySchoolMathQuizItem {
     public getFormattedString(): string {
         let rststr = super.getFormattedString();
         return rststr + this.LeftNumber.toString()
-            + " × " + this.RightNumber.toString() + " = " + this.Result.toString()
-            + ((this.InputtedResult !== undefined && this.InputtedResult !== null)? "; Inputted: " + this.InputtedResult.toString() : "");
+            + " × " + this.RightNumber.toString() + " = ";
     }
+
+    public static restoreFromString(s: string): MultiplicationQuizItem {
+        let qi: PrimarySchoolMathQuizItem = super.restoreFromString(s);
+        return new MultiplicationQuizItem(qi.LeftNumber, qi.RightNumber);
+    }    
 }
 
 /**
@@ -251,10 +263,12 @@ export class DivisionQuizItem extends PrimarySchoolMathQuizItem {
     public getFormattedString(): string {
         let rststr = super.getFormattedString();
         return rststr + this.LeftNumber.toString()
-            + " ÷ " + this.RightNumber.toString() + " = " + this.Quotient.toString()
-            + ((this.Remainder === 0) ? "" : ("... " + this.Remainder.toString()))
-            + ((this.InputtedQuotient !== undefined && this.InputtedQuotient !== null)? "; Inputted: " + this.InputtedQuotient.toString() : "")
-            + ((this.InputtedRemainder !== undefined && this.InputtedRemainder !== null)? " ... " + this.InputtedRemainder.toString() : "");
+            + " ÷ " + this.RightNumber.toString() + " = ";
     }
+    
+    public static restoreFromString(s: string): DivisionQuizItem {
+        let qi: PrimarySchoolMathQuizItem = super.restoreFromString(s);
+        return new DivisionQuizItem(qi.LeftNumber, qi.RightNumber);
+    }    
 }
 
