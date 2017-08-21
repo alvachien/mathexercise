@@ -1,7 +1,8 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "project": {
-    "name": "mathexercise"
+    "name": "mathexercise",
+    "ejected": false
   },
   "apps": [
     {
@@ -20,8 +21,7 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles.scss",
-        "../node_modules/bootstrap/dist/css/bootstrap.min.css"
+        "styles.scss"
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.slim.min.js",
@@ -58,10 +58,11 @@
   },
   "defaults": {
     "styleExt": "scss",
-    "serve": {
-        "port": 20000,
-        "host": "localhost"
+    "component": {
     },
-    "component": {}
+    "serve": {
+      "port": 20000,
+      "host": "localhost"
+    }
   }
 }

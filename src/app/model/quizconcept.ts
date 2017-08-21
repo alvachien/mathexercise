@@ -46,7 +46,8 @@ export class QuizItem {
     }
 
     public getFormattedString(): string {
-        return '#' + this.QuizIndex.toString() + QuizSplitter;
+        //return '#' + this.QuizIndex.toString() + QuizSplitter;
+        return '';
     }
 
     public storeToString(): string {
