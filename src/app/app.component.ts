@@ -26,6 +26,7 @@ export class AppComponent implements OnInit {
     { name: 'Home.FormulaList', route: 'formula-list' },
     { name: 'Home.FormulaExercises', route: 'formula-ex' },
     { name: 'Home.RetestPreviousFailures', route: 'fail-retest' },
+    { name: 'Home.RetestPreviousFailures', route: 'user-stat' },
   ];
   selectedLanguage: string;
   availableLanguages = [

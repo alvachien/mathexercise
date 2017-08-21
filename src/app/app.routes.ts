@@ -8,6 +8,7 @@ import { QuizSummaryComponent } from './quiz-summary/';
 import { FormulaExerciseComponent } from './formula-exercise/';
 import { FormulaListComponent } from './formula-list/';
 import { FailureRetestComponent } from './failure-retest';
+import { UserStatisticsComponent } from './user-statistics/';
 
 export const AppRoutes: Routes = [
   { path: '', component: Home },
@@ -19,4 +20,5 @@ export const AppRoutes: Routes = [
   { path: 'formula-ex', component: FormulaExerciseComponent },
   { path: 'formula-list', component: FormulaListComponent },
   { path: 'fail-retest', component: FailureRetestComponent },
+  { path: 'user-stat', component: UserStatisticsComponent },
 ];

@@ -34,7 +34,8 @@
         "AdjAvgTimeSpentEachInSeconds": "Adj. avg. time spt. (s)",
         "Expected": "Expected",
         "Inputted": "Inputted",
-        "Score": "Score"
+        "Score": "Score",
+        "Finished": "Finished"
     },
     "Math": {
         "Sum": "Sum",

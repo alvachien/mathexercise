@@ -40,6 +40,11 @@ export class FormulaQuizItem extends PrimarySchoolMathQuizItem {
 
             }
             break;
+
+            case PrimaySchoolFormulaEnum.DistanceAndSpeed: {
+
+            }
+            break;
             
             default:
             break;

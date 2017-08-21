@@ -34,7 +34,8 @@
         "AdjAvgTimeSpentEachInSeconds": "调整后平均每题用时 (秒)",
         "Expected": "正确答案",
         "Inputted": "输入答案",
-        "Score": "分数"
+        "Score": "分数",
+        "Finished": "结束"
     },
     "Math": {
         "Sum": "和",

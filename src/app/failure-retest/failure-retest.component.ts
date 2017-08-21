@@ -19,6 +19,12 @@ export class QuizFailureItem {
 }
 
 @Component({
+  selector: 'failure-retest-complete-dialog',
+  templateUrl: 'failure-retest-complete-dialog.html',
+})
+export class FailureRetestCompleteDialog {}
+
+@Component({
   selector: 'app-failure-retest',
   templateUrl: './failure-retest.component.html',
   styleUrls: ['./failure-retest.component.scss']
@@ -186,6 +192,9 @@ export class FailureRetestComponent implements OnInit {
         dialogRef.afterClosed().subscribe(x => {
           // Do nothing!
         });
+      } else {
+        // Also show a dialog
+        this.dialog.open(FailureRetestCompleteDialog);
       }
     }
   }
