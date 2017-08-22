@@ -21,10 +21,11 @@
                 window.location = "/index.html";
             }
         })
-            .catch(function (er) {
-                document.getElementById("waiting").style.display = "none";
-                document.getElementById("error").innerText = er.message;
-            });
+        .catch(function (er) {
+            console.error(er.message);
+            document.getElementById("waiting").style.display = "none";
+            document.getElementById("error").innerText = er.message;
+        });
     </script>
 </body>
 

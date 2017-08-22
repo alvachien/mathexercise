@@ -1,10 +1,10 @@
 
-import { QuizItem, PrimarySchoolMathQuizItem } from './quizconcept';
+import { QuizItem, PrimarySchoolMathQuizItem, PrimarySchoolMathFAOQuizItem } from './quizconcept';
 
 /**
  * Math quiz item for additon part
  */
-export class AdditionQuizItem extends PrimarySchoolMathQuizItem {
+export class AdditionQuizItem extends PrimarySchoolMathFAOQuizItem {
     private _result: number;
     private _inputtedResult: number;
 
@@ -50,14 +50,14 @@ export class AdditionQuizItem extends PrimarySchoolMathQuizItem {
             + " + " + this.RightNumber.toString() + " = " + ((this.InputtedResult !== undefined && this.InputtedResult !== null)? this.InputtedResult.toString() : "");
     }
     
-    public getFormattedString(): string {
-        let rststr = super.getFormattedString();
+    public getQuizFormat(): string {
+        let rststr = super.getQuizFormat();
         return rststr + this.LeftNumber.toString()
             + " + " + this.RightNumber.toString() + " = ";
     }
 
     public static restoreFromString(s: string): AdditionQuizItem {
-        let qi: PrimarySchoolMathQuizItem = super.restoreFromString(s);
+        let qi: PrimarySchoolMathFAOQuizItem = super.restoreFromString(s);
         return new AdditionQuizItem(qi.LeftNumber, qi.RightNumber);
     }
 }
@@ -65,7 +65,7 @@ export class AdditionQuizItem extends PrimarySchoolMathQuizItem {
 /**
  * Math quiz item for subtraction part
  */
-export class SubtractionQuizItem extends PrimarySchoolMathQuizItem {
+export class SubtractionQuizItem extends PrimarySchoolMathFAOQuizItem {
     private _result: number;
     private _inputtedResult: number;
 
@@ -112,14 +112,14 @@ export class SubtractionQuizItem extends PrimarySchoolMathQuizItem {
             + ((this.InputtedResult !== undefined && this.InputtedResult !== null)? this.InputtedResult.toString() : "");
     }
     
-    public getFormattedString(): string {
-        let rststr = super.getFormattedString();
+    public getQuizFormat(): string {
+        let rststr = super.getQuizFormat();
         return rststr + this.LeftNumber.toString()
             + " - " + this.RightNumber.toString() + " = ";
     }
 
     public static restoreFromString(s: string): SubtractionQuizItem {
-        let qi: PrimarySchoolMathQuizItem = super.restoreFromString(s);
+        let qi: PrimarySchoolMathFAOQuizItem = super.restoreFromString(s);
         return new SubtractionQuizItem(qi.LeftNumber, qi.RightNumber);
     }    
 }
@@ -127,7 +127,7 @@ export class SubtractionQuizItem extends PrimarySchoolMathQuizItem {
 /**
  * Math quiz item for multiplication part
  */
-export class MultiplicationQuizItem extends PrimarySchoolMathQuizItem {
+export class MultiplicationQuizItem extends PrimarySchoolMathFAOQuizItem {
     private _result: number;
     private _inputtedResult: number;
 
@@ -175,14 +175,14 @@ export class MultiplicationQuizItem extends PrimarySchoolMathQuizItem {
             + ((this.InputtedResult !== undefined && this.InputtedResult !== null)? this.InputtedResult.toString() : "");
     }
     
-    public getFormattedString(): string {
-        let rststr = super.getFormattedString();
+    public getQuizFormat(): string {
+        let rststr = super.getQuizFormat();
         return rststr + this.LeftNumber.toString()
             + " × " + this.RightNumber.toString() + " = ";
     }
 
     public static restoreFromString(s: string): MultiplicationQuizItem {
-        let qi: PrimarySchoolMathQuizItem = super.restoreFromString(s);
+        let qi: PrimarySchoolMathFAOQuizItem = super.restoreFromString(s);
         return new MultiplicationQuizItem(qi.LeftNumber, qi.RightNumber);
     }    
 }
@@ -190,7 +190,7 @@ export class MultiplicationQuizItem extends PrimarySchoolMathQuizItem {
 /**
  * Math quiz item for division  part
  */
-export class DivisionQuizItem extends PrimarySchoolMathQuizItem {
+export class DivisionQuizItem extends PrimarySchoolMathFAOQuizItem {
     private _quotient: number;
     private _remainder: number;
     private _inputtedQuotient: number;
@@ -260,14 +260,14 @@ export class DivisionQuizItem extends PrimarySchoolMathQuizItem {
             + ((this.InputtedRemainder !== undefined && this.InputtedRemainder !== null)? " ... " + this.InputtedRemainder.toString() : "");
     }
 
-    public getFormattedString(): string {
-        let rststr = super.getFormattedString();
+    public getQuizFormat(): string {
+        let rststr = super.getQuizFormat();
         return rststr + this.LeftNumber.toString()
             + " ÷ " + this.RightNumber.toString() + " = ";
     }
     
     public static restoreFromString(s: string): DivisionQuizItem {
-        let qi: PrimarySchoolMathQuizItem = super.restoreFromString(s);
+        let qi: PrimarySchoolMathFAOQuizItem = super.restoreFromString(s);
         return new DivisionQuizItem(qi.LeftNumber, qi.RightNumber);
     }    
 }

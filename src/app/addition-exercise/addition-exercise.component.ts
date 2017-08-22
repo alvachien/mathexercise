@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, AdditionQuizItem,
   DefaultQuizAmount, DefaultFailedQuizFactor, QuizTypeEnum } from '../model';
 import { MdDialog } from '@angular/material';
+import { Router } from '@angular/router';
+import { PageEvent } from '@angular/material';
 import { DialogService } from '../dialog.service';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
 import { QuizSummaryComponent } from '../quiz-summary/quiz-summary.component';
-import { Router } from '@angular/router';
-import { PageEvent } from '@angular/material';
 
 @Component({
   selector: 'app-addition-exercise',

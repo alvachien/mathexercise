@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angular/http';
+import { Router } from '@angular/router';
+import { MdDialog } from '@angular/material';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../auth.service';
 import { QuizTypeEnum, PrimarySchoolMathQuizItem, QuizTypeEnum2UIString,
   AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem } from '../model';
-import { MdDialog } from '@angular/material';
 import { DialogService } from '../dialog.service';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
   
@@ -35,7 +36,8 @@ export class FailureRetestComponent implements OnInit {
   constructor(private _http: Http,
     private dialog: MdDialog,
     private _dlgsvc: DialogService,
-    private _authService: AuthService) {
+    private _authService: AuthService,
+    private _router: Router) {
   }
 
   ngOnInit() {
@@ -194,7 +196,10 @@ export class FailureRetestComponent implements OnInit {
         });
       } else {
         // Also show a dialog
-        this.dialog.open(FailureRetestCompleteDialog);
+        this.dialog.open(FailureRetestCompleteDialog).afterClosed().subscribe(() => {
+          // Navigate it back to home page
+          this._router.navigate(['/']);
+        });
       }
     }
   }

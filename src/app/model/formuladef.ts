@@ -5,7 +5,7 @@ export enum PrimaySchoolFormulaEnum {
     AreaOfRectangle   = 2,
     AreaOfParallelogram = 3,
     AreaOfTrapezoid     = 4,
-    AreaOfCircle        = 6,
+    AreaOfCircle        = 5,
 
     CircumferenceOfCircle   = 10,
     CircumferenceOfSquare   = 11,

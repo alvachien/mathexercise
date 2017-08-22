@@ -7,7 +7,7 @@
     <div *ngFor="let qi of listFailItems">
       <span>{{qi.quizid}}, </span>
       <span>{{getUIStringForType(qi.quiztype) | translate}} </span>
-      <span>{{qi.qsInstance.getFormattedString()}}</span>
+      <span>{{qi.qsInstance.getQuizFormat()}}</span>
       <md-input-container *ngIf="IsASMType(qi.quiztype)">
         <input mdInput type="number" placeholder="{{'Math.Sum' | translate }}" [(ngModel)]="qi.qsInstance.InputtedResult" name="inputrst"
           required>

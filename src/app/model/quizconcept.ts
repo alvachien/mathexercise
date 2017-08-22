@@ -45,7 +45,7 @@ export class QuizItem {
         return true;
     }
 
-    public getFormattedString(): string {
+    public getQuizFormat(): string {
         //return '#' + this.QuizIndex.toString() + QuizSplitter;
         return '';
     }
@@ -59,6 +59,42 @@ export class QuizItem {
  * Math quiz item for Primary School
  */
 export class PrimarySchoolMathQuizItem extends QuizItem {
+    public IsCorrect(): boolean {
+        let brst = super.IsCorrect();
+        if (!brst) {
+            return false;
+        }
+        return true;
+    }
+
+    public getQuizFormat(): string {
+        let rststr = super.getQuizFormat();
+        return rststr;
+    }
+
+    public getCorrectFormula(): string {
+        return '';
+    }
+
+    public getInputtedForumla(): string {
+        return '';
+    }
+
+    public storeToString(): string {
+        let rstr = super.storeToString();
+        return rstr;
+    }
+
+    public static restoreFromString(s: string): PrimarySchoolMathQuizItem | null {
+        return null;
+    }    
+}
+
+/**
+ * Quiz item for FAO
+ * four arithmetic operation
+ */
+export class PrimarySchoolMathFAOQuizItem extends PrimarySchoolMathQuizItem {
     private _leftNumber: number;
     private _rightNumber: number;
 
@@ -84,17 +120,19 @@ export class PrimarySchoolMathQuizItem extends QuizItem {
         return true;
     }
 
-    public getFormattedString(): string {
-        let rststr = super.getFormattedString();
+    public getQuizFormat(): string {
+        let rststr = super.getQuizFormat();
         return rststr;
     }
 
     public getCorrectFormula(): string {
-        return '';
+        let rststr = super.getCorrectFormula();
+        return rststr;
     }
 
     public getInputtedForumla(): string {
-        return '';
+        let rststr = super.getInputtedForumla();
+        return rststr;
     }
 
     public storeToString(): string {
@@ -103,7 +141,7 @@ export class PrimarySchoolMathQuizItem extends QuizItem {
         return rstr;
     }
 
-    public static restoreFromString(s: string): PrimarySchoolMathQuizItem {
+    public static restoreFromString(s: string): PrimarySchoolMathFAOQuizItem {
         // Now parse it!
         let idx = s.indexOf(QuizSplitter);
         let idx2 = s.indexOf(QuizSplitter, idx + 1);
@@ -111,8 +149,8 @@ export class PrimarySchoolMathQuizItem extends QuizItem {
         let leftNumber = parseInt(s.substring(0, idx));
         let rightNumber = parseInt(s.substring(idx + 1, idx2));
 
-        return new PrimarySchoolMathQuizItem(leftNumber, rightNumber);
-    }
+        return new PrimarySchoolMathFAOQuizItem(leftNumber, rightNumber);
+    }    
 }
 
 /**

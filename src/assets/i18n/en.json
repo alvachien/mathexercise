@@ -35,7 +35,11 @@
         "Expected": "Expected",
         "Inputted": "Inputted",
         "Score": "Score",
-        "Finished": "Finished"
+        "Finished": "Finished",
+        "FailureRetestFinished": "Finished all previous failures retested",
+        "Statistics": "Statistics",
+
+        "Underconstruction": "Page still under construction"
     },
     "Math": {
         "Sum": "Sum",
@@ -72,6 +76,9 @@
         "CircumferenceOfCircle": "Circumference",
         "AreaOfCircle": "Area of Circle",
         "RadiusOfCircle": "Radius of Circle",
-        "DiameterOfCircle": "Diameter of Circle"
+        "DiameterOfCircle": "Diameter of Circle",
+        "DistanceAndSpeed": "Distance and Speed",
+        "CircumferenceOfSquare": "Circumference of Square",
+        "CircumferenceOfRectangle": "Circumference of Rectangle"
     }
 }
