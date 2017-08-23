@@ -79,6 +79,7 @@
         "DiameterOfCircle": "Diameter of Circle",
         "DistanceAndSpeed": "Distance and Speed",
         "CircumferenceOfSquare": "Circumference of Square",
-        "CircumferenceOfRectangle": "Circumference of Rectangle"
+        "CircumferenceOfRectangle": "Circumference of Rectangle",
+        "Scope": "Scope"
     }
 }

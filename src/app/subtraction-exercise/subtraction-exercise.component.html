@@ -57,7 +57,7 @@
   </md-card-content>
 
   <md-card-actions>
-    <button md-button (click)="onQuizStart()" [disabled]="quizInstance.IsStarted">{{'Home.StartButton' | translate }}</button>
+    <button md-button (click)="onQuizStart()" [disabled]="!CanStart()">{{'Home.StartButton' | translate }}</button>
     <button md-button (click)="onQuizSubmit()" [disabled]="!CanSubmit()">{{'Home.SubmitButton' | translate }}</button>
   </md-card-actions>
 </md-card>

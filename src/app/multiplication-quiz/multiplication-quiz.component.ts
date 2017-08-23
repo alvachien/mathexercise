@@ -106,6 +106,18 @@ export class MultiplicationQuizComponent implements OnInit {
     return item.QuizIndex;
   }
   
+  public CanStart(): boolean {
+    if (this.StartQuizAmount <= 0) {
+      return false;
+    }
+    
+    if (this.quizInstance.IsStarted) {
+      return false;
+    }
+
+    return true;
+  }
+  
   public onQuizStart(): void {
     // Start it!
     this.quizInstance.BasicInfo = '[' + this.LeftNumberRangeBgn.toString() + '...' + this.LeftNumberRangeEnd.toString() + ']'

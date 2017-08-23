@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, AdditionQuizItem,
-  DefaultQuizAmount, DefaultFailedQuizFactor, QuizTypeEnum } from '../model';
+import {
+  PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, AdditionQuizItem,
+  DefaultQuizAmount, DefaultFailedQuizFactor, QuizTypeEnum
+} from '../model';
 import { MdDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { PageEvent } from '@angular/material';
@@ -60,7 +62,7 @@ export class AdditionExerciseComponent implements OnInit {
 
       this.QuizItems.push(dq);
     }
-    this.UsedQuizAmount += this.QuizItems.length;    
+    this.UsedQuizAmount += this.QuizItems.length;
   }
 
   public onPageChanged($event: PageEvent) {
@@ -72,9 +74,9 @@ export class AdditionExerciseComponent implements OnInit {
   }
 
   private submitCurrentPage() {
-    if (this.DisplayedQuizItems.length > 0 ) {
-      for(let qi of this.DisplayedQuizItems) {
-        for(let qi2 of this.QuizItems) {
+    if (this.DisplayedQuizItems.length > 0) {
+      for (let qi of this.DisplayedQuizItems) {
+        for (let qi2 of this.QuizItems) {
           if (qi.QuizIndex === qi2.QuizIndex) {
             qi2.InputtedResult = qi.InputtedResult;
             break;
@@ -89,7 +91,7 @@ export class AdditionExerciseComponent implements OnInit {
     let pageEnd = pageStart + this.pageSize;
 
     this.DisplayedQuizItems = [];
-    for(let i = 0; i < this.QuizItems.length; i ++) {
+    for (let i = 0; i < this.QuizItems.length; i++) {
       if (i >= pageStart && i < pageEnd) {
         this.DisplayedQuizItems.push(this.QuizItems[i]);
       }
@@ -100,10 +102,21 @@ export class AdditionExerciseComponent implements OnInit {
     return item.QuizIndex;
   }
 
-  public onQuizStart(): void {    
+  public CanStart(): boolean {
+    if (this.StartQuizAmount <= 0) {
+      return false;
+    }
+
+    if (this.quizInstance.IsStarted) {
+      return false;
+    }
+
+    return true;
+  }
+  public onQuizStart(): void {
     // Start it!
     this.quizInstance.BasicInfo = '[' + this.LeftNumberRangeBgn.toString() + '...' + this.LeftNumberRangeEnd.toString() + ']'
-          + ' + [' + this.RightNumberRangeBgn.toString() + '...' + this.RightNumberRangeEnd.toString() + ']';
+      + ' + [' + this.RightNumberRangeBgn.toString() + '...' + this.RightNumberRangeEnd.toString() + ']';
     this.quizInstance.Start(this.StartQuizAmount, this.FailedQuizFactor);
 
     // Generated section
@@ -141,7 +154,7 @@ export class AdditionExerciseComponent implements OnInit {
       if (!quiz.IsCorrect()) {
         this._dlgsvc.FailureItems.push(quiz);
       }
-    }    
+    }
 
     if (this._dlgsvc.FailureItems.length > 0) {
       this._dlgsvc.CurrentScore = Math.round(100 - 100 * this._dlgsvc.FailureItems.length / this.QuizItems.length);

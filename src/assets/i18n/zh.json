@@ -6,7 +6,7 @@
     "Home": {
         "AppTitle": "数学练习",
         "WelcomeTitle": "基于TypeScript的数学练习程序",
-        "WelcomeDetail": "打开侧边栏以选择一个测试程序。",
+        "WelcomeDetail": "打开侧边栏，选择对应的内容来启动测试程序。",
         "MathExercise": "数学练习",
         "DivisionExercises": "除法练习",
         "MultiplicationExercises": "乘法练习",
@@ -79,6 +79,7 @@
         "DiameterOfCircle": "直径",
         "DistanceAndSpeed": "距离与速度",
         "CircumferenceOfSquare": "正方形周长",
-        "CircumferenceOfRectangle": "长方形周长"
+        "CircumferenceOfRectangle": "长方形周长",
+        "Scope": "范围"
     }
 }

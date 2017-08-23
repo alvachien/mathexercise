@@ -2,6 +2,7 @@
   <md-card-header>
     <md-card-title>{{'Home.FormulaExercises' | translate}}</md-card-title>
   </md-card-header>
+
   <md-card-content>
     <div *ngIf="!quizInstance.IsStarted">
       <div class="demo-full-width">
@@ -15,6 +16,21 @@
             required>
           <md-error>This field is required</md-error>
         </md-input-container>
+      </div>
+
+      <div class="demo-full-width">
+        <md-input-container>
+          <input mdInput type="number" placeholder="{{'Math.Scope' | translate}}" [(ngModel)]="NumberRangeBgn" name="nrbgn"
+            required>
+        </md-input-container>
+        <md-input-container>
+          <input mdInput type="number" placeholder="{{'Math.Scope' | translate}}" [(ngModel)]="NumberRangeEnd" name="nrend"
+            required>
+        </md-input-container>
+      </div>
+
+      <div class="demo-full-width" *ngFor="let fs of formulaDef">
+        <md-checkbox [(ngModel)]="fs.selected"><span>{{fs.name | translate}}</span><span>  {{fs.formula}}</span></md-checkbox>
       </div>
     </div>
 
@@ -36,7 +52,7 @@
   </md-card-content>
 
   <md-card-actions>
-    <button md-button (click)="onQuizStart()" [disabled]="quizInstance.IsStarted">{{'Home.StartButton' | translate }}</button>
+    <button md-button (click)="onQuizStart()" [disabled]="!CanStart()">{{'Home.StartButton' | translate }}</button>
     <button md-button (click)="onQuizSubmit()" [disabled]="!CanSubmit()">{{'Home.SubmitButton' | translate }}</button>
   </md-card-actions>
 </md-card>
