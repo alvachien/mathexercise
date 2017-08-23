@@ -42,6 +42,7 @@ import {
   StyleModule
 } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppRoutes } from './app.routes';
@@ -131,6 +132,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ReactiveFormsModule,
     RouterModule.forRoot(AppRoutes),
     DSMaterialModule,
+    NgxChartsModule,
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {

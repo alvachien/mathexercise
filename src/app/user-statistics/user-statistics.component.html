@@ -1,3 +1,34 @@
-<h2>
-    {{'Home.Underconstruction' | translate}}
-</h2>
+<md-card>
+    <md-card-header>
+        <md-card-title>{{'Home.Statistics' | translate}}</md-card-title>
+    </md-card-header>
+    <md-card-content>
+        <div>
+            <md-select placeholder="User" [(ngModel)]="curUser" name="usr" (change)="onUserChanged($event)">
+                <md-option *ngFor="let user of listUsers" [value]="user">
+                    {{ user }}
+                </md-option>
+            </md-select>
+        </div>
+        <md-tab-group>
+            <md-tab label="By Date">
+                <ngx-charts-bar-vertical [view]="viewQuizAmountByDate" [scheme]="colorSchemeQuizAmountByDate" [results]="dataQuizAmountByDate" 
+                    [gradient]="gradientQuizAmountByDate"
+                    [xAxis]="showXAxisQuizAmountByDate"
+                    [yAxis]="showYAxisQuizAmountByDate"
+                    [legend]="showLegendQuizAmountByDate"
+                    [showXAxisLabel]="showXAxisLabelQuizAmountByDate"
+                    [showYAxisLabel]="showYAxisLabelQuizAmountByDate"
+                    [xAxisLabel]="xAxisLabelQuizAmountByDate"
+                    [yAxisLabel]="yAxisLabelQuizAmountByDate"
+                    (select)="onQuizAmountByDateSelect($event)">
+                </ngx-charts-bar-vertical>
+            </md-tab>
+            <md-tab label="By types">
+                <ngx-charts-number-card [view]="viewQuizAmountByType" [scheme]="colorQuizAmountByTypeScheme" [results]="dataQuizAmountByType"
+                    (select)="onQuizAmountByTypeSelect($event)">
+                </ngx-charts-number-card>
+            </md-tab>
+        </md-tab-group>
+    </md-card-content>
+</md-card>
