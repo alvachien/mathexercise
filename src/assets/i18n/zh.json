@@ -38,6 +38,10 @@
         "Finished": "结束",
         "FailureRetestFinished": "错误重做结束，结果通过。",
         "Statistics": "统计数据",
+        "UserDetail": "用户信息",
+        "UserID": "用户ID",
+        "Mailbox": "邮箱",
+        "DisplayAs": "显示名称",
 
         "Underconstruction": "当前页还在开发中"
     },

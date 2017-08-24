@@ -1,14 +1,15 @@
 import { Routes } from '@angular/router';
 import { Home } from './app.component';
-import { DivisionExerciseComponent } from './division-exercise/';
-import { MultiplicationQuizComponent } from './multiplication-quiz/';
-import { AdditionExerciseComponent } from './addition-exercise/';
-import { SubtractionExerciseComponent } from './subtraction-exercise/';
-import { QuizSummaryComponent } from './quiz-summary/';
-import { FormulaExerciseComponent } from './formula-exercise/';
-import { FormulaListComponent } from './formula-list/';
+import { DivisionExerciseComponent } from './division-exercise';
+import { MultiplicationQuizComponent } from './multiplication-quiz';
+import { AdditionExerciseComponent } from './addition-exercise';
+import { SubtractionExerciseComponent } from './subtraction-exercise';
+import { QuizSummaryComponent } from './quiz-summary';
+import { FormulaExerciseComponent } from './formula-exercise';
+import { FormulaListComponent } from './formula-list';
 import { FailureRetestComponent } from './failure-retest';
-import { UserStatisticsComponent } from './user-statistics/';
+import { UserStatisticsComponent } from './user-statistics';
+import { UserDetailComponent } from './user-detail';
 
 export const AppRoutes: Routes = [
   { path: '', component: Home },
@@ -21,4 +22,5 @@ export const AppRoutes: Routes = [
   { path: 'formula-list', component: FormulaListComponent },
   { path: 'fail-retest', component: FailureRetestComponent },
   { path: 'user-stat', component: UserStatisticsComponent },
+  { path: 'user-detail', component: UserDetailComponent },
 ];

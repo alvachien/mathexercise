@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation, NgZone, ElementRef } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { AuthService } from './auth.service';
+import { AuthService } from './services';
 import { environment } from '../environments/environment';
 import { LogLevel } from './model';
 
@@ -27,6 +27,7 @@ export class AppComponent implements OnInit {
     { name: 'Home.FormulaExercises', route: 'formula-ex' },
     { name: 'Home.RetestPreviousFailures', route: 'fail-retest' },
     { name: 'Home.Statistics', route: 'user-stat' },
+    { name: 'Home.UserDetail', route: 'user-detail' },
   ];
   selectedLanguage: string;
   availableLanguages = [

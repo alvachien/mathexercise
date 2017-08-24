@@ -5,29 +5,37 @@
     <md-card-content>
         <div>
             <md-select placeholder="User" [(ngModel)]="curUser" name="usr" (change)="onUserChanged($event)">
-                <md-option *ngFor="let user of listUsers" [value]="user">
-                    {{ user }}
+                <md-option *ngFor="let user of listUsers" [value]="user.attenduser">
+                    {{ user.displayas }}
                 </md-option>
             </md-select>
         </div>
         <md-tab-group>
             <md-tab label="By Date">
-                <ngx-charts-bar-vertical [view]="viewQuizAmountByDate" [scheme]="colorSchemeQuizAmountByDate" [results]="dataQuizAmountByDate" 
-                    [gradient]="gradientQuizAmountByDate"
-                    [xAxis]="showXAxisQuizAmountByDate"
-                    [yAxis]="showYAxisQuizAmountByDate"
-                    [legend]="showLegendQuizAmountByDate"
-                    [showXAxisLabel]="showXAxisLabelQuizAmountByDate"
-                    [showYAxisLabel]="showYAxisLabelQuizAmountByDate"
-                    [xAxisLabel]="xAxisLabelQuizAmountByDate"
-                    [yAxisLabel]="yAxisLabelQuizAmountByDate"
-                    (select)="onQuizAmountByDateSelect($event)">
+                <ngx-charts-bar-vertical [view]="viewQuizAmountByDate" [scheme]="colorSchemeQuizAmountByDate" [results]="dataQuizAmountByDate"
+                    [gradient]="gradientQuizAmountByDate" [xAxis]="showXAxisQuizAmountByDate" [yAxis]="showYAxisQuizAmountByDate"
+                    [legend]="showLegendQuizAmountByDate" [showXAxisLabel]="showXAxisLabelQuizAmountByDate" [showYAxisLabel]="showYAxisLabelQuizAmountByDate"
+                    [xAxisLabel]="xAxisLabelQuizAmountByDate" [yAxisLabel]="yAxisLabelQuizAmountByDate" (select)="onQuizAmountByDateSelect($event)">
                 </ngx-charts-bar-vertical>
             </md-tab>
             <md-tab label="By types">
                 <ngx-charts-number-card [view]="viewQuizAmountByType" [scheme]="colorQuizAmountByTypeScheme" [results]="dataQuizAmountByType"
                     (select)="onQuizAmountByTypeSelect($event)">
                 </ngx-charts-number-card>
+            </md-tab>
+            <md-tab label="Items amount By Date">
+                <ngx-charts-bar-vertical-stacked [view]="viewItemAmountByDate" [scheme]="colorSchemeItemAmountByDate" [results]="dataItemAmountByDate"
+                    [gradient]="gradientItemAmountByDate" [xAxis]="showXAxisItemAmountByDate" [yAxis]="showYAxisItemAmountByDate"
+                    [legend]="showLegendItemAmountByDate" [showXAxisLabel]="showXAxisLabelItemAmountByDate" [showYAxisLabel]="showYAxisLabelItemAmountByDate"
+                    [xAxisLabel]="xAxisLabelItemAmountByDate" [yAxisLabel]="yAxisLabelItemAmountByDate" (select)="onItemAmountByDateSelect($event)">
+                </ngx-charts-bar-vertical-stacked>
+            </md-tab>
+            <md-tab label="Items amount By Type">
+                <ngx-charts-bar-vertical-stacked [view]="viewItemAmountByType" [scheme]="colorSchemeItemAmountByType" [results]="dataItemAmountByType"
+                    [gradient]="gradientItemAmountByType" [xAxis]="showXAxisItemAmountByType" [yAxis]="showYAxisItemAmountByType"
+                    [legend]="showLegendItemAmountByType" [showXAxisLabel]="showXAxisLabelItemAmountByType" [showYAxisLabel]="showYAxisLabelItemAmountByType"
+                    [xAxisLabel]="xAxisLabelItemAmountByType" [yAxisLabel]="yAxisLabelItemAmountByType" (select)="onItemAmountByTypeSelect($event)">
+                </ngx-charts-bar-vertical-stacked>
             </md-tab>
         </md-tab-group>
     </md-card-content>

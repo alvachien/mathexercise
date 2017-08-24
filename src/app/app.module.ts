@@ -53,12 +53,12 @@ import { AdditionExerciseComponent } from './addition-exercise/';
 import { SubtractionExerciseComponent } from './subtraction-exercise/';
 import { QuizFailureDlgComponent } from './quiz-failure-dlg/';
 import { QuizSummaryComponent } from './quiz-summary/';
-import { DialogService } from './dialog.service';
+import { DialogService, AuthService } from './services';
 import { FormulaExerciseComponent } from './formula-exercise/';
-import { AuthService } from './auth.service';
 import { FormulaListComponent } from './formula-list/';
 import { FailureRetestComponent, FailureRetestCompleteDialog } from './failure-retest';
-import { UserStatisticsComponent } from './user-statistics/';
+import { UserStatisticsComponent } from './user-statistics';
+import { UserDetailComponent } from './user-detail';
 
 @NgModule({
   exports: [
@@ -118,7 +118,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormulaListComponent,
     FailureRetestComponent,
     FailureRetestCompleteDialog,
-    UserStatisticsComponent
+    UserStatisticsComponent,
+    UserDetailComponent
   ],
   entryComponents: [
     QuizFailureDlgComponent,

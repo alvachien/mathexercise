@@ -1,11 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angular/http';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services';
 import {
-  QuizTypeEnum, PrimarySchoolMathQuizItem, QuizTypeEnum2UIString,
+  QuizTypeEnum, PrimarySchoolMathQuizItem, QuizTypeEnum2UIString, 
   AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem
 } from '../model';
 import { environment } from '../../environments/environment';
+import { TranslateService } from '@ngx-translate/core';
+
+export interface quizattenduser {
+  attenduser: string;
+  displayas: string;
+}
+
+export interface quiztypeui {
+  qtype: QuizTypeEnum,
+  i18term: string,
+  display: string  
+}
 
 @Component({
   selector: 'app-user-statistics',
@@ -19,10 +31,12 @@ export class UserStatisticsComponent implements OnInit {
   // StatisticQuizAmountByType
   // AttendedUser
 
-  listUsers: string[] = [];
+  listUsers: quizattenduser[] = [];
   isUserLoaded: boolean = false;
   curUser: string = '';
+  listqtype: quiztypeui[] = [];
 
+  // Quiz amount by date
   viewQuizAmountByDate: any[] = [700, 400];
   showXAxisQuizAmountByDate = true;
   showYAxisQuizAmountByDate = true;
@@ -37,17 +51,76 @@ export class UserStatisticsComponent implements OnInit {
   };
   dataQuizAmountByDate: any[] = [];
 
+  // Quiz amount by type
   dataQuizAmountByType: any[] = [];
   viewQuizAmountByType: any[] = [700, 400];
   colorQuizAmountByTypeScheme = {
     domain: ['#5AA454', '#A10A28', '#C7B42C']
   };
 
+  // Item amount by date
+  viewItemAmountByDate: any[] = [700, 400];
+  showXAxisItemAmountByDate = true;
+  showYAxisItemAmountByDate = true;
+  gradientItemAmountByDate = false;
+  showLegendItemAmountByDate = true;
+  showXAxisLabelItemAmountByDate = true;
+  xAxisLabelItemAmountByDate = 'Date';
+  showYAxisLabelItemAmountByDate = true;
+  yAxisLabelItemAmountByDate = 'Amount';  
+  colorSchemeItemAmountByDate = {
+    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+  };
+  dataItemAmountByDate: any[] = [];
+  
+  // Item amount by type
+  viewItemAmountByType: any[] = [700, 400];
+  showXAxisItemAmountByType = true;
+  showYAxisItemAmountByType = true;
+  gradientItemAmountByType = false;
+  showLegendItemAmountByType = true;
+  showXAxisLabelItemAmountByType = true;
+  xAxisLabelItemAmountByType = 'Type';
+  showYAxisLabelItemAmountByType = true;
+  yAxisLabelItemAmountByType = 'Amount';  
+  colorSchemeItemAmountByType = {
+    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+  };
+  dataItemAmountByType: any[] = [];
+
   constructor(private _http: Http,
+    private _tranService: TranslateService,
     private _authService: AuthService) {
     // Object.assign(this, {single});
     this.isUserLoaded = false;
     this.curUser = '';
+
+    let arstrs: string[] = [];
+    for(let fe in QuizTypeEnum) {
+      if (isNaN(Number(fe))) {        
+      } else {
+        let astr = QuizTypeEnum2UIString(Number(fe));
+        arstrs.push(astr);
+
+        let qtu = {
+          qtype: Number(fe),
+          i18term: astr,
+          display: ''
+        };
+        this.listqtype.push(qtu);        
+      }
+    }
+
+    this._tranService.get(arstrs).subscribe(x => {
+      for(let tran in x) {
+        //console.log(tran);
+        for(let qtu of this.listqtype) {
+          if (tran === qtu.i18term) {
+            qtu.display = x[tran];
+          }
+        }
+      }
+    });
   }
 
   ngOnInit() {
@@ -60,6 +133,8 @@ export class UserStatisticsComponent implements OnInit {
     if (this.curUser !== undefined && this.curUser !== null && this.curUser.length > 0) {
       this.fetchQuizAmountByDate(this.curUser);
       this.fetchQuizAmountByType(this.curUser);
+      this.fetchQuizItemAmountByDate(this.curUser);
+      this.fetchQuizItemAmountByType(this.curUser);
     }
   }
 
@@ -71,6 +146,14 @@ export class UserStatisticsComponent implements OnInit {
 
   }
 
+  public onItemAmountByDateSelect(evnt: any) {
+    
+  }
+    
+  public onItemAmountByTypeSelect(evnt: any) {
+    
+  }
+      
   private fetchAllUsers() {
     this.isUserLoaded = true;
 
@@ -90,8 +173,11 @@ export class UserStatisticsComponent implements OnInit {
       .subscribe(x => {
         if (x instanceof Array && x.length > 0) {
           for (let si of x) {
-            console.log(si);
-            this.listUsers.push(si);
+            let au: quizattenduser = {
+              attenduser: si.attendUser,
+              displayas: si.displayAs
+            };
+            this.listUsers.push(au);
           }
         }
       });
@@ -135,16 +221,22 @@ export class UserStatisticsComponent implements OnInit {
     let options = new RequestOptions({ headers: headers }); // Create a request option
     this._http.get(apiurl, options)
       .map((response: Response) => {
-        console.log(response);
+        //console.log(response);
         return response.json();
       })
       .subscribe(x => {
         if (x instanceof Array && x.length > 0) {
           this.dataQuizAmountByType = [];
           for (let si of x) {
-            console.log(si);
+            //console.log(si);
+            let name: string = '';
+            for(let qtu of this.listqtype) {
+              if (qtu.qtype === Number(si.quizType)) {
+                name = qtu.display;
+              }
+            }
             let ent: any = {
-              name: '{{' + QuizTypeEnum2UIString(si.quizType) + ' | translate}}',
+              name: name,
               value: Number(si.amount)
             };
 
@@ -164,13 +256,28 @@ export class UserStatisticsComponent implements OnInit {
     let options = new RequestOptions({ headers: headers }); // Create a request option
     this._http.get(apiurl, options)
       .map((response: Response) => {
-        console.log(response);
+        //console.log(response);
         return response.json();
       })
       .subscribe(x => {
+        this.dataItemAmountByDate = [];
         if (x instanceof Array && x.length > 0) {
           for (let si of x) {
-            console.log(si);
+            //console.log(si);
+            let rst = {
+              name : si.quizDate,
+              series: [
+                {
+                  name: 'Success',
+                  value: si.totalAmount - si.failedAmount
+                },
+                {
+                  name: 'Failed',
+                  value: si.failedAmount
+                }
+              ]
+            };
+            this.dataItemAmountByDate.push(rst);
           }
         }
       });
@@ -186,13 +293,34 @@ export class UserStatisticsComponent implements OnInit {
     let options = new RequestOptions({ headers: headers }); // Create a request option
     this._http.get(apiurl, options)
       .map((response: Response) => {
-        console.log(response);
+        //console.log(response);
         return response.json();
       })
       .subscribe(x => {
+        this.dataItemAmountByType = [];
         if (x instanceof Array && x.length > 0) {
           for (let si of x) {
-            console.log(si);
+            //console.log(si);
+            let name: string = '';
+            for(let qtu of this.listqtype) {
+              if (qtu.qtype === Number(si.quizType)) {
+                name = qtu.display;
+              }
+            }
+            let rst = {
+              name : name,
+              series: [
+                {
+                  name: 'Success',
+                  value: si.totalAmount - si.failedAmount
+                },
+                {
+                  name: 'Failed',
+                  value: si.failedAmount
+                }
+              ]
+            };
+            this.dataItemAmountByType.push(rst);
           }
         }
       });

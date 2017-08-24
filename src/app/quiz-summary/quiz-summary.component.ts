@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angular/http';
-import { DialogService } from '../dialog.service';
 import { DataSource } from '@angular/cdk';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
@@ -10,7 +9,7 @@ import 'rxjs/add/operator/map';
 import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, MultiplicationQuizItem, QuizTypeEnum2UIString } from '../model';
 import { slideInOutAnimation } from '../animation';
 import { environment } from '../../environments/environment';
-import { AuthService } from '../auth.service';
+import { DialogService, AuthService } from '../services';
 
 export interface QuizSummaryInfo {
   id: number;

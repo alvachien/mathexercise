@@ -1,10 +1,10 @@
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 import { Injectable, EventEmitter } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { LogLevel, UserAuthInfo } from './model';
+import { LogLevel, UserAuthInfo } from '../model';
 import { UserManager, Log, MetadataService, User } from 'oidc-client';
 
 @Injectable()
@@ -254,10 +254,12 @@ const AuthSettings: any = {
   response_type: "id_token token",
   scope: "openid profile api.acquiz",
 
-  silent_redirect_uri: environment.AppLoginCallbackUrl,
+  silent_redirect_uri: environment.AppLoginSlientRevewCallbackUrl,
   automaticSilentRenew: true,
+  accessTokenExpiringNotificationTime: 4,
   //silentRequestTimeout:10000,
 
   filterProtocolClaims: true,
   loadUserInfo: true
 };
+

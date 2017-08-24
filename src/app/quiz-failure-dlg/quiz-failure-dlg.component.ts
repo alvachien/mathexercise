@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DialogService } from '../dialog.service';
+import { DialogService } from '../services';
 import { MdDialog, MdDialogRef } from '@angular/material';
 import { DataSource } from '@angular/cdk';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';

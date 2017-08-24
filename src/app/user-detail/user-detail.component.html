@@ -1,0 +1,32 @@
+<md-card>
+  <md-card-header>
+    <md-card-title>User detail</md-card-title>
+    <md-card-subtitle>User detail</md-card-subtitle>
+  </md-card-header>
+  <md-card-content>
+    <div class="demo-full-width">
+      <md-input-container>
+        <input mdInput type="number" placeholder="{{'Home.UserID' | translate}}" [(ngModel)]="UserID" name="User"
+          required>
+        <md-error>This field is required</md-error>
+      </md-input-container>
+    </div>
+    <div class="demo-full-width">
+      <md-input-container>
+        <input mdInput type="number" placeholder="{{'Home.Mailbox' | translate }}" [(ngModel)]="Mailbox" name="mailbox"
+          required>
+        <md-error>This field is required</md-error>
+      </md-input-container>
+    </div>
+    <div class="demo-full-width">
+      <md-input-container>
+        <input mdInput type="number" placeholder="{{'Home.DisplayAs' | translate }}" [(ngModel)]="DisplayAs" name="dispas"
+          required>
+        <md-error>This field is required</md-error>
+      </md-input-container>
+    </div>
+  </md-card-content>
+  <md-card-actions>
+    <button md-button (click)="onSave()">Save</button>
+  </md-card-actions>
+</md-card>

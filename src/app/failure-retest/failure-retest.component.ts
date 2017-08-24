@@ -3,10 +3,9 @@ import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angul
 import { Router } from '@angular/router';
 import { MdDialog } from '@angular/material';
 import { environment } from '../../environments/environment';
-import { AuthService } from '../auth.service';
+import { AuthService, DialogService } from '../services';
 import { QuizTypeEnum, PrimarySchoolMathQuizItem, QuizTypeEnum2UIString,
   AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem } from '../model';
-import { DialogService } from '../dialog.service';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
   
 export class QuizFailureItem {

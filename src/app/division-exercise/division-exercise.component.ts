@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, DivisionQuizItem,
   DefaultQuizAmount, DefaultFailedQuizFactor, QuizTypeEnum } from '../model';
 import { MdDialog } from '@angular/material';
-import { DialogService } from '../dialog.service';
+import { DialogService } from '../services';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
 import { QuizSummaryComponent } from '../quiz-summary/quiz-summary.component';
 import { Router } from '@angular/router';

@@ -36,6 +36,7 @@ export class UserAuthInfo {
     private currentUser: User;
     private userName: string;
     private userId: string;
+    private userMailbox: string;
     private accessToken: string;
     
     public setContent(user: User) : void {
@@ -45,6 +46,7 @@ export class UserAuthInfo {
 
             this.userName = user.profile.name;
             this.userId = user.profile.sub;
+            this.userMailbox = user.profile.mail;
             this.accessToken = user.access_token;
         } else {
             this.cleanContent();
@@ -64,5 +66,8 @@ export class UserAuthInfo {
     }
     public getAccessToken(): string {
         return this.accessToken;
+    }
+    public getUserMailbox(): string {
+        return this.userMailbox;
     }
 }
