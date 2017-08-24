@@ -11,6 +11,7 @@
       "assets": [
         "assets",
         "logincallback.html",
+        "silentrenewcallback.html",
         "favicon.ico"
       ],
       "index": "index.html",

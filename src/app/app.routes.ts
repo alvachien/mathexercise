@@ -10,6 +10,7 @@ import { FormulaListComponent } from './formula-list';
 import { FailureRetestComponent } from './failure-retest';
 import { UserStatisticsComponent } from './user-statistics';
 import { UserDetailComponent } from './user-detail';
+import { PuzzleGamesComponent } from './puzzle-games';
 
 export const AppRoutes: Routes = [
   { path: '', component: Home },
@@ -23,4 +24,5 @@ export const AppRoutes: Routes = [
   { path: 'fail-retest', component: FailureRetestComponent },
   { path: 'user-stat', component: UserStatisticsComponent },
   { path: 'user-detail', component: UserDetailComponent },
+  { path: 'puzz-game', component: PuzzleGamesComponent },
 ];

@@ -59,6 +59,7 @@ import { FormulaListComponent } from './formula-list/';
 import { FailureRetestComponent, FailureRetestCompleteDialog } from './failure-retest';
 import { UserStatisticsComponent } from './user-statistics';
 import { UserDetailComponent } from './user-detail';
+import { PuzzleGamesComponent } from './puzzle-games';
 
 @NgModule({
   exports: [
@@ -119,7 +120,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     FailureRetestComponent,
     FailureRetestCompleteDialog,
     UserStatisticsComponent,
-    UserDetailComponent
+    UserDetailComponent,
+    PuzzleGamesComponent
   ],
   entryComponents: [
     QuizFailureDlgComponent,

@@ -55,7 +55,7 @@ export class UserStatisticsComponent implements OnInit {
   dataQuizAmountByType: any[] = [];
   viewQuizAmountByType: any[] = [700, 400];
   colorQuizAmountByTypeScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C']
+    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
   };
 
   // Item amount by date
@@ -111,6 +111,7 @@ export class UserStatisticsComponent implements OnInit {
       }
     }
 
+    // Translate for quiz type
     this._tranService.get(arstrs).subscribe(x => {
       for(let tran in x) {
         //console.log(tran);
@@ -121,6 +122,17 @@ export class UserStatisticsComponent implements OnInit {
         }
       }
     });
+
+    // Other strings
+    arstrs = ['Home.Amount', 'Home.Type', 'Home.Date', 'Home.CorrectedAmount', 'FailedAmount' ];
+    this._tranService.get(arstrs).subscribe(x => {
+      this.xAxisLabelQuizAmountByDate = x['Home.Date'];
+      this.yAxisLabelQuizAmountByDate = x['Home.Amount'];
+      this.xAxisLabelItemAmountByDate = x['Home.Date'];
+      this.yAxisLabelItemAmountByDate = x['Home.Amount'];
+      this.xAxisLabelItemAmountByType = x['Home.Type'];
+      this.yAxisLabelItemAmountByType = x['Home.Amount'];
+    });    
   }
 
   ngOnInit() {

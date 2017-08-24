@@ -4,33 +4,33 @@
     </md-card-header>
     <md-card-content>
         <div>
-            <md-select placeholder="User" [(ngModel)]="curUser" name="usr" (change)="onUserChanged($event)">
+            <md-select placeholder="{{'Home.User' | translate}}" [(ngModel)]="curUser" name="usr" (change)="onUserChanged($event)">
                 <md-option *ngFor="let user of listUsers" [value]="user.attenduser">
                     {{ user.displayas }}
                 </md-option>
             </md-select>
         </div>
         <md-tab-group>
-            <md-tab label="By Date">
+            <md-tab label="{{'Home.QuizAmountByDate' | translate}}">
                 <ngx-charts-bar-vertical [view]="viewQuizAmountByDate" [scheme]="colorSchemeQuizAmountByDate" [results]="dataQuizAmountByDate"
                     [gradient]="gradientQuizAmountByDate" [xAxis]="showXAxisQuizAmountByDate" [yAxis]="showYAxisQuizAmountByDate"
                     [legend]="showLegendQuizAmountByDate" [showXAxisLabel]="showXAxisLabelQuizAmountByDate" [showYAxisLabel]="showYAxisLabelQuizAmountByDate"
                     [xAxisLabel]="xAxisLabelQuizAmountByDate" [yAxisLabel]="yAxisLabelQuizAmountByDate" (select)="onQuizAmountByDateSelect($event)">
                 </ngx-charts-bar-vertical>
             </md-tab>
-            <md-tab label="By types">
+            <md-tab label="{{'Home.QuizAmountByType' | translate}}">
                 <ngx-charts-number-card [view]="viewQuizAmountByType" [scheme]="colorQuizAmountByTypeScheme" [results]="dataQuizAmountByType"
                     (select)="onQuizAmountByTypeSelect($event)">
                 </ngx-charts-number-card>
             </md-tab>
-            <md-tab label="Items amount By Date">
+            <md-tab label="{{'Home.ItemAmountByDate' | translate}}">
                 <ngx-charts-bar-vertical-stacked [view]="viewItemAmountByDate" [scheme]="colorSchemeItemAmountByDate" [results]="dataItemAmountByDate"
                     [gradient]="gradientItemAmountByDate" [xAxis]="showXAxisItemAmountByDate" [yAxis]="showYAxisItemAmountByDate"
                     [legend]="showLegendItemAmountByDate" [showXAxisLabel]="showXAxisLabelItemAmountByDate" [showYAxisLabel]="showYAxisLabelItemAmountByDate"
                     [xAxisLabel]="xAxisLabelItemAmountByDate" [yAxisLabel]="yAxisLabelItemAmountByDate" (select)="onItemAmountByDateSelect($event)">
                 </ngx-charts-bar-vertical-stacked>
             </md-tab>
-            <md-tab label="Items amount By Type">
+            <md-tab label="{{'Home.ItemAmountByType' | translate}}">
                 <ngx-charts-bar-vertical-stacked [view]="viewItemAmountByType" [scheme]="colorSchemeItemAmountByType" [results]="dataItemAmountByType"
                     [gradient]="gradientItemAmountByType" [xAxis]="showXAxisItemAmountByType" [yAxis]="showYAxisItemAmountByType"
                     [legend]="showLegendItemAmountByType" [showXAxisLabel]="showXAxisLabelItemAmountByType" [showYAxisLabel]="showYAxisLabelItemAmountByType"

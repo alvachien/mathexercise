@@ -1,5 +1,6 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { AuthService } from '../services';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-user-detail',
@@ -19,7 +20,7 @@ export class UserDetailComponent implements OnInit {
   ngOnInit() {
     this._authService.authContent.subscribe(x => {
       this._zone.run(() => {
-        if (x.isAuthorized)         {
+        if (x.isAuthorized) {
           this.UserID = x.getUserId();
           this.Mailbox = x.getUserMailbox();
         }
@@ -31,5 +32,21 @@ export class UserDetailComponent implements OnInit {
     }, () => {
       // Completed
     });
+  }
+
+  public CanSave(): boolean {
+    if (this.UserID === null || this.UserID === undefined || this.UserID.length <= 0) {
+      return false;
+    }
+
+    if (this.DisplayAs === null || this.DisplayAs === undefined || this.DisplayAs.length <= 0) {
+      return false;
+    }
+
+    return true;
+  }
+
+  public onSave(): void {
+
   }
 }
