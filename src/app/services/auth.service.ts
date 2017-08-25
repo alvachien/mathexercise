@@ -15,9 +15,7 @@ export class AuthService {
   private authHeaders: Headers;
   public userLoadededEvent: EventEmitter<User> = new EventEmitter<User>();
 
-  constructor(
-    private http: Http
-  ) {
+  constructor(private http: Http) {
     if (environment.LoggingLevel >= LogLevel.Debug) {
       console.log("ACMathExercies Log [Debug]: Entering AuthService constructor...");
     }
@@ -60,10 +58,10 @@ export class AuthService {
     });
 
     this.mgr.events.addAccessTokenExpiring(function () {
-      console.log("token expiring");
+      console.warn("ACMathExercies Log: token expiring");
     });
     this.mgr.events.addAccessTokenExpired(function () {
-      console.log("token expired");
+      console.error("ACMathExercies Log: token expired");
     });
   }
 

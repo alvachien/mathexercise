@@ -6,7 +6,8 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
-import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, MultiplicationQuizItem, QuizTypeEnum2UIString } from '../model';
+import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, MultiplicationQuizItem, 
+  LogLevel, QuizTypeEnum2UIString } from '../model';
 import { slideInOutAnimation } from '../animation';
 import { environment } from '../../environments/environment';
 import { DialogService, AuthService } from '../services';
@@ -139,7 +140,9 @@ export class QuizSummaryComponent implements OnInit {
     let options = new RequestOptions({ headers: headers }); // Create a request option
     this._http.post(apiurl, data, options)
       .map((response: Response) => {
-        console.log(response);
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log(response);
+        }
         return response.json();
       })
       .subscribe(x => {

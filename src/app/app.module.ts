@@ -53,7 +53,7 @@ import { AdditionExerciseComponent } from './addition-exercise/';
 import { SubtractionExerciseComponent } from './subtraction-exercise/';
 import { QuizFailureDlgComponent } from './quiz-failure-dlg/';
 import { QuizSummaryComponent } from './quiz-summary/';
-import { DialogService, AuthService } from './services';
+import { DialogService, AuthService, UserDetailService } from './services';
 import { FormulaExerciseComponent } from './formula-exercise/';
 import { FormulaListComponent } from './formula-list/';
 import { FailureRetestComponent, FailureRetestCompleteDialog } from './failure-retest';
@@ -148,7 +148,8 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   providers: [
     DialogService,
-    AuthService
+    AuthService,
+    UserDetailService
   ],
   bootstrap: [AppComponent]
 })

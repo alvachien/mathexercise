@@ -5,22 +5,17 @@
   <md-card-content>
     <div class="demo-full-width">
       <md-input-container>
-        <input mdInput type="number" placeholder="{{'Home.UserID' | translate}}" readonly [(ngModel)]="UserID" name="User"
-          required>
-        <md-error>This field is required</md-error>
+        <input mdInput placeholder="{{'Home.UserID' | translate}}" readonly [(ngModel)]="UserID" name="User">
       </md-input-container>
     </div>
     <div class="demo-full-width">
       <md-input-container>
-        <input mdInput type="number" placeholder="{{'Home.Mailbox' | translate }}" readonly [(ngModel)]="Mailbox" name="mailbox"
-          required>
-        <md-error>This field is required</md-error>
+        <input mdInput placeholder="{{'Home.Mailbox' | translate }}" readonly [(ngModel)]="Mailbox" name="mailbox">
       </md-input-container>
     </div>
     <div class="demo-full-width">
       <md-input-container>
-        <input mdInput type="number" placeholder="{{'Home.DisplayAs' | translate }}" [(ngModel)]="DisplayAs" name="dispas"
-          required>
+        <input mdInput placeholder="{{'Home.DisplayAs' | translate }}" [(ngModel)]="DisplayAs" name="dispas" required>
         <md-error>This field is required</md-error>
       </md-input-container>
     </div>

@@ -1,5 +1,5 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import { AuthService } from '../services';
+import { AuthService, UserDetailService } from '../services';
 import { environment } from '../../environments/environment';
 
 @Component({
@@ -13,6 +13,7 @@ export class UserDetailComponent implements OnInit {
   DisplayAs: string = '';
 
   constructor(private _authService: AuthService,
+    private _userDetailService: UserDetailService,
     private _zone: NgZone) {
     //this.UserID = this._authService.authSubject.
   }
@@ -22,7 +23,12 @@ export class UserDetailComponent implements OnInit {
       this._zone.run(() => {
         if (x.isAuthorized) {
           this.UserID = x.getUserId();
-          this.Mailbox = x.getUserMailbox();
+          this.Mailbox = x.getUserName();
+          this._userDetailService.fetchUserDetail().subscribe(x => {
+            if (x !== null) {
+              this.DisplayAs = x;
+            }
+          });
         }
       });
     }, error => {
@@ -47,6 +53,6 @@ export class UserDetailComponent implements OnInit {
   }
 
   public onSave(): void {
-
+    this._userDetailService.saveUserDetail(this.DisplayAs);
   }
 }
