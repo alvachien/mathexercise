@@ -7,6 +7,24 @@ import { Observable } from 'rxjs/Observable';
 import { LogLevel, UserAuthInfo } from '../model';
 import { UserManager, Log, MetadataService, User } from 'oidc-client';
 
+const AuthSettings: any = {
+  authority: environment.IDServerUrl,
+  client_id: "acexercise.math",
+  redirect_uri: environment.AppLoginCallbackUrl,
+  post_logout_redirect_uri: environment.AppLogoutCallbackUrl,
+  response_type: "id_token token",
+  scope: "openid profile api.acquiz",
+
+  silent_redirect_uri: environment.AppLoginSlientRevewCallbackUrl,
+  automaticSilentRenew: true,
+  accessTokenExpiringNotificationTime: 4,
+  //silentRequestTimeout:10000,
+
+  filterProtocolClaims: true,
+  loadUserInfo: true
+};
+
+
 @Injectable()
 export class AuthService {
   public authSubject: BehaviorSubject<UserAuthInfo> = new BehaviorSubject(new UserAuthInfo());
@@ -58,10 +76,16 @@ export class AuthService {
     });
 
     this.mgr.events.addAccessTokenExpiring(function () {
-      console.warn("ACMathExercies Log: token expiring");
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.warn("ACMathExercies Log: token expiring");
+      }
     });
     this.mgr.events.addAccessTokenExpired(function () {
-      console.error("ACMathExercies Log: token expired");
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.error("ACMathExercies Log: token expired");
+      }
+
+      this.doLogin();
     });
   }
 
@@ -72,15 +96,16 @@ export class AuthService {
 
     if (this.mgr) {
       this.mgr.signinRedirect().then(function () {
+      //this.mgr.signinSilent().then(function(){
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.info("ACMathExercies Log [Debug]: Redirecting for login...");
         }
       })
-        .catch(function (er) {
-          if (environment.LoggingLevel >= LogLevel.Error) {
-            console.error("ACMathExercies Log [Error]: Sign-in error", er);
-          }
-        });
+      .catch(function (er) {
+        if (environment.LoggingLevel >= LogLevel.Error) {
+          console.error("ACMathExercies Log [Error]: Sign-in error", er);
+        }
+      });
     }
   }
 
@@ -105,15 +130,22 @@ export class AuthService {
 
   clearState() {
     this.mgr.clearStaleState().then(function () {
-      console.log("clearStateState success");
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.log("clearStateState success");
+      }
     }).catch(function (e) {
-      console.log("clearStateState error", e.message);
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.log("clearStateState error", e.message);
+      }
     });
   }
 
   getUser() {
     this.mgr.getUser().then((user) => {
-      console.log("got user", user);
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.log("got user", user);
+      }
+
       this.userLoadededEvent.emit(user);
     }).catch(function (err) {
       console.log(err);
@@ -123,7 +155,9 @@ export class AuthService {
   removeUser() {
     this.mgr.removeUser().then(() => {
       this.userLoadededEvent.emit(null);
-      console.log("user removed");
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.log("user removed");
+      }
     }).catch(function (err) {
       console.log(err);
     });
@@ -131,7 +165,9 @@ export class AuthService {
 
   startSigninMainWindow() {
     this.mgr.signinRedirect({ data: 'some data' }).then(function () {
-      console.log("signinRedirect done");
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.log("signinRedirect done");
+      }
     }).catch(function (err) {
       console.log(err);
     });
@@ -139,7 +175,9 @@ export class AuthService {
 
   endSigninMainWindow() {
     this.mgr.signinRedirectCallback().then(function (user) {
-      console.log("signed in", user);
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.log("signed in", user);
+      }
     }).catch(function (err) {
       console.log(err);
     });
@@ -147,10 +185,11 @@ export class AuthService {
 
   startSignoutMainWindow() {
     this.mgr.signoutRedirect().then(function (resp) {
-      console.log("signed out", resp);
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.log("signed out", resp);
+      }
       setTimeout(5000, () => {
         console.log("testing to see if fired...");
-
       })
     }).catch(function (err) {
       console.log(err);
@@ -159,14 +198,15 @@ export class AuthService {
 
   endSignoutMainWindow() {
     this.mgr.signoutRedirectCallback().then(function (resp) {
-      console.log("signed out", resp);
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.log("signed out", resp);
+      }
     }).catch(function (err) {
       console.log(err);
     });
   };
 
   /**
-   * Example of how you can make auth request using angulars http methods.
    * @param options if options are not supplied the default content type is application/json
    */
   AuthGet(url: string, options?: RequestOptions): Observable<Response> {
@@ -244,20 +284,4 @@ export class AuthService {
   }
 }
 
-const AuthSettings: any = {
-  authority: environment.IDServerUrl,
-  client_id: "acexercise.math",
-  redirect_uri: environment.AppLoginCallbackUrl,
-  post_logout_redirect_uri: environment.AppLogoutCallbackUrl,
-  response_type: "id_token token",
-  scope: "openid profile api.acquiz",
-
-  silent_redirect_uri: environment.AppLoginSlientRevewCallbackUrl,
-  automaticSilentRenew: true,
-  accessTokenExpiringNotificationTime: 4,
-  //silentRequestTimeout:10000,
-
-  filterProtocolClaims: true,
-  loadUserInfo: true
-};
 
