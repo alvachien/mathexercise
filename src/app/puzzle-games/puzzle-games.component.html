@@ -3,7 +3,6 @@
     <md-card class="example-card">
       <md-card-header>
         <md-card-title>{{'Home.Calculate24' | translate}}</md-card-title>
-        <md-card-subtitle>{{'Home.Calculate24' | translate}}</md-card-subtitle>
       </md-card-header>
       <md-card-content>
         <div class="demo-full-width" *ngIf="!IsCal24Start">
@@ -46,6 +45,16 @@
     </md-card>
   </md-tab>
   <md-tab label="{{'Home.Sudou' | translate}}">
-
+    <md-card class="example-card">
+      <md-card-header>
+        <md-card-title>{{'Home.Sudou' | translate}}</md-card-title>
+      </md-card-header>
+      <md-card-content>
+        <canvas #canvassudou width="400" height="400"></canvas>
+      </md-card-content>
+      <md-card-actions>
+        <button md-button [disabled]="!CanSudouStart()" (click)="OnSudouStart()">{{'Home.StartButton' | translate}}</button>
+      </md-card-actions>
+    </md-card>
   </md-tab>
 </md-tab-group>

@@ -5,10 +5,20 @@ import { environment } from '../environments/environment';
 import { LogLevel } from './model';
 
 @Component({
-  selector: 'home',
+  selector: 'app-root-home',
   templateUrl: './app.home.html'
 })
-export class Home { }
+export class Home {
+  public bgidx: number;
+  constructor() {
+    this.bgidx = Math.ceil(Math.random() * 2 + 1);
+    if (this.bgidx > 3) {
+      this.bgidx = 3;
+    } else if (this.bgidx < 1) {
+      this.bgidx = 1;
+    }
+  }
+}
 
 @Component({
   selector: 'app-root',
@@ -17,7 +27,7 @@ export class Home { }
   encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent implements OnInit {
-  navItems = [
+  public navItems = [
     { name: 'Home.HomePage', route: '' },
     { name: 'Home.AdditionExercises', route: 'add-ex' },
     { name: 'Home.SubtractionExercises', route: 'sub-ex' },
@@ -30,8 +40,8 @@ export class AppComponent implements OnInit {
     { name: 'Home.Statistics', route: 'user-stat' },
     { name: 'Home.UserDetail', route: 'user-detail' },
   ];
-  selectedLanguage: string;
-  availableLanguages = [
+  public selectedLanguage: string;
+  public availableLanguages = [
     { DisplayName: 'Languages.en', Value: 'en' },
     { DisplayName: 'Languages.zh', Value: 'zh' }
   ];
@@ -42,10 +52,10 @@ export class AppComponent implements OnInit {
     private _translate: TranslateService,
     private _authService: AuthService,
     private _zone: NgZone) {
-      // Setup the translate
-      this.selectedLanguage = 'zh';
-      this._translate.setDefaultLang('zh');
-      this._translate.use(this.selectedLanguage);
+    // Setup the translate
+    this.selectedLanguage = 'zh';
+    this._translate.setDefaultLang('zh');
+    this._translate.use(this.selectedLanguage);
 
     // Register the Auth service
     this._authService.authContent.subscribe(x => {
@@ -73,12 +83,12 @@ export class AppComponent implements OnInit {
   }
 
   public onUserDetail(): void {
-    
+
   }
 
-  public onLogout() : void {
+  public onLogout(): void {
     this._authService.doLogout();
-  } 
+  }
 
   public toggleFullscreen(): void {
     const elem = this._element.nativeElement.querySelector('.demo-content');
@@ -99,7 +109,7 @@ export class AppComponent implements OnInit {
 
       this.updateDocumentTitle();
     }
-  }  
+  }
 
   private updateDocumentTitle() {
     this._translate.get('Home.AppTitle').subscribe(x => {
