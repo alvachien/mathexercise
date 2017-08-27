@@ -1,3 +1,51 @@
-<p>
-  puzzle-games works!
-</p>
+<md-tab-group>
+  <md-tab label="{{'Home.Calculate24' | translate}}">
+    <md-card class="example-card">
+      <md-card-header>
+        <md-card-title>{{'Home.Calculate24' | translate}}</md-card-title>
+        <md-card-subtitle>{{'Home.Calculate24' | translate}}</md-card-subtitle>
+      </md-card-header>
+      <md-card-content>
+        <div class="demo-full-width" *ngIf="!IsCal24Start">
+          <md-input-container>
+            <input mdInput type="number" placeholder="{{'Math.LeftNumber' | translate}}" [(ngModel)]="Cal24NumberRangeBgn" name="leftnrbgn"
+              required>
+          </md-input-container>
+          <md-input-container>
+            <input mdInput type="number" placeholder="{{'Math.RightNumber' | translate}}" [(ngModel)]="Cal24NumberRangeEnd" name="leftnrend"
+              required>
+          </md-input-container>
+        </div>
+        <div class="demo-full-width" *ngIf="IsCal24Start">
+          <div class="demo-full-width" *ngIf="IsCal24ShowError">
+            <div class="alert alert-danger" role="alert">
+              {{Cal24PrvError}}
+            </div>
+          </div>
+          <div class="demo-full-width">
+            <span *ngFor="let it of Cal24items; let i = index">{{it}}<span *ngIf="i !== Cal24items.length - 1">,</span></span>
+          </div>
+          <div class="demo-full-width">
+            <md-input-container>
+              <input mdInput type="text" placeholder="{{'Home.Calculate24' | translate }}" [(ngModel)]="Cal24Input" name="cal24inp" required>
+              <md-error>This field is required</md-error>
+            </md-input-container>
+          </div>
+        </div>
+        <div class="demo-full-width" *ngIf="IsCal24PrvSuccess && !IsCal24Start">
+          <div class="alert alert-success" role="alert">
+            {{Cal24PrvSuccess}}
+          </div>
+        </div>
+      </md-card-content>
+      <md-card-actions>
+        <button md-button [disabled]="!CanCal24Start()" (click)="OnCal24Start()">{{'Home.StartButton' | translate}}</button>
+        <button md-button [disabled]="!CanCal24Submit()" (click)="OnCal24Submit()">{{'Home.SubmitButton' | translate}}</button>
+        <button md-raised-button *ngIf="IsCal24Start" (click)="OnCal24Surrender()">{{'Home.SurrenderButton' | translate}}</button>
+      </md-card-actions>
+    </md-card>
+  </md-tab>
+  <md-tab label="{{'Home.Sudou' | translate}}">
+
+  </md-tab>
+</md-tab-group>

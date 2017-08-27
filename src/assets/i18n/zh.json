@@ -22,6 +22,8 @@
         "SubmitButton": "提交",
         "StartButton": "开始",
         "SaveButton": "保存",
+        "SurrenderButton": "投降",
+        "HintButton": "提示",
         "ContinueButton": "继续",
         "QuizAmount": "试题数量",
         "FailedFactor": "错误扩散因子",
@@ -52,6 +54,9 @@
         "Amount": "总数",
         "Date": "日期",
         "Type": "类型",
+        "Calculate24": "速算24",
+        "Sudou": "数独",
+        "PuzzleGames": "智力游戏",
 
         "Underconstruction": "当前页还在开发中"
     },

@@ -1,12 +1,15 @@
 # mathexercise
-It's all about math exercise, targets for student in Primary School.
+A web app which used to generate exercises of Math, targets for student in Primary School to do practices. It can store the failure in the exercises, and it also provide several puzzle games.
 
-This web app will:
+The features of web app including:
 1. Generate the quiz based on specified scope;
 2. Record the time spent;
 3. Use the failure failor to continue the exercise until it is fully succeed;
 4. It allows the retest upon failures;
 5. Show the statistics of the quiz;
+6. It supports several puzzle games;
+7. Multiple langues supported: English, Simplified Chinese;
+8. Further to come;
 
 # dependencies
 This web app depends on the following project
@@ -21,6 +24,8 @@ This web app credits to the following libraries:
 4. [ngx-translate](http://www.ngx-translate.com/)
 5. [oidc-client](https://github.com/IdentityModel/oidc-client-js)
 6. [Angular CLI](https://github.com/angular/angular-cli)
+7. [d3.js](https://d3js.org)
+8. [ngx-charts](https://swimlane.github.io/ngx-charts/)
 
 # license
 MIT

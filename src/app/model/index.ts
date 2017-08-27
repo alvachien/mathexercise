@@ -6,3 +6,4 @@ export * from './formuladef';
 export * from './formulaquiz';
 export * from './log';
 export * from './userinfo';
+export * from './rpn';

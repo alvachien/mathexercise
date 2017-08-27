@@ -85,7 +85,7 @@ export class AuthService {
         console.error("ACMathExercies Log: token expired");
       }
 
-      this.doLogin();
+      that.doLogin();
     });
   }
 

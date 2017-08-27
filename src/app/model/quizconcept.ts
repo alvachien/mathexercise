@@ -9,7 +9,9 @@ export enum QuizTypeEnum {
     sub     = 2,
     multi   = 3,
     div     = 4,
-    formula = 5
+    formula = 5,
+    cal24   = 6,
+    sudou   = 7
 }
 
 export function QuizTypeEnum2UIString(qt: QuizTypeEnum): string {
@@ -20,6 +22,8 @@ export function QuizTypeEnum2UIString(qt: QuizTypeEnum): string {
         case QuizTypeEnum.multi: rst = 'Home.MultiplicationExercises'; break;
         case QuizTypeEnum.div: rst = 'Home.DivisionExercises'; break;
         case QuizTypeEnum.formula: rst = 'Home.FormulaExercises'; break;
+        case QuizTypeEnum.cal24: rst = 'Home.Calculate24'; break;
+        case QuizTypeEnum.sudou: rst = 'Home.Sudou'; break;
         default: rst = ''; break;
     }
     return rst;

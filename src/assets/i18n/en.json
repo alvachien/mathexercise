@@ -22,6 +22,8 @@
         "SubmitButton": "SUBMIT",
         "StartButton": "START",
         "SaveButton": "SAVE",
+        "SurrenderButton": "SURRENDER",
+        "HintButton": "HINT",
         "ContinueButton": "CONTINUE",
         "QuizAmount": "Amount of Quiz",
         "FailedFactor": "Failed Factor",
@@ -52,6 +54,9 @@
         "Amount": "Amount",
         "Date": "Date",
         "Type": "Type",
+        "Calculate24": "Calculate 24",
+        "Sudou": "Sudou",
+        "PuzzleGames": "Puzzle Games",
 
         "Underconstruction": "Page still under construction"
     },
