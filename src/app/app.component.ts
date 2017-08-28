@@ -11,20 +11,20 @@ import { LogLevel } from './model';
 })
 export class Home {
   public backgroundimage: string;
+  
   constructor(private _sanitizer: DomSanitizer) {
-    let bgidx: number = Math.ceil(Math.random() * 2 + 1);
-    if (bgidx > 3) {
-      bgidx = 3;
+    const photoamt: number = 4;
+    let bgidx: number = Math.ceil(Math.random() * (photoamt - 1) + 1);
+    if (bgidx > photoamt) {
+      bgidx = photoamt;
     } else if (bgidx < 1) {
       bgidx = 1;
     }
 
     if (bgidx === 1) {
       this.backgroundimage = "assets/image/home-bg.jpg";
-    } else if (bgidx === 2) {
-      this.backgroundimage = "assets/image/home-bg2.jpg";
-    } else if (bgidx === 3) {
-      this.backgroundimage = "assets/image/home-bg3.jpg";
+    } else {
+      this.backgroundimage = "assets/image/home-bg" + bgidx.toString() + ".jpg";
     }
   }
 
