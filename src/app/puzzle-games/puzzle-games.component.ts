@@ -1,5 +1,6 @@
 import { Component, ViewChild, ElementRef, AfterContentInit, OnInit, Renderer, HostListener } from '@angular/core';
 import { RPN, SudouUnit, Sudou, generateValidSudou, SudouSize } from '../model';
+import { MdTabChangeEvent } from '@angular/material';
 
 export class SudouCell {
   num: number;
@@ -93,8 +94,7 @@ class SudouEditPanel {
     var j = Math.floor((x - this._drawX) / this._itemWidth);
     var i = Math.floor((y - this._drawY) / this._itemWidth);
 
-    if (j < 0 || j > 2 || i < 0 || i > 3)
-    {
+    if (j < 0 || j > 2 || i < 0 || i > 3) {
       return -1;
     }
 
@@ -117,6 +117,11 @@ class SudouEditPanel {
   styleUrls: ['./puzzle-games.component.scss']
 })
 export class PuzzleGamesComponent implements OnInit, AfterContentInit {
+
+  /**
+   * UI part
+   */
+  indexTab: number;
 
   /**
    * Cal24 part
@@ -147,7 +152,7 @@ export class PuzzleGamesComponent implements OnInit, AfterContentInit {
   IsSudouStart: boolean = false;
 
   constructor() {
-    //SudouUnit.generateValidOne();
+    this.indexTab = 0; // Defaul tab
   }
 
   ngOnInit() {
@@ -162,6 +167,11 @@ export class PuzzleGamesComponent implements OnInit, AfterContentInit {
     this.sudouHeight = this.canvasSudou.nativeElement.height;
     this.sudouItemWidth = this.sudouWidth / SudouSize;
     this.sudouItemHeight = this.sudouHeight / SudouSize;
+  }
+
+  public onTabSelectChanged(event: MdTabChangeEvent) {
+    //console.log(event);
+    this.indexTab = event.index;
   }
 
   /**
@@ -386,7 +396,7 @@ export class PuzzleGamesComponent implements OnInit, AfterContentInit {
 
   @HostListener('mouseup', ['$event'])
   public onSudouCanvasMouseUp(evt: MouseEvent) {
-    if (this.IsSudouStart) {
+    if (this.indexTab === 1 && this.IsSudouStart) {
       let loc = this.getPointOnCanvas(evt.target, evt.clientX, evt.clientY);
       this.ProcessMouseClick(loc);
     }
@@ -430,16 +440,14 @@ export class PuzzleGamesComponent implements OnInit, AfterContentInit {
       if (seleN == null) {
         this.sudouDataCells[this.sudouEditingCellIndex.i][this.sudouEditingCellIndex.j].N = null;
       }
-      else if (seleN === -1) { // 点在外面了
+      else if (seleN === -1) { // Out of the panel
         this.sudouEditingCellIndex = null;
         this.sudouEditPanel = null;
 
-        // 重新画整个版面。
         this.SudouDraw();
         this.ProcessMouseClick(pos);
         return;
-      }
-      else {
+      } else {
         this.sudouDataCells[this.sudouEditingCellIndex.i][this.sudouEditingCellIndex.j].num = seleN;
       }
 
@@ -472,7 +480,7 @@ export class PuzzleGamesComponent implements OnInit, AfterContentInit {
   private sudouCheckAllConflicts() {
     for (let i: number = 0; i < SudouSize; i++) {
       for (let j: number = 0; j < SudouSize; j++) {
-        this.sudouDataCells[i][j].InConflict = this.sudouCheckConflict({ row: i, column: j });
+        this.sudouDataCells[i][j].inConflict = this.sudouCheckConflict({ row: i, column: j });
       }
     }
   }

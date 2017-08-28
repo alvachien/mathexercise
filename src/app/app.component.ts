@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, NgZone, ElementRef } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl, SafeUrl  } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from './services';
 import { environment } from '../environments/environment';
@@ -9,14 +10,26 @@ import { LogLevel } from './model';
   templateUrl: './app.home.html'
 })
 export class Home {
-  public bgidx: number;
-  constructor() {
-    this.bgidx = Math.ceil(Math.random() * 2 + 1);
-    if (this.bgidx > 3) {
-      this.bgidx = 3;
-    } else if (this.bgidx < 1) {
-      this.bgidx = 1;
+  public backgroundimage: string;
+  constructor(private _sanitizer: DomSanitizer) {
+    let bgidx: number = Math.ceil(Math.random() * 2 + 1);
+    if (bgidx > 3) {
+      bgidx = 3;
+    } else if (bgidx < 1) {
+      bgidx = 1;
     }
+
+    if (bgidx === 1) {
+      this.backgroundimage = "assets/image/home-bg.jpg";
+    } else if (bgidx === 2) {
+      this.backgroundimage = "assets/image/home-bg2.jpg";
+    } else if (bgidx === 3) {
+      this.backgroundimage = "assets/image/home-bg3.jpg";
+    }
+  }
+
+  getBackgroundImage() {
+    return this._sanitizer.bypassSecurityTrustStyle('url(' + this.backgroundimage + ')');
   }
 }
 

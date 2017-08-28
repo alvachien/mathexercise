@@ -189,6 +189,9 @@ export class UserStatisticsComponent implements OnInit {
               attenduser: si.attendUser,
               displayas: si.displayAs
             };
+            if (au.displayas === null || au.displayas === undefined || au.displayas.length <= 0) {
+              au.displayas = au.attenduser;
+            }
             this.listUsers.push(au);
           }
         }

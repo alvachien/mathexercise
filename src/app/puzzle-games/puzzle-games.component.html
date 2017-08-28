@@ -1,4 +1,4 @@
-<md-tab-group>
+<md-tab-group (selectChange)="onTabSelectChanged($event)">
   <md-tab label="{{'Home.Calculate24' | translate}}">
     <md-card class="example-card">
       <md-card-header>
