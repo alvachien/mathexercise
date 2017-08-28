@@ -1,6 +1,9 @@
-import { Component, ViewChild, ElementRef, AfterContentInit, OnInit, Renderer, HostListener } from '@angular/core';
-import { RPN, SudouUnit, Sudou, generateValidSudou, SudouSize } from '../model';
+import { Component, ViewChild, ElementRef, AfterContentInit, 
+  OnInit, Renderer, HostListener } from '@angular/core';
 import { MdTabChangeEvent } from '@angular/material';
+import { Router } from '@angular/router';
+import { RPN, SudouUnit, Sudou, generateValidSudou, SudouSize } from '../model';
+import { DialogService } from '../services';
 
 export class SudouCell {
   num: number;
@@ -151,7 +154,8 @@ export class PuzzleGamesComponent implements OnInit, AfterContentInit {
   sudouDataCells: any = [];
   IsSudouStart: boolean = false;
 
-  constructor() {
+  constructor(private _dlgsvc: DialogService,
+    private _router: Router) {
     this.indexTab = 0; // Defaul tab
   }
 
@@ -458,6 +462,8 @@ export class PuzzleGamesComponent implements OnInit, AfterContentInit {
       this.SudouDraw();
 
       if (this.sudouCheckFinish()) {
+        // Navigate to summary
+
         alert('Finished!');
         this.IsSudouStart = false;
       }

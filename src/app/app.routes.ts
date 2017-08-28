@@ -11,18 +11,19 @@ import { FailureRetestComponent } from './failure-retest';
 import { UserStatisticsComponent } from './user-statistics';
 import { UserDetailComponent } from './user-detail';
 import { PuzzleGamesComponent } from './puzzle-games';
+import { AuthGuard, CanDeactivateGuard } from './services';
 
 export const AppRoutes: Routes = [
   { path: '', component: Home },
-  { path: 'add-ex', component: AdditionExerciseComponent },
-  { path: 'sub-ex', component: SubtractionExerciseComponent },
-  { path: 'divide-ex', component: DivisionExerciseComponent },
-  { path: 'multi-ex', component: MultiplicationQuizComponent },
-  { path: 'quiz-sum', component: QuizSummaryComponent },
-  { path: 'formula-ex', component: FormulaExerciseComponent },
-  { path: 'formula-list', component: FormulaListComponent },
-  { path: 'fail-retest', component: FailureRetestComponent },
-  { path: 'user-stat', component: UserStatisticsComponent },
-  { path: 'user-detail', component: UserDetailComponent },
-  { path: 'puzz-game', component: PuzzleGamesComponent },
+  { path: 'add-ex', component: AdditionExerciseComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateGuard], },
+  { path: 'sub-ex', component: SubtractionExerciseComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateGuard], },
+  { path: 'divide-ex', component: DivisionExerciseComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateGuard], },
+  { path: 'multi-ex', component: MultiplicationQuizComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateGuard], },
+  { path: 'quiz-sum', component: QuizSummaryComponent, canActivate: [AuthGuard] },
+  { path: 'formula-ex', component: FormulaExerciseComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateGuard], },
+  { path: 'formula-list', component: FormulaListComponent, canActivate: [AuthGuard], },
+  { path: 'fail-retest', component: FailureRetestComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateGuard], },
+  { path: 'user-stat', component: UserStatisticsComponent, canActivate: [AuthGuard], },
+  { path: 'user-detail', component: UserDetailComponent, canActivate: [AuthGuard], },
+  { path: 'puzz-game', component: PuzzleGamesComponent, canActivate: [AuthGuard], },
 ];

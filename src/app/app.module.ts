@@ -60,6 +60,7 @@ import { FailureRetestComponent, FailureRetestCompleteDialog } from './failure-r
 import { UserStatisticsComponent } from './user-statistics';
 import { UserDetailComponent } from './user-detail';
 import { PuzzleGamesComponent } from './puzzle-games';
+import { AuthGuard, CanDeactivateGuard } from './services';
 
 @NgModule({
   exports: [
@@ -149,7 +150,9 @@ export function HttpLoaderFactory(http: HttpClient) {
   providers: [
     DialogService,
     AuthService,
-    UserDetailService
+    UserDetailService,
+    AuthGuard,
+    CanDeactivateGuard
   ],
   bootstrap: [AppComponent]
 })
