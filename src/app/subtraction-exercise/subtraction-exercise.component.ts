@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, SubtractionQuizItem,
   DefaultQuizAmount, DefaultFailedQuizFactor, QuizTypeEnum } from '../model';
 import { MdDialog } from '@angular/material';
-import { DialogService } from '../services';
+import { DialogService } from '../services/dialog.service';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
 import { QuizSummaryComponent } from '../quiz-summary/quiz-summary.component';
 import { Router } from '@angular/router';
@@ -63,6 +63,13 @@ export class SubtractionExerciseComponent implements OnInit {
     this.UsedQuizAmount += this.QuizItems.length;    
   }
 
+  public canDeactivate(): boolean {
+    if (this.quizInstance.IsStarted) {
+      return false;
+    }
+    return true;
+  }
+  
   public onPageChanged($event: PageEvent) {
     this.pageSize = $event.pageSize;
     this.pageIndex = $event.pageIndex;

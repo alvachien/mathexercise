@@ -1,4 +1,5 @@
 <md-tab-group (selectChange)="onTabSelectChanged($event)">
+  <!-- Tab: Calculate 24 -->
   <md-tab label="{{'Home.Calculate24' | translate}}">
     <md-card class="example-card">
       <md-card-header>
@@ -15,15 +16,22 @@
               required>
           </md-input-container>
         </div>
+
+        <div class="demo-full-width" *ngIf="IsCal24Start">
+          <app-digit-clock [IsStart]="IsCal24Start"></app-digit-clock>
+        </div>
+
         <div class="demo-full-width" *ngIf="IsCal24Start">
           <div class="demo-full-width" *ngIf="IsCal24ShowError">
             <div class="alert alert-danger" role="alert">
               {{Cal24PrvError}}
             </div>
           </div>
-          <div class="demo-full-width">
+
+          <h2 class="demo-full-width">
             <span *ngFor="let it of Cal24items; let i = index">{{it}}<span *ngIf="i !== Cal24items.length - 1">,</span></span>
-          </div>
+          </h2>
+
           <div class="demo-full-width">
             <md-input-container>
               <input mdInput type="text" placeholder="{{'Home.Calculate24' | translate }}" [(ngModel)]="Cal24Input" name="cal24inp" required>
@@ -44,24 +52,36 @@
       </md-card-actions>
     </md-card>
   </md-tab>
+
+  <!-- Tab: Sudou -->
   <md-tab label="{{'Home.Sudou' | translate}}">
     <md-card class="example-card">
       <md-card-header>
         <md-card-title>{{'Home.Sudou' | translate}}</md-card-title>
       </md-card-header>
+
       <md-card-content>
-        <canvas #canvassudou width="400" height="400"></canvas>
+          <div class="demo-full-width" *ngIf="IsSudouStart">
+              <app-digit-clock [IsStart]="IsSudouStart"></app-digit-clock>
+          </div>
+
+          <canvas #canvassudou width="400" height="400"></canvas>
       </md-card-content>
+      
       <md-card-actions>
         <button md-button [disabled]="!CanSudouStart()" (click)="OnSudouStart()">{{'Home.StartButton' | translate}}</button>
       </md-card-actions>
     </md-card>
   </md-tab>
+
+  <!-- Tab: Minesweeper -->
   <md-tab label="{{'Home.Minesweeper' | translate}}">
     <md-card class="example-card">
       <p>{{'Home.Underconstruction' | translate}}</p>
     </md-card>
   </md-tab>
+
+  <!-- Tab: Typing Tutor -->
   <md-tab label="{{'Home.TypingTutor' | translate}}">
     <md-card class="example-card">
       <p>{{'Home.Underconstruction' | translate}}</p>

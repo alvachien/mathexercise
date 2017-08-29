@@ -4,6 +4,8 @@ import {
     ActivatedRouteSnapshot,
     RouterStateSnapshot
 } from '@angular/router';
+import { environment } from '../../environments/environment';
+import { LogLevel, UserAuthInfo } from '../model';
 import { AuthService } from './auth.service';
 
 @Injectable()
@@ -13,17 +15,32 @@ export class AuthGuard implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         let url: string = state.url;
 
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+            console.log("AC Math Exercise [Debug]: entering can Activate of AuthGuard");
+        }
+
         return this.checkLogin(url);
     }
 
     checkLogin(url: string): boolean {
-        if (this.authService.authSubject.getValue().isAuthorized) { return true; }
 
+        if (this.authService.authSubject.getValue().isAuthorized) {
+            if (environment.LoggingLevel >= LogLevel.Debug) {
+                console.log("AC Math Exercise [Debug]: entering checkLogin of AuthGuard with TRUE");
+            }
+            return true;
+        }
+
+        // For ACMathExercise: we cannot store the attempted URL because the whole page will be reloaded.
         // Store the attempted URL for redirecting
         //this.authService.redirectUrl = url;
 
         // Navigate to the login page with extras
-        this.router.navigate(['/login']);
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+            console.log("AC Math Exercise [Debug]: entering checkLogin of AuthGuard with FALSE, therefore redirecting...");
+        }
+        this.authService.doLogin();
+
         return false;
     }
 }

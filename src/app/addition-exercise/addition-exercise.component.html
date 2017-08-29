@@ -37,8 +37,12 @@
         </md-input-container>
       </div>
     </div>
-
-    <div *ngIf="quizInstance.IsStarted">
+    
+    <div class="demo-full-width" *ngIf="quizInstance.IsStarted">
+      <app-digit-clock [IsStart]="quizInstance.IsStarted"></app-digit-clock>
+    </div>
+      
+    <div class="demo-full-width" *ngIf="quizInstance.IsStarted">
       <div class="demo-full-width" *ngFor="let quiz of DisplayedQuizItems; trackBy: onQuizItemTrackBy">
         <span>({{quiz.QuizIndex}}). {{quiz.LeftNumber}} + {{quiz.RightNumber}} = </span>
         <md-input-container>

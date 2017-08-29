@@ -77,3 +77,8 @@ import 'hammerjs/hammer';
 //  * Bootstrap
 //  */
 // import 'bootstrap/dist/js/bootstrap';
+
+// /***************************************************************************************************
+//  * Moment
+//  */
+// import 'moment';

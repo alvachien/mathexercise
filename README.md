@@ -7,7 +7,7 @@ The features of web app including:
 3. Use the failure failor to continue the exercise until it is fully succeed;
 4. It allows the retest upon failures;
 5. Show the statistics of the quiz;
-6. It supports several puzzle games;
+6. It supports several puzzle games: Calculate 24, Sudou, and more to come;
 7. Multiple langues supported: English, Simplified Chinese;
 8. Further to come;
 
@@ -26,6 +26,7 @@ This web app credits to the following libraries:
 6. [Angular CLI](https://github.com/angular/angular-cli)
 7. [d3.js](https://d3js.org)
 8. [ngx-charts](https://swimlane.github.io/ngx-charts/)
+9. [Angular2-moment](https://github.com/urish/angular2-moment)
 
 # license
 MIT

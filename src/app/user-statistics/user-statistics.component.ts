@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angular/http';
-import { AuthService } from '../services';
+import { AuthService } from '../services/auth.service';
 import {
   QuizTypeEnum, PrimarySchoolMathQuizItem, QuizTypeEnum2UIString, 
   AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem

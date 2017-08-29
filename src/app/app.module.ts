@@ -45,6 +45,7 @@ import { CdkTableModule } from '@angular/cdk';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
 import { AppRoutes } from './app.routes';
 import { Home, AppComponent } from './app.component';
 import { DivisionExerciseComponent } from './division-exercise/';
@@ -53,14 +54,19 @@ import { AdditionExerciseComponent } from './addition-exercise/';
 import { SubtractionExerciseComponent } from './subtraction-exercise/';
 import { QuizFailureDlgComponent } from './quiz-failure-dlg/';
 import { QuizSummaryComponent } from './quiz-summary/';
-import { DialogService, AuthService, UserDetailService } from './services';
+import { DialogService } from './services/dialog.service';
+import { AuthService } from './services/auth.service';
+import { UserDetailService } from './services/userdetail.service';
 import { FormulaExerciseComponent } from './formula-exercise/';
 import { FormulaListComponent } from './formula-list/';
 import { FailureRetestComponent, FailureRetestCompleteDialog } from './failure-retest';
 import { UserStatisticsComponent } from './user-statistics';
 import { UserDetailComponent } from './user-detail';
 import { PuzzleGamesComponent } from './puzzle-games';
-import { AuthGuard, CanDeactivateGuard } from './services';
+import { AuthGuard } from './services/auth-guard.service';
+import { CanDeactivateGuard } from './services/can-deactive-guard.service';
+import { DigitClockComponent } from './digit-clock/digit-clock.component';
+import { MessageDialogComponent } from './message-dialog';
 
 @NgModule({
   exports: [
@@ -122,11 +128,14 @@ export function HttpLoaderFactory(http: HttpClient) {
     FailureRetestCompleteDialog,
     UserStatisticsComponent,
     UserDetailComponent,
-    PuzzleGamesComponent
+    PuzzleGamesComponent,
+    DigitClockComponent,
+    MessageDialogComponent
   ],
   entryComponents: [
     QuizFailureDlgComponent,
-    FailureRetestCompleteDialog
+    FailureRetestCompleteDialog,
+    MessageDialogComponent
   ],
   imports: [
     BrowserModule,

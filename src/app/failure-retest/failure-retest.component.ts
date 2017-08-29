@@ -3,7 +3,8 @@ import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angul
 import { Router } from '@angular/router';
 import { MdDialog } from '@angular/material';
 import { environment } from '../../environments/environment';
-import { AuthService, DialogService } from '../services';
+import { AuthService } from '../services/auth.service';
+import { DialogService } from '../services/dialog.service';
 import { QuizTypeEnum, PrimarySchoolMathQuizItem, QuizTypeEnum2UIString,
   AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem } from '../model';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';

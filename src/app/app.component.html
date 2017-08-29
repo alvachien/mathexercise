@@ -7,7 +7,8 @@
         <button (click)="onLogout()" md-button style="background: #525252;">{{'Home.Logout' | translate}}</button>
       </div>
     </div>
-    <md-nav-list *ngIf="isLoggedIn">
+    <!-- <md-nav-list *ngIf="isLoggedIn"> -->
+    <md-nav-list>
       <a *ngFor="let navItem of navItems; let i = index" md-list-item (click)="start.close()" [routerLink]="[navItem.route]">
         {{i}} - {{navItem.name | translate}}
       </a>

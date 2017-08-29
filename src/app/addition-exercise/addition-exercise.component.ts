@@ -6,9 +6,12 @@ import {
 import { MdDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { PageEvent } from '@angular/material';
-import { DialogService } from '../services';
-import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
+import { DialogService } from '../services/dialog.service';
 import { QuizSummaryComponent } from '../quiz-summary/quiz-summary.component';
+import { environment } from '../../environments/environment';
+import { LogLevel, UserAuthInfo } from '../model';
+import { MessageDialogComponent } from '../message-dialog/message-dialog.component';
+import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
 
 @Component({
   selector: 'app-addition-exercise',
@@ -63,6 +66,24 @@ export class AdditionExerciseComponent implements OnInit {
       this.QuizItems.push(dq);
     }
     this.UsedQuizAmount += this.QuizItems.length;
+  }
+
+  public canDeactivate(): boolean {
+    if (this.quizInstance.IsStarted) {
+      this._dlgsvc.MessageDialogHeader = 'Home.Error';
+      this._dlgsvc.MessageDialogContent = 'Home.QuizIsOngoing';
+      let dialogRef = this.dialog.open(MessageDialogComponent, {
+        disableClose: false,
+        width: '500px'
+      });
+
+      dialogRef.afterClosed().subscribe(x => {
+        // Do nothing!
+      });
+      return false;
+    }
+
+    return true;
   }
 
   public onPageChanged($event: PageEvent) {

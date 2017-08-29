@@ -10,7 +10,8 @@ import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, MultiplicationQuiz
   LogLevel, QuizTypeEnum2UIString } from '../model';
 import { slideInOutAnimation } from '../animation';
 import { environment } from '../../environments/environment';
-import { DialogService, AuthService } from '../services';
+import { DialogService } from '../services/dialog.service';
+import { AuthService } from '../services/auth.service';
 
 export interface QuizSummaryInfo {
   id: number;

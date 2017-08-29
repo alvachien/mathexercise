@@ -1,0 +1,8 @@
+<h2 md-dialog-title>{{ MessageHeader | translate}}</h2>
+<md-dialog-content>
+  <div class="demo-full-width"> {{MessageContent | translate}}
+  </div>
+</md-dialog-content>
+<md-dialog-actions>
+  <button md-button [md-dialog-close]="true" tabindex="1">{{'Home.CloseButton' | translate}}</button>
+</md-dialog-actions>

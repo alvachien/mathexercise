@@ -59,6 +59,8 @@
         "PuzzleGames": "Puzzle Games",
         "Minesweeper": "Minesweeper",
         "TypingTutor": "Typing Tutor",
+        "Error": "Error",
+        "QuizIsOngoing": "Exercise or game is on going, cannot jump to other page",
 
         "Underconstruction": "Page still under construction"
     },

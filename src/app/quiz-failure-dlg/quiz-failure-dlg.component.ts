@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DialogService } from '../services';
-import { MdDialog, MdDialogRef } from '@angular/material';
+import { DialogService } from '../services/dialog.service';
 import { DataSource } from '@angular/cdk';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
@@ -63,13 +62,13 @@ export class QuizFailureDlgComponent implements OnInit {
   dataSource: QuizFailureDataSource | null;
   currentScore: number;  
 
-  constructor(private _dlgsvc: DialogService,
-    public dialogRef: MdDialogRef<QuizFailureDlgComponent>) {       
+  constructor(private _dlgsvc: DialogService) {
   }
 
   ngOnInit() {
     this.currentScore = this._dlgsvc.CurrentScore;
     this.quizDatabase = new QuizFailureDatabase(this._dlgsvc.FailureItems);
+    
     // Workaround for https://github.com/angular/material2/issues/5593
     setTimeout(() => {
       this.dataSource = new QuizFailureDataSource(this.quizDatabase);

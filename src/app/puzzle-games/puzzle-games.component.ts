@@ -3,7 +3,7 @@ import { Component, ViewChild, ElementRef, AfterContentInit,
 import { MdTabChangeEvent } from '@angular/material';
 import { Router } from '@angular/router';
 import { RPN, SudouUnit, Sudou, generateValidSudou, SudouSize } from '../model';
-import { DialogService } from '../services';
+import { DialogService } from '../services/dialog.service';
 
 export class SudouCell {
   num: number;

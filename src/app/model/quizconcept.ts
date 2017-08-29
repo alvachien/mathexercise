@@ -319,6 +319,9 @@ export class PrimarySchoolMathQuiz {
                 let curID = this._curRun.SectionNumber;
                 this._curRun = new PrimarySchoolMathQuizSection(curID + 1, ncnt);            
             }
-        } 
+        } else {
+            // As no failure, stop the current quiz
+            this._isStarted = false;
+        }
     }
 }

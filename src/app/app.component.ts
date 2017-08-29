@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation, NgZone, ElementRef } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl, SafeUrl  } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
-import { AuthService } from './services';
+import { AuthService } from './services/auth.service';
 import { environment } from '../environments/environment';
 import { LogLevel } from './model';
 
@@ -13,7 +13,7 @@ export class Home {
   public backgroundimage: string;
   
   constructor(private _sanitizer: DomSanitizer) {
-    const photoamt: number = 4;
+    const photoamt: number = 3;
     let bgidx: number = Math.ceil(Math.random() * (photoamt - 1) + 1);
     if (bgidx > photoamt) {
       bgidx = photoamt;

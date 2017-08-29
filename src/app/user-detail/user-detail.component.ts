@@ -1,5 +1,6 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import { AuthService, UserDetailService } from '../services';
+import { AuthService } from '../services/auth.service';
+import { UserDetailService } from '../services/userdetail.service';
 import { environment } from '../../environments/environment';
 
 @Component({

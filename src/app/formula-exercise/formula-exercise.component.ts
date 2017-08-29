@@ -5,7 +5,7 @@ import {
   FormulaCOfCircleQuizItem, FormulaCOfSquareQuizItem, FormulaCOfRectangleQuizItem, FormulaDistAndSpeedQuizItem
 } from '../model';
 import { MdDialog } from '@angular/material';
-import { DialogService } from '../services';
+import { DialogService } from '../services/dialog.service';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
 import { QuizSummaryComponent } from '../quiz-summary/quiz-summary.component';
 import { Router } from '@angular/router';

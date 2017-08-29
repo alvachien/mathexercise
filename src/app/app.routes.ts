@@ -11,7 +11,8 @@ import { FailureRetestComponent } from './failure-retest';
 import { UserStatisticsComponent } from './user-statistics';
 import { UserDetailComponent } from './user-detail';
 import { PuzzleGamesComponent } from './puzzle-games';
-import { AuthGuard, CanDeactivateGuard } from './services';
+import { AuthGuard } from './services/auth-guard.service';
+import { CanDeactivateGuard } from './services/can-deactive-guard.service';
 
 export const AppRoutes: Routes = [
   { path: '', component: Home },
