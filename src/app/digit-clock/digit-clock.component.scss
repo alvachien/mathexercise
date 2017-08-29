@@ -9,9 +9,9 @@
  $clock-background-color: #565656;
  $clock-front-color: #eee;
 
-.clock { font-size: 2px; width:9em; height:14em;border:1px solid $clock-background-color;position:relative;display:inline-block;margin:0 2px;-webkit-text-size-adjust:none;}
-.clock { *display:inline;}
-.clock div{position: absolute;border-style:solid;}
+.clock { font-size: 2px; width:9em; height:14em;border:1px solid $clock-background-color; position:relative; display:inline-block; margin:0 2px;-webkit-text-size-adjust:none;}
+//.clock { *display:inline;}
+.clock div { position: absolute; border-style:solid; }
 .clock .l,.clock .r,.clock .u,.clock .d{width:0;height:0;overflow:hidden;}
 
 .clock .v{width:0;height:5em;border-width:0 0.5em;border-color: $clock-front-color;}

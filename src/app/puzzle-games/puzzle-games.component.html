@@ -18,7 +18,7 @@
         </div>
 
         <div class="demo-full-width" *ngIf="Cal24Quiz.IsStarted">
-          <app-digit-clock [IsStart]="Cal24Quiz.IsStarted"></app-digit-clock>
+          <app-digit-clock [IsStart]="Cal24Quiz.IsStarted" style="display:block;"></app-digit-clock>
         </div>
 
         <div class="demo-full-width" *ngIf="Cal24Quiz.IsStarted">
@@ -56,7 +56,7 @@
 
       <md-card-content>
         <div class="demo-full-width" *ngIf="sudouQuiz.IsStarted">
-          <app-digit-clock [IsStart]="sudouQuiz.IsStarted"></app-digit-clock>
+          <app-digit-clock [IsStart]="sudouQuiz.IsStarted" style="display:block;"></app-digit-clock>
         </div>
 
         <app-pg-sudou (finishEvent)="OnSudouComplete()" [sudouObject]="objSudou"></app-pg-sudou>
