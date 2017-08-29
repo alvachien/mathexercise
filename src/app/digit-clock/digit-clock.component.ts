@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { LogLevel, UserAuthInfo } from '../model';
 import * as moment from 'moment';
@@ -8,12 +8,12 @@ import * as moment from 'moment';
   templateUrl: './digit-clock.component.html',
   styleUrls: ['./digit-clock.component.scss']
 })
-export class DigitClockComponent implements OnInit {
+export class DigitClockComponent implements OnInit, OnDestroy {
   @ViewChild("digitclock") clockElement: ElementRef;
 
   private _dateStart: Date;
   //private _size: number = 1;
-  private _handle = null;
+  private _handler = null;
   private _hour: number = 0;
   private _min: number = 0;
   private _sec: number = 0;
@@ -24,21 +24,40 @@ export class DigitClockComponent implements OnInit {
   ngOnInit() {
   }
 
+  ngOnDestroy() {
+    if (environment.LoggingLevel >= LogLevel.Debug) {
+      console.log("AC Math Exercise [Debug]: Entering ngOnDestroy of digit-clock" + this._handler);
+    }
+    if (this._handler !== null) {
+      clearInterval(this._handler);
+      this._handler = null;
+    }
+  }
+
   @Input()
   set IsStart(istart: boolean) {
+    if (environment.LoggingLevel >= LogLevel.Debug) {
+      console.log("AC Math Exercise [Debug]: setter IsStart in Digit-clock:" + istart);
+    }
+
     if (this._isStart !== istart) {
       this._isStart = istart;
 
-      if (this._isStart) {
+      if (this._isStart === true) {
         this._dateStart = new Date();
-        this._handle = setInterval(()=> { this.onInterval(); }, 500); // Set to 0.5 sec for the dot         
-        //this.onStart();
+        this._handler = setInterval(() => { this.onInterval(); }, 500); // Set to 0.5 sec for the dot
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log("AC Math Exercise [Debug]: After start the interval Digit-clock:" + this._handler);
+        }
       } else {
-        //this.onStop();
-        if (this._handle !== null) {
-          clearInterval(this._handle);
-          this._handle = null;
-        }        
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log("AC Math Exercise [Debug]: Try to stop the interval Digit-clock:" + this._handler);
+        }
+
+        if (this._handler !== null) {
+          clearInterval(this._handler);
+          this._handler = null;
+        }
       }
     }
   }
@@ -71,6 +90,6 @@ export class DigitClockComponent implements OnInit {
       this._hour = mt.hours();
       clocks[1].className = "clock c" + (this._hour % 10);
       clocks[0].className = "clock c" + ((this._hour - (this._hour % 10)) / 10);
-    }    
+    }
   }
 }

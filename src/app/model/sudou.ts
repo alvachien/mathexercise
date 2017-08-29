@@ -403,6 +403,29 @@ export class Sudou {
             console.log(arRows[i]);
         }
     }
+
+    /**
+     * Print it content as string
+     */
+    public print2String(): string {
+        let arRows: string[] = [];
+        for (let i: number = 0; i < SudouSize; i++) {
+            arRows.push('');
+        }
+
+        for (let i: number = 0; i < SudouUnitSize; i++) {
+            for (let j: number = 0; j < SudouUnitSize; j++) {
+                let unit = this._dataRows[i].getCell(j);
+                for(let k: number = 0; k < SudouUnitSize; k ++) {
+                    let ridx = 3 * i + k;
+                    
+                    arRows[ridx] += unit.getRow(k).toString() + ' ';
+                }
+            }
+        }
+
+        return arRows.join(';');
+    }
 }
 
 /**

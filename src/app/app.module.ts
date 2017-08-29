@@ -67,6 +67,9 @@ import { AuthGuard } from './services/auth-guard.service';
 import { CanDeactivateGuard } from './services/can-deactive-guard.service';
 import { DigitClockComponent } from './digit-clock/digit-clock.component';
 import { MessageDialogComponent } from './message-dialog';
+import { PgSudouComponent } from './pg-sudou/pg-sudou.component';
+import { PgMinesweeperComponent } from './pg-minesweeper/pg-minesweeper.component';
+import { PgTypingtourComponent } from './pg-typingtour/pg-typingtour.component';
 
 @NgModule({
   exports: [
@@ -130,7 +133,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     UserDetailComponent,
     PuzzleGamesComponent,
     DigitClockComponent,
-    MessageDialogComponent
+    MessageDialogComponent,
+    PgSudouComponent,
+    PgMinesweeperComponent,
+    PgTypingtourComponent
   ],
   entryComponents: [
     QuizFailureDlgComponent,

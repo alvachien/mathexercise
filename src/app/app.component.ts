@@ -13,7 +13,7 @@ export class Home {
   public backgroundimage: string;
   
   constructor(private _sanitizer: DomSanitizer) {
-    const photoamt: number = 3;
+    const photoamt: number = 7;
     let bgidx: number = Math.ceil(Math.random() * (photoamt - 1) + 1);
     if (bgidx > photoamt) {
       bgidx = photoamt;

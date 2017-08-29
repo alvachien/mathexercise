@@ -5,18 +5,18 @@ import { QuizSplitter } from './quizconstants';
  * Quiz type
  */
 export enum QuizTypeEnum {
-    add     = 1,
-    sub     = 2,
-    multi   = 3,
-    div     = 4,
+    add = 1,
+    sub = 2,
+    multi = 3,
+    div = 4,
     formula = 5,
-    cal24   = 6,
-    sudou   = 7
+    cal24 = 6,
+    sudou = 7
 }
 
 export function QuizTypeEnum2UIString(qt: QuizTypeEnum): string {
     let rst: string;
-    switch(qt) {
+    switch (qt) {
         case QuizTypeEnum.add: rst = 'Home.AdditionExercises'; break;
         case QuizTypeEnum.sub: rst = 'Home.SubtractionExercises'; break;
         case QuizTypeEnum.multi: rst = 'Home.MultiplicationExercises'; break;
@@ -91,7 +91,7 @@ export class PrimarySchoolMathQuizItem extends QuizItem {
 
     public static restoreFromString(s: string): PrimarySchoolMathQuizItem | null {
         return null;
-    }    
+    }
 }
 
 /**
@@ -154,7 +154,7 @@ export class PrimarySchoolMathFAOQuizItem extends PrimarySchoolMathQuizItem {
         let rightNumber = parseInt(s.substring(idx + 1, idx2));
 
         return new PrimarySchoolMathFAOQuizItem(leftNumber, rightNumber);
-    }    
+    }
 }
 
 /**
@@ -188,8 +188,9 @@ export class PrimarySchoolMathQuizSection {
         return this._timeSpent;
     }
 
-    constructor(scn: number, ic: number)  {
+    constructor(scn: number, ic: number) {
         this._sectionNumber = scn;
+
         this.ItemsCount = ic;
     }
 
@@ -204,7 +205,7 @@ export class PrimarySchoolMathQuizSection {
     public getSummaryInfo(): string {
         let rst: string = 'BATCH#' + this.SectionNumber.toString() + ';';
         rst = rst + ' total items: ' + this.ItemsCount.toString() + '; '
-            + (this.ItemsFailed > 0? ' Failed : ' + this.ItemsFailed.toString() : '');
+            + (this.ItemsFailed > 0 ? ' Failed : ' + this.ItemsFailed.toString() : '');
         rst = rst += ' Time spent: ' + this.TimeSpent.toString() + ' s';
         return rst;
     }
@@ -220,7 +221,7 @@ export interface PrimarySchoolQuizBaseInfo {
 /**
  * Math quiz for Primary School
  */
-export class PrimarySchoolMathQuiz {    
+export class PrimarySchoolMathQuiz {
     // Elder runs
     private _elderRun: PrimarySchoolMathQuizSection[] = [];
     public ElderRuns(): PrimarySchoolMathQuizSection[] {
@@ -274,10 +275,18 @@ export class PrimarySchoolMathQuiz {
     }
 
     constructor() {
+        this.init();
+    }
+
+    /**
+     * Initial the internal variables
+     */
+    private init(): void {
         this._curRunID = 1;
         this._faileFactor = 0;
         this._isStarted = false;
         this._curRun = null;
+        this._elderRun = [];
     }
 
     /**
@@ -290,8 +299,12 @@ export class PrimarySchoolMathQuiz {
             throw new Error('Quiz already started!');
         }
 
+        // Empty the elder run
+        this.init();
+
         this._faileFactor = failfactor;
         this._curRun = new PrimarySchoolMathQuizSection(this._curRunID, startnum);
+
         this._isStarted = true;
     }
 
@@ -301,27 +314,30 @@ export class PrimarySchoolMathQuiz {
      * @param failedItems The failed items
      */
     public SubmitCurrentRun(failedItems?: PrimarySchoolMathQuizItem[]) {
-        if (failedItems !== undefined && failedItems.length > 0) {
+        if (failedItems !== null && failedItems !== undefined && failedItems.length > 0) {
             this._curRun.ItemsFailed = failedItems.length;
-            for(let fi of failedItems) {
+            for (let fi of failedItems) {
                 this._failedItems.push(fi);
             }
         } else {
-            this._curRun.ItemsFailed = 0;            
+            this._curRun.ItemsFailed = 0;
         }
         this._curRun.SectionComplete();
         this._elderRun.push(this._curRun);
 
-        if (this._curRun.ItemsFailed > 0) {
-            let ncnt = Math.round(this._curRun.ItemsFailed * this._faileFactor);
-
-            if (ncnt > 0) {
-                let curID = this._curRun.SectionNumber;
-                this._curRun = new PrimarySchoolMathQuizSection(curID + 1, ncnt);            
-            }
+        let ncnt = Math.round(this._curRun.ItemsFailed * this._faileFactor);
+        if (ncnt > 0) {
+            let curID = this._curRun.SectionNumber;
+            this._curRun = new PrimarySchoolMathQuizSection(curID + 1, ncnt);
         } else {
-            // As no failure, stop the current quiz
-            this._isStarted = false;
+            this.Stop();
         }
+    }
+
+    private Stop() {
+        // As no failure, stop the current quiz
+        this._curRun = null;
+        this._curRunID = 1;
+        this._isStarted = false;
     }
 }
