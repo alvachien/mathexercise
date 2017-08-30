@@ -79,7 +79,33 @@
   <!-- Tab: Typing Tutor -->
   <md-tab label="{{'Home.TypingTutor' | translate}}">
     <md-card class="example-card">
-      <p>{{'Home.Underconstruction' | translate}}</p>
+      <md-card-header>
+          <md-card-title>{{'Home.TypingTutor' | translate}}</md-card-title>
+      </md-card-header>
+      <md-card-content>
+        <div class="demo-full-width" *ngIf="!typingQuiz.IsStarted">
+          <md-input-container>
+            <input mdInput type="number" placeholder="{{'Math.Amount' | translate}}" [(ngModel)]="typingMaxLength" name="typmaxnr" required>
+          </md-input-container>
+        </div>
+        <div class="demo-full-width" *ngIf="!typingQuiz.IsStarted">
+          <md-checkbox [(ngModel)]="typingIncCaptial">{{'Home.IncludeCaptial' | translate}}</md-checkbox>
+        </div>
+        <div class="demo-full-width" *ngIf="!typingQuiz.IsStarted">
+          <md-checkbox [(ngModel)]="typingIncNumber">{{'Home.IncludeNumber' | translate}}</md-checkbox>
+        </div>
+        <div class="demo-full-width" *ngIf="!typingQuiz.IsStarted">
+          <md-checkbox [(ngModel)]="typingIncSymbols">{{'Home.IncludeSymbol' | translate}}</md-checkbox>
+        </div>
+
+        <div class="demo-full-width" *ngIf="typingQuiz.IsStarted">
+          <app-pg-typingtour [expectedString]="typingExpected" (finishEvent)="OnTypingComplete()"></app-pg-typingtour>
+        </div>
+      </md-card-content>
+      <md-card-actions>
+          <button md-button [disabled]="!CanTypingStart()" (click)="OnTypingStart()">{{'Home.StartButton' | translate}}</button>
+          <button md-raised-button *ngIf="typingQuiz.IsStarted" (click)="OnTypingSurrender()">{{'Home.SurrenderButton' | translate}}</button>
+        </md-card-actions>
     </md-card>
   </md-tab>
 </md-tab-group>

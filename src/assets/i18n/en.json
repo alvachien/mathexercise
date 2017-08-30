@@ -63,6 +63,11 @@
         "QuizIsOngoing": "Exercise or game is on going, cannot jump to other page",
         "Cal24Detail": "Input a formula by using the number above and allowed operators (+-*/) to make it equal 24",
         "Cal24NoSolution": "No suitable solution found",
+        "MixedOperations" : "Mixed Operations",
+        "IncludeCaptial": "Include the capital letters",
+        "IncludeNumber": "Include the numbers",
+        "IncludeSymbol": "Include the symbols",
+        "IncludeSimplifiedChinese": "Include the Simplified Chinese",
 
         "Underconstruction": "Page still under construction"
     },

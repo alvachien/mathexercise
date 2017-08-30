@@ -26,7 +26,18 @@ This web app credits to the following libraries:
 6. [Angular CLI](https://github.com/angular/angular-cli)
 7. [d3.js](https://d3js.org)
 8. [ngx-charts](https://swimlane.github.io/ngx-charts/)
-9. [Angular2-moment](https://github.com/urish/angular2-moment)
+9. [moment](https://github.com/moment/moment)
+
+# author
+**Alva Chien (Hongjun Qian) | 钱红俊**
+
+A programmer, a photographer and a father.
+ 
+Contact me:
+
+1. Via mail: alvachien@163.com. Or,
+2. [Check my flickr](http://www.flickr.com/photos/alvachien). Or,
+3. [Visit my website](http://www.alvachien.com)
 
 # license
 MIT

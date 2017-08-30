@@ -39,7 +39,17 @@ export class PuzzleGamesComponent implements OnInit {
    * Sudou part
    */
   sudouQuiz: PrimarySchoolMathQuiz;
-  objSudou: Sudou;
+  sudouInstance: Sudou;
+
+  /**
+   * Typing tour
+   */
+  typingQuiz: PrimarySchoolMathQuiz;
+  typingMaxLength: number;
+  typingIncCaptial: boolean;
+  typingIncNumber: boolean;
+  typingIncSymbols: boolean;
+  typingExpected: string;
   
   constructor(private _dlgsvc: DialogService,
     private _dialog: MdDialog,
@@ -52,6 +62,14 @@ export class PuzzleGamesComponent implements OnInit {
 
     this.sudouQuiz = new PrimarySchoolMathQuiz();
     this.sudouQuiz.QuizType = QuizTypeEnum.sudou;
+
+    this.typingQuiz = new PrimarySchoolMathQuiz();
+    this.typingQuiz.QuizType = QuizTypeEnum.typing;
+    this.typingMaxLength = 20;
+    this.typingIncCaptial = true;
+    this.typingIncNumber = true;
+    this.typingIncSymbols = true;
+    this.typingExpected = '';
   }
 
   ngOnInit() {
@@ -114,7 +132,7 @@ export class PuzzleGamesComponent implements OnInit {
   }
 
   public CanCal24Start(): boolean {
-    if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted) {
+    if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted || this.typingQuiz.IsStarted) {
       return false;
     }
 
@@ -235,7 +253,7 @@ export class PuzzleGamesComponent implements OnInit {
    * Sudou part
    */
   public CanSudouStart(): boolean {
-    if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted) {
+    if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted || this.typingQuiz.IsStarted) {
       return false;
     }
 
@@ -243,9 +261,9 @@ export class PuzzleGamesComponent implements OnInit {
   }
 
   public OnSudouStart(): void {
-    this.objSudou = generateValidSudou();
+    this.sudouInstance = generateValidSudou();
 
-    this.sudouQuiz.BasicInfo = this.objSudou.print2String().substring(0, 45);
+    this.sudouQuiz.BasicInfo = this.sudouInstance.print2String().substring(0, 45);
     this.sudouQuiz.Start(1, 0); // Single item and no failor
     this.sudouQuiz.CurrentRun().SectionStart();
   }
@@ -268,6 +286,66 @@ export class PuzzleGamesComponent implements OnInit {
     // Navigate to summary
     this.sudouQuiz.SubmitCurrentRun();
     this._dlgsvc.CurrentQuiz = this.sudouQuiz;
+
+    this._router.navigate(['/quiz-sum']);
+  }
+
+  /**
+   * Typing tour
+   */
+  private typingGenerateExpectedString() {  
+    let basic = "abcdefghijklmnopqrstuvwxyz";
+    if (this.typingIncCaptial) {
+      basic = basic + "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    }
+    if (this.typingIncNumber) {
+      basic = basic + "0123456789";
+    }
+    if (this.typingIncSymbols) {
+      basic = basic + ",.;'`!@#$%^&*()_+-=[]{}\|<>?:";
+    }
+
+    this.typingExpected = '';
+    for(let i: number = 0; i < this.typingMaxLength; i++) {
+      let word = basic.charAt(Math.floor(Math.random() * basic.length));
+      this.typingExpected += word;
+    }
+  }
+
+  public CanTypingStart(): boolean {
+    if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted || this.typingQuiz.IsStarted) {
+      return false;
+    }
+
+    return true;
+  }
+
+  public OnTypingStart(): void {
+    this.typingGenerateExpectedString();
+
+    this.typingQuiz.BasicInfo = '';
+    this.typingQuiz.Start(1, 0); // Single item and no failor
+    this.typingQuiz.CurrentRun().SectionStart();
+  }
+
+  public OnTypingSurrender(): void {
+    let fitem: SudouQuizItem = new SudouQuizItem();
+    fitem.IsSurrended = true;
+    fitem.DetailInfo = this.typingQuiz.BasicInfo.substring(0, 45);
+    this._dlgsvc.FailureItems = [];
+    this._dlgsvc.FailureItems.push(fitem);
+    this.typingQuiz.SubmitCurrentRun(this._dlgsvc.FailureItems);
+
+    // Do nothing but finish the quiz! Jump to the summary      
+    this._dlgsvc.CurrentQuiz = this.typingQuiz;
+
+    this._router.navigate(['/quiz-sum']);
+  }
+
+  public OnTypingComplete(): void {
+    // Navigate to summary
+    this.typingQuiz.SubmitCurrentRun();
+    this._dlgsvc.CurrentQuiz = this.typingQuiz;
 
     this._router.navigate(['/quiz-sum']);
   }

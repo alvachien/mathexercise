@@ -63,6 +63,11 @@
         "QuizIsOngoing": "当前练习（游戏）尚未结束，不能跳转其他页面",
         "Cal24Detail": "使用上面的数字和操作符(+-*/)使其等于24。注意，乘号用*表示，除法用/表示",
         "Cal24NoSolution": "无解！当前数字在允许的操作符的范畴内无解！",
+        "MixedOperations" : "四则混合运算",
+        "IncludeCaptial": "包含大写字母",
+        "IncludeNumber": "包含数字",
+        "IncludeSymbol": "包含符号",
+        "IncludeSimplifiedChinese": "包含中文字符",
         
         "Underconstruction": "当前页还在开发中"
     },

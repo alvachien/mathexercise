@@ -1,0 +1,28 @@
+span
+{
+    margin-top:5px;
+    margin-left:5px;
+    margin-right:5px;
+
+    font-family: "Courier New", monospace;
+    font-size:20pt;
+    border:1px solid gray;
+
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-left:5px;
+    padding-right:5px;
+
+    color: #121212;
+    background-color:#fffff0;
+
+    border-width:0 1px 1px 0;
+};
+
+.demo-full-width {
+   width: 100%;
+}
+
+.input-fail {
+    color: #FF0000
+}

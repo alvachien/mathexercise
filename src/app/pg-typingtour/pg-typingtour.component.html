@@ -1,3 +1,36 @@
-<p>
-  pg-typingtour works!
-</p>
+<h2 class="lead text-justify" #inpword>
+  <div class="demo-full-width">
+    <span *ngFor="let cmp of arComparison">
+    {{cmp.expected}}
+    </span>
+  </div>
+  <div class="demo-full-width">
+    <span *ngFor="let cmp of arComparison" [ngClass]="{'input-fail': cmp.inputted !== null && cmp.inputted !== cmp.expected}">
+    {{cmp.inputted}}
+    </span>    
+  </div>
+</h2>
+<hr>
+
+<div align="center" style="border:1px dotted gray;padding:20px;width:600px;">
+  <div class="m-2">
+    <span id="keybackquote">`</span><span id="key1">1</span><span id="key2">2</span><span id="key3">3</span><span id="key4">4</span>
+    <span id="key5">5</span><span id="key6">6</span><span id="key7">7</span><span id="key8">8</span>
+    <span id="key9">9</span><span id="key0">0</span><span id="keyminus">-</span><span id="keyequal">=</span>
+  </div>
+  <div class="m-2">
+    <span id="keyq">q</span><span id="keyw">w</span><span id="keye">e</span><span id="keyr">r</span>
+    <span id="keyt">t</span><span id="keyy">y</span><span id="keyu">u</span><span id="keyi">i</span>
+    <span id="keyo">o</span><span id="keyp">p</span><span id="keyleftbr">[</span><span id="keyrightbr">]</span><span id="keybackslash">\</span>
+  </div>
+  <div class="m-2">
+    <span id="keya">a</span><span id="keys">s</span><span id="keyd">d</span><span id="keyf">f</span>
+    <span id="keyg">g</span><span id="keyh">h</span><span id="keyj">j</span><span id="keyk">k</span>
+    <span id="keyl">l</span><span id="keysemicolon">;</span>
+  </div>
+  <div class="m-2">
+    <span id="keyz">z</span><span id="keyx">x</span><span id="keyc">c</span><span id="keyv">v</span>
+    <span id="keyb">b</span><span id="keyn">n</span><span id="keym">m</span><span id="keycomma">,</span>
+    <span id="keydot">.</span><span id="keyslash">/</span>
+  </div>
+</div>

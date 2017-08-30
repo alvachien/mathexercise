@@ -259,9 +259,9 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
     }
   }
 
-  @HostListener('mousemove', ['$event'])
-  public onSudouCanvasMouseMove(evt: MouseEvent) {
-  }
+  // @HostListener('mousemove', ['$event'])
+  // public onSudouCanvasMouseMove(evt: MouseEvent) {
+  // }
 
   @HostListener('mousedown', ['$event'])
   public onSudouCanvasMouseDown(evt: MouseEvent) {
