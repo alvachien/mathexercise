@@ -13,6 +13,7 @@ import { UserDetailComponent } from './user-detail';
 import { PuzzleGamesComponent } from './puzzle-games';
 import { AuthGuard } from './services/auth-guard.service';
 import { CanDeactivateGuard } from './services/can-deactive-guard.service';
+import { MixedopExerciseComponent } from './mixedop-exercise';
 
 export const AppRoutes: Routes = [
   { path: '', component: Home },
@@ -27,4 +28,5 @@ export const AppRoutes: Routes = [
   { path: 'user-stat', component: UserStatisticsComponent, canActivate: [AuthGuard], },
   { path: 'user-detail', component: UserDetailComponent, canActivate: [AuthGuard], },
   { path: 'puzz-game', component: PuzzleGamesComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateGuard] },
+  { path: 'mixop-ex', component: MixedopExerciseComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateGuard] },
 ];

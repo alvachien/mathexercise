@@ -25,9 +25,9 @@ export class DivisionExerciseComponent implements OnInit {
   FailedQuizFactor: number = DefaultFailedQuizFactor;
 
   DivisorRangeBgn: number = 1;
-  DivisorRangeEnd: number = 10;
-  DividendRangeBgn: number = 10;
-  DividendRangeEnd: number = 100;
+  DivisorRangeEnd: number = 100;
+  DividendRangeBgn: number = 500;
+  DividendRangeEnd: number = 1000;
   
   quizInstance: PrimarySchoolMathQuiz = null;
   QuizItems: DivisionQuizItem[] = [];

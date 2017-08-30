@@ -1,13 +1,12 @@
-<h2 class="lead text-justify" #inpword>
-  <div class="demo-full-width">
-    <span *ngFor="let cmp of arComparison">
-    {{cmp.expected}}
-    </span>
-  </div>
-  <div class="demo-full-width">
-    <span *ngFor="let cmp of arComparison" [ngClass]="{'input-fail': cmp.inputted !== null && cmp.inputted !== cmp.expected}">
-    {{cmp.inputted}}
-    </span>    
+<h2 class="lead text-justify" >
+  <h2 class="demo-full-width mt-5" style="background-color:#fffff0; color:blue;">
+    <div align="center" #expword></div>
+  </h2>
+  <h2 class="demo-full-width mt-5" style="background-color:#fffff0; color:black;">
+    <div align="center" #inpword></div>
+  </h2>
+  <div class="demo-full-width mt-5" style="background-color:#fffff0;">
+     <input align="center" type="text" [value]="inputtedString">
   </div>
 </h2>
 <hr>

@@ -24,9 +24,9 @@ export class AdditionExerciseComponent implements OnInit {
   UsedQuizAmount: number = 0;
 
   LeftNumberRangeBgn: number = 1;
-  LeftNumberRangeEnd: number = 10;
+  LeftNumberRangeEnd: number = 1000;
   RightNumberRangeBgn: number = 1;
-  RightNumberRangeEnd: number = 10;
+  RightNumberRangeEnd: number = 1000;
 
   quizInstance: PrimarySchoolMathQuiz = null;
   QuizItems: AdditionQuizItem[] = [];

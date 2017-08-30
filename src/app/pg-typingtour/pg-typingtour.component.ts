@@ -14,16 +14,17 @@ export interface typingCompare {
   styleUrls: ['./pg-typingtour.component.scss']
 })
 export class PgTypingtourComponent implements OnInit {
-  //@ViewChild('expword') expWordER: ElementRef;
+  @ViewChild('expword') expWordER: ElementRef;
   @ViewChild('inpword') inpWordER: ElementRef;
-  @Input() 
+  @Input()
   set expectedString(exp: string) {
     this._expectedString = exp;
+
     this.updateComparison();
   }
   @Output() finishEvent: EventEmitter<any> = new EventEmitter();
-  private _expectedString: string;
-  private _inputtedString: string;
+  private _expectedString: string = '';
+  public inputtedString: string;
 
   arComparison: typingCompare[] = [];
 
@@ -31,26 +32,56 @@ export class PgTypingtourComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._inputtedString = '';
+    this.inputtedString = '';
   }
 
   private updateComparison(isdelta?: boolean) {
     if (isdelta) {
-      let nlen = this._inputtedString.length;
-      this.arComparison[nlen - 1].inputted = this._inputtedString.charAt(nlen - 1);
+      let nlen = this.inputtedString.length;
+      for (let i: number = 0; i < nlen; i++) {
+        this.arComparison[i].inputted = this.inputtedString.charAt(i);
+      }
+      for(let i: number = nlen; i < this.arComparison.length; i++) {
+        this.arComparison[i].inputted = null;
+      }
+
+      if (this.inpWordER !== null && this.inpWordER !== undefined) {
+        let nhtml: string = '';
+        for(let cmp of this.arComparison) {
+          if (cmp.inputted !== null) {
+            nhtml += "<span>" + cmp.inputted + "</span>";            
+          } else if (cmp.inputted !== null && cmp.inputted !== cmp.expected) {
+            nhtml += "<span class=\"input-fail\">" + cmp.inputted + "</span>";            
+          } else {
+          }
+        }
+
+        this.inpWordER.nativeElement.innerHTML = nhtml;
+      }
     } else {
-      this.arComparison = [];
-      for(let c of this._expectedString) {
-        let tc: typingCompare = {
-          expected: c,
-          inputted: null
-        };
-        this.arComparison.push(tc);
+      if (this._expectedString !== undefined && this._expectedString.length > 0) {
+        this.arComparison = [];
+        for(let c of this._expectedString) {
+          let tc: typingCompare = {
+            expected: c,
+            inputted: null
+          };
+          this.arComparison.push(tc);
+        }
+  
+        if (this.expWordER !== null && this.expWordER !== undefined) {
+          let nhtml: string = '';
+          for(let c of this._expectedString) {
+            nhtml += "<span>" + c + "</span>";
+          }
+  
+          this.expWordER.nativeElement.innerHTML = nhtml;
+        }
       }
     }
   }
 
-  @HostListener('document:keydown', ['$event'])
+  @HostListener('keydown', ['$event'])
   public onPGTypingTourKeyDown(evt: KeyboardEvent) {
     if (environment.LoggingLevel >= LogLevel.Debug) {
       console.log("AC Math Exercise [Debug]: Entering onPGTypingTourMouseDown of PgTypingTourComponent: " + evt.key);
@@ -60,13 +91,19 @@ export class PgTypingtourComponent implements OnInit {
     // evt.altKey;
     // evt.shiftKey;
 
-    if (evt.key === "Backspace") {
-      //this._inputtedString += evt.key;
-    } else if(evt.key === "Enter") {
+    // https://developer.mozilla.org/zh-CN/docs/Web/API/KeyboardEvent/key/Key_Values
 
+    if (evt.key === "Backspace") {
+      if (this.inputtedString.length >= 2) {
+        this.inputtedString = this.inputtedString.slice(0, length - 2);
+      } else {
+        this.inputtedString = '';
+      }
+      this.updateComparison(true);
+    } else if("`1234567890-=~!@#$%^&*()_+[]\\{}|;':\",./<>?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".indexOf(evt.key) !== -1) {
+      this.inputtedString = this.inputtedString + evt.key;
+      this.updateComparison(true);
     }
-    this.updateComparison(true);
-    // if(/[^A-Z]/g.test(var1))
   }
 
   // @HostListener('document:keyup', ['$event'])
