@@ -5,10 +5,11 @@ import { MdDialog } from '@angular/material';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../services/auth.service';
 import { DialogService } from '../services/dialog.service';
-import { QuizTypeEnum, PrimarySchoolMathQuizItem, QuizTypeEnum2UIString,
+import { QuizTypeEnum, PrimarySchoolMathQuizItem, QuizTypeEnum2UIString, LogLevel,
   AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem } from '../model';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
-  
+import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } from '../message-dialog';
+
 export class QuizFailureItem {
   public quiztype: QuizTypeEnum;
   public quizid: number;
@@ -18,12 +19,6 @@ export class QuizFailureItem {
   public quizitemstore: string;
   public qsInstance: PrimarySchoolMathQuizItem;
 }
-
-@Component({
-  selector: 'failure-retest-complete-dialog',
-  templateUrl: 'failure-retest-complete-dialog.html',
-})
-export class FailureRetestCompleteDialog {}
 
 @Component({
   selector: 'app-failure-retest',
@@ -80,6 +75,30 @@ export class FailureRetestComponent implements OnInit {
       });
   }
 
+  public canDeactivate(): boolean {
+    if (this.listFailItems.length > 0) {
+      let dlginfo: MessageDialogInfo = {
+        Header: 'Home.Error',
+        Content: 'Home.QuizIsOngoing',
+        Button: MessageDialogButtonEnum.onlyok
+      };
+      
+      this.dialog.open(MessageDialogComponent, {
+        disableClose: false,
+        width: '500px',
+        data: dlginfo
+      }).afterClosed().subscribe(x => {
+        // Do nothing!
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log(`AC Math Exercise [Debug]: Message dialog result ${x}`);
+        }
+      });
+      return false;
+    }
+
+    return true;
+  }
+  
   public getUIStringForType(qt: QuizTypeEnum): string {
     return QuizTypeEnum2UIString(qt);
   }
@@ -196,8 +215,21 @@ export class FailureRetestComponent implements OnInit {
         });
       } else {
         // Also show a dialog
-        this.dialog.open(FailureRetestCompleteDialog).afterClosed().subscribe(() => {
-          // Navigate it back to home page
+        let dlginfo: MessageDialogInfo = {
+          Header: 'Home.Finished',
+          Content: 'Home.FailureRetestFinished',
+          Button: MessageDialogButtonEnum.onlyok
+        };
+        
+        this.dialog.open(MessageDialogComponent, {
+          disableClose: false,
+          width: '500px',
+          data: dlginfo
+        }).afterClosed().subscribe(x => {
+          // Do nothing!
+          if (environment.LoggingLevel >= LogLevel.Debug) {
+            console.log(`AC Math Exercise [Debug]: Message dialog result ${x}`);
+          }
           this._router.navigate(['/']);
         });
       }

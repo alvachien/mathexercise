@@ -1,20 +1,42 @@
-import { Component, OnInit } from '@angular/core';
-import { DialogService } from '../services/dialog.service';
+import { Component, Inject } from '@angular/core';
+import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
+
+export enum MessageDialogButtonEnum {
+  onlyok,
+  yesno,
+  okcancel,
+  yesnocancel
+}
+
+export interface MessageDialogInfo {
+  Header: string;
+  Content: string;
+  Button: MessageDialogButtonEnum;
+}
 
 @Component({
   selector: 'app-message-dialog',
   templateUrl: './message-dialog.component.html',
   styleUrls: ['./message-dialog.component.scss']
 })
-export class MessageDialogComponent implements OnInit {
-  MessageHeader: string = '';
-  MessageContent: string = '';
-
-  constructor(private _dlgsvc: DialogService) {
+export class MessageDialogComponent{
+  get IsOnlyOKButton(): boolean {
+    return this.dlgInfo.Button === MessageDialogButtonEnum.onlyok;
   }
 
-  ngOnInit() {
-    this.MessageHeader = this._dlgsvc.MessageDialogHeader;
-    this.MessageContent = this._dlgsvc.MessageDialogContent;
+  get IsYesNoButton(): boolean {
+    return this.dlgInfo.Button === MessageDialogButtonEnum.yesno;
+  }
+
+  get IsOKCancelButton(): boolean {
+    return this.dlgInfo.Button === MessageDialogButtonEnum.okcancel;
+  }
+
+  get IsYesNoCancelButton(): boolean {
+    return this.dlgInfo.Button === MessageDialogButtonEnum.yesnocancel;
+  }
+
+  constructor(public dialogRef: MdDialogRef<MessageDialogComponent>,
+    @Inject(MD_DIALOG_DATA) public dlgInfo: MessageDialogInfo) {
   }
 }

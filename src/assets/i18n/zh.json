@@ -27,6 +27,10 @@
         "ContinueButton": "继续",
         "HaveARetryButton": "再来一盘",
         "NoThanksButton": "不，谢谢",
+        "OKButton": "确定",
+        "CancelButton": "取消",
+        "YesButton": "是",
+        "NoButton": "否",
         "QuizAmount": "试题数量",
         "FailedFactor": "错误扩散因子",
         "Failure": "失败",
@@ -73,6 +77,10 @@
         "HaveAnotherTry": "再来一盘",
         "YouWin": "你赢了",
         "YouLose": "你输了",
+        "NumberOfOperators": "操作符数量",
+        "AllowNegative": "允许运算过程和结果中有负数",
+        "AllowDecimal": "允许运算过程和结果中有小数",
+        "Result": "结果",
         
         "Underconstruction": "当前页还在开发中"
     },
@@ -115,6 +123,10 @@
         "DistanceAndSpeed": "距离与速度",
         "CircumferenceOfSquare": "正方形周长",
         "CircumferenceOfRectangle": "长方形周长",
-        "Scope": "范围"
+        "Scope": "范围",
+        "Integer": "整数",
+        "Fraction": "分数",
+        "Decimal": "小数",
+        "NegativeNumber": "负数"
     }
 }

@@ -27,6 +27,10 @@
         "ContinueButton": "CONTINUE",
         "HaveARetryButton": "HAVE A RETRY",
         "NoThanksButton": "NO, THANKS",
+        "OKButton": "OK",
+        "CancelButton": "CANCEL",
+        "YesButton": "YES",
+        "NoButton": "NO",
         "QuizAmount": "Amount of Quiz",
         "FailedFactor": "Failed Factor",
         "Failure": "Failure",
@@ -73,6 +77,10 @@
         "HaveAnotherTry": "Have another try",
         "YouWin": "You Win",
         "YouLose": "You Lose",
+        "NumberOfOperators": "Number of operators",
+        "AllowNegative": "Allow Negative",
+        "AllowDecimal": "Allow Decimal",
+        "Result": "Result",
 
         "Underconstruction": "Page still under construction"
     },
@@ -115,6 +123,10 @@
         "DistanceAndSpeed": "Distance and Speed",
         "CircumferenceOfSquare": "Circumference of Square",
         "CircumferenceOfRectangle": "Circumference of Rectangle",
-        "Scope": "Scope"
+        "Scope": "Scope",
+        "Integer": "Integer",
+        "Fraction": "Fraction",
+        "Decimal": "Decimal",
+        "NegativeNumber": "Negative number"
     }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, DivisionQuizItem,
-  DefaultQuizAmount, DefaultFailedQuizFactor, QuizTypeEnum } from '../model';
+  DefaultQuizAmount, DefaultFailedQuizFactor, QuizTypeEnum, LogLevel } from '../model';
 import { MdDialog } from '@angular/material';
 import { DialogService } from '../services/dialog.service';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
@@ -14,6 +14,8 @@ import {
   transition
 } from '@angular/animations';
 import { PageEvent } from '@angular/material';
+import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } from '../message-dialog';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-division-exercise',
@@ -72,8 +74,25 @@ export class DivisionExerciseComponent implements OnInit {
 
   public canDeactivate(): boolean {
     if (this.quizInstance.IsStarted) {
+      let dlginfo: MessageDialogInfo = {
+        Header: 'Home.Error',
+        Content: 'Home.QuizIsOngoing',
+        Button: MessageDialogButtonEnum.onlyok
+      };
+      
+      this.dialog.open(MessageDialogComponent, {
+        disableClose: false,
+        width: '500px',
+        data: dlginfo
+      }).afterClosed().subscribe(x => {
+        // Do nothing!
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log(`AC Math Exercise [Debug]: Message dialog result ${x}`);
+        }
+      });
       return false;
     }
+
     return true;
   }
   
@@ -116,7 +135,10 @@ export class DivisionExerciseComponent implements OnInit {
   }
   
   public CanStart(): boolean {
-    if (this.StartQuizAmount <= 0) {
+    if (this.StartQuizAmount <= 0 || this.DividendRangeBgn <= 0
+      || this.DividendRangeEnd <= this.DividendRangeBgn
+      || this.DivisorRangeBgn <= 0 
+      || this.DivisorRangeEnd <= this.DivisorRangeBgn) {
       return false;
     }
     

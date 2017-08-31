@@ -2,6 +2,7 @@ export const environment = {
   production: true,
   DebugLogging: false,
   LoggingLevel: 1, // Crash
+  LoginRequired: true,
   
   IDServerUrl: 'http://118.178.58.187:5100/',
   APIBaseUrl: 'http://118.178.58.187:5330/api/',

@@ -8,11 +8,12 @@ import { MdDialog } from '@angular/material';
 import {
   RPN, SudouUnit, Sudou, generateValidSudou, SudouSize,
   PrimarySchoolMathQuiz, QuizTypeEnum, PrimarySchoolMathQuizItem,
-  Cal24QuizItem, SudouQuizItem
+  Cal24QuizItem, SudouQuizItem, LogLevel
 } from '../model';
+import { environment } from '../../environments/environment';
 import { DialogService } from '../services/dialog.service';
-import { MessageDialogComponent } from '../message-dialog';
 import { PgSummaryDlgInfo, PgSummaryDlgComponent } from '../pg-summary-dlg';
+import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } from '../message-dialog';
 
 @Component({
   selector: 'app-puzzle-games',
@@ -51,7 +52,7 @@ export class PuzzleGamesComponent implements OnInit {
   typingIncNumber: boolean;
   typingIncSymbols: boolean;
   typingExpected: string;
-  
+
   constructor(private _dlgsvc: DialogService,
     private _dialog: MdDialog,
     private _zone: NgZone,
@@ -83,15 +84,20 @@ export class PuzzleGamesComponent implements OnInit {
 
   public canDeactivate(): boolean {
     if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted) {
-      this._dlgsvc.MessageDialogHeader = 'Home.Error';
-      this._dlgsvc.MessageDialogContent = 'Home.QuizIsOngoing';
-      let dialogRef = this._dialog.open(MessageDialogComponent, {
+      let dlginfo: MessageDialogInfo = {
+        Header: 'Home.Error',
+        Content: 'Home.QuizIsOngoing',
+        Button: MessageDialogButtonEnum.onlyok
+      };
+      this._dialog.open(MessageDialogComponent, {
         disableClose: false,
-        width: '500px'
-      });
-
-      dialogRef.afterClosed().subscribe(x => {
+        width: '500px',
+        data: dlginfo
+      }).afterClosed().subscribe(x => {
         // Do nothing!
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log(`AC Math Exericse [Debug]: Message Dialog Result ${x}`);
+        }
       });
       return false;
     }
@@ -190,31 +196,36 @@ export class PuzzleGamesComponent implements OnInit {
   public OnCal24Submit(): void {
     let rst: number = <number>eval(this.Cal24Input);
     if (rst !== 24) {
-      this._dlgsvc.MessageDialogHeader = 'Home.Error';
-      this._dlgsvc.MessageDialogContent = this.Cal24Input + ' = ' + rst.toString() + ' != 24';;
-      let dialogRef = this._dialog.open(MessageDialogComponent, {
+      let dlginfo: MessageDialogInfo = {
+        Header: 'Home.Error',
+        Content: this.Cal24Input + ' = ' + rst.toString() + ' != 24',
+        Button: MessageDialogButtonEnum.onlyok
+      };
+      this._dialog.open(MessageDialogComponent, {
         disableClose: false,
-        width: '500px'
-      });
-
-      dialogRef.afterClosed().subscribe(x => {
+        width: '500px',
+        data: dlginfo
+      }).afterClosed().subscribe(x => {
         // Do nothing!
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log(`AC Math Exericse [Debug]: Message Dialog Result ${x}`);
+        }
       });
     } else {
       // Success
       this.Cal24Quiz.SubmitCurrentRun();
 
-      let di: PgSummaryDlgInfo = { 
+      let di: PgSummaryDlgInfo = {
         gameWin: true,
         timeSpent: this.Cal24Quiz.ElderRuns()[0].TimeSpent,
         haveARetry: true
       };
-  
+
       let dialogRef = this._dialog.open(PgSummaryDlgComponent, {
         width: '500px',
         data: di
       });
-  
+
       dialogRef.afterClosed().subscribe(x => {
         if (di.haveARetry) {
           this.OnCal24Start();
@@ -237,40 +248,44 @@ export class PuzzleGamesComponent implements OnInit {
     this.Cal24Quiz.SubmitCurrentRun(fitems);
 
     // Prepare the dialog for the correct answer
-    this._dlgsvc.MessageDialogHeader = 'Home.Error';
-
+    let dlginfo: MessageDialogInfo = {
+      Header: 'Home.Error',
+      Content: '',
+      Button: MessageDialogButtonEnum.onlyok
+    };
     if (this.Cal24(arnums, arnums.length, 24)) {
-      this._dlgsvc.MessageDialogContent = this.Cal24SurrendString + ' = 24';
+      dlginfo.Content = this.Cal24SurrendString + ' = 24';
     } else {
       // No suitable errors      
-      this._dlgsvc.MessageDialogContent = 'Home.Cal24NoSolution';
+      dlginfo.Content = 'Home.Cal24NoSolution';
     }
 
-    let dialogRef = this._dialog.open(MessageDialogComponent, {
+    this._dialog.open(MessageDialogComponent, {
       disableClose: false,
-      width: '500px'
-    });
+      width: '500px',
+      data: dlginfo
+    }).afterClosed().subscribe(x => {
+      // Do nothing!
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.log(`AC Math Exericse [Debug]: Message Dialog Result ${x}`);
+      }
 
-    dialogRef.afterClosed().subscribe(x => {
-      let di: PgSummaryDlgInfo = { 
+      let di: PgSummaryDlgInfo = {
         gameWin: false,
         timeSpent: this.Cal24Quiz.ElderRuns()[0].TimeSpent,
         haveARetry: true
       };
-  
-      let dialogRef2 = this._dialog.open(PgSummaryDlgComponent, {
+
+      this._dialog.open(PgSummaryDlgComponent, {
         width: '500px',
         data: di
-      });
-  
-      dialogRef2.afterClosed().subscribe(x => {
+      }).afterClosed().subscribe(x => {
         if (di.haveARetry) {
           this.OnCal24Start();
         }
       });
     });
   }
-
 
   /**
    * Sudou part
@@ -299,7 +314,7 @@ export class PuzzleGamesComponent implements OnInit {
     fitems.push(fitem);
     this.sudouQuiz.SubmitCurrentRun(fitems);
 
-    let di: PgSummaryDlgInfo = { 
+    let di: PgSummaryDlgInfo = {
       gameWin: false,
       timeSpent: this.sudouQuiz.ElderRuns()[0].TimeSpent,
       haveARetry: true
@@ -319,7 +334,7 @@ export class PuzzleGamesComponent implements OnInit {
 
   public OnSudouComplete(): void {
     this.sudouQuiz.SubmitCurrentRun();
-    let di: PgSummaryDlgInfo = { 
+    let di: PgSummaryDlgInfo = {
       gameWin: true,
       timeSpent: this.sudouQuiz.ElderRuns()[0].TimeSpent,
       haveARetry: true
@@ -340,7 +355,7 @@ export class PuzzleGamesComponent implements OnInit {
   /**
    * Typing tour
    */
-  private typingGenerateExpectedString() {  
+  private typingGenerateExpectedString() {
     let basic = "abcdefghijklmnopqrstuvwxyz";
     if (this.typingIncCaptial) {
       basic = basic + "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -353,7 +368,7 @@ export class PuzzleGamesComponent implements OnInit {
     }
 
     this.typingExpected = '';
-    for(let i: number = 0; i < this.typingMaxLength; i++) {
+    for (let i: number = 0; i < this.typingMaxLength; i++) {
       let word = basic.charAt(Math.floor(Math.random() * basic.length));
       this.typingExpected += word;
     }
@@ -370,7 +385,7 @@ export class PuzzleGamesComponent implements OnInit {
   public OnTypingStart(): void {
     this.typingGenerateExpectedString();
 
-    this.typingQuiz.BasicInfo = this.typingMaxLength.toString() + ';' 
+    this.typingQuiz.BasicInfo = this.typingMaxLength.toString() + ';'
       + (this.typingIncCaptial ? '1' : '0') + ';'
       + (this.typingIncNumber ? '1' : '0') + ';'
       + (this.typingIncSymbols ? '1' : '0') + ';';
@@ -387,7 +402,7 @@ export class PuzzleGamesComponent implements OnInit {
     fitems.push(fitem);
     this.typingQuiz.SubmitCurrentRun(fitems);
 
-    let di: PgSummaryDlgInfo = { 
+    let di: PgSummaryDlgInfo = {
       gameWin: false,
       timeSpent: this.typingQuiz.ElderRuns()[0].TimeSpent,
       haveARetry: true
@@ -411,7 +426,7 @@ export class PuzzleGamesComponent implements OnInit {
 
     this.typingQuiz.SubmitCurrentRun();
 
-    let di: PgSummaryDlgInfo = { 
+    let di: PgSummaryDlgInfo = {
       gameWin: true,
       timeSpent: this.typingQuiz.ElderRuns()[0].TimeSpent,
       haveARetry: true

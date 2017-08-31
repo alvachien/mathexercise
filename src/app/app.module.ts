@@ -59,7 +59,7 @@ import { AuthService } from './services/auth.service';
 import { UserDetailService } from './services/userdetail.service';
 import { FormulaExerciseComponent } from './formula-exercise/';
 import { FormulaListComponent } from './formula-list/';
-import { FailureRetestComponent, FailureRetestCompleteDialog } from './failure-retest';
+import { FailureRetestComponent } from './failure-retest';
 import { UserStatisticsComponent } from './user-statistics';
 import { UserDetailComponent } from './user-detail';
 import { PuzzleGamesComponent } from './puzzle-games';
@@ -130,7 +130,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormulaExerciseComponent,
     FormulaListComponent,
     FailureRetestComponent,
-    FailureRetestCompleteDialog,
     UserStatisticsComponent,
     UserDetailComponent,
     PuzzleGamesComponent,
@@ -144,7 +143,6 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   entryComponents: [
     QuizFailureDlgComponent,
-    FailureRetestCompleteDialog,
     MessageDialogComponent,
     PgSummaryDlgComponent
   ],

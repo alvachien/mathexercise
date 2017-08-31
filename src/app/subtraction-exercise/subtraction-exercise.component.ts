@@ -7,6 +7,9 @@ import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.co
 import { QuizSummaryComponent } from '../quiz-summary/quiz-summary.component';
 import { Router } from '@angular/router';
 import { PageEvent } from '@angular/material';
+import { environment } from '../../environments/environment';
+import { LogLevel, UserAuthInfo } from '../model';
+import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } from '../message-dialog';
 
 @Component({
   selector: 'app-subtraction-exercise',
@@ -65,6 +68,23 @@ export class SubtractionExerciseComponent implements OnInit {
 
   public canDeactivate(): boolean {
     if (this.quizInstance.IsStarted) {
+      let dlginfo: MessageDialogInfo = {
+        Header: 'Home.Error',
+        Content: 'Home.QuizIsOngoing',
+        Button: MessageDialogButtonEnum.onlyok
+      };
+      
+      this.dialog.open(MessageDialogComponent, {
+        disableClose: false,
+        width: '500px',
+        data: dlginfo
+      }).afterClosed().subscribe(x => {
+        // Do nothing!
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log(`AC Math Exercise [Debug]: Message dialog result ${x}`);
+        }
+      });
+      
       return false;
     }
     return true;
@@ -108,7 +128,10 @@ export class SubtractionExerciseComponent implements OnInit {
   }
 
   public CanStart(): boolean {
-    if (this.StartQuizAmount <= 0) {
+    if (this.StartQuizAmount <= 0 || this.LeftNumberRangeBgn < 0
+      || this.LeftNumberRangeEnd <= this.LeftNumberRangeBgn
+      || this.RightNumberRangeBgn < 0 
+      || this.RightNumberRangeEnd <= this.RightNumberRangeBgn) {
       return false;
     }
     

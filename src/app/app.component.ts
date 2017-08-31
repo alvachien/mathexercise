@@ -47,7 +47,7 @@ export class AppComponent implements OnInit {
     { name: 'Home.MultiplicationExercises', route: 'multi-ex' },
     { name: 'Home.DivisionExercises', route: 'divide-ex' },
     { name: 'Home.MixedOperations', route: 'mixop-ex' },
-    { name: 'Home.FormulaList', route: 'formula-list' },
+    //{ name: 'Home.FormulaList', route: 'formula-list' },
     { name: 'Home.FormulaExercises', route: 'formula-ex' },
     { name: 'Home.PuzzleGames', route: 'puzz-game' },
     { name: 'Home.RetestPreviousFailures', route: 'fail-retest' },

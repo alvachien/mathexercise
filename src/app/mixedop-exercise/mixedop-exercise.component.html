@@ -1,3 +1,74 @@
-<p>
-  mixedop-exercise works!
-</p>
+<md-card>
+  <md-card-header>
+    <md-card-title>{{'Home.MixedOperations' | translate}}</md-card-title>
+  </md-card-header>
+
+  <md-card-content>
+    <div *ngIf="!quizInstance.IsStarted">
+      <div class="demo-full-width">
+        <md-input-container>
+          <input mdInput type="number" placeholder="{{'Home.QuizAmount' | translate}}" [(ngModel)]="StartQuizAmount" name="startquizamt"
+            required>
+          <md-error>This field is required</md-error>
+        </md-input-container>
+        <md-input-container>
+          <input mdInput type="number" placeholder="{{'Home.FailedFactor' | translate }}" [(ngModel)]="FailedQuizFactor" name="fquizfactor"
+            required>
+          <md-error>This field is required</md-error>
+        </md-input-container>
+      </div>
+
+      <div class="demo-full-width">
+          <md-input-container>
+              <input mdInput type="number" placeholder="{{'Home.NumberOfOperators' | translate }}" [(ngModel)]="NumberOfOperators" name="fquizfactor"
+                required>
+              <md-error>This field is required</md-error>
+          </md-input-container>
+      </div>
+
+      <div class="demo-full-width">
+          <md-checkbox [(ngModel)]="AllowDecimal">{{'Home.AllowDecimal' | translate}}</md-checkbox>
+      </div>
+      
+      <div class="demo-full-width">
+          <md-checkbox [(ngModel)]="AllowNegative">{{'Home.AllowNegative' | translate}}</md-checkbox>
+      </div>
+
+      <div class="demo-full-width">
+        <md-input-container>
+          <input mdInput type="number" placeholder="{{'Math.Scope' | translate}}" [(ngModel)]="NumberRangeBgn" name="nrbgn"
+            required>
+        </md-input-container>
+        <md-input-container>
+          <input mdInput type="number" placeholder="{{'Math.Scope' | translate}}" [(ngModel)]="NumberRangeEnd" name="nrend"
+            required>
+        </md-input-container>
+      </div>
+    </div>
+
+    <div class="demo-full-width" *ngIf="quizInstance.IsStarted">
+        <app-digit-clock [IsStart]="quizInstance.IsStarted" style="display:block;"></app-digit-clock>
+    </div>
+    
+    <div *ngIf="quizInstance.IsStarted">
+      <div class="demo-full-width" *ngFor="let quiz of DisplayedQuizItems; trackBy: onQuizItemTrackBy">
+        <span>({{quiz.QuizIndex}}). {{quiz.Formula}} = </span>
+        <md-input-container>
+          <input mdInput type="number" placeholder="{{'Home.Result' | translate}}" [(ngModel)]="quiz.InputtedResult" name="iptquot">
+        </md-input-container>
+      </div>
+
+      <md-paginator [length]="QuizItems.length"
+              [pageSize]="pageSize"
+              [pageIndex]="pageIndex"
+              [pageSizeOptions]="[5, 10, 25, 100]"
+              (page)="onPageChanged($event)">
+      </md-paginator> 
+    </div>
+  </md-card-content>
+
+  <md-card-actions>
+    <button md-button (click)="onQuizStart()" [disabled]="!CanStart()">{{'Home.StartButton' | translate }}</button>
+    <button md-button (click)="onQuizSubmit()" [disabled]="!CanSubmit()">{{'Home.SubmitButton' | translate }}</button>
+  </md-card-actions>
+</md-card>

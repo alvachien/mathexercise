@@ -10,8 +10,8 @@ import { DialogService } from '../services/dialog.service';
 import { QuizSummaryComponent } from '../quiz-summary/quiz-summary.component';
 import { environment } from '../../environments/environment';
 import { LogLevel, UserAuthInfo } from '../model';
-import { MessageDialogComponent } from '../message-dialog/message-dialog.component';
-import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
+import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } from '../message-dialog';
+import { QuizFailureDlgComponent } from '../quiz-failure-dlg';
 
 @Component({
   selector: 'app-addition-exercise',
@@ -70,15 +70,21 @@ export class AdditionExerciseComponent implements OnInit {
 
   public canDeactivate(): boolean {
     if (this.quizInstance.IsStarted) {
-      this._dlgsvc.MessageDialogHeader = 'Home.Error';
-      this._dlgsvc.MessageDialogContent = 'Home.QuizIsOngoing';
-      let dialogRef = this.dialog.open(MessageDialogComponent, {
+      let dlginfo: MessageDialogInfo = {
+        Header: 'Home.Error',
+        Content: 'Home.QuizIsOngoing',
+        Button: MessageDialogButtonEnum.onlyok
+      };
+      
+      this.dialog.open(MessageDialogComponent, {
         disableClose: false,
-        width: '500px'
-      });
-
-      dialogRef.afterClosed().subscribe(x => {
+        width: '500px',
+        data: dlginfo
+      }).afterClosed().subscribe(x => {
         // Do nothing!
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log(`AC Math Exercise [Debug]: Message dialog result ${x}`);
+        }
       });
       return false;
     }
@@ -124,7 +130,10 @@ export class AdditionExerciseComponent implements OnInit {
   }
 
   public CanStart(): boolean {
-    if (this.StartQuizAmount <= 0) {
+    if (this.StartQuizAmount <= 0 || this.LeftNumberRangeBgn < 0
+      || this.LeftNumberRangeEnd <= this.LeftNumberRangeBgn
+      || this.RightNumberRangeBgn < 0 
+      || this.RightNumberRangeEnd <= this.RightNumberRangeBgn) {
       return false;
     }
 
@@ -199,9 +208,6 @@ export class AdditionExerciseComponent implements OnInit {
       this.quizInstance.SubmitCurrentRun();
 
       this._dlgsvc.CurrentQuiz = this.quizInstance;
-      // for (let run of this.quizInstance.ElderRuns()) {
-      //   this._dlgsvc.SummaryInfos.push(run.getSummaryInfo());
-      // }
 
       this._router.navigate(['/quiz-sum']);
     }

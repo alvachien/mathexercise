@@ -2,6 +2,7 @@ export const environment = {
     production: true,
     DebugLogging: false,
     LoggingLevel: 1, // Crash
+    LoginRequired: true,
   
     IDServerUrl: 'http://acidserver.azurewebsites.net/',
     APIBaseUrl: 'http://acquizapi.azurewebsites.net/api/',

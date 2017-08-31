@@ -8,6 +8,7 @@ export const environment = {
 
   DebugLogging: true,
   LoggingLevel: 4, // Debug
+  LoginRequired: true,
 
   IDServerUrl: 'http://localhost:41016/',
   APIBaseUrl: 'http://localhost:54020/api/',

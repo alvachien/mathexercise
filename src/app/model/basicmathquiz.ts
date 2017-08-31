@@ -272,3 +272,68 @@ export class DivisionQuizItem extends PrimarySchoolMathFAOQuizItem {
     }    
 }
 
+/**
+ * Mixed operation quiz 
+ */
+export class MixedOperationQuizItem extends PrimarySchoolMathQuizItem {
+    private _formula: string;
+    private _result: number;
+    private _inputtedResult: number;
+
+    get Formula(): string {
+        return this._formula;;
+    }
+    get Result(): number {
+        return this._result;
+    }
+
+    get InputtedResult(): number {
+        return this._inputtedResult;
+    }
+    set InputtedResult(ia: number) {
+        this._inputtedResult = ia;
+    }
+
+    constructor(frm: string) {
+        super();
+
+        this._formula = frm;
+        this._result = <number>eval(this._formula);
+    }
+
+    public IsCorrect(): boolean {
+        let brst = super.IsCorrect();
+        if (!brst) {
+            return brst;
+        }
+
+        if (this._result === this._inputtedResult) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public getCorrectFormula(): string {
+        return this.getQuizFormat() + this.Result.toString();
+    }
+
+    public getInputtedForumla(): string {
+        return this.getQuizFormat() + this.InputtedResult.toString();
+    }
+
+    public getQuizFormat(): string {
+        let rststr = super.getQuizFormat();
+        return rststr + this._formula.replace('*', '×').replace('/', '÷') + ' = ';
+    }
+
+    public storeToString(): string {
+        let rstr = super.storeToString();
+        rstr = rstr + this._formula;
+        return rstr;
+    }
+
+    public static restoreFromString(s: string): MixedOperationQuizItem {
+        return new MixedOperationQuizItem(s);
+    }    
+}
