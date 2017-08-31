@@ -26,3 +26,12 @@ span
 .input-fail {
     color: #FF0000
 }
+
+input.input-hidden {
+    color:white;
+    opacity:0.00;
+    filter:alpha(opacity=00);
+    position:absolute;
+    top:0px;
+    left:0px;    
+}

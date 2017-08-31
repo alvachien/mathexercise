@@ -16,6 +16,7 @@ export interface typingCompare {
 export class PgTypingtourComponent implements OnInit {
   @ViewChild('expword') expWordER: ElementRef;
   @ViewChild('inpword') inpWordER: ElementRef;
+  @ViewChild("inpword2") inpWord2ER: ElementRef;
   @Input()
   set expectedString(exp: string) {
     this._expectedString = exp;
@@ -25,6 +26,7 @@ export class PgTypingtourComponent implements OnInit {
   @Output() finishEvent: EventEmitter<any> = new EventEmitter();
   private _expectedString: string = '';
   public inputtedString: string;
+  public fakedContent: string = '';
 
   arComparison: typingCompare[] = [];
 
@@ -33,29 +35,59 @@ export class PgTypingtourComponent implements OnInit {
 
   ngOnInit() {
     this.inputtedString = '';
+
+    //https://stackoverflow.com/questions/3671141/hide-textfield-blinking-cursor
+    this.inpWordER.nativeElement.addEventListener("focus", () => {
+      this.inpWord2ER.nativeElement.focus();
+    });
+
+    this.inpWord2ER.nativeElement.focus();
+    //this.inpWord2ER.nativeElement.addEventListener("keyup", () => {
+    //});
   }
 
   private updateComparison(isdelta?: boolean) {
     if (isdelta) {
       let nlen = this.inputtedString.length;
+      let issucc: boolean = true;
+
+      if (nlen !== this.arComparison.length) {
+        issucc = false;
+      }
       for (let i: number = 0; i < nlen; i++) {
         this.arComparison[i].inputted = this.inputtedString.charAt(i);
+        
+        if (issucc) {
+          if (this.arComparison[i].expected !== this.inputtedString.charAt(i)) {
+            issucc = false;
+          }
+        }
       }
+
+      if (issucc) {
+        // Completed.
+        this.finishEvent.emit(null);
+      }
+
       for(let i: number = nlen; i < this.arComparison.length; i++) {
         this.arComparison[i].inputted = null;
       }
 
+      // There still room to improve performance!
+      // Todo!
       if (this.inpWordER !== null && this.inpWordER !== undefined) {
         let nhtml: string = '';
         for(let cmp of this.arComparison) {
-          if (cmp.inputted !== null) {
-            nhtml += "<span>" + cmp.inputted + "</span>";            
-          } else if (cmp.inputted !== null && cmp.inputted !== cmp.expected) {
-            nhtml += "<span class=\"input-fail\">" + cmp.inputted + "</span>";            
-          } else {
+          if (cmp.inputted !== null && cmp.inputted !== cmp.expected) {
+            nhtml += "<span style=\"color: #FF0000;\">" + cmp.inputted + "</span>";            
+          } else if (cmp.inputted !== null) {
+            nhtml += "<span>" + cmp.inputted + "</span>";
           }
         }
-
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log("AC Math Exercise [Debug]: Entering updateComparison of PgTypingTourComponent with DELTA: " + nhtml);
+        }
+  
         this.inpWordER.nativeElement.innerHTML = nhtml;
       }
     } else {
@@ -75,6 +107,9 @@ export class PgTypingtourComponent implements OnInit {
             nhtml += "<span>" + c + "</span>";
           }
   
+          if (environment.LoggingLevel >= LogLevel.Debug) {
+            console.log("AC Math Exercise [Debug]: Entering updateComparison of PgTypingTourComponent: " + nhtml);
+          }
           this.expWordER.nativeElement.innerHTML = nhtml;
         }
       }
@@ -92,6 +127,8 @@ export class PgTypingtourComponent implements OnInit {
     // evt.shiftKey;
 
     // https://developer.mozilla.org/zh-CN/docs/Web/API/KeyboardEvent/key/Key_Values
+    // Any other input? Prevent the default response:
+    if (evt.preventDefault) evt.preventDefault();
 
     if (evt.key === "Backspace") {
       if (this.inputtedString.length >= 2) {
@@ -99,9 +136,17 @@ export class PgTypingtourComponent implements OnInit {
       } else {
         this.inputtedString = '';
       }
+
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.log("AC Math Exercise [Debug]: Entering onPGTypingTourMouseDown of PgTypingTourComponent: " + this.inputtedString);
+      }
       this.updateComparison(true);
     } else if("`1234567890-=~!@#$%^&*()_+[]\\{}|;':\",./<>?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".indexOf(evt.key) !== -1) {
       this.inputtedString = this.inputtedString + evt.key;
+
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.log("AC Math Exercise [Debug]: Entering onPGTypingTourMouseDown of PgTypingTourComponent: " + this.inputtedString);
+      }
       this.updateComparison(true);
     }
   }
@@ -112,4 +157,8 @@ export class PgTypingtourComponent implements OnInit {
   //     console.log("AC Math Exercise [Debug]: Entering onPGTypingTourMouseUp of PgTypingTourComponent: " + evt.key);
   //   }
   // }
+
+  public onInputWorkinput(event) {
+    // DO nothing
+  }
 }

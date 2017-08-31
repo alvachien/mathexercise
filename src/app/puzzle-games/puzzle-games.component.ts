@@ -12,6 +12,7 @@ import {
 } from '../model';
 import { DialogService } from '../services/dialog.service';
 import { MessageDialogComponent } from '../message-dialog';
+import { PgSummaryDlgInfo, PgSummaryDlgComponent } from '../pg-summary-dlg';
 
 @Component({
   selector: 'app-puzzle-games',
@@ -201,12 +202,24 @@ export class PuzzleGamesComponent implements OnInit {
       });
     } else {
       // Success
-      this._zone.run(() => {
-        this.Cal24Quiz.SubmitCurrentRun();
-      });
-      this._dlgsvc.CurrentQuiz = this.Cal24Quiz;
+      this.Cal24Quiz.SubmitCurrentRun();
 
-      this._router.navigate(['/quiz-sum']);
+      let di: PgSummaryDlgInfo = { 
+        gameWin: true,
+        timeSpent: this.Cal24Quiz.ElderRuns()[0].TimeSpent,
+        haveARetry: true
+      };
+  
+      let dialogRef = this._dialog.open(PgSummaryDlgComponent, {
+        width: '500px',
+        data: di
+      });
+  
+      dialogRef.afterClosed().subscribe(x => {
+        if (di.haveARetry) {
+          this.OnCal24Start();
+        }
+      });
     }
   }
 
@@ -219,13 +232,11 @@ export class PuzzleGamesComponent implements OnInit {
     let fitem: Cal24QuizItem = new Cal24QuizItem();
     fitem.IsSurrended = true;
     fitem.Items = this.Cal24items;
-    this._dlgsvc.FailureItems = [];
-    this._dlgsvc.FailureItems.push(fitem);
-    this._zone.run(() => {
-      this.Cal24Quiz.SubmitCurrentRun(this._dlgsvc.FailureItems);
-    });
+    let fitems = [];
+    fitems.push(fitem);
+    this.Cal24Quiz.SubmitCurrentRun(fitems);
 
-    // Prepare the dialog
+    // Prepare the dialog for the correct answer
     this._dlgsvc.MessageDialogHeader = 'Home.Error';
 
     if (this.Cal24(arnums, arnums.length, 24)) {
@@ -241,10 +252,22 @@ export class PuzzleGamesComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(x => {
-      // Do nothing but finish the quiz! Jump to the summary      
-      this._dlgsvc.CurrentQuiz = this.Cal24Quiz;
-
-      this._router.navigate(['/quiz-sum']);
+      let di: PgSummaryDlgInfo = { 
+        gameWin: false,
+        timeSpent: this.Cal24Quiz.ElderRuns()[0].TimeSpent,
+        haveARetry: true
+      };
+  
+      let dialogRef2 = this._dialog.open(PgSummaryDlgComponent, {
+        width: '500px',
+        data: di
+      });
+  
+      dialogRef2.afterClosed().subscribe(x => {
+        if (di.haveARetry) {
+          this.OnCal24Start();
+        }
+      });
     });
   }
 
@@ -272,22 +295,46 @@ export class PuzzleGamesComponent implements OnInit {
     let fitem: SudouQuizItem = new SudouQuizItem();
     fitem.IsSurrended = true;
     fitem.DetailInfo = this.sudouQuiz.BasicInfo.substring(0, 45);
-    this._dlgsvc.FailureItems = [];
-    this._dlgsvc.FailureItems.push(fitem);
-    this.sudouQuiz.SubmitCurrentRun(this._dlgsvc.FailureItems);
+    let fitems = [];
+    fitems.push(fitem);
+    this.sudouQuiz.SubmitCurrentRun(fitems);
 
-    // Do nothing but finish the quiz! Jump to the summary      
-    this._dlgsvc.CurrentQuiz = this.sudouQuiz;
+    let di: PgSummaryDlgInfo = { 
+      gameWin: false,
+      timeSpent: this.sudouQuiz.ElderRuns()[0].TimeSpent,
+      haveARetry: true
+    };
 
-    this._router.navigate(['/quiz-sum']);
+    let dialogRef = this._dialog.open(PgSummaryDlgComponent, {
+      width: '500px',
+      data: di
+    });
+
+    dialogRef.afterClosed().subscribe(x => {
+      if (di.haveARetry) {
+        this.OnSudouStart();
+      }
+    });
   }
 
   public OnSudouComplete(): void {
-    // Navigate to summary
     this.sudouQuiz.SubmitCurrentRun();
-    this._dlgsvc.CurrentQuiz = this.sudouQuiz;
+    let di: PgSummaryDlgInfo = { 
+      gameWin: true,
+      timeSpent: this.sudouQuiz.ElderRuns()[0].TimeSpent,
+      haveARetry: true
+    };
 
-    this._router.navigate(['/quiz-sum']);
+    let dialogRef = this._dialog.open(PgSummaryDlgComponent, {
+      width: '500px',
+      data: di
+    });
+
+    dialogRef.afterClosed().subscribe(x => {
+      if (di.haveARetry) {
+        this.OnSudouStart();
+      }
+    });
   }
 
   /**
@@ -323,7 +370,10 @@ export class PuzzleGamesComponent implements OnInit {
   public OnTypingStart(): void {
     this.typingGenerateExpectedString();
 
-    this.typingQuiz.BasicInfo = '';
+    this.typingQuiz.BasicInfo = this.typingMaxLength.toString() + ';' 
+      + (this.typingIncCaptial ? '1' : '0') + ';'
+      + (this.typingIncNumber ? '1' : '0') + ';'
+      + (this.typingIncSymbols ? '1' : '0') + ';';
     this.typingQuiz.Start(1, 0); // Single item and no failor
     this.typingQuiz.CurrentRun().SectionStart();
   }
@@ -332,21 +382,50 @@ export class PuzzleGamesComponent implements OnInit {
     let fitem: SudouQuizItem = new SudouQuizItem();
     fitem.IsSurrended = true;
     fitem.DetailInfo = this.typingQuiz.BasicInfo.substring(0, 45);
-    this._dlgsvc.FailureItems = [];
-    this._dlgsvc.FailureItems.push(fitem);
-    this.typingQuiz.SubmitCurrentRun(this._dlgsvc.FailureItems);
 
-    // Do nothing but finish the quiz! Jump to the summary      
-    this._dlgsvc.CurrentQuiz = this.typingQuiz;
+    let fitems = [];
+    fitems.push(fitem);
+    this.typingQuiz.SubmitCurrentRun(fitems);
 
-    this._router.navigate(['/quiz-sum']);
+    let di: PgSummaryDlgInfo = { 
+      gameWin: false,
+      timeSpent: this.typingQuiz.ElderRuns()[0].TimeSpent,
+      haveARetry: true
+    };
+
+    let dialogRef = this._dialog.open(PgSummaryDlgComponent, {
+      width: '500px',
+      data: di
+    });
+
+    dialogRef.afterClosed().subscribe(x => {
+      //console.log(`Dialog result: ${x}, ${di.haveARetry}`); 
+
+      if (di.haveARetry) {
+        this.OnTypingStart();
+      }
+    });
   }
 
   public OnTypingComplete(): void {
-    // Navigate to summary
-    this.typingQuiz.SubmitCurrentRun();
-    this._dlgsvc.CurrentQuiz = this.typingQuiz;
 
-    this._router.navigate(['/quiz-sum']);
+    this.typingQuiz.SubmitCurrentRun();
+
+    let di: PgSummaryDlgInfo = { 
+      gameWin: true,
+      timeSpent: this.typingQuiz.ElderRuns()[0].TimeSpent,
+      haveARetry: true
+    };
+
+    let dialogRef = this._dialog.open(PgSummaryDlgComponent, {
+      width: '500px',
+      data: di
+    });
+
+    dialogRef.afterClosed().subscribe(x => {
+      if (di.haveARetry) {
+        this.OnTypingStart();
+      }
+    });
   }
 }

@@ -25,6 +25,8 @@
         "SurrenderButton": "SURRENDER",
         "HintButton": "HINT",
         "ContinueButton": "CONTINUE",
+        "HaveARetryButton": "HAVE A RETRY",
+        "NoThanksButton": "NO, THANKS",
         "QuizAmount": "Amount of Quiz",
         "FailedFactor": "Failed Factor",
         "Failure": "Failure",
@@ -68,6 +70,9 @@
         "IncludeNumber": "Include the numbers",
         "IncludeSymbol": "Include the symbols",
         "IncludeSimplifiedChinese": "Include the Simplified Chinese",
+        "HaveAnotherTry": "Have another try",
+        "YouWin": "You Win",
+        "YouLose": "You Lose",
 
         "Underconstruction": "Page still under construction"
     },

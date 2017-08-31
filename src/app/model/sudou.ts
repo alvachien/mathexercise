@@ -259,7 +259,7 @@ export class SudouUnit {
             }
         }
 
-        console.log(arInitOne.join(' '));
+        //console.log(arInitOne.join(' '));
         for (let i: number = 0; i < SudouSize; i++) {
             unit.setCell(Math.floor(i / 3), Math.floor(i % 3), arInitOne[i]);
         }
@@ -436,37 +436,37 @@ export function generateValidSudou(): Sudou {
 
     // The central one - B5
     let cunit: SudouUnit = SudouUnit.generateValidOne();
-    console.log("B5 is ready: ");
-    cunit.print2Log();
+    //console.log("B5 is ready: ");
+    //cunit.print2Log();
     // Now B4 and B6
     let cunitb6 = cunit.scrollUp();
-    console.log("B6 is ready: ");
-    cunitb6.print2Log();
+    //console.log("B6 is ready: ");
+    //cunitb6.print2Log();
     let cunitb4 = cunit.scrollDown();
-    console.log("B4 is ready: ");
-    cunitb4.print2Log();
+    //console.log("B4 is ready: ");
+    //cunitb4.print2Log();
     // Now B2 and B8
     let cunitb2 = cunit.scrollRight();
-    console.log("B2 is ready: ");
-    cunitb2.print2Log();
+    //console.log("B2 is ready: ");
+    //cunitb2.print2Log();
     let cunitb8 = cunit.scrollLeft();
-    console.log("B8 is ready: ");
-    cunitb8.print2Log();
+    //console.log("B8 is ready: ");
+    //cunitb8.print2Log();
 
     // Then B1, B3, B7 and B9
     let cunitb1 = cunitb4.scrollRight();
-    console.log("B1 is ready: ");
-    cunitb1.print2Log();
+    //console.log("B1 is ready: ");
+    //cunitb1.print2Log();
     let cunitb7 = cunitb4.scrollLeft();
-    console.log("B7 is ready: ");
-    cunitb7.print2Log();
+    //console.log("B7 is ready: ");
+    //cunitb7.print2Log();
 
     let cunitb3 = cunitb6.scrollRight();
-    console.log("B3 is ready: ");
-    cunitb3.print2Log();
+    //console.log("B3 is ready: ");
+    //cunitb3.print2Log();
     let cunitb9 = cunitb6.scrollLeft();
-    console.log("B9 is ready: ");
-    cunitb9.print2Log();
+    //console.log("B9 is ready: ");
+    //cunitb9.print2Log();
 
     rst.setUnitCell(0, 0, cunitb1);
     rst.setUnitCell(0, 1, cunitb2);
@@ -478,7 +478,7 @@ export function generateValidSudou(): Sudou {
     rst.setUnitCell(2, 1, cunitb8);
     rst.setUnitCell(2, 2, cunitb9);
 
-    rst.print2Log();
+    //rst.print2Log();
 
     return rst;
 }

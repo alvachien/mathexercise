@@ -25,6 +25,8 @@
         "SurrenderButton": "投降",
         "HintButton": "提示",
         "ContinueButton": "继续",
+        "HaveARetryButton": "再来一盘",
+        "NoThanksButton": "不，谢谢",
         "QuizAmount": "试题数量",
         "FailedFactor": "错误扩散因子",
         "Failure": "失败",
@@ -68,6 +70,9 @@
         "IncludeNumber": "包含数字",
         "IncludeSymbol": "包含符号",
         "IncludeSimplifiedChinese": "包含中文字符",
+        "HaveAnotherTry": "再来一盘",
+        "YouWin": "你赢了",
+        "YouLose": "你输了",
         
         "Underconstruction": "当前页还在开发中"
     },

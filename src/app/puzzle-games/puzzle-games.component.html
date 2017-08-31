@@ -59,20 +59,13 @@
           <app-digit-clock [IsStart]="sudouQuiz.IsStarted" style="display:block;"></app-digit-clock>
         </div>
 
-        <app-pg-sudou (finishEvent)="OnSudouComplete()" [sudouObject]="objSudou"></app-pg-sudou>
+        <app-pg-sudou (finishEvent)="OnSudouComplete()" [sudouObject]="sudouInstance"></app-pg-sudou>
       </md-card-content>
 
       <md-card-actions>
         <button md-button [disabled]="!CanSudouStart()" (click)="OnSudouStart()">{{'Home.StartButton' | translate}}</button>
         <button md-raised-button *ngIf="sudouQuiz.IsStarted" (click)="OnSudouSurrender()">{{'Home.SurrenderButton' | translate}}</button>
       </md-card-actions>
-    </md-card>
-  </md-tab>
-
-  <!-- Tab: Minesweeper -->
-  <md-tab label="{{'Home.Minesweeper' | translate}}">
-    <md-card class="example-card">
-      <p>{{'Home.Underconstruction' | translate}}</p>
     </md-card>
   </md-tab>
 
@@ -106,6 +99,13 @@
           <button md-button [disabled]="!CanTypingStart()" (click)="OnTypingStart()">{{'Home.StartButton' | translate}}</button>
           <button md-raised-button *ngIf="typingQuiz.IsStarted" (click)="OnTypingSurrender()">{{'Home.SurrenderButton' | translate}}</button>
         </md-card-actions>
+    </md-card>
+  </md-tab>
+  
+  <!-- Tab: Minesweeper -->
+  <md-tab label="{{'Home.Minesweeper' | translate}}">
+    <md-card class="example-card">
+      <p>{{'Home.Underconstruction' | translate}}</p>
     </md-card>
   </md-tab>
 </md-tab-group>

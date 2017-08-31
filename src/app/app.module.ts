@@ -71,6 +71,7 @@ import { PgSudouComponent } from './pg-sudou/pg-sudou.component';
 import { PgMinesweeperComponent } from './pg-minesweeper';
 import { PgTypingtourComponent } from './pg-typingtour';
 import { MixedopExerciseComponent } from './mixedop-exercise';
+import { PgSummaryDlgComponent } from './pg-summary-dlg';
 
 @NgModule({
   exports: [
@@ -138,12 +139,14 @@ export function HttpLoaderFactory(http: HttpClient) {
     PgSudouComponent,
     PgMinesweeperComponent,
     PgTypingtourComponent,
-    MixedopExerciseComponent
+    MixedopExerciseComponent,
+    PgSummaryDlgComponent
   ],
   entryComponents: [
     QuizFailureDlgComponent,
     FailureRetestCompleteDialog,
-    MessageDialogComponent
+    MessageDialogComponent,
+    PgSummaryDlgComponent
   ],
   imports: [
     BrowserModule,
