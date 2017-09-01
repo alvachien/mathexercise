@@ -1,2 +1,0 @@
-# mathexercise
-Math exercise
