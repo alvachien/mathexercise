@@ -46,13 +46,17 @@ export class FailureRetestComponent implements OnInit {
     let options = new RequestOptions({ headers: headers }); // Create a request option
     this._http.get(apiurl, options)
       .map((response: Response) => {
-        console.log(response);
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log('AC Math Exericse [Debug]: ' + response);
+        }        
         return response.json();
       })
       .subscribe(x => {
         if (x instanceof Array && x.length > 0) {
           for (let si of x) {
-            console.log(si);
+            if (environment.LoggingLevel >= LogLevel.Debug) {
+              console.log('AC Math Exericse [Debug]: ' + si);
+            }
             let qi: QuizFailureItem = new QuizFailureItem();
             qi.quiztype = si.quizType;
             qi.quizid = si.quizID;
@@ -67,7 +71,9 @@ export class FailureRetestComponent implements OnInit {
               case QuizTypeEnum.div: qi.qsInstance = DivisionQuizItem.restoreFromString(si.expected); break;
               default: break;
             }
-            console.log(qi);
+            if (environment.LoggingLevel >= LogLevel.Debug) {
+              console.log('AC Math Exericse [Debug]: ' + qi);
+            }        
 
             this.listFailItems.push(qi);
           }

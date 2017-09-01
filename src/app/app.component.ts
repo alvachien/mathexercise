@@ -7,7 +7,8 @@ import { LogLevel } from './model';
 
 @Component({
   selector: 'app-root-home',
-  templateUrl: './app.home.html'
+  templateUrl: './app.home.html',
+  styleUrls: ['./app.home.scss'],
 })
 export class Home {
   public backgroundimage: string;

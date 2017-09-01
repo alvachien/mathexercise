@@ -9,7 +9,9 @@ body {
   }
 
   .mat-sidenav {
-    min-width: 15vw;
+    min-width: 100px !important;
+    width: 15vw !important;
+    max-width: 200px !important;
 
     .mat-button {
       width: 100%;

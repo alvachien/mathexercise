@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angular/http';
+import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../services/auth.service';
 import {
-  QuizTypeEnum, PrimarySchoolMathQuizItem, QuizTypeEnum2UIString, 
+  QuizTypeEnum, PrimarySchoolMathQuizItem, QuizTypeEnum2UIString, LogLevel,
   AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem
 } from '../model';
 import { environment } from '../../environments/environment';
-import { TranslateService } from '@ngx-translate/core';
 
 export interface quizattenduser {
   attenduser: string;
@@ -16,7 +16,7 @@ export interface quizattenduser {
 export interface quiztypeui {
   qtype: QuizTypeEnum,
   i18term: string,
-  display: string  
+  display: string
 }
 
 @Component({
@@ -35,6 +35,9 @@ export class UserStatisticsComponent implements OnInit {
   isUserLoaded: boolean = false;
   curUser: string = '';
   listqtype: quiztypeui[] = [];
+  colorSchemeGeneral = {
+    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA', '#BBBBBB', '#CCCCCC']
+  };
 
   // Quiz amount by date
   viewQuizAmountByDate: any[] = [700, 400];
@@ -45,18 +48,12 @@ export class UserStatisticsComponent implements OnInit {
   showXAxisLabelQuizAmountByDate = true;
   xAxisLabelQuizAmountByDate = 'Date';
   showYAxisLabelQuizAmountByDate = true;
-  yAxisLabelQuizAmountByDate = 'Amount';  
-  colorSchemeQuizAmountByDate = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-  };
+  yAxisLabelQuizAmountByDate = 'Amount';
   dataQuizAmountByDate: any[] = [];
 
   // Quiz amount by type
   dataQuizAmountByType: any[] = [];
   viewQuizAmountByType: any[] = [700, 400];
-  colorQuizAmountByTypeScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-  };
 
   // Item amount by date
   viewItemAmountByDate: any[] = [700, 400];
@@ -67,12 +64,9 @@ export class UserStatisticsComponent implements OnInit {
   showXAxisLabelItemAmountByDate = true;
   xAxisLabelItemAmountByDate = 'Date';
   showYAxisLabelItemAmountByDate = true;
-  yAxisLabelItemAmountByDate = 'Amount';  
-  colorSchemeItemAmountByDate = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-  };
+  yAxisLabelItemAmountByDate = 'Amount';
   dataItemAmountByDate: any[] = [];
-  
+
   // Item amount by type
   viewItemAmountByType: any[] = [700, 400];
   showXAxisItemAmountByType = true;
@@ -82,10 +76,7 @@ export class UserStatisticsComponent implements OnInit {
   showXAxisLabelItemAmountByType = true;
   xAxisLabelItemAmountByType = 'Type';
   showYAxisLabelItemAmountByType = true;
-  yAxisLabelItemAmountByType = 'Amount';  
-  colorSchemeItemAmountByType = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-  };
+  yAxisLabelItemAmountByType = 'Amount';
   dataItemAmountByType: any[] = [];
 
   constructor(private _http: Http,
@@ -96,8 +87,8 @@ export class UserStatisticsComponent implements OnInit {
     this.curUser = '';
 
     let arstrs: string[] = [];
-    for(let fe in QuizTypeEnum) {
-      if (isNaN(Number(fe))) {        
+    for (let fe in QuizTypeEnum) {
+      if (isNaN(Number(fe))) {
       } else {
         let astr = QuizTypeEnum2UIString(Number(fe));
         arstrs.push(astr);
@@ -107,15 +98,14 @@ export class UserStatisticsComponent implements OnInit {
           i18term: astr,
           display: ''
         };
-        this.listqtype.push(qtu);        
+        this.listqtype.push(qtu);
       }
     }
 
     // Translate for quiz type
     this._tranService.get(arstrs).subscribe(x => {
-      for(let tran in x) {
-        //console.log(tran);
-        for(let qtu of this.listqtype) {
+      for (let tran in x) {
+        for (let qtu of this.listqtype) {
           if (tran === qtu.i18term) {
             qtu.display = x[tran];
           }
@@ -124,7 +114,7 @@ export class UserStatisticsComponent implements OnInit {
     });
 
     // Other strings
-    arstrs = ['Home.Amount', 'Home.Type', 'Home.Date', 'Home.CorrectedAmount', 'FailedAmount' ];
+    arstrs = ['Home.Amount', 'Home.Type', 'Home.Date', 'Home.CorrectedAmount', 'FailedAmount'];
     this._tranService.get(arstrs).subscribe(x => {
       this.xAxisLabelQuizAmountByDate = x['Home.Date'];
       this.yAxisLabelQuizAmountByDate = x['Home.Amount'];
@@ -132,7 +122,7 @@ export class UserStatisticsComponent implements OnInit {
       this.yAxisLabelItemAmountByDate = x['Home.Amount'];
       this.xAxisLabelItemAmountByType = x['Home.Type'];
       this.yAxisLabelItemAmountByType = x['Home.Amount'];
-    });    
+    });
   }
 
   ngOnInit() {
@@ -159,13 +149,13 @@ export class UserStatisticsComponent implements OnInit {
   }
 
   public onItemAmountByDateSelect(evnt: any) {
-    
+
   }
-    
+
   public onItemAmountByTypeSelect(evnt: any) {
-    
+
   }
-      
+
   private fetchAllUsers() {
     this.isUserLoaded = true;
 
@@ -179,7 +169,9 @@ export class UserStatisticsComponent implements OnInit {
     let options = new RequestOptions({ headers: headers }); // Create a request option
     this._http.get(apiurl, options)
       .map((response: Response) => {
-        console.log(response);
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log(response);
+        }
         return response.json();
       })
       .subscribe(x => {
@@ -225,7 +217,7 @@ export class UserStatisticsComponent implements OnInit {
         }
       });
   }
-  
+
   private fetchQuizAmountByType(usr: string) {
     let apiurl = environment.APIBaseUrl + 'StatisticQuizAmountByType/' + usr;
 
@@ -236,16 +228,14 @@ export class UserStatisticsComponent implements OnInit {
     let options = new RequestOptions({ headers: headers }); // Create a request option
     this._http.get(apiurl, options)
       .map((response: Response) => {
-        //console.log(response);
         return response.json();
       })
       .subscribe(x => {
         if (x instanceof Array && x.length > 0) {
           this.dataQuizAmountByType = [];
           for (let si of x) {
-            //console.log(si);
             let name: string = '';
-            for(let qtu of this.listqtype) {
+            for (let qtu of this.listqtype) {
               if (qtu.qtype === Number(si.quizType)) {
                 name = qtu.display;
               }
@@ -271,16 +261,14 @@ export class UserStatisticsComponent implements OnInit {
     let options = new RequestOptions({ headers: headers }); // Create a request option
     this._http.get(apiurl, options)
       .map((response: Response) => {
-        //console.log(response);
         return response.json();
       })
       .subscribe(x => {
         this.dataItemAmountByDate = [];
         if (x instanceof Array && x.length > 0) {
           for (let si of x) {
-            //console.log(si);
             let rst = {
-              name : si.quizDate,
+              name: si.quizDate,
               series: [
                 {
                   name: 'Success',
@@ -297,7 +285,7 @@ export class UserStatisticsComponent implements OnInit {
         }
       });
   }
-  
+
   private fetchQuizItemAmountByType(usr: string) {
     let apiurl = environment.APIBaseUrl + 'StatisticQuizItemAmountByType/' + usr;
 
@@ -308,28 +296,24 @@ export class UserStatisticsComponent implements OnInit {
     let options = new RequestOptions({ headers: headers }); // Create a request option
     this._http.get(apiurl, options)
       .map((response: Response) => {
-        //console.log(response);
         return response.json();
       })
       .subscribe(x => {
         this.dataItemAmountByType = [];
         if (x instanceof Array && x.length > 0) {
           for (let si of x) {
-            //console.log(si);
             let name: string = '';
-            for(let qtu of this.listqtype) {
+            for (let qtu of this.listqtype) {
               if (qtu.qtype === Number(si.quizType)) {
                 name = qtu.display;
               }
             }
             let rst = {
-              name : name,
-              series: [
-                {
+              name: name,
+              series: [{
                   name: 'Success',
                   value: si.totalAmount - si.failedAmount
-                },
-                {
+                },{
                   name: 'Failed',
                   value: si.failedAmount
                 }

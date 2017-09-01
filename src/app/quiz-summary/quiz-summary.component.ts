@@ -13,6 +13,9 @@ import { environment } from '../../environments/environment';
 import { DialogService } from '../services/dialog.service';
 import { AuthService } from '../services/auth.service';
 
+/**
+ * Summary info of Quiz
+ */
 export interface QuizSummaryInfo {
   id: number;
   totalamt: number;
@@ -22,6 +25,9 @@ export interface QuizSummaryInfo {
   adjavgtimespent: number; 
 }
 
+/**
+ * Database for Quiz summary
+ */
 export class QuizSummaryDatabase {
   /** Stream that emits whenever the data has been modified. */
   dataChange: BehaviorSubject<QuizSummaryInfo[]> = new BehaviorSubject<QuizSummaryInfo[]>([]);
@@ -56,6 +62,9 @@ export class QuizSummaryDatabase {
   // }
 }
 
+/**
+ * Data source for quiz summary
+ */
 export class QuizSummaryDataSource extends DataSource<any> {
   constructor(private _quizDatabase: QuizSummaryDatabase) {
     super();
@@ -85,6 +94,8 @@ export class QuizSummaryComponent implements OnInit {
   dataSource: QuizSummaryDataSource | null;
   quizBaseInfo: string;
   quizType: string;
+  totalScore: number;
+  totalTimeSpent: number;
 
   constructor(private _dlgsvc: DialogService,
     private _authService: AuthService,
@@ -96,12 +107,26 @@ export class QuizSummaryComponent implements OnInit {
     this.quizBaseInfo = this._dlgsvc.CurrentQuiz.BasicInfo;
     this.quizType = QuizTypeEnum2UIString(this._dlgsvc.CurrentQuiz.QuizType);
 
+    let totalAmt: number = 0;
+    let totalFailed: number = 0;
+    let totalTime: number = 0;
+    for (let run of this._dlgsvc.CurrentQuiz.ElderRuns()) {
+      totalAmt += run.ItemsCount;
+      totalFailed += run.ItemsFailed;
+      totalTime += run.TimeSpent;
+    }
+
+    this.totalScore = Math.round(100 * ( totalAmt - totalFailed) / totalAmt);
+    this.totalTimeSpent = Math.round(totalTime / totalAmt);
+
     // Workaround for https://github.com/angular/material2/issues/5593
     setTimeout(() => {
       this.dataSource = new QuizSummaryDataSource(this.quizDatabase);
     }, 1);
 
-    this.onSave();
+    if (environment.LoginRequired) {
+      this.onSave();
+    }
   }
 
   private onSave(): void {
@@ -142,12 +167,14 @@ export class QuizSummaryComponent implements OnInit {
     this._http.post(apiurl, data, options)
       .map((response: Response) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
-          console.log(response);
+          console.log('AC Math Exercise [Debug]:' + response);
         }
         return response.json();
       })
       .subscribe(x => {
-        console.log(x);
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log('AC Math Exericse [Debug]: ' + x);
+        }
       });
   }
 }

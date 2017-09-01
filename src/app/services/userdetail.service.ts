@@ -108,13 +108,13 @@ export class UserDetailService {
       this._http.post(apiurl, jdata, options)
         .map((response: Response) => {
           if (environment.LoggingLevel >= LogLevel.Debug) {
-            console.log(response);
+            console.log('AC Math Exercise [Debug]:' + response);
           }
           return response.json();
         })
         .subscribe((data) => {
           if (environment.LoggingLevel >= LogLevel.Debug) {
-            console.log(data);
+            console.log('AC Math Exercise [Debug]:' + data);
           }
 
           this._usrDisplayAs = dis;
@@ -129,19 +129,19 @@ export class UserDetailService {
       this._http.put(apiurl, jdata, options)
         .map((response: Response) => {
           if (environment.LoggingLevel >= LogLevel.Debug) {
-            console.log(response);
+            console.log('AC Math Exercise [Debug]:' + response);
           }
           return response.json();
         })
         .subscribe((data) => {
           if (environment.LoggingLevel >= LogLevel.Debug) {
-            console.log(data);
+            console.log('AC Math Exercise [Debug]:' + data);
           }
 
           this._usrDisplayAs = dis;
         }, (err: Response) => {
           if (environment.LoggingLevel >= LogLevel.Error) {
-            console.error(err.toString());
+            console.error('AC Math Exercise [Error]:' +  err.toString());
           }
         });
     }

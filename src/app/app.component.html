@@ -1,13 +1,13 @@
 <md-sidenav-container class="demo-root" fullscreen>
   <md-sidenav #start>
-    <div *ngIf="isLoggedIn" class="card" style="width: 20rem;">
+    <div *ngIf="isLoggedIn" class="card">
       <div class="card-body">
         <h4 class="card-title">{{titleLogin}}</h4>
         <h6 class="card-subtitle mb-2 text-muted">{{titleLogin}}</h6>
         <button (click)="onLogout()" md-button style="background: #525252;">{{'Home.Logout' | translate}}</button>
       </div>
     </div>
-    <!-- <md-nav-list *ngIf="isLoggedIn"> -->
+
     <md-nav-list>
       <a *ngFor="let navItem of navItems; let i = index" md-list-item (click)="start.close()" [routerLink]="[navItem.route]">
         {{i}} - {{navItem.name | translate}}

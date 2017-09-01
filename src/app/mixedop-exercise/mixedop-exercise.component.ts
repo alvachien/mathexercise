@@ -108,7 +108,9 @@ export class MixedopExerciseComponent implements OnInit {
         }
       }
       catch(exp) {
-        console.log(exp);
+        if (environment.LoggingLevel >= LogLevel.Error) {
+          console.log('AC Math Exericse [Debug]: ' + exp);
+        }        
       }      
     }
 

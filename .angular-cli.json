@@ -12,7 +12,7 @@
         "assets",
         "logincallback.html",
         "silentrenewcallback.html",
-        "favicon.ico"
+        "icon.png"
       ],
       "index": "index.html",
       "main": "main.ts",
