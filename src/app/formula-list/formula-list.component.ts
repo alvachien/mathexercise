@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PrimaySchoolFormulaEnum, getFormulaUIString, getFormulaNameString } from '../model';
+import { PrimarySchoolFormulaEnum, getFormulaUIString, getFormulaNameString } from '../model';
 
 @Component({
   selector: 'app-formula-list',
@@ -11,7 +11,7 @@ export class FormulaListComponent implements OnInit {
   listFormula:any[] = [];
 
   constructor() { 
-    for (let item in PrimaySchoolFormulaEnum) {
+    for (let item in PrimarySchoolFormulaEnum) {
       if (isNaN(Number(item))) {
          //console.log(item);
       } else {

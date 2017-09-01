@@ -8,16 +8,34 @@ import { Observable } from 'rxjs/Observable';
 import { LogLevel, UserAuthInfo } from '../model';
 import { AuthService } from './auth.service';
 
+/**
+ * Attend user
+ */
+export interface QuizAttendUser {
+  attenduser: string;
+  displayas: string;
+}
+
 @Injectable()
 export class UserDetailService {
   private _isloaded: boolean;
-  get IsLoaded(): boolean {
+  get IsUserDetailLoaded(): boolean {
     return this._isloaded;
   }
 
   private _usrDisplayAs: string;
   get DisplayAs(): string {
     return this._usrDisplayAs;
+  }
+
+  private _islistloaded: boolean;
+  get IsAttendUserLoaded(): boolean {
+    return this._islistloaded;
+  }
+
+  private _listUsers: QuizAttendUser[] = [];
+  get AttendUsers(): QuizAttendUser[] {
+    return this._listUsers;
   }
 
   constructor(private _http: Http,
@@ -38,8 +56,6 @@ export class UserDetailService {
       headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
       let options = new RequestOptions({ headers: headers }); // Create a request option
       let apiurl = environment.APIBaseUrl + 'UserDetail/' + this._authService.authSubject.getValue().getUserId();
-
-      this._isloaded = true;
 
       // !!!
       // Return Observable from a subscribe is not working!!!
@@ -71,11 +87,13 @@ export class UserDetailService {
       //   });
 
       return this._http.get(apiurl, options).map((response: Response) => {
-            let jdata = response.json();
-            
-            this._usrDisplayAs = jdata.displayAs;
-            return this._usrDisplayAs;
-        });
+        this._isloaded = true;
+
+        let jdata = response.json();
+
+        this._usrDisplayAs = jdata.displayAs;
+        return this._usrDisplayAs;
+      });
     } else {
       return Observable.of(this._usrDisplayAs);
     }
@@ -141,9 +159,49 @@ export class UserDetailService {
           this._usrDisplayAs = dis;
         }, (err: Response) => {
           if (environment.LoggingLevel >= LogLevel.Error) {
-            console.error('AC Math Exercise [Error]:' +  err.toString());
+            console.error('AC Math Exercise [Error]:' + err.toString());
           }
         });
+    }
+  }
+
+  public fetchAllUsers(): Observable<any> {
+    if (!this._islistloaded) {
+      let apiurl = environment.APIBaseUrl + 'AttendedUser';
+
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      headers.append('Accept', 'application/json');
+      headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
+
+      let options = new RequestOptions({ headers: headers }); // Create a request option
+      return this._http.get(apiurl, options)
+        .map((response: Response) => {
+          if (environment.LoggingLevel >= LogLevel.Debug) {
+            console.log(response);
+          }
+
+          this._islistloaded = true;
+          
+          let rjs = response.json();
+          this._listUsers = [];
+          if (rjs instanceof Array && rjs.length > 0) {
+            for (let si of rjs) {
+              let au: QuizAttendUser = {
+                attenduser: si.attendUser,
+                displayas: si.displayAs
+              };
+              if (au.displayas === null || au.displayas === undefined || au.displayas.length <= 0) {
+                au.displayas = au.attenduser;
+              }
+              this._listUsers.push(au);
+            }
+          }
+
+          return this._listUsers;
+        });
+    } else {
+      return Observable.of(this._listUsers);
     }
   }
 }

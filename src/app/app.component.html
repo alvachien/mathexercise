@@ -3,7 +3,7 @@
     <div *ngIf="isLoggedIn" class="card">
       <div class="card-body">
         <h4 class="card-title">{{titleLogin}}</h4>
-        <h6 class="card-subtitle mb-2 text-muted">{{titleLogin}}</h6>
+        <h6 class="card-subtitle mb-2 text-muted">{{userDisplayAs}}</h6>
         <button (click)="onLogout()" md-button style="background: #525252;">{{'Home.Logout' | translate}}</button>
       </div>
     </div>

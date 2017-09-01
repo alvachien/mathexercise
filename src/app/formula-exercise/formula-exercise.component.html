@@ -30,15 +30,15 @@
       </div>
 
       <div class="demo-full-width" *ngFor="let fs of formulaDef">
-        <md-checkbox [(ngModel)]="fs.selected"><span>{{fs.name | translate}}</span><span>  {{fs.formula}}</span></md-checkbox>
+        <md-checkbox [(ngModel)]="fs.selected" [disabled]="fs.disabled"><span>{{fs.name | translate}}</span><span>  {{fs.formula}}</span></md-checkbox>
       </div>
     </div>
 
     <div *ngIf="quizInstance.IsStarted">
       <div class="demo-full-width" *ngFor="let quiz of DisplayedQuizItems; trackBy: onQuizItemTrackBy">
-        <span>({{quiz.QuizIndex}}). {{quiz.LeftNumber}} + {{quiz.RightNumber}} = </span>
+        <span>({{quiz.QuizIndex}}). {{quiz.getQuizFormat() | translate:quiz.getQuizFormatParam()}} </span>
         <md-input-container>
-          <input mdInput type="number" placeholder="{{'Math.Sum' | translate}}" [(ngModel)]="quiz.InputtedResult" name="iptquot">
+          <input mdInput type="number" placeholder="{{'Home.Result' | translate}}" [(ngModel)]="quiz.InputtedResult" name="iptquot">
         </md-input-container>
       </div>
 

@@ -15,6 +15,10 @@ export class AuthGuard implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         let url: string = state.url;
 
+        if (!environment.LoginRequired) {
+            return true;
+        }
+
         if (environment.LoggingLevel >= LogLevel.Debug) {
             console.log("AC Math Exercise [Debug]: entering can Activate of AuthGuard");
         }

@@ -81,7 +81,13 @@
         "AllowNegative": "允许运算过程和结果中有负数",
         "AllowDecimal": "允许运算过程和结果中有小数",
         "Result": "结果",
-        
+        "CircumferenceOfCircleQuizForCFormat": "已知圆的半径是{{radius}}, 则圆的周长是?",
+        "CircumferenceOfCircleQuizForRFormat": "已知圆的周长是{{circum}}, 请算出圆的半径?",
+        "CircumferenceOfSquareQuizForCFormat": "已知正方形的边长是{{edge}}, 求其周长?",
+        "CircumferenceOfSquareQuizForEFormat": "已知正方形的周长是{{circum}}, 求其边长?",
+        "CircumferenceOfRectangleQuizForCFormat": "已知长方形两条变成分别为{{longedge}}, {{shortedge}}, 求其周长?",
+        "CircumferenceOfRectangleQuizForEFormat": "已知长方形的周长为{{circum}}, 一条边长为{{edge}}, 求另一条边长?",
+
         "Underconstruction": "当前页还在开发中"
     },
     "Math": {

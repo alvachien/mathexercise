@@ -1,5 +1,5 @@
 
-export enum PrimaySchoolFormulaEnum {
+export enum PrimarySchoolFormulaEnum {
     AreaOfTriangle    = 0,
     AreaOfSquare      = 1,
     AreaOfRectangle   = 2,
@@ -14,55 +14,55 @@ export enum PrimaySchoolFormulaEnum {
     DistanceAndSpeed    = 20
 }
 
-export function getFormulaNameString(fe: PrimaySchoolFormulaEnum): string {
+export function getFormulaNameString(fe: PrimarySchoolFormulaEnum): string {
     let rst: string = '';
     switch (fe) {
-        case PrimaySchoolFormulaEnum.AreaOfCircle: {
+        case PrimarySchoolFormulaEnum.AreaOfCircle: {
             rst = 'Math.AreaOfCircle';
         }
         break;
 
-        case PrimaySchoolFormulaEnum.AreaOfParallelogram: {
+        case PrimarySchoolFormulaEnum.AreaOfParallelogram: {
             rst = 'Math.AreaOfParallelogram';
         }
         break;
 
-        case PrimaySchoolFormulaEnum.AreaOfRectangle: {
+        case PrimarySchoolFormulaEnum.AreaOfRectangle: {
             rst = 'Math.AreaOfRectangle';
         }
         break;
 
-        case PrimaySchoolFormulaEnum.AreaOfSquare: {
+        case PrimarySchoolFormulaEnum.AreaOfSquare: {
             rst = 'Math.AreaOfSquare';
         }
         break;
 
-        case PrimaySchoolFormulaEnum.AreaOfTrapezoid: {
+        case PrimarySchoolFormulaEnum.AreaOfTrapezoid: {
             rst = 'Math.AreaOfTrapezoid';
         }
         break;
 
-        case PrimaySchoolFormulaEnum.AreaOfTriangle: {
+        case PrimarySchoolFormulaEnum.AreaOfTriangle: {
             rst = 'Math.AreaOfTriangle';
         }
         break;
 
-        case PrimaySchoolFormulaEnum.CircumferenceOfCircle: {
+        case PrimarySchoolFormulaEnum.CircumferenceOfCircle: {
             rst = 'Math.CircumferenceOfCircle';
         }
         break;
 
-        case PrimaySchoolFormulaEnum.CircumferenceOfSquare: {
+        case PrimarySchoolFormulaEnum.CircumferenceOfSquare: {
             rst = 'Math.CircumferenceOfSquare';
         }
         break;
 
-        case PrimaySchoolFormulaEnum.CircumferenceOfRectangle: {
+        case PrimarySchoolFormulaEnum.CircumferenceOfRectangle: {
             rst = 'Math.CircumferenceOfRectangle';
         }
         break;
 
-        case PrimaySchoolFormulaEnum.DistanceAndSpeed: {
+        case PrimarySchoolFormulaEnum.DistanceAndSpeed: {
             rst = 'Math.DistanceAndSpeed';
         }
         break;
@@ -74,55 +74,55 @@ export function getFormulaNameString(fe: PrimaySchoolFormulaEnum): string {
     return rst;
 }
 
-export function getFormulaUIString(fe: PrimaySchoolFormulaEnum): string {
+export function getFormulaUIString(fe: PrimarySchoolFormulaEnum): string {
     let rst: string = '';
     switch (fe) {
-        case PrimaySchoolFormulaEnum.AreaOfCircle: {
+        case PrimarySchoolFormulaEnum.AreaOfCircle: {
             rst = 'S = πr<sup>2</sup>';
         }
         break;
 
-        case PrimaySchoolFormulaEnum.AreaOfParallelogram: {
+        case PrimarySchoolFormulaEnum.AreaOfParallelogram: {
             rst = 'S = ah';
         }
         break;
 
-        case PrimaySchoolFormulaEnum.AreaOfRectangle: {
+        case PrimarySchoolFormulaEnum.AreaOfRectangle: {
             rst = 'S = ab';
         }
         break;
 
-        case PrimaySchoolFormulaEnum.AreaOfSquare: {
+        case PrimarySchoolFormulaEnum.AreaOfSquare: {
             rst = 'S = a<sup>2</sup>';
         }
         break;
 
-        case PrimaySchoolFormulaEnum.AreaOfTrapezoid: {
+        case PrimarySchoolFormulaEnum.AreaOfTrapezoid: {
             rst = 'S = (a+b)h/2';
         }
         break;
 
-        case PrimaySchoolFormulaEnum.AreaOfTriangle: {
+        case PrimarySchoolFormulaEnum.AreaOfTriangle: {
             rst = 'S = (ah)/ 2';
         }
         break;
 
-        case PrimaySchoolFormulaEnum.CircumferenceOfCircle: {
-            rst = 'C = πD = 2πR';
+        case PrimarySchoolFormulaEnum.CircumferenceOfCircle: {
+            rst = 'C = πD = 2πr';
         }
         break;
 
-        case PrimaySchoolFormulaEnum.CircumferenceOfSquare: {
+        case PrimarySchoolFormulaEnum.CircumferenceOfSquare: {
             rst = 'C = 4a';
         }
         break;
 
-        case PrimaySchoolFormulaEnum.CircumferenceOfRectangle: {
+        case PrimarySchoolFormulaEnum.CircumferenceOfRectangle: {
             rst = 'C = 2(a+b)';
         }
         break;
 
-        case PrimaySchoolFormulaEnum.DistanceAndSpeed: {
+        case PrimarySchoolFormulaEnum.DistanceAndSpeed: {
             rst = 'S = vh';
         }
         break;

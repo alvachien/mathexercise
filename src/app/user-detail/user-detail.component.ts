@@ -2,6 +2,7 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { UserDetailService } from '../services/userdetail.service';
 import { environment } from '../../environments/environment';
+import { LogLevel } from '../model';
 
 @Component({
   selector: 'app-user-detail',
@@ -33,9 +34,9 @@ export class UserDetailComponent implements OnInit {
         }
       });
     }, error => {
-      // if (environment.LoggingLevel >= LogLevel.Error) {
-      //   console.error("AC Math Exercise: Log [Error]: Failed in subscribe to User", error);
-      // }
+      if (environment.LoggingLevel >= LogLevel.Error) {
+        console.error("AC Math Exercise: Log [Error]: Failed in subscribe to User", error);
+      }
     }, () => {
       // Completed
     });

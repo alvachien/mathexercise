@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, PrimarySchoolMathQuizItem, QuizTypeEnum,
-  DefaultQuizAmount, DefaultFailedQuizFactor, PrimaySchoolFormulaEnum, getFormulaNameString, getFormulaUIString,
+  PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, PrimarySchoolMathQuizItem, QuizTypeEnum, FormulaQuizItemBase,
+  DefaultQuizAmount, DefaultFailedQuizFactor, PrimarySchoolFormulaEnum, getFormulaNameString, getFormulaUIString,
+  FormulaCOfCircleCalcDirEum, FormulaCOfSquareCalcDirEum, FormulaCOfRectangleCalcDirEum, isFormulaTypeEnabled,
   FormulaCOfCircleQuizItem, FormulaCOfSquareQuizItem, FormulaCOfRectangleQuizItem, FormulaDistAndSpeedQuizItem
 } from '../model';
 import { MdDialog } from '@angular/material';
@@ -10,6 +11,17 @@ import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.co
 import { QuizSummaryComponent } from '../quiz-summary/quiz-summary.component';
 import { Router } from '@angular/router';
 import { PageEvent } from '@angular/material';
+import { environment } from '../../environments/environment';
+import { LogLevel, UserAuthInfo } from '../model';
+import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } from '../message-dialog';
+
+export interface formulaTypeUISelect {
+  name: string;
+  formula: string;
+  selected: boolean;
+  disabled: boolean;
+  formulatype: PrimarySchoolFormulaEnum
+}
 
 @Component({
   selector: 'app-formula-exercise',
@@ -25,10 +37,10 @@ export class FormulaExerciseComponent implements OnInit {
   NumberRangeEnd: number = 10;
 
   quizInstance: PrimarySchoolMathQuiz = null;
-  QuizItems: PrimarySchoolMathQuizItem[] = [];
-  DisplayedQuizItems: PrimarySchoolMathQuizItem[] = [];
+  QuizItems: FormulaQuizItemBase[] = [];
+  DisplayedQuizItems: FormulaQuizItemBase[] = [];
 
-  formulaDef: any[] = [];
+  formulaDef: formulaTypeUISelect[] = [];
 
   //pageEvent: PageEvent;
   pageSize: number;
@@ -37,13 +49,17 @@ export class FormulaExerciseComponent implements OnInit {
   constructor(private dialog: MdDialog,
     private _dlgsvc: DialogService,
     private _router: Router) {
-    for (let item in PrimaySchoolFormulaEnum) {
+    for (let item in PrimarySchoolFormulaEnum) {
       if (isNaN(Number(item))) {
         //console.log(item);
       } else {
-        let str0: string = getFormulaNameString(Number(item));
-        let str1: string = getFormulaUIString(Number(item));
-        let lf: any = { name: str0, formula: str1, selected: false };
+        let lf: formulaTypeUISelect = { 
+          name: getFormulaNameString(Number(item)), 
+          formula: getFormulaUIString(Number(item)), 
+          selected: false, 
+          disabled: !isFormulaTypeEnabled(Number(item)),
+          formulatype: Number(item) 
+        };
         this.formulaDef.push(lf);
       }
     }
@@ -59,63 +75,163 @@ export class FormulaExerciseComponent implements OnInit {
     this.pageIndex = 0;
   }
 
-  // private generateQuizItem(idx: number): AdditionQuizItem {
-  //   let qz: AdditionQuizItem = new AdditionQuizItem(Math.floor(Math.random() * (this.LeftNumberRangeEnd - this.LeftNumberRangeBgn) + this.LeftNumberRangeBgn),
-  //     Math.floor(Math.random() * (this.RightNumberRangeEnd - this.RightNumberRangeBgn) + this.RightNumberRangeBgn));
-  //   qz.QuizIndex = idx;
-  //   return qz;
-  // }
+  private generateQuizItem(idx: number): FormulaQuizItemBase {
+    let qztypamt = this.formulaDef.length;
+    let qzidx: number;
 
-  // private generateQuizSection() {
-  //   this.QuizItems = [];
+    // Choose one type
+    while(true) {
+      qzidx = Math.round(Math.random() * qztypamt - 1);
+      if (qzidx < 0) {
+        qzidx = 0;
+      }
 
-  //   for (let i = 0; i < this.quizInstance.CurrentRun().ItemsCount; i++) {
-  //     let dq: AdditionQuizItem = this.generateQuizItem(this.UsedQuizAmount + i + 1);
-
-  //     this.QuizItems.push(dq);
-  //   }
-  //   this.UsedQuizAmount += this.QuizItems.length;
-  // }
-
-  // public onPageChanged($event: PageEvent) {
-  //   this.pageSize = $event.pageSize;
-  //   this.pageIndex = $event.pageIndex;
-
-  //   this.submitCurrentPage();
-  //   this.prepareCurrentPage();
-  // }
-  
-  public CanStart(): boolean {
-    if (this.StartQuizAmount <= 0) {
-      return false;
-    }
-
-    let ncnt: number = 0;
-    for (let fs of this.formulaDef) {
-      if (fs.selected === true) {
-        ncnt++;
+      if (!this.formulaDef[qzidx].disabled && this.formulaDef[qzidx].selected) {
+        break;
       }
     }
-    if (ncnt === 0) {
+
+    switch(this.formulaDef[qzidx].formulatype) {
+      case PrimarySchoolFormulaEnum.CircumferenceOfCircle: {
+        let qz: FormulaCOfCircleQuizItem = new FormulaCOfCircleQuizItem(
+          Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
+          <FormulaCOfCircleCalcDirEum>Math.round(Math.random())
+        );
+        qz.QuizIndex = idx;
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log("AC Math Exercise [Debug]: generating Quiz Item for CircumferenceOfCircle: " + qz.storeToString());
+        }
+        return qz;
+      }
+
+      case PrimarySchoolFormulaEnum.CircumferenceOfSquare: {
+        let qz: FormulaCOfSquareQuizItem = new FormulaCOfSquareQuizItem(
+          Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
+          <FormulaCOfSquareCalcDirEum>Math.round(Math.random())
+        );
+        qz.QuizIndex = idx;
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log("AC Math Exercise [Debug]: generating Quiz Item for CircumferenceOfSquare: " + qz.storeToString() );
+        }
+        return qz;
+      }
+
+      case PrimarySchoolFormulaEnum.CircumferenceOfRectangle: {
+        let qz: FormulaCOfRectangleQuizItem = new FormulaCOfRectangleQuizItem(
+          Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
+          Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
+          <FormulaCOfRectangleCalcDirEum>Math.round(Math.random() * 2)
+        );
+        qz.QuizIndex = idx;
+
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log("AC Math Exercise [Debug]: generating Quiz Item for CircumferenceOfRectangle: " + qz.storeToString());
+        }
+        return qz;        
+      }
+
+      default: {
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.error("AC Math Exercise [Debug]: generating Quiz Item: FAILED" );
+        }
+      }
+      return null;
+    }
+  }
+
+  private generateQuizSection() {
+    this.QuizItems = [];
+
+    for (let i = 0; i < this.quizInstance.CurrentRun().ItemsCount; i++) {
+      let dq: FormulaQuizItemBase = this.generateQuizItem(this.UsedQuizAmount + i + 1);
+
+      this.QuizItems.push(dq);
+    }
+    this.UsedQuizAmount += this.QuizItems.length;
+  }
+
+  public canDeactivate(): boolean {
+    if (this.quizInstance.IsStarted) {
+      let dlginfo: MessageDialogInfo = {
+        Header: 'Home.Error',
+        Content: 'Home.QuizIsOngoing',
+        Button: MessageDialogButtonEnum.onlyok
+      };
+      
+      this.dialog.open(MessageDialogComponent, {
+        disableClose: false,
+        width: '500px',
+        data: dlginfo
+      }).afterClosed().subscribe(x => {
+        // Do nothing!
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log(`AC Math Exercise [Debug]: Message dialog result ${x}`);
+        }
+      });
       return false;
     }
 
     return true;
   }
 
+  public onPageChanged($event: PageEvent) {
+    this.pageSize = $event.pageSize;
+    this.pageIndex = $event.pageIndex;
+
+    this.submitCurrentPage();
+    this.prepareCurrentPage();
+  }
+
+  private submitCurrentPage() {
+    if (this.DisplayedQuizItems.length > 0) {
+      for (let qi of this.DisplayedQuizItems) {
+        for (let qi2 of this.QuizItems) {
+          if (qi.QuizIndex === qi2.QuizIndex) {
+            qi2.InputtedResult = qi.InputtedResult;
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  private prepareCurrentPage() {
+    let pageStart = this.pageIndex * this.pageSize;
+    let pageEnd = pageStart + this.pageSize;
+
+    this.DisplayedQuizItems = [];
+    for (let i = 0; i < this.QuizItems.length; i++) {
+      if (i >= pageStart && i < pageEnd) {
+        this.DisplayedQuizItems.push(this.QuizItems[i]);
+      }
+    }
+  }
+
+  public onQuizItemTrackBy(index: number, item: any) {
+    return item.QuizIndex;
+  }
+
+  public CanStart(): boolean {
+    if (this.StartQuizAmount <= 0 || this.NumberRangeBgn < 0
+      || this.NumberRangeEnd <= this.NumberRangeBgn) {
+      return false;
+    }
+
+    if (this.quizInstance.IsStarted) {
+      return false;
+    }
+
+    return true;
+  }
   public onQuizStart(): void {
     // Start it!
-    this.quizInstance.BasicInfo = '[' + this.NumberRangeBgn.toString() + '...' + this.NumberRangeEnd.toString() + ']'
-      + ' '; 
-      // Todo: selected formula!
-
+    this.quizInstance.BasicInfo = '[' + this.NumberRangeBgn.toString() + '...' + this.NumberRangeEnd.toString() + ']';
     this.quizInstance.Start(this.StartQuizAmount, this.FailedQuizFactor);
 
     // Generated section
-    // Todo
-    // this.generateQuizSection();
-    // this.pageIndex = 0;
-    // this.prepareCurrentPage();
+    this.generateQuizSection();
+    this.pageIndex = 0;
+    this.prepareCurrentPage();
 
     // Current run
     this.quizInstance.CurrentRun().SectionStart();
@@ -130,10 +246,49 @@ export class FormulaExerciseComponent implements OnInit {
       return false;
     }
 
-    return false;
+    this.submitCurrentPage();
+    for (let quiz of this.QuizItems) {
+      if (quiz.InputtedResult === undefined
+        || quiz.InputtedResult === null) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   public onQuizSubmit(): void {
+    this._dlgsvc.FailureItems = [];
+    for (let quiz of this.QuizItems) {
+      if (!quiz.IsCorrect()) {
+        this._dlgsvc.FailureItems.push(quiz);
+      }
+    }
 
+    if (this._dlgsvc.FailureItems.length > 0) {
+      this._dlgsvc.CurrentScore = Math.round(100 - 100 * this._dlgsvc.FailureItems.length / this.QuizItems.length);
+      let dialogRef = this.dialog.open(QuizFailureDlgComponent, {
+        disableClose: false,
+        width: '500px'
+      });
+
+      dialogRef.afterClosed().subscribe(x => {
+        this.quizInstance.SubmitCurrentRun(this._dlgsvc.FailureItems);
+
+        this.generateQuizSection();
+        this.pageIndex = 0;
+        this.prepareCurrentPage();
+
+        // Current run
+        this.quizInstance.CurrentRun().SectionStart();
+      });
+    } else {
+      // Succeed!
+      this.quizInstance.SubmitCurrentRun();
+
+      this._dlgsvc.CurrentQuiz = this.quizInstance;
+
+      this._router.navigate(['/quiz-sum']);
+    }
   }
 }

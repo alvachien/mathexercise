@@ -7,11 +7,7 @@ import {
   AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem
 } from '../model';
 import { environment } from '../../environments/environment';
-
-export interface quizattenduser {
-  attenduser: string;
-  displayas: string;
-}
+import { QuizAttendUser, UserDetailService } from '../services/userdetail.service';
 
 export interface quiztypeui {
   qtype: QuizTypeEnum,
@@ -31,8 +27,7 @@ export class UserStatisticsComponent implements OnInit {
   // StatisticQuizAmountByType
   // AttendedUser
 
-  listUsers: quizattenduser[] = [];
-  isUserLoaded: boolean = false;
+  listUsers: QuizAttendUser[] = [];
   curUser: string = '';
   listqtype: quiztypeui[] = [];
   colorSchemeGeneral = {
@@ -81,11 +76,12 @@ export class UserStatisticsComponent implements OnInit {
 
   constructor(private _http: Http,
     private _tranService: TranslateService,
-    private _authService: AuthService) {
+    private _authService: AuthService,
+    private _userDetailService: UserDetailService) {
     // Object.assign(this, {single});
-    this.isUserLoaded = false;
     this.curUser = '';
 
+    // Get Quiz type display string
     let arstrs: string[] = [];
     for (let fe in QuizTypeEnum) {
       if (isNaN(Number(fe))) {
@@ -123,12 +119,16 @@ export class UserStatisticsComponent implements OnInit {
       this.xAxisLabelItemAmountByType = x['Home.Type'];
       this.yAxisLabelItemAmountByType = x['Home.Amount'];
     });
+
+    // Attended user
+    this._userDetailService.fetchAllUsers().subscribe((listUsrs) => {
+      if (listUsrs !== null && listUsrs !== undefined  || listUsrs.length > 0) {
+        this.listUsers = listUsrs;
+      }
+    });
   }
 
   ngOnInit() {
-    if (!this.isUserLoaded) {
-      this.fetchAllUsers();
-    }
   }
 
   public onUserChanged(evnt: any) {
@@ -154,40 +154,6 @@ export class UserStatisticsComponent implements OnInit {
 
   public onItemAmountByTypeSelect(evnt: any) {
 
-  }
-
-  private fetchAllUsers() {
-    this.isUserLoaded = true;
-
-    let apiurl = environment.APIBaseUrl + 'AttendedUser';
-
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-
-    let options = new RequestOptions({ headers: headers }); // Create a request option
-    this._http.get(apiurl, options)
-      .map((response: Response) => {
-        if (environment.LoggingLevel >= LogLevel.Debug) {
-          console.log(response);
-        }
-        return response.json();
-      })
-      .subscribe(x => {
-        if (x instanceof Array && x.length > 0) {
-          for (let si of x) {
-            let au: quizattenduser = {
-              attenduser: si.attendUser,
-              displayas: si.displayAs
-            };
-            if (au.displayas === null || au.displayas === undefined || au.displayas.length <= 0) {
-              au.displayas = au.attenduser;
-            }
-            this.listUsers.push(au);
-          }
-        }
-      });
   }
 
   private fetchQuizAmountByDate(usr: string) {

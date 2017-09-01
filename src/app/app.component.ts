@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewEncapsulation, NgZone, ElementRef } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl, SafeUrl  } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from './services/auth.service';
+import { UserDetailService } from './services/userdetail.service';
 import { environment } from '../environments/environment';
 import { LogLevel } from './model';
 
@@ -34,6 +36,11 @@ export class Home {
   }
 }
 
+export interface appNavItems {
+  name: string;
+  route: string;
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -41,20 +48,7 @@ export class Home {
   encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent implements OnInit {
-  public navItems = [
-    { name: 'Home.HomePage', route: '' },
-    { name: 'Home.AdditionExercises', route: 'add-ex' },
-    { name: 'Home.SubtractionExercises', route: 'sub-ex' },
-    { name: 'Home.MultiplicationExercises', route: 'multi-ex' },
-    { name: 'Home.DivisionExercises', route: 'divide-ex' },
-    { name: 'Home.MixedOperations', route: 'mixop-ex' },
-    //{ name: 'Home.FormulaList', route: 'formula-list' },
-    { name: 'Home.FormulaExercises', route: 'formula-ex' },
-    { name: 'Home.PuzzleGames', route: 'puzz-game' },
-    { name: 'Home.RetestPreviousFailures', route: 'fail-retest' },
-    { name: 'Home.Statistics', route: 'user-stat' },
-    { name: 'Home.UserDetail', route: 'user-detail' },
-  ];
+  public navItems: appNavItems[] = [];
   public selectedLanguage: string;
   public availableLanguages = [
     { DisplayName: 'Languages.en', Value: 'en' },
@@ -62,31 +56,72 @@ export class AppComponent implements OnInit {
   ];
   public isLoggedIn: boolean;
   public titleLogin: string;
+  public userDisplayAs: string;
 
   constructor(private _element: ElementRef,
     private _translate: TranslateService,
     private _authService: AuthService,
-    private _zone: NgZone) {
+    private _userDetailService: UserDetailService,
+    private _zone: NgZone,
+    private _router: Router) {
     // Setup the translate
     this.selectedLanguage = 'zh';
     this._translate.setDefaultLang('zh');
     this._translate.use(this.selectedLanguage);
+    this.userDisplayAs = '';
 
     // Register the Auth service
-    this._authService.authContent.subscribe(x => {
-      this._zone.run(() => {
-        this.isLoggedIn = x.isAuthorized;
-        if (this.isLoggedIn) {
-          this.titleLogin = x.getUserName();
+    if (environment.LoginRequired) {
+      this.navItems = [
+        { name: 'Home.HomePage', route: '' },
+        { name: 'Home.AdditionExercises', route: 'add-ex' },
+        { name: 'Home.SubtractionExercises', route: 'sub-ex' },
+        { name: 'Home.MultiplicationExercises', route: 'multi-ex' },
+        { name: 'Home.DivisionExercises', route: 'divide-ex' },
+        { name: 'Home.MixedOperations', route: 'mixop-ex' },
+        //{ name: 'Home.FormulaList', route: 'formula-list' },
+        { name: 'Home.FormulaExercises', route: 'formula-ex' },
+        { name: 'Home.PuzzleGames', route: 'puzz-game' },
+        { name: 'Home.RetestPreviousFailures', route: 'fail-retest' },
+        { name: 'Home.Statistics', route: 'user-stat' },
+        { name: 'Home.UserDetail', route: 'user-detail' },
+      ];
+
+      this._authService.authContent.subscribe(x => {
+        this._zone.run(() => {
+          this.isLoggedIn = x.isAuthorized;
+          if (this.isLoggedIn) {
+            this.titleLogin = x.getUserName();
+  
+            // Get user detail
+            this._userDetailService.fetchUserDetail().subscribe((x2) => {
+              if (x2 !== null && x2 !== undefined && x2.length > 0) {
+                this.userDisplayAs = x2;
+              }            
+            });
+          }
+        });
+      }, error => {
+        if (environment.LoggingLevel >= LogLevel.Error) {
+          console.error("AC Math Exercise: Log [Error]: Failed in subscribe to User", error);
         }
+      }, () => {
+        // Completed
       });
-    }, error => {
-      if (environment.LoggingLevel >= LogLevel.Error) {
-        console.error("AC Math Exercise: Log [Error]: Failed in subscribe to User", error);
-      }
-    }, () => {
-      // Completed
-    });
+    } else {
+      this.isLoggedIn = false;
+      this.navItems = [
+        { name: 'Home.HomePage', route: '' },
+        { name: 'Home.AdditionExercises', route: 'add-ex' },
+        { name: 'Home.SubtractionExercises', route: 'sub-ex' },
+        { name: 'Home.MultiplicationExercises', route: 'multi-ex' },
+        { name: 'Home.DivisionExercises', route: 'divide-ex' },
+        { name: 'Home.MixedOperations', route: 'mixop-ex' },
+        //{ name: 'Home.FormulaList', route: 'formula-list' },
+        { name: 'Home.FormulaExercises', route: 'formula-ex' },
+        { name: 'Home.PuzzleGames', route: 'puzz-game' },
+      ];
+    }
   }
 
   ngOnInit() {
@@ -94,15 +129,21 @@ export class AppComponent implements OnInit {
   }
 
   public onLogon() {
-    this._authService.doLogin();
+    if (environment.LoginRequired) {
+      this._authService.doLogin();
+    } else {
+      console.log("No logon is required!");
+    }    
   }
 
   public onUserDetail(): void {
-
+    this._router.navigate(['/user-detail']);
   }
 
   public onLogout(): void {
-    this._authService.doLogout();
+    if (environment.LoginRequired) {
+      this._authService.doLogout();
+    }
   }
 
   public toggleFullscreen(): void {

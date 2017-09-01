@@ -72,6 +72,8 @@ import { PgMinesweeperComponent } from './pg-minesweeper';
 import { PgTypingtourComponent } from './pg-typingtour';
 import { MixedopExerciseComponent } from './mixedop-exercise';
 import { PgSummaryDlgComponent } from './pg-summary-dlg';
+import { EnwordReciteExerciseComponent } from './enword-recite-exercise/enword-recite-exercise.component';
+import { CnwordReciteExerciseComponent } from './cnword-recite-exercise/cnword-recite-exercise.component';
 
 @NgModule({
   exports: [
@@ -139,7 +141,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     PgMinesweeperComponent,
     PgTypingtourComponent,
     MixedopExerciseComponent,
-    PgSummaryDlgComponent
+    PgSummaryDlgComponent,
+    EnwordReciteExerciseComponent,
+    CnwordReciteExerciseComponent
   ],
   entryComponents: [
     QuizFailureDlgComponent,

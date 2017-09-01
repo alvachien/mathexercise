@@ -81,7 +81,13 @@
         "AllowNegative": "Allow Negative",
         "AllowDecimal": "Allow Decimal",
         "Result": "Result",
-
+        "CircumferenceOfCircleQuizForCFormat": "Given a circle with radius is {{radius}}, then what's the Circumference?",
+        "CircumferenceOfCircleQuizForRFormat": "Given a circle with circumference is {{circum}}, then what's the Radius?",
+        "CircumferenceOfSquareQuizForCFormat": "Given a square with edge is {{edge}}, then what's the Circumference?",
+        "CircumferenceOfSquareQuizForEFormat": "Given a circle with circumference is {{circum}}, then what's the Edge?",
+        "CircumferenceOfRectangleQuizForCFormat": "Given a rectangle with two edge is {{longedge}} and {{shortedge}}, then what's the Circumference?",
+        "CircumferenceOfRectangleQuizForEFormat": "Given a rectangle whose circumference is {{circum}}, and one ledge is {{longedge}}, then what's the other edge?",
+        
         "Underconstruction": "Page still under construction"
     },
     "Math": {
