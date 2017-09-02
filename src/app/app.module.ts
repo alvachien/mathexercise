@@ -6,42 +6,15 @@ import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
-  FullscreenOverlayContainer,
-  MdAutocompleteModule,
-  MdButtonModule,
-  MdButtonToggleModule,
-  MdCardModule,
-  MdCheckboxModule,
-  MdChipsModule,
-  MdCoreModule,
-  MdTableModule,
-  MdDatepickerModule,
-  MdDialogModule,
-  MdExpansionModule,
-  MdGridListModule,
-  MdIconModule,
-  MdInputModule,
-  MdListModule,
-  MdMenuModule,
-  MdNativeDateModule,
-  MdPaginatorModule,
-  MdProgressBarModule,
-  MdProgressSpinnerModule,
-  MdRadioModule,
-  MdRippleModule,
-  MdSelectModule,
-  MdSidenavModule,
-  MdSliderModule,
-  MdSlideToggleModule,
-  MdSnackBarModule,
-  MdSortModule,
-  MdTabsModule,
-  MdToolbarModule,
-  MdTooltipModule,
-  OverlayContainer,
-  StyleModule
+  MdAutocompleteModule, MdButtonModule, MdButtonToggleModule, MdPaginatorModule,
+  MdCardModule, MdCheckboxModule, MdChipsModule, MdDatepickerModule,
+  MdDialogModule, MdGridListModule, MdIconModule, MdInputModule,
+  MdListModule, MdMenuModule, MdProgressBarModule, MdProgressSpinnerModule,
+  MdRadioModule, MdSelectModule, MdSidenavModule, MdSliderModule, MdSortModule,
+  MdSlideToggleModule, MdSnackBarModule, MdTableModule, MdTabsModule, MdToolbarModule,
+  MdTooltipModule, MdFormFieldModule, MdExpansionModule
 } from '@angular/material';
-import { CdkTableModule } from '@angular/cdk';
+import { CdkTableModule } from '@angular/cdk/table';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -77,39 +50,14 @@ import { CnwordReciteExerciseComponent } from './cnword-recite-exercise/cnword-r
 
 @NgModule({
   exports: [
-    MdAutocompleteModule,
-    MdButtonModule,
-    MdButtonToggleModule,
-    MdCardModule,
-    MdCheckboxModule,
-    MdChipsModule,
-    MdTableModule,
-    MdDatepickerModule,
-    MdDialogModule,
-    MdExpansionModule,
-    MdGridListModule,
-    MdIconModule,
-    MdInputModule,
-    MdListModule,
-    MdMenuModule,
-    MdCoreModule,
-    MdPaginatorModule,
-    MdProgressBarModule,
-    MdProgressSpinnerModule,
-    MdRadioModule,
-    MdRippleModule,
-    MdSelectModule,
-    MdSidenavModule,
-    MdSlideToggleModule,
-    MdSliderModule,
-    MdSnackBarModule,
-    MdSortModule,
-    MdTabsModule,
-    MdToolbarModule,
-    MdTooltipModule,
-    MdNativeDateModule,
-    CdkTableModule,
-    StyleModule
+    MdAutocompleteModule, MdButtonModule, MdButtonToggleModule, MdPaginatorModule,
+    MdCardModule, MdCheckboxModule, MdChipsModule, MdDatepickerModule,
+    MdDialogModule, MdGridListModule, MdIconModule, MdInputModule,
+    MdListModule, MdMenuModule, MdProgressBarModule, MdProgressSpinnerModule,
+    MdRadioModule, MdSelectModule, MdSidenavModule, MdSliderModule, MdSortModule,
+    MdSlideToggleModule, MdSnackBarModule, MdTableModule, MdTabsModule, MdToolbarModule,
+    MdTooltipModule, MdFormFieldModule, MdExpansionModule,
+    CdkTableModule
   ]
 })
 export class DSMaterialModule { }

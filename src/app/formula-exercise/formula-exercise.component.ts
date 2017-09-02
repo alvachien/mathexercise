@@ -3,7 +3,8 @@ import {
   PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, PrimarySchoolMathQuizItem, QuizTypeEnum, FormulaQuizItemBase,
   DefaultQuizAmount, DefaultFailedQuizFactor, PrimarySchoolFormulaEnum, getFormulaNameString, getFormulaUIString,
   FormulaCOfCircleCalcDirEum, FormulaCOfSquareCalcDirEum, FormulaCOfRectangleCalcDirEum, isFormulaTypeEnabled,
-  FormulaCOfCircleQuizItem, FormulaCOfSquareQuizItem, FormulaCOfRectangleQuizItem, FormulaDistAndSpeedQuizItem
+  FormulaCOfCircleQuizItem, FormulaCOfSquareQuizItem, FormulaCOfRectangleQuizItem, FormulaDistAndSpeedCalcDirEum, FormulaDistAndSpeedQuizItem,
+  FormulaAOfRectangleCalcDirEum, FormulaAreaOfRectangleQuizItem
 } from '../model';
 import { MdDialog } from '@angular/material';
 import { DialogService } from '../services/dialog.service';
@@ -128,6 +129,35 @@ export class FormulaExerciseComponent implements OnInit {
           console.log("AC Math Exercise [Debug]: generating Quiz Item for CircumferenceOfRectangle: " + qz.storeToString());
         }
         return qz;        
+      }
+
+      case PrimarySchoolFormulaEnum.AreaOfRectangle: {
+        let qz: FormulaAreaOfRectangleQuizItem = new FormulaAreaOfRectangleQuizItem(
+          Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
+          Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
+          <FormulaAOfRectangleCalcDirEum>Math.round(Math.random() * 2)
+        );
+        qz.QuizIndex = idx;
+
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log("AC Math Exercise [Debug]: generating Quiz Item for AreaOfRectangle: " + qz.storeToString());
+        }
+        return qz;        
+      }
+
+      case PrimarySchoolFormulaEnum.DistanceAndSpeed: {        
+        let qz: FormulaDistAndSpeedQuizItem = new FormulaDistAndSpeedQuizItem(
+          Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
+          Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
+          <FormulaDistAndSpeedCalcDirEum>Math.round(Math.random() * 2)
+        );
+        qz.QuizIndex = idx;
+
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log("AC Math Exercise [Debug]: generating Quiz Item for DistanceAndSpeed: " + qz.storeToString());
+        }
+        return qz;        
+        
       }
 
       default: {

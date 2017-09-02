@@ -8,19 +8,19 @@
       <span>{{qi.quizid}}, </span>
       <span>{{getUIStringForType(qi.quiztype) | translate}} </span>
       <span>{{qi.qsInstance.getQuizFormat()}}</span>
-      <md-input-container *ngIf="IsASMType(qi.quiztype)">
+      <md-form-field *ngIf="IsASMType(qi.quiztype)">
         <input mdInput type="number" placeholder="{{'Math.Sum' | translate }}" [(ngModel)]="qi.qsInstance.InputtedResult" name="inputrst"
           required>
-      </md-input-container>
+      </md-form-field>
       <div *ngIf="IsDivType(qi.quiztype)">
-        <md-input-container>
+        <md-form-field>
           <input mdInput type="number" placeholder="{{'Math.Quotient' | translate}}" [(ngModel)]="qi.qsInstance.InputtedQuotient" name="iptquot">
-        </md-input-container>
+        </md-form-field>
         <span> ... </span>
-        <md-input-container>
+        <md-form-field>
           <input mdInput type="number" placeholder="{{'Math.Remainder' | translate}}" [(ngModel)]="qi.qsInstance.InputtedRemainder"
             name="iptrmd">
-        </md-input-container>
+        </md-form-field>
       </div>
     </div>
   </md-card-content>

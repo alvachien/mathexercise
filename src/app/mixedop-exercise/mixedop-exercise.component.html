@@ -6,24 +6,24 @@
   <md-card-content>
     <div *ngIf="!quizInstance.IsStarted">
       <div class="demo-full-width">
-        <md-input-container>
+        <md-form-field>
           <input mdInput type="number" placeholder="{{'Home.QuizAmount' | translate}}" [(ngModel)]="StartQuizAmount" name="startquizamt"
             required>
           <md-error>This field is required</md-error>
-        </md-input-container>
-        <md-input-container>
+        </md-form-field>
+        <md-form-field>
           <input mdInput type="number" placeholder="{{'Home.FailedFactor' | translate }}" [(ngModel)]="FailedQuizFactor" name="fquizfactor"
             required>
           <md-error>This field is required</md-error>
-        </md-input-container>
+        </md-form-field>
       </div>
 
       <div class="demo-full-width">
-          <md-input-container>
+          <md-form-field>
               <input mdInput type="number" placeholder="{{'Home.NumberOfOperators' | translate }}" [(ngModel)]="NumberOfOperators" name="fquizfactor"
                 required>
               <md-error>This field is required</md-error>
-          </md-input-container>
+          </md-form-field>
       </div>
 
       <div class="demo-full-width">
@@ -35,14 +35,14 @@
       </div>
 
       <div class="demo-full-width">
-        <md-input-container>
+        <md-form-field>
           <input mdInput type="number" placeholder="{{'Math.Scope' | translate}}" [(ngModel)]="NumberRangeBgn" name="nrbgn"
             required>
-        </md-input-container>
-        <md-input-container>
+        </md-form-field>
+        <md-form-field>
           <input mdInput type="number" placeholder="{{'Math.Scope' | translate}}" [(ngModel)]="NumberRangeEnd" name="nrend"
             required>
-        </md-input-container>
+        </md-form-field>
       </div>
     </div>
 
@@ -53,9 +53,9 @@
     <div *ngIf="quizInstance.IsStarted">
       <div class="demo-full-width" *ngFor="let quiz of DisplayedQuizItems; trackBy: onQuizItemTrackBy">
         <span>({{quiz.QuizIndex}}). {{quiz.Formula}} = </span>
-        <md-input-container>
+        <md-form-field>
           <input mdInput type="number" placeholder="{{'Home.Result' | translate}}" [(ngModel)]="quiz.InputtedResult" name="iptquot">
-        </md-input-container>
+        </md-form-field>
       </div>
 
       <md-paginator [length]="QuizItems.length"

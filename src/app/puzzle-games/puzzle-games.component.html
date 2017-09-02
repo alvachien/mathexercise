@@ -7,14 +7,14 @@
       </md-card-header>
       <md-card-content>
         <div class="demo-full-width" *ngIf="!Cal24Quiz.IsStarted">
-          <md-input-container>
+          <md-form-field>
             <input mdInput type="number" placeholder="{{'Math.LeftNumber' | translate}}" [(ngModel)]="Cal24NumberRangeBgn" name="leftnrbgn"
               required>
-          </md-input-container>
-          <md-input-container>
+          </md-form-field>
+          <md-form-field>
             <input mdInput type="number" placeholder="{{'Math.RightNumber' | translate}}" [(ngModel)]="Cal24NumberRangeEnd" name="leftnrend"
               required>
-          </md-input-container>
+          </md-form-field>
         </div>
 
         <div class="demo-full-width" *ngIf="Cal24Quiz.IsStarted">
@@ -32,10 +32,10 @@
           </h2>
 
           <div class="demo-full-width">
-            <md-input-container>
+            <md-form-field>
               <input mdInput type="text" placeholder="{{'Home.Calculate24' | translate }}" [(ngModel)]="Cal24Input" name="cal24inp" required>
               <md-error>This field is required</md-error>
-            </md-input-container>
+            </md-form-field>
           </div>
         </div>
       </md-card-content>
@@ -77,9 +77,9 @@
       </md-card-header>
       <md-card-content>
         <div class="demo-full-width" *ngIf="!typingQuiz.IsStarted">
-          <md-input-container>
+          <md-form-field>
             <input mdInput type="number" placeholder="{{'Home.Amount' | translate}}" [(ngModel)]="typingMaxLength" name="typmaxnr" required>
-          </md-input-container>
+          </md-form-field>
         </div>
         <div class="demo-full-width" *ngIf="!typingQuiz.IsStarted">
           <md-checkbox [(ngModel)]="typingIncCaptial">{{'Home.IncludeCaptial' | translate}}</md-checkbox>

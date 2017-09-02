@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { DataSource } from '@angular/cdk/collections';
 import { DialogService } from '../services/dialog.service';
-import { DataSource } from '@angular/cdk';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';

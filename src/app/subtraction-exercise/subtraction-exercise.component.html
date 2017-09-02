@@ -5,37 +5,37 @@
   <md-card-content>
     <div *ngIf="!quizInstance.IsStarted">
       <div class="demo-full-width">
-        <md-input-container>
+        <md-form-field>
           <input mdInput type="number" placeholder="{{'Home.QuizAmount' | translate}}" [(ngModel)]="StartQuizAmount" name="startquizamt"
             required>
           <md-error>This field is required</md-error>
-        </md-input-container>
-        <md-input-container>
+        </md-form-field>
+        <md-form-field>
           <input mdInput type="number" placeholder="{{'Home.FailedFactor' | translate }}" [(ngModel)]="FailedQuizFactor" name="fquizfactor"
             required>
           <md-error>This field is required</md-error>
-        </md-input-container>
+        </md-form-field>
       </div>
       
       <div class="demo-full-width">
-        <md-input-container>
+        <md-form-field>
           <input mdInput type="number" placeholder="{{'Math.Minuend' | translate}}" [(ngModel)]="LeftNumberRangeBgn" name="leftnrbgn"
             required>
-        </md-input-container>
-        <md-input-container>
+        </md-form-field>
+        <md-form-field>
           <input mdInput type="number" placeholder="{{'Math.Minuend' | translate}}" [(ngModel)]="LeftNumberRangeEnd" name="leftnrend"
             required>
-        </md-input-container>
+        </md-form-field>
       </div>
       <div class="demo-full-width">
-        <md-input-container>
+        <md-form-field>
           <input mdInput type="number" placeholder="{{'Math.Subtrahend' | translate}}" [(ngModel)]="RightNumberRangeBgn" name="rightnrbgn"
             required>
-        </md-input-container>
-        <md-input-container>
+        </md-form-field>
+        <md-form-field>
           <input mdInput type="number" placeholder="{{'Math.Subtrahend' | translate}}" [(ngModel)]="RightNumberRangeEnd" name="rightnrend"
             required>
-        </md-input-container>
+        </md-form-field>
       </div>
     </div>
 
@@ -46,9 +46,9 @@
     <div *ngIf="quizInstance.IsStarted">
       <div class="demo-full-width" *ngFor="let quiz of DisplayedQuizItems; trackBy: onQuizItemTrackBy">
         <span>({{quiz.QuizIndex}}). {{quiz.LeftNumber}} - {{quiz.RightNumber}} = </span>
-        <md-input-container>
+        <md-form-field>
           <input mdInput type="number" placeholder="{{'Math.Difference' | translate}}" [(ngModel)]="quiz.InputtedResult" name="iptquot">
-        </md-input-container>
+        </md-form-field>
       </div>
 
       <md-paginator [length]="QuizItems.length"

@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angular/http';
-import { DataSource } from '@angular/cdk';
+import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
-import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, MultiplicationQuizItem, 
-  LogLevel, QuizTypeEnum2UIString } from '../model';
+import {
+  PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, MultiplicationQuizItem,
+  LogLevel, QuizTypeEnum2UIString
+} from '../model';
 import { slideInOutAnimation } from '../animation';
 import { environment } from '../../environments/environment';
 import { DialogService } from '../services/dialog.service';
@@ -22,7 +24,7 @@ export interface QuizSummaryInfo {
   failedamt: number;
   timespent: number;
   avgtimespent: number;
-  adjavgtimespent: number; 
+  adjavgtimespent: number;
 }
 
 /**
@@ -116,7 +118,7 @@ export class QuizSummaryComponent implements OnInit {
       totalTime += run.TimeSpent;
     }
 
-    this.totalScore = Math.round(100 * ( totalAmt - totalFailed) / totalAmt);
+    this.totalScore = Math.round(100 * (totalAmt - totalFailed) / totalAmt);
     this.totalTimeSpent = Math.round(totalTime / totalAmt);
 
     // Workaround for https://github.com/angular/material2/issues/5593
@@ -133,14 +135,14 @@ export class QuizSummaryComponent implements OnInit {
     // Save it to DB
     let apiurl = environment.APIBaseUrl + 'quiz';
 
-    let result:any = {};
+    let result: any = {};
     result.quizType = this._dlgsvc.CurrentQuiz.QuizType;
     result.basicInfo = this._dlgsvc.CurrentQuiz.BasicInfo;
     result.submitDate = new Date();
     result.attendUser = 'test';
 
     result.failLogs = [];
-    for(let fl of this._dlgsvc.CurrentQuiz.FailedItems) {
+    for (let fl of this._dlgsvc.CurrentQuiz.FailedItems) {
       let flog: any = {};
       flog.quizFailIndex = fl.QuizIndex;
       flog.expected = fl.storeToString();
@@ -149,7 +151,7 @@ export class QuizSummaryComponent implements OnInit {
     }
 
     result.sections = [];
-    for(let qs of this._dlgsvc.CurrentQuiz.ElderRuns()) {
+    for (let qs of this._dlgsvc.CurrentQuiz.ElderRuns()) {
       let qsect: any = {};
       qsect.sectionID = qs.SectionNumber;
       qsect.timeSpent = qs.TimeSpent;

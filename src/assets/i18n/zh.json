@@ -87,6 +87,13 @@
         "CircumferenceOfSquareQuizForEFormat": "已知正方形的周长是{{circum}}, 求其边长?",
         "CircumferenceOfRectangleQuizForCFormat": "已知长方形两条变成分别为{{longedge}}, {{shortedge}}, 求其周长?",
         "CircumferenceOfRectangleQuizForEFormat": "已知长方形的周长为{{circum}}, 一条边长为{{edge}}, 求另一条边长?",
+        "SpeedAndDistanceForDFormat": "已知一台车的速度{{speed}}, 开了{{time}}小时后，求该车开了多少里程?",
+        "SpeedAndDistanceForTFormat": "已知一台车的速度{{speed}}, 但开到里程{{distance}}时, 求该车开了多长时间?",
+        "SpeedAndDistanceForSFormat": "已知一台车开了{{time}}小时，距离为{{distance}}, 求该车的速度?",
+        "AreaOfRectangleQuizForAFormat": "已知长方形两条变成分别为{{longedge}}, {{shortedge}}, 求其面积?",
+        "AreaOfRectangleQuizForEFormat": "已知长方形的面积为{{area}}, 一条边长为{{edge}}, 求另一条边长?",
+        "AreaOfSquareQuizForAFormat": "已知正方形的边长是{{edge}}, 求其面积?",
+        "AreaOfSquareQuizForEFormat": "已知正方形的周长是{{area}}, 求其边长?",
 
         "Underconstruction": "当前页还在开发中"
     },

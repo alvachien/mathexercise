@@ -86,7 +86,14 @@
         "CircumferenceOfSquareQuizForCFormat": "Given a square with edge is {{edge}}, then what's the Circumference?",
         "CircumferenceOfSquareQuizForEFormat": "Given a circle with circumference is {{circum}}, then what's the Edge?",
         "CircumferenceOfRectangleQuizForCFormat": "Given a rectangle with two edge is {{longedge}} and {{shortedge}}, then what's the Circumference?",
-        "CircumferenceOfRectangleQuizForEFormat": "Given a rectangle whose circumference is {{circum}}, and one ledge is {{longedge}}, then what's the other edge?",
+        "CircumferenceOfRectangleQuizForEFormat": "Given a rectangle whose circumference is {{circum}}, and one ledge is {{edge}}, then what's the other edge?",
+        "SpeedAndDistanceForDFormat": "Given a car with speed {{speed}}, after {{time}} hours, what's the distance then?",
+        "SpeedAndDistanceForTFormat": "Given a car with speed {{speed}}, when reached distance  {{distance}}, how many hours then?",
+        "SpeedAndDistanceForSFormat": "Given a car after {{time}} hours reached distance {{distance}}, what's the speed then?",
+        "AreaOfRectangleQuizForAFormat": "Given a rectangle with two edge is {{longedge}} and {{shortedge}}, then what's the Area?",
+        "AreaOfRectangleQuizForEFormat": "Given a rectangle whose area is {{area}}, and one ledge is {{edge}}, then what's the other edge?",
+        "AreaOfSquareQuizForAFormat": "Given a square with edge is {{edge}}, then what's the Area?",
+        "AreaOfSquareQuizForEFormat": "Given a circle with area is {{area}}, then what's the Edge?",
         
         "Underconstruction": "Page still under construction"
     },

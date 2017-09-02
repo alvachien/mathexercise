@@ -4,20 +4,20 @@
   </md-card-header>
   <md-card-content>
     <div class="demo-full-width">
-      <md-input-container>
+      <md-form-field>
         <input mdInput placeholder="{{'Home.UserID' | translate}}" readonly [(ngModel)]="UserID" name="User">
-      </md-input-container>
+      </md-form-field>
     </div>
     <div class="demo-full-width">
-      <md-input-container>
+      <md-form-field>
         <input mdInput placeholder="{{'Home.Mailbox' | translate }}" readonly [(ngModel)]="Mailbox" name="mailbox">
-      </md-input-container>
+      </md-form-field>
     </div>
     <div class="demo-full-width">
-      <md-input-container>
+      <md-form-field>
         <input mdInput placeholder="{{'Home.DisplayAs' | translate }}" [(ngModel)]="DisplayAs" name="dispas" required>
         <md-error>This field is required</md-error>
-      </md-input-container>
+      </md-form-field>
     </div>
   </md-card-content>
   <md-card-actions>
