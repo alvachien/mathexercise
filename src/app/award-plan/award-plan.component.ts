@@ -33,10 +33,10 @@ export class AwardPlanDataSource extends DataSource<any> {
   connect(): Observable<AwardPlan[]> {
     return this._apService.dataChangedSubject.switchMap((v: boolean) => {
       if (this._curuser !== null && this._curuser !== undefined && this._curuser.length > 0) {
-        return this._apService.fetchPlansForUser(this._curuser);  
+        return this._apService.fetchPlansForUser(this._curuser);
       } else {
         return Observable.of([]);
-      }      
+      }
     });
   }
 
@@ -109,9 +109,9 @@ export class AwardPlanComponent implements OnInit {
     this.dataSource = new AwardPlanDataSource();
     this.dataSource.AwardPlanService = this._apService;
 
-    for (let qt in QuizTypeEnum) {
+    for (const qt in QuizTypeEnum) {
       if (!Number.isNaN(+qt)) {
-        let qtu: QuizTypeUI = {
+        const qtu: QuizTypeUI = {
           value: +qt,
           displayas: QuizTypeEnum2UIString(+qt)
         };
@@ -143,7 +143,33 @@ export class AwardPlanComponent implements OnInit {
   }
 
   public onEditPlan(row) {
-    
+    // Todo
+    // this._curPlan = row;
+    // this.setDetailView('Home.EditAwardPlan');
+  }
+
+  public onDeletePlan(row) {
+    const dlginfo: MessageDialogInfo = {
+      Header: 'Home.ConfirmOnDeletion',
+      Content: 'Home.ConfirmOnDeletionDetail',
+      Button: MessageDialogButtonEnum.okcancel
+    };
+
+    this._dialog.open(MessageDialogComponent, {
+      disableClose: false,
+      width: '500px',
+      data: dlginfo
+    }).afterClosed().subscribe(x => {
+      // Do nothing!
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.log(`AC Math Exericse [Debug]: Message Dialog Result ${x}`);
+      }
+
+      if (x) {
+        this._apService.deleteAwardPlan(row);
+      }
+    });
+
   }
 
   public onUserChanged(event) {
@@ -154,7 +180,7 @@ export class AwardPlanComponent implements OnInit {
 
   public canDeactivate(): boolean {
     if (this.IsDetailView) {
-      let dlginfo: MessageDialogInfo = {
+      const dlginfo: MessageDialogInfo = {
         Header: 'Home.Error',
         Content: 'Home.QuizIsOngoing',
         Button: MessageDialogButtonEnum.onlyok
@@ -196,27 +222,22 @@ export class AwardPlanComponent implements OnInit {
       return false;
     }
 
-    // if ((this.CurrentPlan.MinQuizScore === null || this.CurrentPlan.MinQuizScore === undefined || this.Curr)
-    //   && (this.CurrentPlan.MinQuizScore === null || this.CurrentPlan.MinQuizScore === undefined)) {
-    //     return false;
-    //   }
-
     return true;
   }
 
   public onDetailPlanSubmit(): void {
     // Submit to the API
-    let apiurl = environment.APIBaseUrl + 'AwardPlan';
+    const apiurl = environment.APIBaseUrl + 'AwardPlan';
 
-    let jdata = this.CurrentPlan.prepareData();
-    let data = JSON && JSON.stringify(jdata);
+    const jdata = this.CurrentPlan.prepareData();
+    const data = JSON && JSON.stringify(jdata);
 
-    let headers = new Headers();
+    const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
     headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
 
-    let options = new RequestOptions({ headers: headers }); // Create a request option
+    const options = new RequestOptions({ headers: headers }); // Create a request option
     this._http.post(apiurl, data, options)
       .map((response: Response) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
@@ -230,7 +251,7 @@ export class AwardPlanComponent implements OnInit {
         }
 
         // Show a dialog for success
-        let dlginfo: MessageDialogInfo = {
+        const dlginfo: MessageDialogInfo = {
           Header: 'Home.Success',
           Content: 'Home.AwardPlanCreatedSuccessfully',
           Button: MessageDialogButtonEnum.onlyok
@@ -248,7 +269,7 @@ export class AwardPlanComponent implements OnInit {
           console.log('AC Math Exericse [Debug]: ' + error);
         }
         // Also show a dialog for error
-        let dlginfo: MessageDialogInfo = {
+        const dlginfo: MessageDialogInfo = {
           Header: 'Home.Error',
           Content: error,
           Button: MessageDialogButtonEnum.onlyok

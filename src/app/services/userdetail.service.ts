@@ -41,7 +41,7 @@ export class UserDetailService {
   constructor(private _http: Http,
     private _authService: AuthService) {
     if (environment.LoggingLevel >= LogLevel.Debug) {
-      console.log("ACMathExercies Log [Debug]: Entering UserDetailService constructor...");
+      console.log('ACMathExercies Log [Debug]: Entering UserDetailService constructor...');
     }
 
     this._usrDisplayAs = '';
@@ -50,12 +50,12 @@ export class UserDetailService {
 
   public fetchUserDetail(): Observable<any> {
     if (!this._isloaded) {
-      let headers = new Headers();
+      const headers = new Headers();
       headers.append('Content-Type', 'application/json');
       headers.append('Accept', 'application/json');
       headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-      let options = new RequestOptions({ headers: headers }); // Create a request option
-      let apiurl = environment.APIBaseUrl + 'UserDetail/' + this._authService.authSubject.getValue().getUserId();
+      const options = new RequestOptions({ headers: headers }); // Create a request option
+      const apiurl = environment.APIBaseUrl + 'UserDetail/' + this._authService.authSubject.getValue().getUserId();
 
       // !!!
       // Return Observable from a subscribe is not working!!!
@@ -89,7 +89,7 @@ export class UserDetailService {
       return this._http.get(apiurl, options).map((response: Response) => {
         this._isloaded = true;
 
-        let jdata = response.json();
+        const jdata = response.json();
 
         this._usrDisplayAs = jdata.displayAs;
         return this._usrDisplayAs;
@@ -108,18 +108,18 @@ export class UserDetailService {
       return;
     }
 
-    let headers = new Headers();
+    const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
     headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-    let options = new RequestOptions({ headers: headers }); // Create a request option
+    const options = new RequestOptions({ headers: headers }); // Create a request option
     let apiurl = environment.APIBaseUrl + 'UserDetail';
 
-    let data: any = {};
+    const data: any = {};
     data.userID = this._authService.authSubject.getValue().getUserId();
     data.displayAs = dis;
     data.others = '';
-    let jdata = JSON && JSON.stringify(data);
+    const jdata = JSON && JSON.stringify(data);
 
     if (this._usrDisplayAs.length === 0) {
       // Not exist yet, create
@@ -142,7 +142,7 @@ export class UserDetailService {
           }
         });
     } else {
-      // Update  
+      // Update
       apiurl = apiurl + '/' + this._authService.authSubject.getValue().getUserId();
       this._http.put(apiurl, jdata, options)
         .map((response: Response) => {
@@ -167,14 +167,14 @@ export class UserDetailService {
 
   public fetchAllUsers(): Observable<any> {
     if (!this._islistloaded) {
-      let apiurl = environment.APIBaseUrl + 'AttendedUser';
+      const apiurl = environment.APIBaseUrl + 'AttendedUser';
 
-      let headers = new Headers();
+      const headers = new Headers();
       headers.append('Content-Type', 'application/json');
       headers.append('Accept', 'application/json');
       headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
 
-      let options = new RequestOptions({ headers: headers }); // Create a request option
+      const options = new RequestOptions({ headers: headers }); // Create a request option
       return this._http.get(apiurl, options)
         .map((response: Response) => {
           if (environment.LoggingLevel >= LogLevel.Debug) {
@@ -182,12 +182,12 @@ export class UserDetailService {
           }
 
           this._islistloaded = true;
-          
-          let rjs = response.json();
+
+          const rjs = response.json();
           this._listUsers = [];
           if (rjs instanceof Array && rjs.length > 0) {
-            for (let si of rjs) {
-              let au: QuizAttendUser = {
+            for (const si of rjs) {
+              const au: QuizAttendUser = {
                 attenduser: si.attendUser,
                 displayas: si.displayAs
               };

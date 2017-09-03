@@ -11,11 +11,8 @@
       </md-select>
 
       <button md-icon-button [disabled]="!CurrentUser" (click)="onCreateNewExpense()">
-              <md-icon class="md-24" aria-label="Create">create_new_folder</md-icon>
-            </button>
-      <button md-icon-button>
-              <md-icon class="md-24" aria-label="Edit">delete</md-icon>
-            </button>
+        <md-icon class="md-24" aria-label="Create">create_new_folder</md-icon>
+      </button>
 
       <!-- This fills the remaining space of the current row -->
       <span class="example-fill-remaining-space"></span>
@@ -26,7 +23,15 @@
 
       <ng-container mdColumnDef="ID">
         <md-header-cell *mdHeaderCellDef> # </md-header-cell>
-        <md-cell *mdCellDef="let element">{{element.ID}} </md-cell>
+        <md-cell *mdCellDef="let element">
+          <button md-mini-fab (click)="onEditAward(element)">
+            <md-icon class="md-18" aria-label="Edit">edit</md-icon>
+          </button>
+          <button md-mini-fab (click)="onDeleteAward(element)">
+            <md-icon class="md-18" aria-label="Delete">delete</md-icon>
+          </button> 
+          {{element.ID}}
+        </md-cell>
       </ng-container>
       <ng-container mdColumnDef="AwardDate">
         <md-header-cell *mdHeaderCellDef> {{'Home.Date' | translate }} </md-header-cell>
@@ -37,18 +42,18 @@
         <md-cell *mdCellDef="let element"> {{element.AwardPlanID}} </md-cell>
       </ng-container>
       <ng-container mdColumnDef="QuizID">
-        <md-header-cell *mdHeaderCellDef> {{'Home.Quiz' | translate }} </md-header-cell>
-        <md-cell *mdCellDef="let element"> {{element.QuizID}} </md-cell>
+        <md-header-cell *mdHeaderCellDef> {{'Home.QuizType' | translate }} </md-header-cell>
+        <md-cell *mdCellDef="let element"> {{element.QuizType}} </md-cell>
       </ng-container>
       <ng-container mdColumnDef="Award">
         <md-header-cell *mdHeaderCellDef> {{'Home.Award' | translate }} </md-header-cell>
         <md-cell *mdCellDef="let element"> {{element.Award}} </md-cell>
       </ng-container>
       <ng-container mdColumnDef="UsedReason">
-          <md-header-cell *mdHeaderCellDef> {{'Home.ExpenseReason' | translate }} </md-header-cell>
-          <md-cell *mdCellDef="let element"> {{element.UsedReason}} </md-cell>
-        </ng-container>
-  
+        <md-header-cell *mdHeaderCellDef> {{'Home.ExpenseReason' | translate }} </md-header-cell>
+        <md-cell *mdCellDef="let element"> {{element.UsedReason}} </md-cell>
+      </ng-container>
+
       <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
       <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
     </md-table>

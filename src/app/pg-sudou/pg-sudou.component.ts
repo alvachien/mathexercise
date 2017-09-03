@@ -15,9 +15,9 @@ import { environment } from '../../environments/environment';
 export class SudouCell {
   num: number;
   exp_num: number;
-  fixed: boolean = true;
+  fixed = true;
   allowInput: boolean;
-  inConflict: boolean = false;
+  inConflict = false;
 
   public toString(): string {
     if (this.num === null || this.num === undefined) {
@@ -37,8 +37,8 @@ export interface SudouPosition {
 }
 
 function InArray(obj, arr) {
-  for (var i in arr) {
-    if (arr[i] == obj) {
+  for (const i in arr) {
+    if (arr[i] === obj) {
       return true;
     }
   }
@@ -84,40 +84,41 @@ class SudouEditPanel {
   public Draw(ctx: any) {
     ctx.fillStyle = 'pink';
     ctx.fillRect(this._drawX, this._drawY, this._w, this._h);
-    ctx.strokeStyle = "#000000";
+    ctx.strokeStyle = '#000000';
     ctx.lineWidth = 2.0;
     ctx.strokeRect(this._drawX, this._drawY, this._w, this._h);
-    ctx.strokeStyle = "#000000";
+    ctx.strokeStyle = '#000000';
     ctx.lineWidth = 1.0;
-    for (var i = 1; i <= SudouSize; i++) {
-      var itemX = this._drawX + ((i - 1) % 3) * this._itemWidth;
-      var itemY = this._drawY + Math.floor((i - 1) / 3) * this._itemWidth;
-      ctx.strokeStyle = "#000000";
+    for (let i = 1; i <= SudouSize; i++) {
+      const itemX = this._drawX + ((i - 1) % 3) * this._itemWidth;
+      const itemY = this._drawY + Math.floor((i - 1) / 3) * this._itemWidth;
+      ctx.strokeStyle = '#000000';
       ctx.strokeRect(
         itemX,
         itemY,
         this._itemWidth, this._itemWidth);
 
       if (InArray(i, this._nlist)) {
-        ctx.fillStyle = "green";
-        ctx.font = "Bold " + (this._itemWidth / 2) + "px Arial";
+        ctx.fillStyle = 'green';
+        ctx.font = 'Bold ' + (this._itemWidth / 2) + 'px Arial';
         ctx.fillText(i.toString(), itemX + this._itemWidth / 3, itemY + this._itemWidth / 1.5);
       }
     }
   }
 
   public GetHitNumber(x, y) {
-    var j = Math.floor((x - this._drawX) / this._itemWidth);
-    var i = Math.floor((y - this._drawY) / this._itemWidth);
+    const j = Math.floor((x - this._drawX) / this._itemWidth);
+    const i = Math.floor((y - this._drawY) / this._itemWidth);
 
     if (j < 0 || j > 2 || i < 0 || i > 3) {
       return -1;
     }
 
-    if (i === 3)
+    if (i === 3) {
       return null;
+    }
 
-    var n = i * 3 + j + 1;
+    const n = i * 3 + j + 1;
 
     if (!InArray(n, this._nlist)) {
       return null;
@@ -143,7 +144,47 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
   private _editPanel: SudouEditPanel = null;
   private _dataCells: any = [];
   private _dod: QuizDegreeOfDifficulity;
-  private _started: boolean = false;
+  private _started = false;
+  /**
+   * Finish event
+   */
+  @Output() finishEvent: EventEmitter<any> = new EventEmitter();
+  
+  /**
+   * Degree of difficulity
+   */
+  @Input()
+  set sudouDoD(dod: QuizDegreeOfDifficulity) {
+    if (environment.LoggingLevel >= LogLevel.Debug) {
+      console.log('AC Math Exercise [Debug]: Entering setter of sudouStart in PgSudouComponent' + dod.toString());
+    }
+
+    if (this._dod !== dod) {
+      this._dod = dod;
+    }
+  }
+  /**
+   * Sudou object
+   */
+  @Input()
+  set sudouObject(obj: Sudou) {
+    if (environment.LoggingLevel >= LogLevel.Debug) {
+      console.log('AC Math Exercise [Debug]: Entering setter of sudouObject in PgSudouComponent');
+    }
+
+    this._objSudou = obj;
+  }
+  /**
+   * Start the game
+   */
+  @Input()
+  set sudouStart(bstart: boolean) {
+    if (environment.LoggingLevel >= LogLevel.Debug) {
+      console.log('AC Math Exercise [Debug]: Entering setter of sudouStart in PgSudouComponent' + bstart.toString());
+    }
+
+    this._started = bstart;
+  }
 
   constructor() {
     this._dod = QuizDegreeOfDifficulity.medium;
@@ -151,7 +192,7 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
 
   ngOnInit() {
     if (environment.LoggingLevel >= LogLevel.Debug) {
-      console.log("AC Math Exercise [Debug]: Entering ngOnInit of PgSudouComponent");
+      console.log('AC Math Exercise [Debug]: Entering ngOnInit of PgSudouComponent');
     }
   }
 
@@ -162,20 +203,20 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
     this._itemHeight = this._height / SudouSize;
 
     if (this._started && this._objSudou != null) {
-      let datrst = this._objSudou.getDataCells();
+      const datrst = this._objSudou.getDataCells();
       this._dataCells = [];
-      for (let i: number = 0; i < SudouSize; i++) {
-        let ar = [];
-        for (let j: number = 0; j < SudouSize; j++) {
+      for (let i = 0; i < SudouSize; i++) {
+        const ar = [];
+        for (let j = 0; j < SudouSize; j++) {
           ar.push(0);
         }
         this._dataCells.push(ar);
       }
 
-      for (let i: number = 0; i < SudouSize; i++) {
-        for (let j: number = 0; j < SudouSize; j++) {
-          let cell: SudouCell = new SudouCell();
-          switch(this._dod) {
+      for (let i = 0; i < SudouSize; i++) {
+        for (let j = 0; j < SudouSize; j++) {
+          const cell: SudouCell = new SudouCell();
+          switch (this._dod) {
             case QuizDegreeOfDifficulity.medium: {
               if (Math.random() * 6 < 2) {
                 cell.fixed = false;
@@ -222,95 +263,51 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
 
   ngOnDestroy() {
     if (environment.LoggingLevel >= LogLevel.Debug) {
-      console.log("AC Math Exercise [Debug]: Entering ngOnDestroy of PgSudouComponent");
+      console.log('AC Math Exercise [Debug]: Entering ngOnDestroy of PgSudouComponent');
     }
-  }
-
-  /**
-   * Finish event
-   */
-  @Output() finishEvent: EventEmitter<any> = new EventEmitter();
-  /**
-   * Degree of difficulity
-   */
-  @Input() 
-  set sudouDoD(dod: QuizDegreeOfDifficulity) {
-    if (environment.LoggingLevel >= LogLevel.Debug) {
-      console.log("AC Math Exercise [Debug]: Entering setter of sudouStart in PgSudouComponent" + dod.toString());
-    }
-
-    if (this._dod !== dod) {
-      this._dod = dod;
-    }
-  }
-  /**
-   * Sudou object
-   */
-  @Input()
-  set sudouObject(obj: Sudou) {
-    if (environment.LoggingLevel >= LogLevel.Debug) {
-      console.log("AC Math Exercise [Debug]: Entering setter of sudouObject in PgSudouComponent");
-    }
-
-    this._objSudou = obj;
-  }
-  /**
-   * Start the game
-   */
-  @Input() 
-  set sudouStart(bstart: boolean) {
-    if (environment.LoggingLevel >= LogLevel.Debug) {
-      console.log("AC Math Exercise [Debug]: Entering setter of sudouStart in PgSudouComponent" + bstart.toString());
-    }
-
-    this._started = bstart;
   }
 
   private onDraw() {
     if (environment.LoggingLevel >= LogLevel.Debug) {
-      console.log("AC Math Exercise [Debug]: Entering onDraw in PgSudouComponent");
+      console.log('AC Math Exercise [Debug]: Entering onDraw in PgSudouComponent');
     }
 
-    let cvBuffer = null;
-    let ctx2 = this.canvasSudou.nativeElement.getContext("2d");
+    const cvBuffer = null;
+    const ctx2 = this.canvasSudou.nativeElement.getContext('2d');
 
-    ctx2.fillStyle = "#ffffff";
+    ctx2.fillStyle = '#ffffff';
     ctx2.fillRect(0, 0, this._width, this._height);
-    ctx2.font = "Bold " + this._itemWidth / 1.5 + "px Roboto";
+    ctx2.font = 'Bold ' + this._itemWidth / 1.5 + 'px Roboto';
 
-    for (let i: number = 0; i < SudouSize; i++) {
-      for (let j: number = 0; j < SudouSize; j++) {
-        let cell: SudouCell = this._dataCells[i][j];
+    for (let i = 0; i < SudouSize; i++) {
+      for (let j = 0; j < SudouSize; j++) {
+        const cell: SudouCell = this._dataCells[i][j];
 
         if (cell.fixed) {
-          ctx2.fillStyle = "#dddddd";
+          ctx2.fillStyle = '#dddddd';
           ctx2.fillRect(j * this._itemWidth, i * this._itemHeight, this._itemWidth, this._itemHeight);
         }
 
-        ctx2.fillStyle = "#008800";
+        ctx2.fillStyle = '#008800';
         if (cell.num === null) {
-        }
-        else {
+        } else {
           if (cell.inConflict) {
-            ctx2.fillStyle = "red";
-          }
-          else if (cell.fixed) {
-            ctx2.fillStyle = "#000000";
-          }
-          else {
-            ctx2.fillStyle = "#008800";
+            ctx2.fillStyle = 'red';
+          } else if (cell.fixed) {
+            ctx2.fillStyle = '#000000';
+          } else {
+            ctx2.fillStyle = '#008800';
           }
           ctx2.fillText(cell.num.toString(), (j + 0.3) * this._itemWidth, (i + 0.8) * this._itemHeight);
         }
       }
     }
     ctx2.lineWidth = 1.0;
-    ctx2.strokeStyle = "#000000";
-    for (var i = 0; i < 10; i++) {
-      if (i % 3 == 0) {
+    ctx2.strokeStyle = '#000000';
+    for (let i: number = 0; i < 10; i++) {
+      if (i % 3 === 0) {
         ctx2.lineWidth = 3.0;
-      }
-      else {
+      } else {
         ctx2.lineWidth = 1.0;
       }
 
@@ -325,10 +322,6 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
     }
   }
 
-  // @HostListener('mousemove', ['$event'])
-  // public onSudouCanvasMouseMove(evt: MouseEvent) {
-  // }
-
   @HostListener('mousedown', ['$event'])
   public onSudouCanvasMouseDown(evt: MouseEvent) {
   }
@@ -336,16 +329,16 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
   @HostListener('mouseup', ['$event'])
   public onSudouCanvasMouseUp(evt: MouseEvent) {
     if (environment.LoggingLevel >= LogLevel.Debug) {
-      console.log("AC Math Exercise [Debug]: Entering onSudouCanvasMouseUp of PgSudouComponent");
+      console.log('AC Math Exercise [Debug]: Entering onSudouCanvasMouseUp of PgSudouComponent');
     }
 
-    let loc = this.getPointOnCanvas(evt.target, evt.clientX, evt.clientY);
+    const loc = this.getPointOnCanvas(evt.target, evt.clientX, evt.clientY);
     this.ProcessMouseClick(loc);
   }
 
   private getCellIndex(pos: any) {
-    var j = Math.floor(pos.x / this._itemWidth);
-    var i = Math.floor(pos.y / this._itemHeight);
+    const j = Math.floor(pos.x / this._itemWidth);
+    const i = Math.floor(pos.y / this._itemHeight);
     return {
       j: j,
       i: i
@@ -354,7 +347,7 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private ProcessMouseClick(pos: any) {
     if (this._editingCellIndex === null) {
-      let index: any = this.getCellIndex(pos);
+      const index: any = this.getCellIndex(pos);
       if (index.i < 0 || index.i > 8 || index.j < 0 || index.j > 8) {
         this._editingCellIndex = null;
         this._editPanel = null;
@@ -363,8 +356,8 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
         return;
       }
 
-      let cell: SudouCell = this._dataCells[index.i][index.j];
-      if (cell.fixed == true) {
+      const cell: SudouCell = this._dataCells[index.i][index.j];
+      if (cell.fixed === true) {
         this._editingCellIndex = null;
         this._editPanel = null;
         this.onDraw();
@@ -372,16 +365,15 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
       }
 
       this._editingCellIndex = index;
-      let nList = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+      const nList = [1, 2, 3, 4, 5, 6, 7, 8, 9];
       this._editPanel = new SudouEditPanel(pos.x, pos.y, this._itemWidth / 1.5, nList, this._width, this._height);
-      let ctx2 = this.canvasSudou.nativeElement.getContext("2d");
+      const ctx2 = this.canvasSudou.nativeElement.getContext('2d');
       this._editPanel.Draw(ctx2);
     } else {
-      let seleN = this._editPanel.GetHitNumber(pos.x, pos.y);
+      const seleN = this._editPanel.GetHitNumber(pos.x, pos.y);
       if (seleN == null) {
         this._dataCells[this._editingCellIndex.i][this._editingCellIndex.j].N = null;
-      }
-      else if (seleN === -1) { // Out of the panel
+      } else if (seleN === -1) { // Out of the panel
         this._editingCellIndex = null;
         this._editPanel = null;
 
@@ -407,8 +399,8 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
   private checkFinish() {
     this.checkAllConflicts();
 
-    for (let i: number = 0; i < SudouSize; i++) {
-      for (let j: number = 0; j < SudouSize; j++) {
+    for (let i = 0; i < SudouSize; i++) {
+      for (let j = 0; j < SudouSize; j++) {
         if (this._dataCells[i][j].num === null || this._dataCells[i][j].InConflict)
           return false;
       }
@@ -418,33 +410,33 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private checkAllConflicts() {
-    for (let i: number = 0; i < SudouSize; i++) {
-      for (let j: number = 0; j < SudouSize; j++) {
+    for (let i = 0; i < SudouSize; i++) {
+      for (let j = 0; j < SudouSize; j++) {
         this._dataCells[i][j].inConflict = this.checkConflict({ row: i, column: j });
       }
     }
   }
 
   private checkConflict(pos: SudouPosition) {
-    let cell: SudouCell = this._dataCells[pos.row][pos.column];
+    const cell: SudouCell = this._dataCells[pos.row][pos.column];
     if (cell.num === null || cell.num === undefined) {
       return false;
     }
 
-    for (let i: number = 0; i < SudouSize; i++) {
+    for (let i = 0; i < SudouSize; i++) {
       if (this._dataCells[pos.row][i].num === cell.num && i !== pos.column) {
         return true;
       }
     }
 
-    for (let i: number = 0; i < SudouSize; i++) {
+    for (let i = 0; i < SudouSize; i++) {
       if (this._dataCells[i][pos.column].num === cell.num && i !== pos.row) {
         return true;
       }
     }
 
-    let iStart: number = Math.floor(pos.row / 3) * 3;
-    let jStart: number = Math.floor(pos.column / 3) * 3;
+    const iStart: number = Math.floor(pos.row / 3) * 3;
+    const jStart: number = Math.floor(pos.column / 3) * 3;
 
     for (let i: number = iStart; i < iStart + 3; i++) {
       for (let j: number = jStart; j < jStart + 3; j++) {
@@ -458,9 +450,9 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private getPointOnCanvas(canvas, x, y) {
-    var bbox = canvas.getBoundingClientRect();
-    var x2 = (x - bbox.left) * (canvas.width / bbox.width);
-    var y2 = (y - bbox.top) * (canvas.height / bbox.height);
+    const bbox = canvas.getBoundingClientRect();
+    const x2 = (x - bbox.left) * (canvas.width / bbox.width);
+    const y2 = (y - bbox.top) * (canvas.height / bbox.height);
     return {
       x: x2,
       y: y2

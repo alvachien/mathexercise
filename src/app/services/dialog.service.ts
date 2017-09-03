@@ -9,6 +9,6 @@ export class DialogService {
   }
 
   public FailureItems: PrimarySchoolMathQuizItem[] = [];
-  public CurrentScore: number = 0;
+  public CurrentScore = 0;
   public CurrentQuiz: PrimarySchoolMathQuiz = null;
 }

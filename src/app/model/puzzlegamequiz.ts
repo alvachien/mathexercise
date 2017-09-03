@@ -20,13 +20,13 @@ export class Cal24QuizItem extends PrimarySchoolMathQuizItem {
     }
     set Items(aits: number[]) {
         this._arItems = [];
-        for(let it of aits) {
+        for (const it of aits) {
             this._arItems.push(it);
         }
     }
 
     public IsCorrect(): boolean {
-        let brst = super.IsCorrect();
+        const brst = super.IsCorrect();
         if (!brst) {
             return false;
         }
@@ -39,17 +39,17 @@ export class Cal24QuizItem extends PrimarySchoolMathQuizItem {
     }
 
     public getQuizFormat(): string {
-        let rststr = super.getQuizFormat();
+        const rststr = super.getQuizFormat();
         return rststr + this._arItems.join(QuizSplitter);
     }
 
     public getCorrectFormula(): string {
-        let rststr = super.getCorrectFormula();
+        const rststr = super.getCorrectFormula();
         return rststr;
     }
 
     public getInputtedForumla(): string {
-        let rststr = super.getInputtedForumla();
+        const rststr = super.getInputtedForumla();
         return rststr;
     }
 
@@ -60,7 +60,7 @@ export class Cal24QuizItem extends PrimarySchoolMathQuizItem {
     }
 
     public static restoreFromString(s: string): Cal24QuizItem {
-        let cqi: Cal24QuizItem = new Cal24QuizItem();
+        const cqi: Cal24QuizItem = new Cal24QuizItem();
         // todo!!!
 
         return cqi;
@@ -88,7 +88,7 @@ export class SudouQuizItem extends PrimarySchoolMathQuizItem {
     }
 
     public IsCorrect(): boolean {
-        let brst = super.IsCorrect();
+        const brst = super.IsCorrect();
         if (!brst) {
             return false;
         }
@@ -101,17 +101,17 @@ export class SudouQuizItem extends PrimarySchoolMathQuizItem {
     }
 
     public getQuizFormat(): string {
-        let rststr = super.getQuizFormat();
+        const rststr = super.getQuizFormat();
         return rststr + this._info;
     }
 
     public getCorrectFormula(): string {
-        let rststr = super.getCorrectFormula();
+        const rststr = super.getCorrectFormula();
         return rststr;
     }
 
     public getInputtedForumla(): string {
-        let rststr = super.getInputtedForumla();
+        const rststr = super.getInputtedForumla();
         return rststr;
     }
 
@@ -122,7 +122,7 @@ export class SudouQuizItem extends PrimarySchoolMathQuizItem {
     }
 
     public static restoreFromString(s: string): Cal24QuizItem {
-        let cqi: Cal24QuizItem = new Cal24QuizItem();
+        const cqi: Cal24QuizItem = new Cal24QuizItem();
         // todo!!!
 
         return cqi;

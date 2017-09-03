@@ -15,7 +15,7 @@ export enum PrimarySchoolFormulaEnum {
 }
 
 export function getFormulaNameString(fe: PrimarySchoolFormulaEnum): string {
-    let rst: string = '';
+    let rst = '';
     switch (fe) {
         case PrimarySchoolFormulaEnum.AreaOfCircle: {
             rst = 'Math.AreaOfCircle';
@@ -66,7 +66,7 @@ export function getFormulaNameString(fe: PrimarySchoolFormulaEnum): string {
             rst = 'Math.DistanceAndSpeed';
         }
         break;
-        
+
         default:
         break;
     }
@@ -75,7 +75,7 @@ export function getFormulaNameString(fe: PrimarySchoolFormulaEnum): string {
 }
 
 export function getFormulaUIString(fe: PrimarySchoolFormulaEnum): string {
-    let rst: string = '';
+    let rst = '';
     switch (fe) {
         case PrimarySchoolFormulaEnum.AreaOfCircle: {
             rst = 'S = πr<sup>2</sup>';
@@ -126,7 +126,7 @@ export function getFormulaUIString(fe: PrimarySchoolFormulaEnum): string {
             rst = 'S = vh';
         }
         break;
-        
+
         default:
         break;
     }

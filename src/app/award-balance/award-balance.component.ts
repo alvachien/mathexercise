@@ -106,4 +106,12 @@ export class AwardBalanceComponent implements OnInit {
   public onCreateNewExpense(): void {
 
   }
+
+  public onEditAward(data) {
+
+  }
+
+  public onDeleteAward(data) {
+    
+  }
 }

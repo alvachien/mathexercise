@@ -38,35 +38,35 @@ export class FailureRetestComponent implements OnInit {
   }
 
   ngOnInit() {
-    let usr = this._authService.authSubject.getValue().getUserId();
-    let apiurl = environment.APIBaseUrl + 'quizfailure/' + usr;
+    const usr = this._authService.authSubject.getValue().getUserId();
+    const apiurl = environment.APIBaseUrl + 'quizfailure/' + usr;
 
-    let headers = new Headers();
+    const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
     headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-    let options = new RequestOptions({ headers: headers }); // Create a request option
+    const options = new RequestOptions({ headers: headers }); // Create a request option
     this._http.get(apiurl, options)
       .map((response: Response) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log('AC Math Exericse [Debug]: ' + response);
-        }        
+        }
         return response.json();
       })
       .subscribe(x => {
         if (x instanceof Array && x.length > 0) {
-          for (let si of x) {
+          for (const si of x) {
             if (environment.LoggingLevel >= LogLevel.Debug) {
               console.log('AC Math Exericse [Debug]: ' + si);
             }
-            let qi: QuizFailureItem = new QuizFailureItem();
+            const qi: QuizFailureItem = new QuizFailureItem();
             qi.quiztype = +si.quizType;
             qi.quizid = +si.quizID;
             qi.quizfailidx = +si.quizFailIndex;
             qi.quizitemstore = si.expected;
             qi.inputted = si.inputted;
             qi.submitdate = new Date(si.submitDate);
-            switch(qi.quiztype) {
+            switch (qi.quiztype) {
               case QuizTypeEnum.add: qi.qsInstance = AdditionQuizItem.restoreFromString(si.expected); break;
               case QuizTypeEnum.sub: qi.qsInstance = SubtractionQuizItem.restoreFromString(si.expected); break;
               case QuizTypeEnum.multi: qi.qsInstance = MultiplicationQuizItem.restoreFromString(si.expected); break;
@@ -89,12 +89,12 @@ export class FailureRetestComponent implements OnInit {
 
   public canDeactivate(): boolean {
     if (this.listFailItems.length > 0) {
-      let dlginfo: MessageDialogInfo = {
+      const dlginfo: MessageDialogInfo = {
         Header: 'Home.Error',
         Content: 'Home.QuizIsOngoing',
         Button: MessageDialogButtonEnum.onlyok
       };
-      
+
       this.dialog.open(MessageDialogComponent, {
         disableClose: false,
         width: '500px',
@@ -110,7 +110,7 @@ export class FailureRetestComponent implements OnInit {
 
     return true;
   }
-  
+
   public getUIStringForType(qt: QuizTypeEnum): string {
     return QuizTypeEnum2UIString(qt);
   }
@@ -134,10 +134,10 @@ export class FailureRetestComponent implements OnInit {
       return false;
     }
 
-    for(let fi of this.listFailItems) {
-      switch(fi.quiztype) {
+    for (const fi of this.listFailItems) {
+      switch (fi.quiztype) {
         case QuizTypeEnum.add: {
-          let aqi: AdditionQuizItem = <AdditionQuizItem>fi.qsInstance;
+          const aqi: AdditionQuizItem = <AdditionQuizItem>fi.qsInstance;
           if (aqi.InputtedResult === undefined
             || aqi.InputtedResult === null) {
               return false;
@@ -146,8 +146,8 @@ export class FailureRetestComponent implements OnInit {
         break;
 
         case QuizTypeEnum.sub: {
-          let sqi: SubtractionQuizItem = <SubtractionQuizItem>fi.qsInstance;
-          if (sqi.InputtedResult === undefined 
+          const sqi: SubtractionQuizItem = <SubtractionQuizItem>fi.qsInstance;
+          if (sqi.InputtedResult === undefined
           || sqi.InputtedResult === null) {
             return false;
           }
@@ -155,7 +155,7 @@ export class FailureRetestComponent implements OnInit {
         break;
 
         case QuizTypeEnum.multi: {
-          let mqi: MultiplicationQuizItem = <MultiplicationQuizItem>fi.qsInstance;
+          const mqi: MultiplicationQuizItem = <MultiplicationQuizItem>fi.qsInstance;
           if (mqi.InputtedResult === undefined
             || mqi.InputtedResult === null) {
               return false;
@@ -164,7 +164,7 @@ export class FailureRetestComponent implements OnInit {
         break;
 
         case QuizTypeEnum.div: {
-          let dqi: DivisionQuizItem = <DivisionQuizItem>fi.qsInstance;
+          const dqi: DivisionQuizItem = <DivisionQuizItem>fi.qsInstance;
           if (dqi.InputtedQuotient === undefined || dqi.InputtedQuotient === null
             || dqi.InputtedRemainder === undefined || dqi.InputtedRemainder === null) {
               return false;
@@ -173,7 +173,7 @@ export class FailureRetestComponent implements OnInit {
         break;
 
         case QuizTypeEnum.formula: {
-          let fqi: FormulaQuizItemBase = <FormulaQuizItemBase>fi.qsInstance;
+          const fqi: FormulaQuizItemBase = <FormulaQuizItemBase>fi.qsInstance;
           if (fqi.InputtedResult === undefined
             || fqi.InputtedResult === null) {
             return false;
@@ -191,10 +191,10 @@ export class FailureRetestComponent implements OnInit {
 
   public onQuizSubmit() {
     this._dlgsvc.FailureItems = [];
-    for(let fi of this.listFailItems) {
-      switch(fi.quiztype) {
+    for (const fi of this.listFailItems) {
+      switch (fi.quiztype) {
         case QuizTypeEnum.add: {
-          let aqi: AdditionQuizItem = <AdditionQuizItem>fi.qsInstance;
+          const aqi: AdditionQuizItem = <AdditionQuizItem>fi.qsInstance;
           if (!aqi.IsCorrect()) {
             this._dlgsvc.FailureItems.push(aqi);
           }
@@ -202,7 +202,7 @@ export class FailureRetestComponent implements OnInit {
         break;
 
         case QuizTypeEnum.sub: {
-          let sqi: SubtractionQuizItem = <SubtractionQuizItem>fi.qsInstance;
+          const sqi: SubtractionQuizItem = <SubtractionQuizItem>fi.qsInstance;
           if (!sqi.IsCorrect()) {
             this._dlgsvc.FailureItems.push(sqi);
           }
@@ -210,7 +210,7 @@ export class FailureRetestComponent implements OnInit {
         break;
 
         case QuizTypeEnum.multi: {
-          let mqi: MultiplicationQuizItem = <MultiplicationQuizItem>fi.qsInstance;
+          const mqi: MultiplicationQuizItem = <MultiplicationQuizItem>fi.qsInstance;
           if (!mqi.IsCorrect()) {
             this._dlgsvc.FailureItems.push(mqi);
           }
@@ -218,7 +218,7 @@ export class FailureRetestComponent implements OnInit {
         break;
 
         case QuizTypeEnum.div: {
-          let dqi: DivisionQuizItem = <DivisionQuizItem>fi.qsInstance;
+          const dqi: DivisionQuizItem = <DivisionQuizItem>fi.qsInstance;
           if (!dqi.IsCorrect()) {
             this._dlgsvc.FailureItems.push(dqi);
           }
@@ -226,7 +226,7 @@ export class FailureRetestComponent implements OnInit {
         break;
 
         case QuizTypeEnum.formula: {
-          let fqi: FormulaQuizItemBase = <FormulaQuizItemBase>fi.qsInstance;
+          const fqi: FormulaQuizItemBase = <FormulaQuizItemBase>fi.qsInstance;
           if (!fqi.IsCorrect()) {
             this._dlgsvc.FailureItems.push(fqi);
           }
@@ -246,14 +246,14 @@ export class FailureRetestComponent implements OnInit {
         });
       } else {
         this.listFailItems = [];
-        
+
         // Also show a dialog
-        let dlginfo: MessageDialogInfo = {
+        const dlginfo: MessageDialogInfo = {
           Header: 'Home.Finished',
           Content: 'Home.FailureRetestFinished',
           Button: MessageDialogButtonEnum.onlyok
         };
-        
+
         this.dialog.open(MessageDialogComponent, {
           disableClose: false,
           width: '500px',

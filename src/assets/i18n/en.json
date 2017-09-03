@@ -101,6 +101,8 @@
         "Hard": "Hard",
         "AwardPlan": "Award Plan",
         "CreateAwardPlan": "Create an Award Plan",
+        "EditAwardPlan": "Edit an Award Plan",
+        "DeleteAwardPlan": "Delete an Award Plan",
         "ValidFrom": "Valid from",
         "ValidTo": "Valid to",
         "QuizType": "Quiz type",
@@ -116,6 +118,8 @@
         "AwardBalanceByUser": "Award Balance for current user",
         "AwardPointAssigned": "Award Points Assigned",
         "ExpenseReason": "Expense reason",
+        "ConfirmOnDeletion": "Confirm on Deletion",
+        "ConfirmOnDeletionDetail": "Please be aware that the deletion cannot be undo, please confirm to continue",
         
         "Underconstruction": "Page still under construction"
     },

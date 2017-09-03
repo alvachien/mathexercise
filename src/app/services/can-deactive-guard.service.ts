@@ -13,7 +13,7 @@ export class CanDeactivateGuard implements CanDeactivate<CanComponentDeactivate>
 
   canDeactivate(component: CanComponentDeactivate) {
     if (environment.LoggingLevel >= LogLevel.Debug) {
-      console.log("AC Math Exercise [Debug]: entering canDeactivate of CanDeactivateGuard");
+      console.log('AC Math Exercise [Debug]: entering canDeactivate of CanDeactivateGuard');
     }
     return component.canDeactivate ? component.canDeactivate() : true;
   }

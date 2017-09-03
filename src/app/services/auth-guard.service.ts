@@ -13,14 +13,14 @@ export class AuthGuard implements CanActivate {
     constructor(private authService: AuthService, private router: Router) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        let url: string = state.url;
+        const url: string = state.url;
 
         if (!environment.LoginRequired) {
             return true;
         }
 
         if (environment.LoggingLevel >= LogLevel.Debug) {
-            console.log("AC Math Exercise [Debug]: entering can Activate of AuthGuard");
+            console.log('AC Math Exercise [Debug]: entering can Activate of AuthGuard');
         }
 
         return this.checkLogin(url);
@@ -30,7 +30,7 @@ export class AuthGuard implements CanActivate {
 
         if (this.authService.authSubject.getValue().isAuthorized) {
             if (environment.LoggingLevel >= LogLevel.Debug) {
-                console.log("AC Math Exercise [Debug]: entering checkLogin of AuthGuard with TRUE");
+                console.log('AC Math Exercise [Debug]: entering checkLogin of AuthGuard with TRUE');
             }
             return true;
         }
@@ -41,7 +41,7 @@ export class AuthGuard implements CanActivate {
 
         // Navigate to the login page with extras
         if (environment.LoggingLevel >= LogLevel.Debug) {
-            console.log("AC Math Exercise [Debug]: entering checkLogin of AuthGuard with FALSE, therefore redirecting...");
+            console.log('AC Math Exercise [Debug]: entering checkLogin of AuthGuard with FALSE, therefore redirecting...');
         }
         this.authService.doLogin();
 

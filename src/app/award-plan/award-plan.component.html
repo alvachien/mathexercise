@@ -13,9 +13,6 @@
       <button md-icon-button [disabled]="!CurrentUser" (click)="onCreatePlan()">
         <md-icon class="md-24" aria-label="Create">create_new_folder</md-icon>
       </button>
-      <button md-icon-button>
-        <md-icon class="md-24" aria-label="Edit">delete</md-icon>
-      </button>
 
       <!-- This fills the remaining space of the current row -->
       <span class="example-fill-remaining-space"></span>
@@ -27,7 +24,15 @@
 
         <ng-container mdColumnDef="ID">
           <md-header-cell *mdHeaderCellDef> # </md-header-cell>
-          <md-cell *mdCellDef="let element" (click)="onEditPlan(row)"><md-checkbox></md-checkbox> {{element.ID}} </md-cell>
+          <md-cell *mdCellDef="let element">
+            <button md-mini-fab (click)="onEditPlan(element)">
+              <md-icon class="md-18" aria-label="Edit">edit</md-icon>
+            </button>
+            <button md-mini-fab (click)="onDeletePlan(element)">
+              <md-icon class="md-18" aria-label="Delete">delete</md-icon>
+            </button>
+            {{element.ID}} 
+          </md-cell>
         </ng-container>
         <ng-container mdColumnDef="ValidFrom">
           <md-header-cell *mdHeaderCellDef> {{'Home.ValidFrom' | translate }} </md-header-cell>
@@ -39,7 +44,7 @@
         </ng-container>
         <ng-container mdColumnDef="QuizType">
           <md-header-cell *mdHeaderCellDef> {{'Home.QuizType' | translate }} </md-header-cell>
-          <md-cell *mdCellDef="let element"> {{element.getQuizTypeUIString()}} </md-cell>
+          <md-cell *mdCellDef="let element"> {{element.getQuizTypeUIString() | translate}} </md-cell>
         </ng-container>
         <ng-container mdColumnDef="AwardCondition">
           <md-header-cell *mdHeaderCellDef> {{'Home.AwardCondition' | translate }} </md-header-cell>

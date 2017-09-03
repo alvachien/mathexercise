@@ -18,7 +18,7 @@ export class AdditionQuizItem extends PrimarySchoolMathFAOQuizItem {
         this._inputtedResult = ir;
     }
     public IsCorrect(): boolean {
-        let brst = super.IsCorrect();
+        const brst = super.IsCorrect();
         if (!brst) {
             return brst;
         }
@@ -37,27 +37,27 @@ export class AdditionQuizItem extends PrimarySchoolMathFAOQuizItem {
     constructor(lft: number, right: number) {
         super(lft, right);
 
-        this._result = Math.round(this.LeftNumber + this.RightNumber);    
+        this._result = Math.round(this.LeftNumber + this.RightNumber);
     }
 
     public getCorrectFormula(): string {
         return this.LeftNumber.toString()
-            + " + " + this.RightNumber.toString() + " = " + this.Result.toString();
+            + ' + ' + this.RightNumber.toString() + ' = ' + this.Result.toString();
     }
 
     public getInputtedForumla(): string {
         return this.LeftNumber.toString()
-            + " + " + this.RightNumber.toString() + " = " + ((this.InputtedResult !== undefined && this.InputtedResult !== null)? this.InputtedResult.toString() : "");
+            + ' + ' + this.RightNumber.toString() + ' = ' + ((this.InputtedResult !== undefined && this.InputtedResult !== null) ? this.InputtedResult.toString() : '');
     }
-    
+
     public getQuizFormat(): string {
-        let rststr = super.getQuizFormat();
+        const rststr = super.getQuizFormat();
         return rststr + this.LeftNumber.toString()
-            + " + " + this.RightNumber.toString() + " = ";
+            + ' + ' + this.RightNumber.toString() + ' = ';
     }
 
     public static restoreFromString(s: string): AdditionQuizItem {
-        let qi: PrimarySchoolMathFAOQuizItem = super.restoreFromString(s);
+        const qi: PrimarySchoolMathFAOQuizItem = super.restoreFromString(s);
         return new AdditionQuizItem(qi.LeftNumber, qi.RightNumber);
     }
 }
@@ -79,7 +79,7 @@ export class SubtractionQuizItem extends PrimarySchoolMathFAOQuizItem {
         this._inputtedResult = ir;
     }
     public IsCorrect(): boolean {
-        let brst = super.IsCorrect();
+        const brst = super.IsCorrect();
         if (!brst) {
             return brst;
         }
@@ -98,30 +98,30 @@ export class SubtractionQuizItem extends PrimarySchoolMathFAOQuizItem {
     constructor(lft: number, right: number) {
         super(lft, right);
 
-        this._result = Math.round(this.LeftNumber - this.RightNumber);    
+        this._result = Math.round(this.LeftNumber - this.RightNumber);
     }
 
     public getCorrectFormula(): string {
         return this.LeftNumber.toString()
-            + " - " + this.RightNumber.toString() + " = " + this.Result.toString();
+            + ' - ' + this.RightNumber.toString() + ' = ' + this.Result.toString();
     }
 
     public getInputtedForumla(): string {
         return this.LeftNumber.toString()
-            + " - " + this.RightNumber.toString() + " = " 
-            + ((this.InputtedResult !== undefined && this.InputtedResult !== null)? this.InputtedResult.toString() : "");
+            + ' - ' + this.RightNumber.toString() + ' = '
+            + ((this.InputtedResult !== undefined && this.InputtedResult !== null) ? this.InputtedResult.toString() : '');
     }
-    
+
     public getQuizFormat(): string {
-        let rststr = super.getQuizFormat();
+        const rststr = super.getQuizFormat();
         return rststr + this.LeftNumber.toString()
-            + " - " + this.RightNumber.toString() + " = ";
+            + ' - ' + this.RightNumber.toString() + ' = ';
     }
 
     public static restoreFromString(s: string): SubtractionQuizItem {
-        let qi: PrimarySchoolMathFAOQuizItem = super.restoreFromString(s);
+        const qi: PrimarySchoolMathFAOQuizItem = super.restoreFromString(s);
         return new SubtractionQuizItem(qi.LeftNumber, qi.RightNumber);
-    }    
+    }
 }
 
 /**
@@ -141,7 +141,7 @@ export class MultiplicationQuizItem extends PrimarySchoolMathFAOQuizItem {
         this._inputtedResult = ir;
     }
     public IsCorrect(): boolean {
-        let brst = super.IsCorrect();
+        const brst = super.IsCorrect();
         if (!brst) {
             return brst;
         }
@@ -160,31 +160,31 @@ export class MultiplicationQuizItem extends PrimarySchoolMathFAOQuizItem {
     constructor(lft: number, right: number) {
         super(lft, right);
 
-        this._result = Math.round(this.LeftNumber * this.RightNumber);    
+        this._result = Math.round(this.LeftNumber * this.RightNumber);
     }
 
     public getCorrectFormula(): string {
         return this.LeftNumber.toString()
-            + " × " + this.RightNumber.toString() + " = " 
+            + ' × ' + this.RightNumber.toString() + ' = '
             + this.Result.toString();
     }
 
     public getInputtedForumla(): string {
         return this.LeftNumber.toString()
-            + " × " + this.RightNumber.toString() + " = " 
-            + ((this.InputtedResult !== undefined && this.InputtedResult !== null)? this.InputtedResult.toString() : "");
+            + ' × ' + this.RightNumber.toString() + ' = '
+            + ((this.InputtedResult !== undefined && this.InputtedResult !== null) ? this.InputtedResult.toString() : '');
     }
-    
+
     public getQuizFormat(): string {
-        let rststr = super.getQuizFormat();
+        const rststr = super.getQuizFormat();
         return rststr + this.LeftNumber.toString()
-            + " × " + this.RightNumber.toString() + " = ";
+            + ' × ' + this.RightNumber.toString() + ' = ';
     }
 
     public static restoreFromString(s: string): MultiplicationQuizItem {
-        let qi: PrimarySchoolMathFAOQuizItem = super.restoreFromString(s);
+        const qi: PrimarySchoolMathFAOQuizItem = super.restoreFromString(s);
         return new MultiplicationQuizItem(qi.LeftNumber, qi.RightNumber);
-    }    
+    }
 }
 
 /**
@@ -197,7 +197,7 @@ export class DivisionQuizItem extends PrimarySchoolMathFAOQuizItem {
     private _inputtedRemainder: number;
 
     get Dividend(): number {
-        return this.LeftNumber;;
+        return this.LeftNumber; ;
     }
     get Divisor(): number {
         return this.RightNumber;
@@ -230,7 +230,7 @@ export class DivisionQuizItem extends PrimarySchoolMathFAOQuizItem {
     }
 
     public IsCorrect(): boolean {
-        let brst = super.IsCorrect();
+        const brst = super.IsCorrect();
         if (!brst) {
             return brst;
         }
@@ -249,31 +249,31 @@ export class DivisionQuizItem extends PrimarySchoolMathFAOQuizItem {
 
     public getCorrectFormula(): string {
         return this.LeftNumber.toString()
-            + " ÷ " + this.RightNumber.toString() + " = " + this.Quotient.toString()
-            + ((this.Remainder === 0) ? "" : ("... " + this.Remainder.toString()));
+            + ' ÷ ' + this.RightNumber.toString() + ' = ' + this.Quotient.toString()
+            + ((this.Remainder === 0) ? '' : ('... ' + this.Remainder.toString()));
     }
 
     public getInputtedForumla(): string {
         return this.LeftNumber.toString()
-            + " ÷ " + this.RightNumber.toString() + " = " 
-            + ((this.InputtedQuotient !== undefined && this.InputtedQuotient !== null)? this.InputtedQuotient.toString() : "")
-            + ((this.InputtedRemainder !== undefined && this.InputtedRemainder !== null)? " ... " + this.InputtedRemainder.toString() : "");
+            + ' ÷ ' + this.RightNumber.toString() + ' = '
+            + ((this.InputtedQuotient !== undefined && this.InputtedQuotient !== null) ? this.InputtedQuotient.toString() : '')
+            + ((this.InputtedRemainder !== undefined && this.InputtedRemainder !== null) ? ' ... ' + this.InputtedRemainder.toString() : '');
     }
 
     public getQuizFormat(): string {
-        let rststr = super.getQuizFormat();
+        const rststr = super.getQuizFormat();
         return rststr + this.LeftNumber.toString()
-            + " ÷ " + this.RightNumber.toString() + " = ";
+            + ' ÷ ' + this.RightNumber.toString() + ' = ';
     }
-    
+
     public static restoreFromString(s: string): DivisionQuizItem {
-        let qi: PrimarySchoolMathFAOQuizItem = super.restoreFromString(s);
+        const qi: PrimarySchoolMathFAOQuizItem = super.restoreFromString(s);
         return new DivisionQuizItem(qi.LeftNumber, qi.RightNumber);
-    }    
+    }
 }
 
 /**
- * Mixed operation quiz 
+ * Mixed operation quiz
  */
 export class MixedOperationQuizItem extends PrimarySchoolMathQuizItem {
     private _formula: string;
@@ -281,7 +281,7 @@ export class MixedOperationQuizItem extends PrimarySchoolMathQuizItem {
     private _inputtedResult: number;
 
     get Formula(): string {
-        return this._formula;;
+        return this._formula; ;
     }
     get Result(): number {
         return this._result;
@@ -302,7 +302,7 @@ export class MixedOperationQuizItem extends PrimarySchoolMathQuizItem {
     }
 
     public IsCorrect(): boolean {
-        let brst = super.IsCorrect();
+        const brst = super.IsCorrect();
         if (!brst) {
             return brst;
         }
@@ -323,7 +323,7 @@ export class MixedOperationQuizItem extends PrimarySchoolMathQuizItem {
     }
 
     public getQuizFormat(): string {
-        let rststr = super.getQuizFormat();
+        const rststr = super.getQuizFormat();
         return rststr + this._formula.replace('*', '×').replace('/', '÷') + ' = ';
     }
 
@@ -335,5 +335,5 @@ export class MixedOperationQuizItem extends PrimarySchoolMathQuizItem {
 
     public static restoreFromString(s: string): MixedOperationQuizItem {
         return new MixedOperationQuizItem(s);
-    }    
+    }
 }

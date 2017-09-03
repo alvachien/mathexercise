@@ -9,15 +9,14 @@ import * as moment from 'moment';
   styleUrls: ['./digit-clock.component.scss']
 })
 export class DigitClockComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild("digitclock") clockElement: ElementRef;
+  @ViewChild('digitclock') clockElement: ElementRef;
 
   private _dateStart: Date;
-  //private _size: number = 1;
   private _handler = null;
-  private _hour: number = 0;
-  private _min: number = 0;
-  private _sec: number = 0;
-  private _isStart: boolean = false;
+  private _hour = 0;
+  private _min = 0;
+  private _sec = 0;
+  private _isStart = false;
   private _isInitialized: boolean;
 
   constructor() {
@@ -26,7 +25,7 @@ export class DigitClockComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     if (environment.LoggingLevel >= LogLevel.Debug) {
-      console.log("AC Math Exercise [Debug]: Entering ngOnInit of digit-clock");
+      console.log('AC Math Exercise [Debug]: Entering ngOnInit of digit-clock');
     }
     this._isInitialized = true;
 
@@ -35,14 +34,13 @@ export class DigitClockComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     if (environment.LoggingLevel >= LogLevel.Debug) {
-      console.log("AC Math Exercise [Debug]: Entering ngAfterViewInit of digit-clock: ");
+      console.log('AC Math Exercise [Debug]: Entering ngAfterViewInit of digit-clock: ');
     }
-    //this.onSetSize();    
   }
 
   ngOnDestroy() {
     if (environment.LoggingLevel >= LogLevel.Debug) {
-      console.log("AC Math Exercise [Debug]: Entering ngOnDestroy of digit-clock: " + this._handler);
+      console.log('AC Math Exercise [Debug]: Entering ngOnDestroy of digit-clock: ' + this._handler);
     }
 
     this._isInitialized = false;
@@ -55,7 +53,7 @@ export class DigitClockComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input()
   set IsStart(istart: boolean) {
     if (environment.LoggingLevel >= LogLevel.Debug) {
-      console.log("AC Math Exercise [Debug]: setter IsStart in Digit-clock:" + istart);
+      console.log('AC Math Exercise [Debug]: setter IsStart in Digit-clock:' + istart);
     }
     this._isStart = istart;
 
@@ -63,35 +61,36 @@ export class DigitClockComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private onSetSize() {
-    let clocks = this.clockElement.nativeElement.children;
-    let i = 0, k = clocks.length;
-    let fontsize = "4px", halfsize = "2px";
+    const clocks = this.clockElement.nativeElement.children;
+    let i = 0;
+    const k: number = clocks.length;
+    const fontsize = '4px', halfsize = '2px';
     if (environment.LoggingLevel >= LogLevel.Debug) {
-      console.log("AC Math Exercise [Debug]: onSetSize in Digit-clock:" + clocks[0].style.fontSize);
+      console.log('AC Math Exercise [Debug]: onSetSize in Digit-clock:' + clocks[0].style.fontSize);
     }
 
-    for (; i < 5;) {
+    for (; i < 5; ) {
       clocks[i++].style.fontSize = fontsize;
     }
-    for (; i < k;) {
+    for (; i < k; ) {
       clocks[i++].style.fontSize = halfsize;
     }
   }
 
   private onStart() {
     if (environment.LoggingLevel >= LogLevel.Debug) {
-      console.log("AC Math Exercise [Debug]: onStart in Digit-clock:" + this._isStart);
+      console.log('AC Math Exercise [Debug]: onStart in Digit-clock:' + this._isStart);
     }
 
     if (this._isStart && this._isInitialized) {
       this._dateStart = new Date();
       this._handler = setInterval(() => { this.onInterval(); }, 500); // Set to 0.5 sec for the dot
       if (environment.LoggingLevel >= LogLevel.Debug) {
-        console.log("AC Math Exercise [Debug]: After start the interval Digit-clock:" + this._handler);
+        console.log('AC Math Exercise [Debug]: After start the interval Digit-clock:' + this._handler);
       }
     } else {
       if (environment.LoggingLevel >= LogLevel.Debug) {
-        console.log("AC Math Exercise [Debug]: Try to stop the interval Digit-clock:" + this._handler);
+        console.log('AC Math Exercise [Debug]: Try to stop the interval Digit-clock:' + this._handler);
       }
 
       if (this._handler !== null) {
@@ -102,33 +101,33 @@ export class DigitClockComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public onInterval() {
-    let clocks = this.clockElement.nativeElement.children;
-    let timeSpent: number = new Date().getTime() - this._dateStart.getTime();
-    let mt = moment.duration(timeSpent);
+    const clocks = this.clockElement.nativeElement.children;
+    const timeSpent: number = new Date().getTime() - this._dateStart.getTime();
+    const mt = moment.duration(timeSpent);
     if (environment.LoggingLevel >= LogLevel.Debug) {
-      console.log("AC Math Exercise [Debug]: entering onInterval of Digit-clock:" + mt.asSeconds());
+      console.log('AC Math Exercise [Debug]: entering onInterval of Digit-clock:' + mt.asSeconds());
     }
 
-    let sec = mt.seconds();
-    clocks[6].className = "clock c" + (sec % 10);
-    clocks[5].className = "clock c" + ((sec - (sec % 10)) / 10);
+    const sec = mt.seconds();
+    clocks[6].className = 'clock c' + (sec % 10);
+    clocks[5].className = 'clock c' + ((sec - (sec % 10)) / 10);
 
     if (sec % 2 === 0) {
-      clocks[2].className = "clock dot";
+      clocks[2].className = 'clock dot';
     } else {
-      clocks[2].className = "clock dot putout";
+      clocks[2].className = 'clock dot putout';
     }
 
     if (this._min !== mt.minutes()) {
       this._min = mt.minutes();
-      clocks[4].className = "clock c" + (this._min % 10);
-      clocks[3].className = "clock c" + ((this._min - (this._min % 10)) / 10);
+      clocks[4].className = 'clock c' + (this._min % 10);
+      clocks[3].className = 'clock c' + ((this._min - (this._min % 10)) / 10);
     }
 
     if (this._hour !== mt.hours()) {
       this._hour = mt.hours();
-      clocks[1].className = "clock c" + (this._hour % 10);
-      clocks[0].className = "clock c" + ((this._hour - (this._hour % 10)) / 10);
+      clocks[1].className = 'clock c' + (this._hour % 10);
+      clocks[0].className = 'clock c' + ((this._hour - (this._hour % 10)) / 10);
     }
   }
 }

@@ -21,7 +21,7 @@ export interface formulaTypeUISelect {
   formula: string;
   selected: boolean;
   disabled: boolean;
-  formulatype: PrimarySchoolFormulaEnum
+  formulatype: PrimarySchoolFormulaEnum;
 }
 
 @Component({
@@ -32,10 +32,10 @@ export interface formulaTypeUISelect {
 export class FormulaExerciseComponent implements OnInit {
   StartQuizAmount: number = DefaultQuizAmount;
   FailedQuizFactor: number = DefaultFailedQuizFactor;
-  UsedQuizAmount: number = 0;
+  UsedQuizAmount = 0;
 
-  NumberRangeBgn: number = 1;
-  NumberRangeEnd: number = 10;
+  NumberRangeBgn = 1;
+  NumberRangeEnd = 10;
 
   quizInstance: PrimarySchoolMathQuiz = null;
   QuizItems: FormulaQuizItemBase[] = [];
@@ -50,16 +50,16 @@ export class FormulaExerciseComponent implements OnInit {
   constructor(private dialog: MdDialog,
     private _dlgsvc: DialogService,
     private _router: Router) {
-    for (let item in PrimarySchoolFormulaEnum) {
+    for (const item in PrimarySchoolFormulaEnum) {
       if (isNaN(Number(item))) {
         //console.log(item);
       } else {
-        let lf: formulaTypeUISelect = { 
-          name: getFormulaNameString(Number(item)), 
-          formula: getFormulaUIString(Number(item)), 
-          selected: false, 
+        const lf: formulaTypeUISelect = {
+          name: getFormulaNameString(Number(item)),
+          formula: getFormulaUIString(Number(item)),
+          selected: false,
           disabled: !isFormulaTypeEnabled(Number(item)),
-          formulatype: Number(item) 
+          formulatype: Number(item)
         };
         this.formulaDef.push(lf);
       }
@@ -77,11 +77,11 @@ export class FormulaExerciseComponent implements OnInit {
   }
 
   private generateQuizItem(idx: number): FormulaQuizItemBase {
-    let qztypamt = this.formulaDef.length;
+    const qztypamt = this.formulaDef.length;
     let qzidx: number;
 
     // Choose one type
-    while(true) {
+    while (true) {
       qzidx = Math.round(Math.random() * qztypamt - 1);
       if (qzidx < 0) {
         qzidx = 0;
@@ -92,33 +92,33 @@ export class FormulaExerciseComponent implements OnInit {
       }
     }
 
-    switch(this.formulaDef[qzidx].formulatype) {
+    switch (this.formulaDef[qzidx].formulatype) {
       case PrimarySchoolFormulaEnum.CircumferenceOfCircle: {
-        let qz: FormulaCOfCircleQuizItem = new FormulaCOfCircleQuizItem(
+        const qz: FormulaCOfCircleQuizItem = new FormulaCOfCircleQuizItem(
           Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
           <FormulaCOfCircleCalcDirEum>Math.round(Math.random())
         );
         qz.QuizIndex = idx;
         if (environment.LoggingLevel >= LogLevel.Debug) {
-          console.log("AC Math Exercise [Debug]: generating Quiz Item for CircumferenceOfCircle: " + qz.storeToString());
+          console.log('AC Math Exercise [Debug]: generating Quiz Item for CircumferenceOfCircle: ' + qz.storeToString());
         }
         return qz;
       }
 
       case PrimarySchoolFormulaEnum.CircumferenceOfSquare: {
-        let qz: FormulaCOfSquareQuizItem = new FormulaCOfSquareQuizItem(
+        const qz: FormulaCOfSquareQuizItem = new FormulaCOfSquareQuizItem(
           Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
           <FormulaCOfSquareCalcDirEum>Math.round(Math.random())
         );
         qz.QuizIndex = idx;
         if (environment.LoggingLevel >= LogLevel.Debug) {
-          console.log("AC Math Exercise [Debug]: generating Quiz Item for CircumferenceOfSquare: " + qz.storeToString() );
+          console.log('AC Math Exercise [Debug]: generating Quiz Item for CircumferenceOfSquare: ' + qz.storeToString() );
         }
         return qz;
       }
 
       case PrimarySchoolFormulaEnum.CircumferenceOfRectangle: {
-        let qz: FormulaCOfRectangleQuizItem = new FormulaCOfRectangleQuizItem(
+        const qz: FormulaCOfRectangleQuizItem = new FormulaCOfRectangleQuizItem(
           Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
           Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
           <FormulaCOfRectangleCalcDirEum>Math.round(Math.random() * 2)
@@ -126,13 +126,13 @@ export class FormulaExerciseComponent implements OnInit {
         qz.QuizIndex = idx;
 
         if (environment.LoggingLevel >= LogLevel.Debug) {
-          console.log("AC Math Exercise [Debug]: generating Quiz Item for CircumferenceOfRectangle: " + qz.storeToString());
+          console.log('AC Math Exercise [Debug]: generating Quiz Item for CircumferenceOfRectangle: ' + qz.storeToString());
         }
-        return qz;        
+        return qz;
       }
 
       case PrimarySchoolFormulaEnum.AreaOfRectangle: {
-        let qz: FormulaAreaOfRectangleQuizItem = new FormulaAreaOfRectangleQuizItem(
+        const qz: FormulaAreaOfRectangleQuizItem = new FormulaAreaOfRectangleQuizItem(
           Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
           Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
           <FormulaAOfRectangleCalcDirEum>Math.round(Math.random() * 2)
@@ -140,13 +140,13 @@ export class FormulaExerciseComponent implements OnInit {
         qz.QuizIndex = idx;
 
         if (environment.LoggingLevel >= LogLevel.Debug) {
-          console.log("AC Math Exercise [Debug]: generating Quiz Item for AreaOfRectangle: " + qz.storeToString());
+          console.log('AC Math Exercise [Debug]: generating Quiz Item for AreaOfRectangle: ' + qz.storeToString());
         }
-        return qz;        
+        return qz;
       }
 
-      case PrimarySchoolFormulaEnum.DistanceAndSpeed: {        
-        let qz: FormulaDistAndSpeedQuizItem = new FormulaDistAndSpeedQuizItem(
+      case PrimarySchoolFormulaEnum.DistanceAndSpeed: {
+        const qz: FormulaDistAndSpeedQuizItem = new FormulaDistAndSpeedQuizItem(
           Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
           Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
           <FormulaDistAndSpeedCalcDirEum>Math.round(Math.random() * 2)
@@ -154,15 +154,15 @@ export class FormulaExerciseComponent implements OnInit {
         qz.QuizIndex = idx;
 
         if (environment.LoggingLevel >= LogLevel.Debug) {
-          console.log("AC Math Exercise [Debug]: generating Quiz Item for DistanceAndSpeed: " + qz.storeToString());
+          console.log('AC Math Exercise [Debug]: generating Quiz Item for DistanceAndSpeed: ' + qz.storeToString());
         }
-        return qz;        
-        
+        return qz;
+
       }
 
       default: {
         if (environment.LoggingLevel >= LogLevel.Debug) {
-          console.error("AC Math Exercise [Debug]: generating Quiz Item: FAILED" );
+          console.error('AC Math Exercise [Debug]: generating Quiz Item: FAILED' );
         }
       }
       return null;
@@ -173,7 +173,7 @@ export class FormulaExerciseComponent implements OnInit {
     this.QuizItems = [];
 
     for (let i = 0; i < this.quizInstance.CurrentRun().ItemsCount; i++) {
-      let dq: FormulaQuizItemBase = this.generateQuizItem(this.UsedQuizAmount + i + 1);
+      const dq: FormulaQuizItemBase = this.generateQuizItem(this.UsedQuizAmount + i + 1);
 
       this.QuizItems.push(dq);
     }
@@ -182,12 +182,12 @@ export class FormulaExerciseComponent implements OnInit {
 
   public canDeactivate(): boolean {
     if (this.quizInstance.IsStarted) {
-      let dlginfo: MessageDialogInfo = {
+      const dlginfo: MessageDialogInfo = {
         Header: 'Home.Error',
         Content: 'Home.QuizIsOngoing',
         Button: MessageDialogButtonEnum.onlyok
       };
-      
+
       this.dialog.open(MessageDialogComponent, {
         disableClose: false,
         width: '500px',
@@ -214,8 +214,8 @@ export class FormulaExerciseComponent implements OnInit {
 
   private submitCurrentPage() {
     if (this.DisplayedQuizItems.length > 0) {
-      for (let qi of this.DisplayedQuizItems) {
-        for (let qi2 of this.QuizItems) {
+      for (const qi of this.DisplayedQuizItems) {
+        for (const qi2 of this.QuizItems) {
           if (qi.QuizIndex === qi2.QuizIndex) {
             qi2.InputtedResult = qi.InputtedResult;
             break;
@@ -226,8 +226,8 @@ export class FormulaExerciseComponent implements OnInit {
   }
 
   private prepareCurrentPage() {
-    let pageStart = this.pageIndex * this.pageSize;
-    let pageEnd = pageStart + this.pageSize;
+    const pageStart = this.pageIndex * this.pageSize;
+    const pageEnd = pageStart + this.pageSize;
 
     this.DisplayedQuizItems = [];
     for (let i = 0; i < this.QuizItems.length; i++) {
@@ -277,7 +277,7 @@ export class FormulaExerciseComponent implements OnInit {
     }
 
     this.submitCurrentPage();
-    for (let quiz of this.QuizItems) {
+    for (const quiz of this.QuizItems) {
       if (quiz.InputtedResult === undefined
         || quiz.InputtedResult === null) {
         return false;
@@ -289,7 +289,7 @@ export class FormulaExerciseComponent implements OnInit {
 
   public onQuizSubmit(): void {
     this._dlgsvc.FailureItems = [];
-    for (let quiz of this.QuizItems) {
+    for (const quiz of this.QuizItems) {
       if (!quiz.IsCorrect()) {
         this._dlgsvc.FailureItems.push(quiz);
       }
@@ -297,7 +297,7 @@ export class FormulaExerciseComponent implements OnInit {
 
     if (this._dlgsvc.FailureItems.length > 0) {
       this._dlgsvc.CurrentScore = Math.round(100 - 100 * this._dlgsvc.FailureItems.length / this.QuizItems.length);
-      let dialogRef = this.dialog.open(QuizFailureDlgComponent, {
+      const dialogRef = this.dialog.open(QuizFailureDlgComponent, {
         disableClose: false,
         width: '500px'
       });

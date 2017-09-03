@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
-import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection,PrimarySchoolMathQuizItem  } from '../model';
+import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, PrimarySchoolMathQuizItem  } from '../model';
 
 export interface QuizFailureInfo {
   qid: number;
@@ -21,7 +21,7 @@ export class QuizFailureDatabase {
 
   constructor(fis: PrimarySchoolMathQuizItem[]) {
     if (fis !== null && fis.length > 0) {
-      for (let fi of fis) {        
+      for (const fi of fis) {
         this.addRecord({
           qid: fi.QuizIndex,
           expected: fi.getCorrectFormula(),
@@ -60,7 +60,7 @@ export class QuizFailureDlgComponent implements OnInit {
   displayedColumns = ['qid', 'expected', 'inputted'];
   quizDatabase: QuizFailureDatabase;
   dataSource: QuizFailureDataSource | null;
-  currentScore: number;  
+  currentScore: number;
 
   constructor(private _dlgsvc: DialogService) {
   }
@@ -68,7 +68,7 @@ export class QuizFailureDlgComponent implements OnInit {
   ngOnInit() {
     this.currentScore = this._dlgsvc.CurrentScore;
     this.quizDatabase = new QuizFailureDatabase(this._dlgsvc.FailureItems);
-    
+
     // Workaround for https://github.com/angular/material2/issues/5593
     setTimeout(() => {
       this.dataSource = new QuizFailureDataSource(this.quizDatabase);

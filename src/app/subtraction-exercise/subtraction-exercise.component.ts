@@ -20,15 +20,15 @@ export class SubtractionExerciseComponent implements OnInit {
   StartQuizAmount: number = DefaultQuizAmount;
   FailedQuizFactor: number = DefaultFailedQuizFactor;
 
-  LeftNumberRangeBgn: number = 1;
-  LeftNumberRangeEnd: number = 10;
-  RightNumberRangeBgn: number = 1;
-  RightNumberRangeEnd: number = 10;
+  LeftNumberRangeBgn = 1;
+  LeftNumberRangeEnd = 10;
+  RightNumberRangeBgn = 1;
+  RightNumberRangeEnd = 10;
 
   quizInstance: PrimarySchoolMathQuiz = null;
   QuizItems: SubtractionQuizItem[] = [];
   DisplayedQuizItems: SubtractionQuizItem[] = [];
-  UsedQuizAmount: number = 0;
+  UsedQuizAmount = 0;
 
   //pageEvent: PageEvent;
   pageSize: number;
@@ -49,7 +49,7 @@ export class SubtractionExerciseComponent implements OnInit {
   }
 
   private generateQuizItem(idx: number): SubtractionQuizItem {
-    let qz: SubtractionQuizItem = new SubtractionQuizItem(Math.floor(Math.random() * (this.LeftNumberRangeEnd - this.LeftNumberRangeBgn) + this.LeftNumberRangeBgn),
+    const qz: SubtractionQuizItem = new SubtractionQuizItem(Math.floor(Math.random() * (this.LeftNumberRangeEnd - this.LeftNumberRangeBgn) + this.LeftNumberRangeBgn),
       Math.floor(Math.random() * (this.RightNumberRangeEnd - this.RightNumberRangeBgn) + this.RightNumberRangeBgn));
     qz.QuizIndex = idx;
     return qz;
@@ -59,21 +59,21 @@ export class SubtractionExerciseComponent implements OnInit {
     this.QuizItems = [];
 
     for (let i = 0; i < this.quizInstance.CurrentRun().ItemsCount; i++) {
-      let dq: SubtractionQuizItem = this.generateQuizItem(this.UsedQuizAmount + i + 1);
+      const dq: SubtractionQuizItem = this.generateQuizItem(this.UsedQuizAmount + i + 1);
 
       this.QuizItems.push(dq);
     }
-    this.UsedQuizAmount += this.QuizItems.length;    
+    this.UsedQuizAmount += this.QuizItems.length;
   }
 
   public canDeactivate(): boolean {
     if (this.quizInstance.IsStarted) {
-      let dlginfo: MessageDialogInfo = {
+      const dlginfo: MessageDialogInfo = {
         Header: 'Home.Error',
         Content: 'Home.QuizIsOngoing',
         Button: MessageDialogButtonEnum.onlyok
       };
-      
+
       this.dialog.open(MessageDialogComponent, {
         disableClose: false,
         width: '500px',
@@ -84,12 +84,12 @@ export class SubtractionExerciseComponent implements OnInit {
           console.log(`AC Math Exercise [Debug]: Message dialog result ${x}`);
         }
       });
-      
+
       return false;
     }
     return true;
   }
-  
+
   public onPageChanged($event: PageEvent) {
     this.pageSize = $event.pageSize;
     this.pageIndex = $event.pageIndex;
@@ -100,8 +100,8 @@ export class SubtractionExerciseComponent implements OnInit {
 
   private submitCurrentPage() {
     if (this.DisplayedQuizItems.length > 0 ) {
-      for(let qi of this.DisplayedQuizItems) {
-        for(let qi2 of this.QuizItems) {
+      for (const qi of this.DisplayedQuizItems) {
+        for (const qi2 of this.QuizItems) {
           if (qi.QuizIndex === qi2.QuizIndex) {
             qi2.InputtedResult = qi.InputtedResult;
             break;
@@ -112,11 +112,11 @@ export class SubtractionExerciseComponent implements OnInit {
   }
 
   private prepareCurrentPage() {
-    let pageStart = this.pageIndex * this.pageSize;
-    let pageEnd = pageStart + this.pageSize;
+    const pageStart = this.pageIndex * this.pageSize;
+    const pageEnd = pageStart + this.pageSize;
 
     this.DisplayedQuizItems = [];
-    for(let i = 0; i < this.QuizItems.length; i ++) {
+    for (let i = 0; i < this.QuizItems.length; i ++) {
       if (i >= pageStart && i < pageEnd) {
         this.DisplayedQuizItems.push(this.QuizItems[i]);
       }
@@ -130,18 +130,18 @@ export class SubtractionExerciseComponent implements OnInit {
   public CanStart(): boolean {
     if (this.StartQuizAmount <= 0 || this.LeftNumberRangeBgn < 0
       || this.LeftNumberRangeEnd <= this.LeftNumberRangeBgn
-      || this.RightNumberRangeBgn < 0 
+      || this.RightNumberRangeBgn < 0
       || this.RightNumberRangeEnd <= this.RightNumberRangeBgn) {
       return false;
     }
-    
+
     if (this.quizInstance.IsStarted) {
       return false;
     }
 
     return true;
   }
-  
+
   public onQuizStart(): void {
     // Start it!
     this.quizInstance.BasicInfo = '[' + this.LeftNumberRangeBgn.toString() + ' ... ' + this.LeftNumberRangeEnd.toString() + ']'
@@ -167,7 +167,7 @@ export class SubtractionExerciseComponent implements OnInit {
     }
 
     this.submitCurrentPage();
-    for (let quiz of this.QuizItems) {
+    for (const quiz of this.QuizItems) {
       if (quiz.InputtedResult === undefined
         || quiz.InputtedResult === null) {
         return false;
@@ -179,7 +179,7 @@ export class SubtractionExerciseComponent implements OnInit {
 
   public onQuizSubmit(): void {
     this._dlgsvc.FailureItems = [];
-    for (let quiz of this.QuizItems) {
+    for (const quiz of this.QuizItems) {
       if (!quiz.IsCorrect()) {
         this._dlgsvc.FailureItems.push(quiz);
       }
@@ -187,7 +187,7 @@ export class SubtractionExerciseComponent implements OnInit {
 
     if (this._dlgsvc.FailureItems.length > 0) {
       this._dlgsvc.CurrentScore = Math.round(100 - 100 * this._dlgsvc.FailureItems.length / this.QuizItems.length);
-      let dialogRef = this.dialog.open(QuizFailureDlgComponent, {
+      const dialogRef = this.dialog.open(QuizFailureDlgComponent, {
         disableClose: false,
         width: '700px'
       });
@@ -198,7 +198,7 @@ export class SubtractionExerciseComponent implements OnInit {
         this.generateQuizSection();
         this.pageIndex = 0;
         this.prepareCurrentPage();
-        
+
         // Current run
         this.quizInstance.CurrentRun().SectionStart();
       });

@@ -14,6 +14,7 @@ import { slideInOutAnimation } from '../animation';
 import { environment } from '../../environments/environment';
 import { DialogService } from '../services/dialog.service';
 import { AuthService } from '../services/auth.service';
+import { QuizService } from '../services/quiz.service';
 
 /**
  * Summary info of Quiz
@@ -37,7 +38,7 @@ export class QuizSummaryDatabase {
 
   constructor(quiz: PrimarySchoolMathQuiz) {
     if (quiz !== null) {
-      for (let run of quiz.ElderRuns()) {
+      for (const run of quiz.ElderRuns()) {
         this.addSummary({
           id: run.SectionNumber,
           totalamt: run.ItemsCount,
@@ -55,13 +56,6 @@ export class QuizSummaryDatabase {
     copiedData.push(si);
     this.dataChange.next(copiedData);
   }
-  // resetSummaries() {
-  //   const copiedData = this.data.slice();
-  //   if (copiedData.length > 0) {
-  //     copiedData.splice(0);
-  //     this.dataChange.next(copiedData);
-  //   }
-  // }
 }
 
 /**
@@ -102,6 +96,7 @@ export class QuizSummaryComponent implements OnInit {
 
   constructor(private _dlgsvc: DialogService,
     private _authService: AuthService,
+    private _quizService: QuizService,
     private _http: Http) {
   }
 
@@ -110,10 +105,10 @@ export class QuizSummaryComponent implements OnInit {
     this.quizBaseInfo = this._dlgsvc.CurrentQuiz.BasicInfo;
     this.quizType = QuizTypeEnum2UIString(this._dlgsvc.CurrentQuiz.QuizType);
 
-    let totalAmt: number = 0;
-    let totalFailed: number = 0;
-    let totalTime: number = 0;
-    for (let run of this._dlgsvc.CurrentQuiz.ElderRuns()) {
+    let totalAmt = 0;
+    let totalFailed = 0;
+    let totalTime = 0;
+    for (const run of this._dlgsvc.CurrentQuiz.ElderRuns()) {
       totalAmt += run.ItemsCount;
       totalFailed += run.ItemsFailed;
       totalTime += run.TimeSpent;
@@ -128,61 +123,15 @@ export class QuizSummaryComponent implements OnInit {
     }, 1);
 
     if (environment.LoginRequired) {
-      this.onSave();
-    }
-  }
-
-  private onSave(): void {
-    // Save it to DB
-    let apiurl = environment.APIBaseUrl + 'quiz';
-
-    let result: any = {};
-    result.quizType = this._dlgsvc.CurrentQuiz.QuizType;
-    result.basicInfo = this._dlgsvc.CurrentQuiz.BasicInfo;
-    result.submitDate = new Date();
-    result.attendUser = 'test';
-
-    result.failLogs = [];
-    for (let fl of this._dlgsvc.CurrentQuiz.FailedItems) {
-      let flog: any = {};
-      flog.quizFailIndex = fl.QuizIndex;
-      flog.expected = fl.storeToString();
-      flog.inputted = fl.getInputtedForumla();
-      result.failLogs.push(flog);
-    }
-
-    result.sections = [];
-    for (let qs of this._dlgsvc.CurrentQuiz.ElderRuns()) {
-      let qsect: any = {};
-      qsect.sectionID = qs.SectionNumber;
-      qsect.timeSpent = qs.TimeSpent;
-      qsect.totalItems = qs.ItemsCount;
-      qsect.failedItems = qs.ItemsFailed;
-      result.sections.push(qsect);
-    }
-    let data = JSON && JSON.stringify(result);
-
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-    let options = new RequestOptions({ headers: headers }); // Create a request option
-    this._http.post(apiurl, data, options)
-      .map((response: Response) => {
-        if (environment.LoggingLevel >= LogLevel.Debug) {
-          console.log('AC Math Exercise [Debug]:' + response);
-        }
-        return response.json();
-      })
-      .subscribe(x => {
-        if (environment.LoggingLevel >= LogLevel.Debug) {
-          console.log('AC Math Exericse [Debug]: ' + x);
-        }
-
-        let cr: QuizCreateResultJSON = <QuizCreateResultJSON>x;
+      this._quizService.saveDB(this._dlgsvc.CurrentQuiz).subscribe((cr : QuizCreateResultJSON) => {
         if (cr.totalAwardPoint) {
           this.totalAwardPoints = cr.totalAwardPoint;
         }
-      });      
+      }, error => {
+        if (environment.LoggingLevel >= LogLevel.Error) {
+          console.log('AC Math Exercise [Debug]:' + error);
+        }
+      });
+    }
   }
 }

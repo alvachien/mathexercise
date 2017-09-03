@@ -3,7 +3,7 @@ export const environment = {
     DebugLogging: false,
     LoggingLevel: 1, // Crash
     LoginRequired: true,
-  
+
     IDServerUrl: 'http://acidserver.azurewebsites.net/',
     APIBaseUrl: 'http://acquizapi.azurewebsites.net/api/',
     AppLoginCallbackUrl: 'http://acmathexercise.azurewebsites.net/logincallback.html',
@@ -11,4 +11,3 @@ export const environment = {
     AppLogoutCallbackUrl: 'http://acmathexercise.azurewebsites.net/index.html',
     AppHost: 'http://acmathexercise.azurewebsites.net'
   };
-  

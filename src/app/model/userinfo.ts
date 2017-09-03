@@ -38,7 +38,7 @@ export class UserAuthInfo {
     private userId: string;
     private userMailbox: string;
     private accessToken: string;
-    
+
     public setContent(user: User) : void {
         if (user) {
             this.currentUser = user;

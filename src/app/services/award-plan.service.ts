@@ -10,23 +10,23 @@ import { AuthService } from './auth.service';
 export class AwardPlanService {
   private _awardPlans: AwardPlan[];
   public dataChangedSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  
+
   constructor(private _http: Http,
     private _authService: AuthService) {
     this._awardPlans = [];
   }
 
   public fetchPlansForUser(usr: string): Observable<any> {
-    let apiurl = environment.APIBaseUrl + 'AwardPlan';
+    const apiurl = environment.APIBaseUrl + 'AwardPlan';
 
-    let headers = new Headers();
+    const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
     headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-    let params: URLSearchParams = new URLSearchParams();
+    const params: URLSearchParams = new URLSearchParams();
     params.set('tgtuser', usr);
 
-    let options = new RequestOptions({ search: params, headers: headers }); // Create a request option
+    const options = new RequestOptions({ search: params, headers: headers }); // Create a request option
     return this._http.get(apiurl, options)
       .map((response: Response) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
@@ -34,12 +34,12 @@ export class AwardPlanService {
         }
 
         this._awardPlans = []; // Clear it first
-        let rjs = response.json();
+        const rjs = response.json();
         if (rjs instanceof Array && rjs.length > 0) {
-          for (let si of rjs) {
-            let ap: AwardPlan = new AwardPlan();
+          for (const si of rjs) {
+            const ap: AwardPlan = new AwardPlan();
             ap.parseData(<AwardPlanJson>si);
-            
+
             this._awardPlans.push(ap);
           }
         }
@@ -53,10 +53,10 @@ export class AwardPlanService {
   }
 
   public createAwardPlan() {
-
+    // Todo
   }
 
-  public deleteAwardPlan() {
-    
+  public deleteAwardPlan(data: any) {
+    // Todo
   }
 }

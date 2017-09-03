@@ -26,15 +26,15 @@ export class DivisionExerciseComponent implements OnInit {
   StartQuizAmount: number = DefaultQuizAmount;
   FailedQuizFactor: number = DefaultFailedQuizFactor;
 
-  DivisorRangeBgn: number = 1;
-  DivisorRangeEnd: number = 100;
-  DividendRangeBgn: number = 500;
-  DividendRangeEnd: number = 1000;
-  
+  DivisorRangeBgn = 1;
+  DivisorRangeEnd = 100;
+  DividendRangeBgn = 500;
+  DividendRangeEnd = 1000;
+
   quizInstance: PrimarySchoolMathQuiz = null;
   QuizItems: DivisionQuizItem[] = [];
   DisplayedQuizItems: DivisionQuizItem[] = [];
-  UsedQuizAmount: number = 0;
+  UsedQuizAmount = 0;
 
   pageSize: number;
   pageIndex: number;
@@ -54,32 +54,32 @@ export class DivisionExerciseComponent implements OnInit {
   }
 
   private generateQuizItem(nIdx: number): DivisionQuizItem {
-      let dq: DivisionQuizItem = new DivisionQuizItem(Math.floor(Math.random() * (this.DividendRangeEnd - this.DividendRangeBgn) + this.DividendRangeBgn ),
+      const dq: DivisionQuizItem = new DivisionQuizItem(Math.floor(Math.random() * (this.DividendRangeEnd - this.DividendRangeBgn) + this.DividendRangeBgn ),
         Math.floor(Math.random() * (this.DivisorRangeEnd - this.DivisorRangeBgn) + this.DivisorRangeBgn));
       dq.QuizIndex = nIdx;
 
       return dq;
   }
-  
+
   private generateQuizSection() {
     this.QuizItems = [];
 
     for (let i = 0; i < this.quizInstance.CurrentRun().ItemsCount; i++) {
-      let dq: DivisionQuizItem = this.generateQuizItem(this.UsedQuizAmount + i + 1);
+      const dq: DivisionQuizItem = this.generateQuizItem(this.UsedQuizAmount + i + 1);
 
       this.QuizItems.push(dq);
     }
-    this.UsedQuizAmount += this.QuizItems.length;    
+    this.UsedQuizAmount += this.QuizItems.length;
   }
 
   public canDeactivate(): boolean {
     if (this.quizInstance.IsStarted) {
-      let dlginfo: MessageDialogInfo = {
+      const dlginfo: MessageDialogInfo = {
         Header: 'Home.Error',
         Content: 'Home.QuizIsOngoing',
         Button: MessageDialogButtonEnum.onlyok
       };
-      
+
       this.dialog.open(MessageDialogComponent, {
         disableClose: false,
         width: '500px',
@@ -95,7 +95,7 @@ export class DivisionExerciseComponent implements OnInit {
 
     return true;
   }
-  
+
   public onPageChanged($event: PageEvent) {
     this.pageSize = $event.pageSize;
     this.pageIndex = $event.pageIndex;
@@ -106,8 +106,8 @@ export class DivisionExerciseComponent implements OnInit {
 
   private submitCurrentPage() {
     if (this.DisplayedQuizItems.length > 0 ) {
-      for(let qi of this.DisplayedQuizItems) {
-        for(let qi2 of this.QuizItems) {
+      for (const qi of this.DisplayedQuizItems) {
+        for (const qi2 of this.QuizItems) {
           if (qi.QuizIndex === qi2.QuizIndex) {
             qi2.InputtedQuotient = qi.InputtedQuotient;
             qi2.InputtedRemainder = qi.InputtedRemainder;
@@ -119,11 +119,11 @@ export class DivisionExerciseComponent implements OnInit {
   }
 
   private prepareCurrentPage() {
-    let pageStart = this.pageIndex * this.pageSize;
-    let pageEnd = pageStart + this.pageSize;
+    const pageStart = this.pageIndex * this.pageSize;
+    const pageEnd = pageStart + this.pageSize;
 
     this.DisplayedQuizItems = [];
-    for(let i = 0; i < this.QuizItems.length; i ++) {
+    for (let i = 0; i < this.QuizItems.length; i ++) {
       if (i >= pageStart && i < pageEnd) {
         this.DisplayedQuizItems.push(this.QuizItems[i]);
       }
@@ -133,22 +133,22 @@ export class DivisionExerciseComponent implements OnInit {
   public onQuizItemTrackBy(index: number, item: any) {
     return item.QuizIndex;
   }
-  
+
   public CanStart(): boolean {
     if (this.StartQuizAmount <= 0 || this.DividendRangeBgn <= 0
       || this.DividendRangeEnd <= this.DividendRangeBgn
-      || this.DivisorRangeBgn <= 0 
+      || this.DivisorRangeBgn <= 0
       || this.DivisorRangeEnd <= this.DivisorRangeBgn) {
       return false;
     }
-    
+
     if (this.quizInstance.IsStarted) {
       return false;
     }
 
     return true;
   }
-  
+
   public onQuizStart(): void {
     // Start it!
     this.quizInstance.BasicInfo = '[' + this.DivisorRangeBgn.toString() + '...' + this.DivisorRangeEnd.toString() + ']'
@@ -174,7 +174,7 @@ export class DivisionExerciseComponent implements OnInit {
     }
 
     this.submitCurrentPage();
-    for (let quiz of this.QuizItems) {
+    for (const quiz of this.QuizItems) {
       if (quiz.InputtedQuotient === undefined
         || quiz.InputtedQuotient === null
         || quiz.InputtedRemainder === undefined
@@ -188,7 +188,7 @@ export class DivisionExerciseComponent implements OnInit {
 
   public onQuizSubmit(): void {
     this._dlgsvc.FailureItems = [];
-    for (let quiz of this.QuizItems) {
+    for (const quiz of this.QuizItems) {
       if (!quiz.IsCorrect()) {
         this._dlgsvc.FailureItems.push(quiz);
       }
@@ -196,14 +196,14 @@ export class DivisionExerciseComponent implements OnInit {
 
     if (this._dlgsvc.FailureItems.length > 0) {
       this._dlgsvc.CurrentScore = Math.round(100 - 100 * this._dlgsvc.FailureItems.length / this.QuizItems.length);
-      let dialogRef = this.dialog.open(QuizFailureDlgComponent, {
+      const dialogRef = this.dialog.open(QuizFailureDlgComponent, {
         disableClose: false,
         width: '500px'
       });
 
       dialogRef.afterClosed().subscribe(x => {
         this.quizInstance.SubmitCurrentRun(this._dlgsvc.FailureItems);
-        
+
         this.generateQuizSection();
         this.pageIndex = 0;
         this.prepareCurrentPage();

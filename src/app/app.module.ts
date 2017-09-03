@@ -51,6 +51,7 @@ import { AwardPlanComponent } from './award-plan';
 import { AwardPlanService } from './services/award-plan.service';
 import { AwardBalanceComponent } from './award-balance';
 import { AwardBalanceService } from './services/award-balance.service';
+import { QuizService } from './services/quiz.service';
 
 @NgModule({
   exports: [
@@ -130,7 +131,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     AuthGuard,
     CanDeactivateGuard,
     AwardPlanService,
-    AwardBalanceService
+    AwardBalanceService,
+    QuizService
   ],
   bootstrap: [AppComponent]
 })

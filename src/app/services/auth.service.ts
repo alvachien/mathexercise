@@ -9,11 +9,11 @@ import { UserManager, Log, MetadataService, User } from 'oidc-client';
 
 const AuthSettings: any = {
   authority: environment.IDServerUrl,
-  client_id: "acexercise.math",
+  client_id: 'acexercise.math',
   redirect_uri: environment.AppLoginCallbackUrl,
   post_logout_redirect_uri: environment.AppLogoutCallbackUrl,
-  response_type: "id_token token",
-  scope: "openid profile api.acquiz",
+  response_type: 'id_token token',
+  scope: 'openid profile api.acquiz',
 
   silent_redirect_uri: environment.AppLoginSlientRevewCallbackUrl,
   automaticSilentRenew: true,
@@ -35,16 +35,16 @@ export class AuthService {
 
   constructor(private http: Http) {
     if (environment.LoggingLevel >= LogLevel.Debug) {
-      console.log("ACMathExercies Log [Debug]: Entering AuthService constructor...");
+      console.log('ACMathExercies Log [Debug]: Entering AuthService constructor...');
     }
 
     this.mgr = new UserManager(AuthSettings);
 
-    let that = this;
+    const that = this;
     this.mgr.getUser().then(function (u) {
       if (u) {
         if (environment.LoggingLevel >= LogLevel.Debug) {
-          console.log("ACMathExercies Log [Debug]: AuthService constructor, user get successfully as following: ");
+          console.log('ACMathExercies Log [Debug]: AuthService constructor, user get successfully as following: ');
           console.log(u);
         }
 
@@ -61,14 +61,14 @@ export class AuthService {
       that.authSubject.next(that.authSubject.value);
     }, function (reason) {
       if (environment.LoggingLevel >= LogLevel.Error) {
-        console.log("ACMathExercies Log [Error]: AuthService failed to fetch user:");
+        console.log('ACMathExercies Log [Error]: AuthService failed to fetch user:');
         console.log(reason);
       }
     });
 
     this.mgr.events.addUserUnloaded((e) => {
       if (environment.LoggingLevel >= LogLevel.Debug) {
-        console.log("ACMathExercies Log [Debug]: User unloaded");
+        console.log('ACMathExercies Log [Debug]: User unloaded');
       }
       that.authSubject.value.cleanContent();
 
@@ -77,12 +77,12 @@ export class AuthService {
 
     this.mgr.events.addAccessTokenExpiring(function () {
       if (environment.LoggingLevel >= LogLevel.Debug) {
-        console.warn("ACMathExercies Log: token expiring");
+        console.warn('ACMathExercies Log: token expiring');
       }
     });
     this.mgr.events.addAccessTokenExpired(function () {
       if (environment.LoggingLevel >= LogLevel.Debug) {
-        console.error("ACMathExercies Log: token expired");
+        console.error('ACMathExercies Log: token expired');
       }
 
       that.doLogin();
@@ -91,19 +91,19 @@ export class AuthService {
 
   public doLogin() {
     if (environment.LoggingLevel >= LogLevel.Debug) {
-      console.log("ACMathExercies Log [Debug]: Start the login...");
+      console.log('ACMathExercies Log [Debug]: Start the login...');
     }
 
     if (this.mgr) {
       this.mgr.signinRedirect().then(function () {
       //this.mgr.signinSilent().then(function(){
         if (environment.LoggingLevel >= LogLevel.Debug) {
-          console.info("ACMathExercies Log [Debug]: Redirecting for login...");
+          console.info('ACMathExercies Log [Debug]: Redirecting for login...');
         }
       })
       .catch(function (er) {
         if (environment.LoggingLevel >= LogLevel.Error) {
-          console.error("ACMathExercies Log [Error]: Sign-in error", er);
+          console.error('ACMathExercies Log [Error]: Sign-in error', er);
         }
       });
     }
@@ -111,18 +111,18 @@ export class AuthService {
 
   public doLogout() {
     if (environment.LoggingLevel >= LogLevel.Debug) {
-      console.log("ACMathExercies Log [Debug]: Start the logout...");
+      console.log('ACMathExercies Log [Debug]: Start the logout...');
     }
 
     if (this.mgr) {
       this.mgr.signoutRedirect().then(function () {
         if (environment.LoggingLevel >= LogLevel.Debug) {
-          console.info("ACMathExercies Log [Debug]: redirecting for logout...");
+          console.info('ACMathExercies Log [Debug]: redirecting for logout...');
         }
       })
         .catch(function (er) {
           if (environment.LoggingLevel >= LogLevel.Error) {
-            console.error("ACMathExercies Log [Error]: Sign-out error", er);
+            console.error('ACMathExercies Log [Error]: Sign-out error', er);
           }
         });
     }
@@ -131,11 +131,11 @@ export class AuthService {
   clearState() {
     this.mgr.clearStaleState().then(function () {
       if (environment.LoggingLevel >= LogLevel.Debug) {
-        console.log("clearStateState success");
+        console.log('clearStateState success');
       }
     }).catch(function (e) {
       if (environment.LoggingLevel >= LogLevel.Debug) {
-        console.log("clearStateState error", e.message);
+        console.log('clearStateState error', e.message);
       }
     });
   }
@@ -143,7 +143,7 @@ export class AuthService {
   getUser() {
     this.mgr.getUser().then((user) => {
       if (environment.LoggingLevel >= LogLevel.Debug) {
-        console.log("got user", user);
+        console.log('got user', user);
       }
 
       this.userLoadededEvent.emit(user);
@@ -156,7 +156,7 @@ export class AuthService {
     this.mgr.removeUser().then(() => {
       this.userLoadededEvent.emit(null);
       if (environment.LoggingLevel >= LogLevel.Debug) {
-        console.log("user removed");
+        console.log('user removed');
       }
     }).catch(function (err) {
       console.log(err);
@@ -166,7 +166,7 @@ export class AuthService {
   startSigninMainWindow() {
     this.mgr.signinRedirect({ data: 'some data' }).then(function () {
       if (environment.LoggingLevel >= LogLevel.Debug) {
-        console.log("signinRedirect done");
+        console.log('signinRedirect done');
       }
     }).catch(function (err) {
       console.log(err);
@@ -176,7 +176,7 @@ export class AuthService {
   endSigninMainWindow() {
     this.mgr.signinRedirectCallback().then(function (user) {
       if (environment.LoggingLevel >= LogLevel.Debug) {
-        console.log("signed in", user);
+        console.log('signed in', user);
       }
     }).catch(function (err) {
       console.log(err);
@@ -186,11 +186,11 @@ export class AuthService {
   startSignoutMainWindow() {
     this.mgr.signoutRedirect().then(function (resp) {
       if (environment.LoggingLevel >= LogLevel.Debug) {
-        console.log("signed out", resp);
+        console.log('signed out', resp);
       }
       setTimeout(5000, () => {
-        console.log("testing to see if fired...");
-      })
+        console.log('testing to see if fired...');
+      });
     }).catch(function (err) {
       console.log(err);
     });
@@ -199,7 +199,7 @@ export class AuthService {
   endSignoutMainWindow() {
     this.mgr.signoutRedirectCallback().then(function (resp) {
       if (environment.LoggingLevel >= LogLevel.Debug) {
-        console.log("signed out", resp);
+        console.log('signed out', resp);
       }
     }).catch(function (err) {
       console.log(err);
@@ -224,7 +224,7 @@ export class AuthService {
    */
   AuthPut(url: string, data: any, options?: RequestOptions): Observable<Response> {
 
-    let body = JSON.stringify(data);
+    const body = JSON.stringify(data);
 
     if (options) {
       options = this._setRequestOptions(options);
@@ -254,7 +254,7 @@ export class AuthService {
    */
   AuthPost(url: string, data: any, options?: RequestOptions): Observable<Response> {
 
-    let body = JSON.stringify(data);
+    const body = JSON.stringify(data);
 
     if (options) {
       options = this._setRequestOptions(options);
@@ -267,7 +267,7 @@ export class AuthService {
 
   private _setAuthHeaders(user: any) {
     this.authHeaders = new Headers();
-    this.authHeaders.append('Authorization', user.token_type + " " + user.access_token);
+    this.authHeaders.append('Authorization', user.token_type + ' ' + user.access_token);
     this.authHeaders.append('Content-Type', 'application/json');
   }
 
@@ -277,7 +277,7 @@ export class AuthService {
       options.headers.append(this.authHeaders.keys[0], this.authHeaders.values[0]);
     }
     else {
-      options = new RequestOptions({ headers: this.authHeaders, body: "" });
+      options = new RequestOptions({ headers: this.authHeaders, body: '' });
     }
 
     return options;

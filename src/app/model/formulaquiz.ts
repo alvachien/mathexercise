@@ -3,11 +3,11 @@ import { PrimarySchoolFormulaEnum, getFormulaUIString } from './formuladef';
 import { PrimarySchoolMathQuizItem } from './quizconcept';
 
 /**
- * 
+ *
  * @param fe Formula
  */
 export function isFormulaTypeEnabled(fe: PrimarySchoolFormulaEnum): boolean {
-    switch(fe) {
+    switch (fe) {
         case PrimarySchoolFormulaEnum.AreaOfRectangle:
         case PrimarySchoolFormulaEnum.AreaOfSquare:
         case PrimarySchoolFormulaEnum.CircumferenceOfCircle:
@@ -102,12 +102,12 @@ export class FormulaQuizItemBase extends PrimarySchoolMathQuizItem {
      * @param s String to restore
      */
     public static restoreFromString(s: string): FormulaQuizItemBase | null {
-        let idx = s.indexOf(QuizSplitter);
-        let ntype: PrimarySchoolFormulaEnum = <PrimarySchoolFormulaEnum>parseInt(s.substring(0, idx));
-        switch(ntype) {
+        const idx = s.indexOf(QuizSplitter);
+        const ntype: PrimarySchoolFormulaEnum = <PrimarySchoolFormulaEnum>parseInt(s.substring(0, idx));
+        switch (ntype) {
             case PrimarySchoolFormulaEnum.CircumferenceOfCircle:
             return FormulaCOfCircleQuizItem.restoreFromString(s.substring(idx + 1));
-            
+
             case PrimarySchoolFormulaEnum.CircumferenceOfSquare:
             return FormulaCOfSquareQuizItem.restoreFromString(s.substring(idx + 1));
 
@@ -119,14 +119,14 @@ export class FormulaQuizItemBase extends PrimarySchoolMathQuizItem {
 
             case PrimarySchoolFormulaEnum.AreaOfSquare:
             return FormulaAreaOfSquareQuizItem.restoreFromString(s.substring(idx + 1));
-            
+
             case PrimarySchoolFormulaEnum.DistanceAndSpeed:
             return FormulaDistAndSpeedQuizItem.restoreFromString(s.substring(idx + 1));
 
             default:
             break;
         }
-        
+
         return null;
     }
 }
@@ -177,7 +177,7 @@ export class FormulaCOfCircleQuizItem extends FormulaQuizItemBase {
     }
 
     public IsCorrect(): boolean {
-        let brst = super.IsCorrect();
+        const brst = super.IsCorrect();
         if (!brst) {
             return false;
         }
@@ -201,7 +201,7 @@ export class FormulaCOfCircleQuizItem extends FormulaQuizItemBase {
 
         if (this._direct === FormulaCOfCircleCalcDirEum.Radius) {
             return `Home.CircumferenceOfCircleQuizForCFormat`;
-        } else if(this._direct === FormulaCOfCircleCalcDirEum.Circum) {
+        } else if (this._direct === FormulaCOfCircleCalcDirEum.Circum) {
             return `Home.CircumferenceOfCircleQuizForRFormat`;
         }
     }
@@ -215,14 +215,14 @@ export class FormulaCOfCircleQuizItem extends FormulaQuizItemBase {
     }
 
     public getCorrectFormula(): string {
-        let frmstr: string = getFormulaUIString(this.FormulaType);
+        const frmstr: string = getFormulaUIString(this.FormulaType);
 
         return frmstr.replace('C', this._circum.toFixed(2)).replace('R', this._raidus.toFixed(2));
     }
 
     public getInputtedForumla(): string {
-        let frmstr: string = getFormulaUIString(this.FormulaType);
-        
+        const frmstr: string = getFormulaUIString(this.FormulaType);
+
         if (this._direct === FormulaCOfCircleCalcDirEum.Radius) {
             return frmstr.replace('C', this.InputtedResult.toFixed(2)).replace('R', this._raidus.toFixed(2));
         } else {
@@ -234,9 +234,9 @@ export class FormulaCOfCircleQuizItem extends FormulaQuizItemBase {
         let rstr = super.storeToString();
 
         if (this._direct === FormulaCOfCircleCalcDirEum.Radius) {
-            rstr += QuizSplitter + "0" + QuizSplitter + this._raidus.toString();
+            rstr += QuizSplitter + '0' + QuizSplitter + this._raidus.toString();
         } else {
-            rstr += QuizSplitter + "1" + QuizSplitter + this._circum.toString();            
+            rstr += QuizSplitter + '1' + QuizSplitter + this._circum.toString();
         }
 
         return rstr;
@@ -244,13 +244,13 @@ export class FormulaCOfCircleQuizItem extends FormulaQuizItemBase {
 
     public static restoreFromString(s: string): FormulaCOfCircleQuizItem | null {
         try {
-            let idx = s.indexOf(QuizSplitter);
-            
-            let nbol: number = parseInt(s.substring(0, idx));
-            let nnum: number = parseFloat(s.substring(idx + 1));
+            const idx = s.indexOf(QuizSplitter);
+
+            const nbol: number = parseInt(s.substring(0, idx));
+            const nnum: number = parseFloat(s.substring(idx + 1));
             return new FormulaCOfCircleQuizItem(nnum, <FormulaCOfCircleCalcDirEum>nbol);
         }
-        catch(exp) {
+        catch (exp) {
             console.error(exp);
         }
 
@@ -271,7 +271,7 @@ export enum FormulaCOfSquareCalcDirEum {
  * C = 4a
  */
 // CircumferenceOfSquare   = 11,
-// 
+//
 export class FormulaCOfSquareQuizItem extends FormulaQuizItemBase {
     private _edge: number;
     get Edge(): number {
@@ -306,7 +306,7 @@ export class FormulaCOfSquareQuizItem extends FormulaQuizItemBase {
     }
 
     public IsCorrect(): boolean {
-        let brst = super.IsCorrect();
+        const brst = super.IsCorrect();
         if (!brst) {
             return false;
         }
@@ -323,11 +323,11 @@ export class FormulaCOfSquareQuizItem extends FormulaQuizItemBase {
 
         return false;
     }
-    
+
     public getQuizFormat(): string {
         if (this._direct === FormulaCOfSquareCalcDirEum.Edge) {
             return `Home.CircumferenceOfSquareQuizForCFormat`;
-        } else if(this._direct === FormulaCOfSquareCalcDirEum.Circum) {
+        } else if (this._direct === FormulaCOfSquareCalcDirEum.Circum) {
             return `Home.CircumferenceOfSquareQuizForEFormat`;
         }
     }
@@ -341,28 +341,28 @@ export class FormulaCOfSquareQuizItem extends FormulaQuizItemBase {
     }
 
     public getCorrectFormula(): string {
-        let frmstr: string = getFormulaUIString(this.FormulaType);
-        
+        const frmstr: string = getFormulaUIString(this.FormulaType);
+
         return frmstr.replace('C', this._circum.toFixed(2)).replace('a', this._edge.toFixed(2));
     }
 
     public getInputtedForumla(): string {
-        let frmstr: string = getFormulaUIString(this.FormulaType);
-        
+        const frmstr: string = getFormulaUIString(this.FormulaType);
+
         if (this._direct === FormulaCOfSquareCalcDirEum.Edge) {
             return frmstr.replace('C', this.InputtedResult.toFixed(2)).replace('a', this._edge.toFixed(2));
-        } else if(this._direct === FormulaCOfSquareCalcDirEum.Circum) {
+        } else if (this._direct === FormulaCOfSquareCalcDirEum.Circum) {
             return frmstr.replace('C', this._circum.toFixed(2)).replace('a', this.InputtedResult.toFixed(2));
         }
     }
 
     public storeToString(): string {
         let rstr = super.storeToString();
-        
+
         if (this._direct === FormulaCOfSquareCalcDirEum.Edge) {
-            rstr += QuizSplitter + "0" + QuizSplitter + this._edge.toString();
-        } else if(this._direct === FormulaCOfSquareCalcDirEum.Circum) {
-            rstr += QuizSplitter + "1" + QuizSplitter + this._circum.toString();            
+            rstr += QuizSplitter + '0' + QuizSplitter + this._edge.toString();
+        } else if (this._direct === FormulaCOfSquareCalcDirEum.Circum) {
+            rstr += QuizSplitter + '1' + QuizSplitter + this._circum.toString();
         }
 
         return rstr;
@@ -370,14 +370,14 @@ export class FormulaCOfSquareQuizItem extends FormulaQuizItemBase {
 
     public static restoreFromString(s: string): FormulaCOfSquareQuizItem | null {
         try {
-            let idx = s.indexOf(QuizSplitter);
-            
-            let nbol: number = parseInt(s.substring(0, idx));
-            let nnum: number = parseFloat(s.substring(idx + 1));
+            const idx = s.indexOf(QuizSplitter);
+
+            const nbol: number = parseInt(s.substring(0, idx));
+            const nnum: number = parseFloat(s.substring(idx + 1));
 
             return new FormulaCOfSquareQuizItem(nnum, <FormulaCOfSquareCalcDirEum>nbol);
         }
-        catch(exp) {
+        catch (exp) {
             console.error(exp);
         }
 
@@ -431,23 +431,23 @@ export class FormulaCOfRectangleQuizItem extends FormulaQuizItemBase {
             this._longedge = num1;
             this._shortedge = num2;
             this._circum = parseFloat((2 * (this._longedge + this._shortedge)).toFixed(2));
-        } else if(dir === FormulaCOfRectangleCalcDirEum.LongEdgeAndCircum) {
+        } else if (dir === FormulaCOfRectangleCalcDirEum.LongEdgeAndCircum) {
             this._direct = dir;
-            this._longedge = num1;            
+            this._longedge = num1;
             this._circum = num2;
             this._shortedge = parseFloat(( (this._circum - 2 * this._longedge ) / 2 ).toFixed(2));
-        } else if(dir === FormulaCOfRectangleCalcDirEum.ShortEdgeAndCircum) {
+        } else if (dir === FormulaCOfRectangleCalcDirEum.ShortEdgeAndCircum) {
             this._direct = dir;
             this._shortedge = num1;
             this._circum = num2;
             this._longedge = parseFloat(( (this._circum - 2 * this._shortedge ) / 2 ).toFixed(2));
         } else {
-            throw new Error("Unsupported direction!");
+            throw new Error('Unsupported direction!');
         }
     }
 
     public IsCorrect(): boolean {
-        let brst = super.IsCorrect();
+        const brst = super.IsCorrect();
         if (!brst) {
             return false;
         }
@@ -456,11 +456,11 @@ export class FormulaCOfRectangleQuizItem extends FormulaQuizItemBase {
             if (this._circum.toFixed(2) === this.InputtedResult.toFixed(2)) {
                 return true;
             }
-        } else if(this._direct === FormulaCOfRectangleCalcDirEum.LongEdgeAndCircum) {
+        } else if (this._direct === FormulaCOfRectangleCalcDirEum.LongEdgeAndCircum) {
             if (this._shortedge.toFixed(2) === this.InputtedResult.toFixed(2)) {
                 return true;
             }
-        } else if(this._direct === FormulaCOfRectangleCalcDirEum.ShortEdgeAndCircum) {
+        } else if (this._direct === FormulaCOfRectangleCalcDirEum.ShortEdgeAndCircum) {
             if (this._longedge.toFixed(2) === this.InputtedResult.toFixed(2)) {
                 return true;
             }
@@ -468,30 +468,30 @@ export class FormulaCOfRectangleQuizItem extends FormulaQuizItemBase {
 
         return false;
     }
-    
+
     public getQuizFormat(): string {
         if (this._direct === FormulaCOfRectangleCalcDirEum.LongEdgeAndShortEdge) {
             return `Home.CircumferenceOfRectangleQuizForCFormat`;
-        } else if(this._direct === FormulaCOfRectangleCalcDirEum.LongEdgeAndCircum) {
+        } else if (this._direct === FormulaCOfRectangleCalcDirEum.LongEdgeAndCircum) {
             return `Home.CircumferenceOfRectangleQuizForEFormat`;
-        } else if(this._direct === FormulaCOfRectangleCalcDirEum.ShortEdgeAndCircum) {
+        } else if (this._direct === FormulaCOfRectangleCalcDirEum.ShortEdgeAndCircum) {
             return `Home.CircumferenceOfRectangleQuizForEFormat`;
         }
     }
 
     public getQuizFormatParam(): any {
         if (this._direct === FormulaCOfRectangleCalcDirEum.LongEdgeAndShortEdge) {
-            return { 
+            return {
                 longedge: this._longedge,
                 shortedge: this._shortedge
             };
-        } else if(this._direct === FormulaCOfRectangleCalcDirEum.LongEdgeAndCircum) {
-            return { 
+        } else if (this._direct === FormulaCOfRectangleCalcDirEum.LongEdgeAndCircum) {
+            return {
                 circum: this._circum,
                 edge: this._longedge
             };
-        } else if(this._direct === FormulaCOfRectangleCalcDirEum.ShortEdgeAndCircum) {
-            return { 
+        } else if (this._direct === FormulaCOfRectangleCalcDirEum.ShortEdgeAndCircum) {
+            return {
                 circum: this._circum,
                 edge: this._shortedge
             };
@@ -499,32 +499,32 @@ export class FormulaCOfRectangleQuizItem extends FormulaQuizItemBase {
     }
 
     public getCorrectFormula(): string {
-        let frmstr: string = getFormulaUIString(this.FormulaType);
-        
+        const frmstr: string = getFormulaUIString(this.FormulaType);
+
         return frmstr.replace('C', this._circum.toFixed(2)).replace('a', this._longedge.toFixed(2)).replace('b', this._shortedge.toFixed(2));
     }
 
     public getInputtedForumla(): string {
-        let frmstr: string = getFormulaUIString(this.FormulaType);
-        
+        const frmstr: string = getFormulaUIString(this.FormulaType);
+
         if (this._direct === FormulaCOfRectangleCalcDirEum.LongEdgeAndShortEdge) {
             return frmstr.replace('C', this.InputtedResult.toFixed(2)).replace('a', this._longedge.toFixed(2)).replace('b', this._shortedge.toFixed(2));
-        } else if(this._direct === FormulaCOfRectangleCalcDirEum.LongEdgeAndCircum) {
+        } else if (this._direct === FormulaCOfRectangleCalcDirEum.LongEdgeAndCircum) {
             return frmstr.replace('C', this._circum.toFixed(2)).replace('a', this._longedge.toFixed(2)).replace('b', this.InputtedResult.toFixed(2));
-        } else if(this._direct === FormulaCOfRectangleCalcDirEum.ShortEdgeAndCircum) {
+        } else if (this._direct === FormulaCOfRectangleCalcDirEum.ShortEdgeAndCircum) {
             return frmstr.replace('C', this._circum.toFixed(2)).replace('a', this.InputtedResult.toFixed(2)).replace('b', this._shortedge.toFixed(2));
         }
     }
 
     public storeToString(): string {
         let rstr = super.storeToString();
-        
+
         if (this._direct === FormulaCOfRectangleCalcDirEum.LongEdgeAndShortEdge) {
-            rstr += QuizSplitter + "0" + QuizSplitter + this._longedge.toString() + QuizSplitter + this._shortedge.toString();
-        } else if(this._direct === FormulaCOfRectangleCalcDirEum.LongEdgeAndCircum) {
-            rstr += QuizSplitter + "1" + QuizSplitter + this._longedge.toString() + QuizSplitter + this._circum.toString();
-        } else if(this._direct === FormulaCOfRectangleCalcDirEum.ShortEdgeAndCircum) {
-            rstr += QuizSplitter + "2" + QuizSplitter + this._shortedge.toString() + QuizSplitter + this._circum.toString();
+            rstr += QuizSplitter + '0' + QuizSplitter + this._longedge.toString() + QuizSplitter + this._shortedge.toString();
+        } else if (this._direct === FormulaCOfRectangleCalcDirEum.LongEdgeAndCircum) {
+            rstr += QuizSplitter + '1' + QuizSplitter + this._longedge.toString() + QuizSplitter + this._circum.toString();
+        } else if (this._direct === FormulaCOfRectangleCalcDirEum.ShortEdgeAndCircum) {
+            rstr += QuizSplitter + '2' + QuizSplitter + this._shortedge.toString() + QuizSplitter + this._circum.toString();
         }
 
         return rstr;
@@ -532,15 +532,15 @@ export class FormulaCOfRectangleQuizItem extends FormulaQuizItemBase {
 
     public static restoreFromString(s: string): FormulaCOfRectangleQuizItem | null {
         try {
-            let idx = s.indexOf(QuizSplitter);
-            let idx2 = s.indexOf(QuizSplitter, idx + 1);
-            
-            let ndir: number = <FormulaCOfRectangleCalcDirEum>parseInt(s.substring(0, idx));
-            let nnum1: number = parseFloat(s.substring(idx + 1, idx2));
-            let nnum2: number = parseFloat(s.substring(idx2 + 1));
+            const idx = s.indexOf(QuizSplitter);
+            const idx2 = s.indexOf(QuizSplitter, idx + 1);
+
+            const ndir: number = <FormulaCOfRectangleCalcDirEum>parseInt(s.substring(0, idx));
+            const nnum1: number = parseFloat(s.substring(idx + 1, idx2));
+            const nnum2: number = parseFloat(s.substring(idx2 + 1));
             return new FormulaCOfRectangleQuizItem(nnum1, nnum2, ndir);
         }
-        catch(exp) {
+        catch (exp) {
             console.error(exp);
         }
 
@@ -603,23 +603,23 @@ export class FormulaDistAndSpeedQuizItem extends FormulaQuizItemBase {
             this._speed = num1;
             this._time = num2;
             this._distance = parseFloat((this._speed * this._time).toFixed(2));
-        } else if(dir === FormulaDistAndSpeedCalcDirEum.SpeedAndDistance) {
+        } else if (dir === FormulaDistAndSpeedCalcDirEum.SpeedAndDistance) {
             this._direct = dir;
-            this._speed = num1;            
+            this._speed = num1;
             this._distance = num2;
             this._time = parseFloat(( this._distance / this._speed ).toFixed(2));
-        } else if(dir === FormulaDistAndSpeedCalcDirEum.TimeAndDistance) {
+        } else if (dir === FormulaDistAndSpeedCalcDirEum.TimeAndDistance) {
             this._direct = dir;
             this._time = num1;
             this._distance = num2;
             this._speed = parseFloat( (this._distance / this._time).toFixed(2));
         } else {
-            throw new Error("Unsupported direction!");
+            throw new Error('Unsupported direction!');
         }
     }
 
     public IsCorrect(): boolean {
-        let brst = super.IsCorrect();
+        const brst = super.IsCorrect();
         if (!brst) {
             return false;
         }
@@ -640,7 +640,7 @@ export class FormulaDistAndSpeedQuizItem extends FormulaQuizItemBase {
 
         return false;
     }
-    
+
     public getQuizFormat(): string {
         if (this._direct === FormulaDistAndSpeedCalcDirEum.SpeedAndTime) {
             return `Home.SpeedAndDistanceForDFormat`;
@@ -653,17 +653,17 @@ export class FormulaDistAndSpeedQuizItem extends FormulaQuizItemBase {
 
     public getQuizFormatParam(): any {
         if (this._direct === FormulaDistAndSpeedCalcDirEum.SpeedAndTime) {
-            return { 
+            return {
                 speed: this._speed,
                 time: this._time
             };
         } else if (this._direct === FormulaDistAndSpeedCalcDirEum.SpeedAndDistance) {
-            return { 
+            return {
                 speed: this._speed,
                 distance: this._distance
             };
         } else if (this._direct === FormulaDistAndSpeedCalcDirEum.TimeAndDistance) {
-            return { 
+            return {
                 time: this._time,
                 distance: this._distance
             };
@@ -671,14 +671,14 @@ export class FormulaDistAndSpeedQuizItem extends FormulaQuizItemBase {
     }
 
     public getCorrectFormula(): string {
-        let frmstr: string = getFormulaUIString(this.FormulaType);
-        
+        const frmstr: string = getFormulaUIString(this.FormulaType);
+
         return frmstr.replace('S', this._distance.toFixed(2)).replace('v', this._speed.toFixed(2)).replace('h', this._time.toFixed(2));
     }
 
     public getInputtedForumla(): string {
-        let frmstr: string = getFormulaUIString(this.FormulaType);
-        
+        const frmstr: string = getFormulaUIString(this.FormulaType);
+
         if (this._direct === FormulaDistAndSpeedCalcDirEum.SpeedAndTime) {
             return frmstr.replace('S', this.InputtedResult.toFixed(2)).replace('v', this._speed.toFixed(2)).replace('h', this._time.toFixed(2));
         } else if (this._direct === FormulaDistAndSpeedCalcDirEum.SpeedAndDistance) {
@@ -690,13 +690,13 @@ export class FormulaDistAndSpeedQuizItem extends FormulaQuizItemBase {
 
     public storeToString(): string {
         let rstr = super.storeToString();
-        
+
         if (this._direct === FormulaDistAndSpeedCalcDirEum.SpeedAndTime) {
-            rstr += QuizSplitter + "0" + QuizSplitter + this._speed.toString() + QuizSplitter + this._time.toString();
+            rstr += QuizSplitter + '0' + QuizSplitter + this._speed.toString() + QuizSplitter + this._time.toString();
         } else if (this._direct === FormulaDistAndSpeedCalcDirEum.SpeedAndDistance) {
-            rstr += QuizSplitter + "1" + QuizSplitter + this._speed.toString() + QuizSplitter + this._time.toString();
+            rstr += QuizSplitter + '1' + QuizSplitter + this._speed.toString() + QuizSplitter + this._time.toString();
         } else if (this._direct === FormulaDistAndSpeedCalcDirEum.TimeAndDistance) {
-            rstr += QuizSplitter + "2" + QuizSplitter + this._time.toString() + QuizSplitter + this._distance.toString();
+            rstr += QuizSplitter + '2' + QuizSplitter + this._time.toString() + QuizSplitter + this._distance.toString();
         }
 
         return rstr;
@@ -704,15 +704,15 @@ export class FormulaDistAndSpeedQuizItem extends FormulaQuizItemBase {
 
     public static restoreFromString(s: string): FormulaDistAndSpeedQuizItem | null {
         try {
-            let idx = s.indexOf(QuizSplitter);
-            let idx2 = s.indexOf(QuizSplitter, idx + 1);
-            
-            let ndir: number = <FormulaDistAndSpeedCalcDirEum>parseInt(s.substring(0, idx));
-            let nnum1: number = parseFloat(s.substring(idx + 1, idx2));
-            let nnum2: number = parseFloat(s.substring(idx2 + 1));
+            const idx = s.indexOf(QuizSplitter);
+            const idx2 = s.indexOf(QuizSplitter, idx + 1);
+
+            const ndir: number = <FormulaDistAndSpeedCalcDirEum>parseInt(s.substring(0, idx));
+            const nnum1: number = parseFloat(s.substring(idx + 1, idx2));
+            const nnum2: number = parseFloat(s.substring(idx2 + 1));
             return new FormulaDistAndSpeedQuizItem(nnum1, nnum2, ndir);
         }
-        catch(exp) {
+        catch (exp) {
             console.error(exp);
         }
 
@@ -766,23 +766,23 @@ export class FormulaAreaOfRectangleQuizItem extends FormulaQuizItemBase {
             this._longedge = num1;
             this._shortedge = num2;
             this._area = parseFloat((this._longedge * this._shortedge).toFixed(2));
-        } else if(dir === FormulaAOfRectangleCalcDirEum.LongEdgeAndArea) {
+        } else if (dir === FormulaAOfRectangleCalcDirEum.LongEdgeAndArea) {
             this._direct = dir;
             this._longedge = num1;
             this._area = num2;
             this._shortedge = parseFloat(( this._area / this._longedge ).toFixed(2));
-        } else if(dir === FormulaAOfRectangleCalcDirEum.ShortEdgeAndArea) {
+        } else if (dir === FormulaAOfRectangleCalcDirEum.ShortEdgeAndArea) {
             this._direct = dir;
             this._shortedge = num1;
             this._area = num2;
             this._longedge = parseFloat(( this._area / this._shortedge ).toFixed(2));
         } else {
-            throw new Error("Unsupported direction!");
+            throw new Error('Unsupported direction!');
         }
     }
 
     public IsCorrect(): boolean {
-        let brst = super.IsCorrect();
+        const brst = super.IsCorrect();
         if (!brst) {
             return false;
         }
@@ -791,11 +791,11 @@ export class FormulaAreaOfRectangleQuizItem extends FormulaQuizItemBase {
             if (this._area.toFixed(2) === this.InputtedResult.toFixed(2)) {
                 return true;
             }
-        } else if(this._direct === FormulaAOfRectangleCalcDirEum.LongEdgeAndArea) {
+        } else if (this._direct === FormulaAOfRectangleCalcDirEum.LongEdgeAndArea) {
             if (this._shortedge.toFixed(2) === this.InputtedResult.toFixed(2)) {
                 return true;
             }
-        } else if(this._direct === FormulaAOfRectangleCalcDirEum.ShortEdgeAndArea) {
+        } else if (this._direct === FormulaAOfRectangleCalcDirEum.ShortEdgeAndArea) {
             if (this._longedge.toFixed(2) === this.InputtedResult.toFixed(2)) {
                 return true;
             }
@@ -803,30 +803,30 @@ export class FormulaAreaOfRectangleQuizItem extends FormulaQuizItemBase {
 
         return false;
     }
-    
+
     public getQuizFormat(): string {
         if (this._direct === FormulaAOfRectangleCalcDirEum.LongEdgeAndShortEdge) {
             return `Home.AreaOfRectangleQuizForAFormat`;
-        } else if(this._direct === FormulaAOfRectangleCalcDirEum.LongEdgeAndArea) {
+        } else if (this._direct === FormulaAOfRectangleCalcDirEum.LongEdgeAndArea) {
             return `Home.AreaOfRectangleQuizForEFormat`;
-        } else if(this._direct === FormulaAOfRectangleCalcDirEum.ShortEdgeAndArea) {
+        } else if (this._direct === FormulaAOfRectangleCalcDirEum.ShortEdgeAndArea) {
             return `Home.AreaOfRectangleQuizForEFormat`;
         }
     }
 
     public getQuizFormatParam(): any {
         if (this._direct === FormulaAOfRectangleCalcDirEum.LongEdgeAndShortEdge) {
-            return { 
+            return {
                 longedge: this._longedge,
                 shortedge: this._shortedge
             };
-        } else if(this._direct === FormulaAOfRectangleCalcDirEum.LongEdgeAndArea) {
-            return { 
+        } else if (this._direct === FormulaAOfRectangleCalcDirEum.LongEdgeAndArea) {
+            return {
                 area: this._area,
                 edge: this._longedge
             };
-        } else if(this._direct === FormulaAOfRectangleCalcDirEum.ShortEdgeAndArea) {
-            return { 
+        } else if (this._direct === FormulaAOfRectangleCalcDirEum.ShortEdgeAndArea) {
+            return {
                 area: this._area,
                 edge: this._shortedge
             };
@@ -834,32 +834,32 @@ export class FormulaAreaOfRectangleQuizItem extends FormulaQuizItemBase {
     }
 
     public getCorrectFormula(): string {
-        let frmstr: string = getFormulaUIString(this.FormulaType);
-        
+        const frmstr: string = getFormulaUIString(this.FormulaType);
+
         return frmstr.replace('S', this._area.toFixed(2)).replace('a', this._longedge.toFixed(2)).replace('b', this._shortedge.toFixed(2));
     }
 
     public getInputtedForumla(): string {
-        let frmstr: string = getFormulaUIString(this.FormulaType);
-        
+        const frmstr: string = getFormulaUIString(this.FormulaType);
+
         if (this._direct === FormulaAOfRectangleCalcDirEum.LongEdgeAndShortEdge) {
             return frmstr.replace('S', this.InputtedResult.toFixed(2)).replace('a', this._longedge.toFixed(2)).replace('b', this._shortedge.toFixed(2));
-        } else if(this._direct === FormulaAOfRectangleCalcDirEum.LongEdgeAndArea) {
+        } else if (this._direct === FormulaAOfRectangleCalcDirEum.LongEdgeAndArea) {
             return frmstr.replace('S', this._area.toFixed(2)).replace('a', this._longedge.toFixed(2)).replace('b', this.InputtedResult.toFixed(2));
-        } else if(this._direct === FormulaAOfRectangleCalcDirEum.ShortEdgeAndArea) {
+        } else if (this._direct === FormulaAOfRectangleCalcDirEum.ShortEdgeAndArea) {
             return frmstr.replace('S', this._area.toFixed(2)).replace('a', this.InputtedResult.toFixed(2)).replace('b', this._shortedge.toFixed(2));
         }
     }
 
     public storeToString(): string {
         let rstr = super.storeToString();
-        
+
         if (this._direct === FormulaAOfRectangleCalcDirEum.LongEdgeAndShortEdge) {
-            rstr += QuizSplitter + "0" + QuizSplitter + this._longedge.toString() + QuizSplitter + this._shortedge.toString();
-        } else if(this._direct === FormulaAOfRectangleCalcDirEum.LongEdgeAndArea) {
-            rstr += QuizSplitter + "1" + QuizSplitter + this._longedge.toString() + QuizSplitter + this._area.toString();
-        } else if(this._direct === FormulaAOfRectangleCalcDirEum.ShortEdgeAndArea) {
-            rstr += QuizSplitter + "2" + QuizSplitter + this._shortedge.toString() + QuizSplitter + this._area.toString();
+            rstr += QuizSplitter + '0' + QuizSplitter + this._longedge.toString() + QuizSplitter + this._shortedge.toString();
+        } else if (this._direct === FormulaAOfRectangleCalcDirEum.LongEdgeAndArea) {
+            rstr += QuizSplitter + '1' + QuizSplitter + this._longedge.toString() + QuizSplitter + this._area.toString();
+        } else if (this._direct === FormulaAOfRectangleCalcDirEum.ShortEdgeAndArea) {
+            rstr += QuizSplitter + '2' + QuizSplitter + this._shortedge.toString() + QuizSplitter + this._area.toString();
         }
 
         return rstr;
@@ -867,15 +867,15 @@ export class FormulaAreaOfRectangleQuizItem extends FormulaQuizItemBase {
 
     public static restoreFromString(s: string): FormulaAreaOfRectangleQuizItem | null {
         try {
-            let idx = s.indexOf(QuizSplitter);
-            let idx2 = s.indexOf(QuizSplitter, idx + 1);
-            
-            let ndir: number = <FormulaAOfRectangleCalcDirEum>parseInt(s.substring(0, idx));
-            let nnum1: number = parseFloat(s.substring(idx + 1, idx2));
-            let nnum2: number = parseFloat(s.substring(idx2 + 1));
+            const idx = s.indexOf(QuizSplitter);
+            const idx2 = s.indexOf(QuizSplitter, idx + 1);
+
+            const ndir: number = <FormulaAOfRectangleCalcDirEum>parseInt(s.substring(0, idx));
+            const nnum1: number = parseFloat(s.substring(idx + 1, idx2));
+            const nnum2: number = parseFloat(s.substring(idx2 + 1));
             return new FormulaAreaOfRectangleQuizItem(nnum1, nnum2, ndir);
         }
-        catch(exp) {
+        catch (exp) {
             console.error(exp);
         }
 
@@ -929,7 +929,7 @@ export class FormulaAreaOfSquareQuizItem extends FormulaQuizItemBase {
     }
 
     public IsCorrect(): boolean {
-        let brst = super.IsCorrect();
+        const brst = super.IsCorrect();
         if (!brst) {
             return false;
         }
@@ -946,11 +946,11 @@ export class FormulaAreaOfSquareQuizItem extends FormulaQuizItemBase {
 
         return false;
     }
-    
+
     public getQuizFormat(): string {
         if (this._direct === FormulaAreaOfSquareCalcDirEum.Edge) {
             return `Home.AreaOfSquareQuizForAFormat`;
-        } else if(this._direct === FormulaAreaOfSquareCalcDirEum.Area) {
+        } else if (this._direct === FormulaAreaOfSquareCalcDirEum.Area) {
             return `Home.AreaOfSquareQuizForEFormat`;
         }
     }
@@ -964,28 +964,28 @@ export class FormulaAreaOfSquareQuizItem extends FormulaQuizItemBase {
     }
 
     public getCorrectFormula(): string {
-        let frmstr: string = getFormulaUIString(this.FormulaType);
-        
+        const frmstr: string = getFormulaUIString(this.FormulaType);
+
         return frmstr.replace('S', this._area.toFixed(2)).replace('a', this._edge.toFixed(2));
     }
 
     public getInputtedForumla(): string {
-        let frmstr: string = getFormulaUIString(this.FormulaType);
-        
+        const frmstr: string = getFormulaUIString(this.FormulaType);
+
         if (this._direct === FormulaAreaOfSquareCalcDirEum.Edge) {
             return frmstr.replace('S', this.InputtedResult.toFixed(2)).replace('a', this._edge.toFixed(2));
-        } else if(this._direct === FormulaAreaOfSquareCalcDirEum.Area) {
+        } else if (this._direct === FormulaAreaOfSquareCalcDirEum.Area) {
             return frmstr.replace('S', this._area.toFixed(2)).replace('a', this.InputtedResult.toFixed(2));
         }
     }
 
     public storeToString(): string {
         let rstr = super.storeToString();
-        
+
         if (this._direct === FormulaAreaOfSquareCalcDirEum.Edge) {
-            rstr += QuizSplitter + "0" + QuizSplitter + this._edge.toString();
-        } else if(this._direct === FormulaAreaOfSquareCalcDirEum.Area) {
-            rstr += QuizSplitter + "1" + QuizSplitter + this._area.toString();            
+            rstr += QuizSplitter + '0' + QuizSplitter + this._edge.toString();
+        } else if (this._direct === FormulaAreaOfSquareCalcDirEum.Area) {
+            rstr += QuizSplitter + '1' + QuizSplitter + this._area.toString();
         }
 
         return rstr;
@@ -993,14 +993,14 @@ export class FormulaAreaOfSquareQuizItem extends FormulaQuizItemBase {
 
     public static restoreFromString(s: string): FormulaAreaOfSquareQuizItem | null {
         try {
-            let idx = s.indexOf(QuizSplitter);
-            
-            let nbol: number = parseInt(s.substring(0, idx));
-            let nnum: number = parseFloat(s.substring(idx + 1));
+            const idx = s.indexOf(QuizSplitter);
+
+            const nbol: number = parseInt(s.substring(0, idx));
+            const nnum: number = parseFloat(s.substring(idx + 1));
 
             return new FormulaAreaOfSquareQuizItem(nnum, <FormulaAreaOfSquareCalcDirEum>nbol);
         }
-        catch(exp) {
+        catch (exp) {
             console.error(exp);
         }
 

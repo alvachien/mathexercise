@@ -16,6 +16,7 @@ import { CanDeactivateGuard } from './services/can-deactive-guard.service';
 import { MixedopExerciseComponent } from './mixedop-exercise';
 import { AwardPlanComponent } from './award-plan';
 import { AwardBalanceComponent } from './award-balance';
+import { EnwordReciteExerciseComponent } from './enword-recite-exercise';
 
 export const AppRoutes: Routes = [
   { path: '', component: Home },
@@ -33,4 +34,5 @@ export const AppRoutes: Routes = [
   { path: 'mixop-ex', component: MixedopExerciseComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateGuard] },
   { path: 'award-plan', component: AwardPlanComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateGuard] },
   { path: 'award-bal', component: AwardBalanceComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateGuard] },
+  { path: 'enword-recite', component: EnwordReciteExerciseComponent, },
 ];

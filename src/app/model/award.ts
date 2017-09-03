@@ -125,7 +125,7 @@ export class AwardPlan {
         this._award = jdata.award;
     }
     public prepareData(): AwardPlanJson {
-        let rst: AwardPlanJson = {
+        const rst: AwardPlanJson = {
             planID: this._id,
             targetUser: this._tgtuser,
             createdBy: this._crtby,
@@ -158,6 +158,7 @@ export interface UserAwardJson {
     awardDate: Date;
     award: number;
     awardPlanID?: number;
+    quizType?: number;
     quizID?: number;
     usedReason?: string;
 }
@@ -211,6 +212,14 @@ export class UserAward {
         this._quizid = qi;
     }
 
+    private _quiztype: QuizTypeEnum;
+    get QuizType(): QuizTypeEnum {
+        return this._quiztype;
+    }
+    set QuizType(qt: QuizTypeEnum) {
+        this._quiztype = qt;
+    }
+
     private _usdrsn: string;
     get UsedReason(): string {
         return this._usdrsn;
@@ -226,18 +235,19 @@ export class UserAward {
         this._awd = jdata.award;
         this._awdpid = jdata.awardPlanID;
         this._quizid = jdata.quizID;
+        this._quiztype = +jdata.quizType;
         this._usdrsn = jdata.usedReason;
     }
 
     public prepareData(): UserAwardJson {
-        let data: UserAwardJson = {
+        const data: UserAwardJson = {
             awardID: this._id,
             userID: this._userid,
             awardDate: this._awdDate,
             award: this._awd,
             awardPlanID: this._awdpid,
             quizID: this._quizid,
-            usedReason: this._usdrsn        
+            usedReason: this._usdrsn
         };
 
         return data;

@@ -14,9 +14,9 @@ import { LogLevel } from './model';
 })
 export class Home {
   public backgroundimage: string;
-  
+
   constructor(private _sanitizer: DomSanitizer) {
-    const photoamt: number = 7;
+    const photoamt = 7;
     let bgidx: number = Math.ceil(Math.random() * (photoamt - 1) + 1);
     if (bgidx > photoamt) {
       bgidx = photoamt;
@@ -25,9 +25,9 @@ export class Home {
     }
 
     if (bgidx === 1) {
-      this.backgroundimage = "assets/image/home-bg.jpg";
+      this.backgroundimage = 'assets/image/home-bg.jpg';
     } else {
-      this.backgroundimage = "assets/image/home-bg" + bgidx.toString() + ".jpg";
+      this.backgroundimage = 'assets/image/home-bg' + bgidx.toString() + '.jpg';
     }
   }
 
@@ -73,7 +73,7 @@ export class AppComponent implements OnInit {
       this.onLanguageChange();
     }
   }
-  
+
   constructor(private _element: ElementRef,
     private _translate: TranslateService,
     private _authService: AuthService,
@@ -101,6 +101,7 @@ export class AppComponent implements OnInit {
       { name: 'Home.RetestPreviousFailures', route: 'fail-retest' },
       { name: 'Home.Statistics', route: 'user-stat' },
       { name: 'Home.UserDetail', route: 'user-detail' },
+      { name: 'Test', route: 'enword-recite' }
     ];
 
     // Register the Auth service
@@ -110,18 +111,18 @@ export class AppComponent implements OnInit {
           this.isLoggedIn = x.isAuthorized;
           if (this.isLoggedIn) {
             this.titleLogin = x.getUserName();
-  
+
             // Get user detail
             this._userDetailService.fetchUserDetail().subscribe((x2) => {
               if (x2 !== null && x2 !== undefined && x2.length > 0) {
                 this.userDisplayAs = x2;
-              }            
+              }
             });
           }
         });
       }, error => {
         if (environment.LoggingLevel >= LogLevel.Error) {
-          console.error("AC Math Exercise: Log [Error]: Failed in subscribe to User", error);
+          console.error('AC Math Exercise: Log [Error]: Failed in subscribe to User', error);
         }
       }, () => {
         // Completed
@@ -139,8 +140,8 @@ export class AppComponent implements OnInit {
     if (environment.LoginRequired) {
       this._authService.doLogin();
     } else {
-      console.log("No logon is required!");
-    }    
+      console.log('No logon is required!');
+    }
   }
 
   public onUserDetail(): void {

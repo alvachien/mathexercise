@@ -10,9 +10,9 @@ import { environment } from '../../environments/environment';
 import { QuizAttendUser, UserDetailService } from '../services/userdetail.service';
 
 export interface quiztypeui {
-  qtype: QuizTypeEnum,
-  i18term: string,
-  display: string
+  qtype: QuizTypeEnum;
+  i18term: string;
+  display: string;
 }
 
 @Component({
@@ -28,7 +28,7 @@ export class UserStatisticsComponent implements OnInit {
   // AttendedUser
 
   listUsers: QuizAttendUser[] = [];
-  curUser: string = '';
+  curUser = '';
   listqtype: quiztypeui[] = [];
   colorSchemeGeneral = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA', '#BBBBBB', '#CCCCCC']
@@ -83,13 +83,13 @@ export class UserStatisticsComponent implements OnInit {
 
     // Get Quiz type display string
     let arstrs: string[] = [];
-    for (let fe in QuizTypeEnum) {
+    for (const fe in QuizTypeEnum) {
       if (isNaN(Number(fe))) {
       } else {
-        let astr = QuizTypeEnum2UIString(Number(fe));
+        const astr = QuizTypeEnum2UIString(Number(fe));
         arstrs.push(astr);
 
-        let qtu = {
+        const qtu = {
           qtype: Number(fe),
           i18term: astr,
           display: ''
@@ -100,8 +100,8 @@ export class UserStatisticsComponent implements OnInit {
 
     // Translate for quiz type
     this._tranService.get(arstrs).subscribe(x => {
-      for (let tran in x) {
-        for (let qtu of this.listqtype) {
+      for (const tran in x) {
+        for (const qtu of this.listqtype) {
           if (tran === qtu.i18term) {
             qtu.display = x[tran];
           }
@@ -157,13 +157,13 @@ export class UserStatisticsComponent implements OnInit {
   }
 
   private fetchQuizAmountByDate(usr: string) {
-    let apiurl = environment.APIBaseUrl + 'StatisticQuizAmountByDate/' + usr;
+    const apiurl = environment.APIBaseUrl + 'StatisticQuizAmountByDate/' + usr;
 
-    let headers = new Headers();
+    const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
     headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-    let options = new RequestOptions({ headers: headers }); // Create a request option
+    const options = new RequestOptions({ headers: headers }); // Create a request option
     this._http.get(apiurl, options)
       .map((response: Response) => {
         return response.json();
@@ -172,8 +172,8 @@ export class UserStatisticsComponent implements OnInit {
         if (x instanceof Array && x.length > 0) {
           this.dataQuizAmountByDate = [];
 
-          for (let si of x) {
-            let ent: any = {
+          for (const si of x) {
+            const ent: any = {
               name: si.quizDate,
               value: Number(si.amount)
             };
@@ -185,13 +185,13 @@ export class UserStatisticsComponent implements OnInit {
   }
 
   private fetchQuizAmountByType(usr: string) {
-    let apiurl = environment.APIBaseUrl + 'StatisticQuizAmountByType/' + usr;
+    const apiurl = environment.APIBaseUrl + 'StatisticQuizAmountByType/' + usr;
 
-    let headers = new Headers();
+    const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
     headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-    let options = new RequestOptions({ headers: headers }); // Create a request option
+    const options = new RequestOptions({ headers: headers }); // Create a request option
     this._http.get(apiurl, options)
       .map((response: Response) => {
         return response.json();
@@ -199,14 +199,14 @@ export class UserStatisticsComponent implements OnInit {
       .subscribe(x => {
         if (x instanceof Array && x.length > 0) {
           this.dataQuizAmountByType = [];
-          for (let si of x) {
-            let name: string = '';
-            for (let qtu of this.listqtype) {
+          for (const si of x) {
+            let name = '';
+            for (const qtu of this.listqtype) {
               if (qtu.qtype === Number(si.quizType)) {
                 name = qtu.display;
               }
             }
-            let ent: any = {
+            const ent: any = {
               name: name,
               value: Number(si.amount)
             };
@@ -218,13 +218,13 @@ export class UserStatisticsComponent implements OnInit {
   }
 
   private fetchQuizItemAmountByDate(usr: string) {
-    let apiurl = environment.APIBaseUrl + 'StatisticQuizItemAmountByDate/' + usr;
+    const apiurl = environment.APIBaseUrl + 'StatisticQuizItemAmountByDate/' + usr;
 
-    let headers = new Headers();
+    const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
     headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-    let options = new RequestOptions({ headers: headers }); // Create a request option
+    const options = new RequestOptions({ headers: headers }); // Create a request option
     this._http.get(apiurl, options)
       .map((response: Response) => {
         return response.json();
@@ -232,8 +232,8 @@ export class UserStatisticsComponent implements OnInit {
       .subscribe(x => {
         this.dataItemAmountByDate = [];
         if (x instanceof Array && x.length > 0) {
-          for (let si of x) {
-            let rst = {
+          for (const si of x) {
+            const rst = {
               name: si.quizDate,
               series: [
                 {
@@ -253,13 +253,13 @@ export class UserStatisticsComponent implements OnInit {
   }
 
   private fetchQuizItemAmountByType(usr: string) {
-    let apiurl = environment.APIBaseUrl + 'StatisticQuizItemAmountByType/' + usr;
+    const apiurl = environment.APIBaseUrl + 'StatisticQuizItemAmountByType/' + usr;
 
-    let headers = new Headers();
+    const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
     headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-    let options = new RequestOptions({ headers: headers }); // Create a request option
+    const options = new RequestOptions({ headers: headers }); // Create a request option
     this._http.get(apiurl, options)
       .map((response: Response) => {
         return response.json();
@@ -267,19 +267,19 @@ export class UserStatisticsComponent implements OnInit {
       .subscribe(x => {
         this.dataItemAmountByType = [];
         if (x instanceof Array && x.length > 0) {
-          for (let si of x) {
-            let name: string = '';
-            for (let qtu of this.listqtype) {
+          for (const si of x) {
+            let name = '';
+            for (const qtu of this.listqtype) {
               if (qtu.qtype === Number(si.quizType)) {
                 name = qtu.display;
               }
             }
-            let rst = {
+            const rst = {
               name: name,
               series: [{
                   name: 'Success',
                   value: si.totalAmount - si.failedAmount
-                },{
+                }, {
                   name: 'Failed',
                   value: si.failedAmount
                 }

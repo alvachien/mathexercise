@@ -10,9 +10,9 @@ import { LogLevel } from '../model';
   styleUrls: ['./user-detail.component.scss']
 })
 export class UserDetailComponent implements OnInit {
-  UserID: string = '';
-  Mailbox: string = '';
-  DisplayAs: string = '';
+  UserID = '';
+  Mailbox = '';
+  DisplayAs = '';
 
   constructor(private _authService: AuthService,
     private _userDetailService: UserDetailService,
@@ -35,7 +35,7 @@ export class UserDetailComponent implements OnInit {
       });
     }, error => {
       if (environment.LoggingLevel >= LogLevel.Error) {
-        console.error("AC Math Exercise: Log [Error]: Failed in subscribe to User", error);
+        console.error('AC Math Exercise: Log [Error]: Failed in subscribe to User', error);
       }
     }, () => {
       // Completed

@@ -17,7 +17,7 @@ export enum QuizTypeEnum {
 }
 
 export function QuizTypeEnum2UIString(qt: QuizTypeEnum): string {
-    let rst: string = '';
+    let rst = '';
     switch (qt) {
         case QuizTypeEnum.add: rst = 'Home.AdditionExercises'; break;
         case QuizTypeEnum.sub: rst = 'Home.SubtractionExercises'; break;
@@ -44,8 +44,8 @@ export enum QuizDegreeOfDifficulity {
 }
 
 export function QuizDegreeOfDifficulity2UIString(qd: QuizDegreeOfDifficulity): string {
-    let rst: string = '';
-    switch(qd) {
+    let rst = '';
+    switch (qd) {
         case QuizDegreeOfDifficulity.easy: rst = 'Home.Easy'; break;
         case QuizDegreeOfDifficulity.medium: rst = 'Home.Medium'; break;
         case QuizDegreeOfDifficulity.hard: rst = 'Home.Hard'; break;
@@ -90,7 +90,7 @@ export class QuizItem {
  */
 export class PrimarySchoolMathQuizItem extends QuizItem {
     public IsCorrect(): boolean {
-        let brst = super.IsCorrect();
+        const brst = super.IsCorrect();
         if (!brst) {
             return false;
         }
@@ -98,7 +98,7 @@ export class PrimarySchoolMathQuizItem extends QuizItem {
     }
 
     public getQuizFormat(): string {
-        let rststr = super.getQuizFormat();
+        const rststr = super.getQuizFormat();
         return rststr;
     }
 
@@ -111,7 +111,7 @@ export class PrimarySchoolMathQuizItem extends QuizItem {
     }
 
     public storeToString(): string {
-        let rstr = super.storeToString();
+        const rstr = super.storeToString();
         return rstr;
     }
 
@@ -143,7 +143,7 @@ export class PrimarySchoolMathFAOQuizItem extends PrimarySchoolMathQuizItem {
     }
 
     public IsCorrect(): boolean {
-        let brst = super.IsCorrect();
+        const brst = super.IsCorrect();
         if (!brst) {
             return false;
         }
@@ -151,17 +151,17 @@ export class PrimarySchoolMathFAOQuizItem extends PrimarySchoolMathQuizItem {
     }
 
     public getQuizFormat(): string {
-        let rststr = super.getQuizFormat();
+        const rststr = super.getQuizFormat();
         return rststr;
     }
 
     public getCorrectFormula(): string {
-        let rststr = super.getCorrectFormula();
+        const rststr = super.getCorrectFormula();
         return rststr;
     }
 
     public getInputtedForumla(): string {
-        let rststr = super.getInputtedForumla();
+        const rststr = super.getInputtedForumla();
         return rststr;
     }
 
@@ -173,18 +173,18 @@ export class PrimarySchoolMathFAOQuizItem extends PrimarySchoolMathQuizItem {
 
     public static restoreFromString(s: string): PrimarySchoolMathFAOQuizItem {
         // Now parse it!
-        let idx = s.indexOf(QuizSplitter);
-        let idx2 = s.indexOf(QuizSplitter, idx + 1);
+        const idx = s.indexOf(QuizSplitter);
+        const idx2 = s.indexOf(QuizSplitter, idx + 1);
 
-        let leftNumber = parseInt(s.substring(0, idx));
-        let rightNumber = parseInt(s.substring(idx + 1, idx2));
+        const leftNumber = parseInt(s.substring(0, idx));
+        const rightNumber = parseInt(s.substring(idx + 1, idx2));
 
         return new PrimarySchoolMathFAOQuizItem(leftNumber, rightNumber);
     }
 }
 
 /**
- * Quiz section 
+ * Quiz section
  */
 export class PrimarySchoolMathQuizSection {
     private _sectionNumber: number;
@@ -317,7 +317,7 @@ export class PrimarySchoolMathQuiz {
 
     /**
      * Start the quiz
-     * @param startnum: Initial number of the questions 
+     * @param startnum: Initial number of the questions
      * @param failfactor: Factor of the failure
      */
     public Start(startnum: number, failfactor: number) {
@@ -342,7 +342,7 @@ export class PrimarySchoolMathQuiz {
     public SubmitCurrentRun(failedItems?: PrimarySchoolMathQuizItem[]) {
         if (failedItems !== null && failedItems !== undefined && failedItems.length > 0) {
             this._curRun.ItemsFailed = failedItems.length;
-            for (let fi of failedItems) {
+            for (const fi of failedItems) {
                 this._failedItems.push(fi);
             }
         } else {
@@ -351,9 +351,9 @@ export class PrimarySchoolMathQuiz {
         this._curRun.SectionComplete();
         this._elderRun.push(this._curRun);
 
-        let ncnt = Math.round(this._curRun.ItemsFailed * this._faileFactor);
+        const ncnt = Math.round(this._curRun.ItemsFailed * this._faileFactor);
         if (ncnt > 0) {
-            let curID = this._curRun.SectionNumber;
+            const curID = this._curRun.SectionNumber;
             this._curRun = new PrimarySchoolMathQuizSection(curID + 1, ncnt);
         } else {
             this.Stop();

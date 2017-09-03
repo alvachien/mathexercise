@@ -19,7 +19,7 @@ export const slideInOutAnimation =
 
             // styles at start of transition
             style({
-                // start with the content positioned off the right of the screen, 
+                // start with the content positioned off the right of the screen,
                 // -400% is required instead of -100% because the negative position adds to the width of the element
                 right: '-400%',
 
