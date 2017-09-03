@@ -10,6 +10,9 @@
     <div class="demo-full-width">
       <h3><span>{{'Home.AvgTimeSpentEachInSeconds' | translate}}: </span> <span>{{totalTimeSpent}}</span></h3>
     </div>
+    <div class="demo-full-width" *ngIf="totalAwardPoints">
+      <h3><span>{{'Home.AwardPointAssigned' | translate}}: </span> <span>{{totalAwardPoints}}</span></h3>
+    </div>
     <div class="example-container mat-elevation-z8">
       <md-table #table [dataSource]="dataSource">
         <!-- ID Column -->
@@ -47,7 +50,7 @@
           <md-header-cell *cdkHeaderCellDef>{{'Home.AdjAvgTimeSpentEachInSeconds' | translate}}</md-header-cell>
           <md-cell *cdkCellDef="let row"> {{row.adjavgtimespent}} </md-cell>
         </ng-container>
-        
+
         <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
         <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
       </md-table>

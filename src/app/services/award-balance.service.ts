@@ -3,28 +3,28 @@ import { Http, RequestOptions, Response, Headers, URLSearchParams } from '@angul
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
-import { LogLevel, UserAuthInfo, AwardPlan, AwardPlanJson } from '../model';
+import { LogLevel, UserAuthInfo, UserAward, UserAwardJson } from '../model';
 import { AuthService } from './auth.service';
 
 @Injectable()
-export class AwardPlanService {
-  private _awardPlans: AwardPlan[];
+export class AwardBalanceService {
+  private _awards: UserAward[];
   public dataChangedSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
   
   constructor(private _http: Http,
     private _authService: AuthService) {
-    this._awardPlans = [];
+    this._awards = [];
   }
 
-  public fetchPlansForUser(usr: string): Observable<any> {
-    let apiurl = environment.APIBaseUrl + 'AwardPlan';
+  public fetchAwardsForUser(usr: string): Observable<any> {
+    let apiurl = environment.APIBaseUrl + 'UserAward';
 
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Accept', 'application/json');
     headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
     let params: URLSearchParams = new URLSearchParams();
-    params.set('tgtuser', usr);
+    params.set('userid', usr);
 
     let options = new RequestOptions({ search: params, headers: headers }); // Create a request option
     return this._http.get(apiurl, options)
@@ -33,30 +33,30 @@ export class AwardPlanService {
           console.log(response);
         }
 
-        this._awardPlans = []; // Clear it first
+        this._awards = []; // Clear it first
         let rjs = response.json();
+
+        let totalPoints: number = 0;
         if (rjs instanceof Array && rjs.length > 0) {
           for (let si of rjs) {
-            let ap: AwardPlan = new AwardPlan();
-            ap.parseData(<AwardPlanJson>si);
-            
-            this._awardPlans.push(ap);
+            let ap: UserAward = new UserAward();
+            ap.parseData(<UserAwardJson>si);
+            totalPoints += ap.Award;
+            this._awards.push(ap);
           }
         }
 
-        return this._awardPlans;
+        // Calculate the sum
+        let aptotal: UserAward = new UserAward();
+        aptotal.Award = totalPoints;
+        //aptotal.AwardDate = 'SUM';
+        this._awards.push(aptotal);
+
+        return this._awards;
       });
   }
 
   public triggerDataChange() {
     this.dataChangedSubject.next(true);
-  }
-
-  public createAwardPlan() {
-
-  }
-
-  public deleteAwardPlan() {
-    
   }
 }

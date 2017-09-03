@@ -367,3 +367,12 @@ export class PrimarySchoolMathQuiz {
         this._isStarted = false;
     }
 }
+
+/**
+ * Interface when communicating with API after Quiz submitted successfully
+ */
+export interface QuizCreateResultJSON {
+    quizID: number;
+    totalAwardPoint: number;
+    awardIDList: number[];
+}

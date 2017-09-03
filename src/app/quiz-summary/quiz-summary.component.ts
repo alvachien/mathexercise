@@ -8,7 +8,7 @@ import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 import {
   PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, MultiplicationQuizItem,
-  LogLevel, QuizTypeEnum2UIString
+  LogLevel, QuizTypeEnum2UIString, QuizCreateResultJSON
 } from '../model';
 import { slideInOutAnimation } from '../animation';
 import { environment } from '../../environments/environment';
@@ -98,6 +98,7 @@ export class QuizSummaryComponent implements OnInit {
   quizType: string;
   totalScore: number;
   totalTimeSpent: number;
+  totalAwardPoints: number;
 
   constructor(private _dlgsvc: DialogService,
     private _authService: AuthService,
@@ -177,6 +178,11 @@ export class QuizSummaryComponent implements OnInit {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log('AC Math Exericse [Debug]: ' + x);
         }
-      });
+
+        let cr: QuizCreateResultJSON = <QuizCreateResultJSON>x;
+        if (cr.totalAwardPoint) {
+          this.totalAwardPoints = cr.totalAwardPoint;
+        }
+      });      
   }
 }

@@ -1,46 +1,100 @@
 <md-card>
   <md-card-header>
-    <md-card-title>{{'Home.AwardPlan' | translate}}</md-card-title>
+    <md-card-title>{{pageHeader | translate}}</md-card-title>
   </md-card-header>
   <md-card-content>
-    <div>
-      <md-select placeholder="{{'Home.User' | translate}}" [(ngModel)]="curUser" name="usr" (change)="onUserChanged($event)">
-        <md-option *ngFor="let user of listUsers" [value]="user.attenduser">
+    <md-toolbar color="primary" *ngIf="IsListView">
+      <md-select placeholder="{{'Home.User' | translate}}" [disabled]="!IsListView" [(ngModel)]="CurrentUser" name="usr" (change)="onUserChanged($event)">
+        <md-option *ngFor="let user of listUsers" [value]="user">
           {{ user.displayas }}
         </md-option>
       </md-select>
+
+      <button md-icon-button [disabled]="!CurrentUser" (click)="onCreatePlan()">
+        <md-icon class="md-24" aria-label="Create">create_new_folder</md-icon>
+      </button>
+      <button md-icon-button>
+        <md-icon class="md-24" aria-label="Edit">delete</md-icon>
+      </button>
+
+      <!-- This fills the remaining space of the current row -->
+      <span class="example-fill-remaining-space"></span>
+      <span>{{'Home.AwardPlanByUser' | translate}}</span>
+    </md-toolbar>
+
+    <div *ngIf="IsListView" class="example-container mat-elevation-z8">
+      <md-table #table [dataSource]="dataSource">
+
+        <ng-container mdColumnDef="ID">
+          <md-header-cell *mdHeaderCellDef> # </md-header-cell>
+          <md-cell *mdCellDef="let element" (click)="onEditPlan(row)"><md-checkbox></md-checkbox> {{element.ID}} </md-cell>
+        </ng-container>
+        <ng-container mdColumnDef="ValidFrom">
+          <md-header-cell *mdHeaderCellDef> {{'Home.ValidFrom' | translate }} </md-header-cell>
+          <md-cell *mdCellDef="let element"> {{element.ValidFrom}} </md-cell>
+        </ng-container>
+        <ng-container mdColumnDef="ValidTo">
+          <md-header-cell *mdHeaderCellDef> {{'Home.ValidTo' | translate }} </md-header-cell>
+          <md-cell *mdCellDef="let element"> {{element.ValidTo}} </md-cell>
+        </ng-container>
+        <ng-container mdColumnDef="QuizType">
+          <md-header-cell *mdHeaderCellDef> {{'Home.QuizType' | translate }} </md-header-cell>
+          <md-cell *mdCellDef="let element"> {{element.getQuizTypeUIString()}} </md-cell>
+        </ng-container>
+        <ng-container mdColumnDef="AwardCondition">
+          <md-header-cell *mdHeaderCellDef> {{'Home.AwardCondition' | translate }} </md-header-cell>
+          <md-cell *mdCellDef="let element"> {{element.getAwardScoreCondition() | translate: element.getAwardScoreConditionParam()}} ; {{element.getAwardAvgTimeCondition()
+            | translate: element.getAwardAvgTimeConditionParam()}} </md-cell>
+        </ng-container>
+        <ng-container mdColumnDef="Award">
+          <md-header-cell *mdHeaderCellDef> {{'Home.Award' | translate }} </md-header-cell>
+          <md-cell *mdCellDef="let element"> {{element.Award}} </md-cell>
+        </ng-container>
+
+        <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+        <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
+      </md-table>
     </div>
 
-    <div class="example-container mat-elevation-z8">
-        <md-table #table [dataSource]="dataSource">
-      
-          <!-- Position Column -->
-          <ng-container mdColumnDef="pid">
-            <md-header-cell *mdHeaderCellDef> No. </md-header-cell>
-            <md-cell *mdCellDef="let element"> {{element.position}} </md-cell>
-          </ng-container>
-      
-          <!-- Name Column -->
-          <ng-container mdColumnDef="usrid">
-            <md-header-cell *mdHeaderCellDef> Name </md-header-cell>
-            <md-cell *mdCellDef="let element"> {{element.name}} </md-cell>
-          </ng-container>
-      
-          <!-- Weight Column -->
-          <ng-container mdColumnDef="quiztype">
-            <md-header-cell *mdHeaderCellDef> Weight </md-header-cell>
-            <md-cell *mdCellDef="let element"> {{element.weight}} </md-cell>
-          </ng-container>
-      
-          <!-- Color Column -->
-          <ng-container mdColumnDef="award">
-            <md-header-cell *mdHeaderCellDef> Symbol </md-header-cell>
-            <md-cell *mdCellDef="let element"> {{element.symbol}} </md-cell>
-          </ng-container>
-      
-          <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
-          <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
-        </md-table>
+    <div *ngIf="IsDetailView">
+      <div class="demo-full-width">
+        <input mdInput type="text" placeholder="{{'Home.User' | translate}}" readonly [(ngModel)]="CurrentUser.displayas">
       </div>
+
+      <div class="demo-full-width">
+        <md-form-field>
+          <input mdInput [(ngModel)]="CurrentPlan.ValidFrom" [mdDatepicker]="vfmpicker" placeholder="{{'Home.ValidFrom' | translate}}">
+          <md-datepicker-toggle mdSuffix [for]="vfmpicker"></md-datepicker-toggle>
+          <md-datepicker #vfmpicker></md-datepicker>
+        </md-form-field>
+        <md-form-field>
+          <input mdInput [(ngModel)]="CurrentPlan.ValidTo" [mdDatepicker]="vtopicker" placeholder="{{'Home.ValidTo' | translate}}">
+          <md-datepicker-toggle mdSuffix [for]="vtopicker"></md-datepicker-toggle>
+          <md-datepicker #vtopicker></md-datepicker>
+        </md-form-field>
+      </div>
+
+      <md-select class="demo-full-width" placeholder="{{'Home.Type' | translate}}" [(ngModel)]="CurrentPlan.QuizType" name="planqtype">
+        <md-option *ngFor="let qt of listQTypes" [value]="qt.value">
+          {{ qt.displayas | translate }}
+        </md-option>
+      </md-select>
+
+      <md-form-field class="demo-full-width">
+        <input mdInput type="number" placeholder="{{'Home.Score' | translate}}" [(ngModel)]="CurrentPlan.MinQuizSocre">
+      </md-form-field>
+
+      <md-form-field class="demo-full-width">
+        <input mdInput type="number" placeholder="{{'Home.AdjAvgTimeSpentEachInSeconds' | translate}}" [(ngModel)]="CurrentPlan.MinQuizAvgTime">
+      </md-form-field>
+
+      <md-form-field class="demo-full-width">
+        <input mdInput type="number" placeholder="{{'Home.AwardPoint' | translate}}" [(ngModel)]="CurrentPlan.Award">
+      </md-form-field>
+    </div>
   </md-card-content>
+  <md-card-actions>
+    <button md-button *ngIf="IsDetailView" (click)="onDetailPlanSubmit()" [disabled]="!CanDetailPlanSubmit()">{{'Home.SubmitButton' | translate }}</button>
+    <button md-button *ngIf="IsDetailView" (click)="onDetailPlanCancel()">{{'Home.CancelButton' | translate }}</button>
+  </md-card-actions>
 </md-card>

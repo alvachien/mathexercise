@@ -1,0 +1,57 @@
+<md-card>
+  <md-card-header>
+    <md-card-title>{{'Home.AwardBalance' | translate}}</md-card-title>
+  </md-card-header>
+  <md-card-content>
+    <md-toolbar color="primary">
+      <md-select placeholder="{{'Home.User' | translate}}" [(ngModel)]="CurrentUser" name="usr" (change)="onUserChanged($event)">
+        <md-option *ngFor="let user of listUsers" [value]="user">
+          {{ user.displayas }}
+        </md-option>
+      </md-select>
+
+      <button md-icon-button [disabled]="!CurrentUser" (click)="onCreateNewExpense()">
+              <md-icon class="md-24" aria-label="Create">create_new_folder</md-icon>
+            </button>
+      <button md-icon-button>
+              <md-icon class="md-24" aria-label="Edit">delete</md-icon>
+            </button>
+
+      <!-- This fills the remaining space of the current row -->
+      <span class="example-fill-remaining-space"></span>
+      <span>{{'Home.AwardBalanceByUser' | translate}}</span>
+    </md-toolbar>
+
+    <md-table #table [dataSource]="dataSource">
+
+      <ng-container mdColumnDef="ID">
+        <md-header-cell *mdHeaderCellDef> # </md-header-cell>
+        <md-cell *mdCellDef="let element">{{element.ID}} </md-cell>
+      </ng-container>
+      <ng-container mdColumnDef="AwardDate">
+        <md-header-cell *mdHeaderCellDef> {{'Home.Date' | translate }} </md-header-cell>
+        <md-cell *mdCellDef="let element"> {{element.AwardDate}} </md-cell>
+      </ng-container>
+      <ng-container mdColumnDef="AwardPlanID">
+        <md-header-cell *mdHeaderCellDef> {{'Home.AwardPlan' | translate }} </md-header-cell>
+        <md-cell *mdCellDef="let element"> {{element.AwardPlanID}} </md-cell>
+      </ng-container>
+      <ng-container mdColumnDef="QuizID">
+        <md-header-cell *mdHeaderCellDef> {{'Home.Quiz' | translate }} </md-header-cell>
+        <md-cell *mdCellDef="let element"> {{element.QuizID}} </md-cell>
+      </ng-container>
+      <ng-container mdColumnDef="Award">
+        <md-header-cell *mdHeaderCellDef> {{'Home.Award' | translate }} </md-header-cell>
+        <md-cell *mdCellDef="let element"> {{element.Award}} </md-cell>
+      </ng-container>
+      <ng-container mdColumnDef="UsedReason">
+          <md-header-cell *mdHeaderCellDef> {{'Home.ExpenseReason' | translate }} </md-header-cell>
+          <md-cell *mdCellDef="let element"> {{element.UsedReason}} </md-cell>
+        </ng-container>
+  
+      <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+      <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
+    </md-table>
+
+  </md-card-content>
+</md-card>

@@ -1,5 +1,5 @@
 
-import { QuizTypeEnum } from './quizconcept';
+import { QuizTypeEnum, QuizTypeEnum2UIString } from './quizconcept';
 
 export class AwardPlan {
     private _id: number;
@@ -54,7 +54,7 @@ export class AwardPlan {
     get MinQuizScore(): number {
         return this._minScore;
     }
-    set MinQuizSocre(scr: number) {
+    set MinQuizScore(scr: number) {
         this._minScore = scr;
     }
 
@@ -75,6 +75,36 @@ export class AwardPlan {
     }
 
     constructor() {
+        this.ValidFrom = new Date();
+        this.ValidTo = new Date(this.ValidFrom.getTime() + 30 * 24 * 60 * 60 * 1000) ;
+        //this.ValidTo = new Date(this.ValidFrom.GetY)
+    }
+
+    public getAwardScoreCondition(): string {
+        if (Number.isInteger(this._minScore)) {
+            return 'Home.AwardPlanScoreConidiotn';
+        }
+        return '';
+    }
+    public getAwardScoreConditionParam(): any {
+        return {
+            score: this._minScore
+        };
+    }
+    public getAwardAvgTimeCondition(): string {
+        if (Number.isInteger(this._minAvgTime)) {
+            return 'Home.AwardPlanScoreConidiotn';
+        }
+        return '';
+    }
+    public getAwardAvgTimeConditionParam(): any {
+        return {
+            avgtime: this._minAvgTime
+        };
+    }
+
+    public getQuizTypeUIString(): string {
+        return QuizTypeEnum2UIString(this._qtype);
     }
 
     public parseData(jdata: AwardPlanJson) {

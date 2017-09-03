@@ -12,7 +12,7 @@ import {
   MdListModule, MdMenuModule, MdProgressBarModule, MdProgressSpinnerModule,
   MdRadioModule, MdSelectModule, MdSidenavModule, MdSliderModule, MdSortModule,
   MdSlideToggleModule, MdSnackBarModule, MdTableModule, MdTabsModule, MdToolbarModule,
-  MdTooltipModule, MdFormFieldModule, MdExpansionModule
+  MdTooltipModule, MdFormFieldModule, MdExpansionModule, MdNativeDateModule
 } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk/table';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -49,6 +49,8 @@ import { EnwordReciteExerciseComponent } from './enword-recite-exercise';
 import { CnwordReciteExerciseComponent } from './cnword-recite-exercise';
 import { AwardPlanComponent } from './award-plan';
 import { AwardPlanService } from './services/award-plan.service';
+import { AwardBalanceComponent } from './award-balance';
+import { AwardBalanceService } from './services/award-balance.service';
 
 @NgModule({
   exports: [
@@ -58,7 +60,7 @@ import { AwardPlanService } from './services/award-plan.service';
     MdListModule, MdMenuModule, MdProgressBarModule, MdProgressSpinnerModule,
     MdRadioModule, MdSelectModule, MdSidenavModule, MdSliderModule, MdSortModule,
     MdSlideToggleModule, MdSnackBarModule, MdTableModule, MdTabsModule, MdToolbarModule,
-    MdTooltipModule, MdFormFieldModule, MdExpansionModule,
+    MdTooltipModule, MdFormFieldModule, MdExpansionModule, MdNativeDateModule,
     CdkTableModule
   ]
 })
@@ -94,7 +96,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     PgSummaryDlgComponent,
     EnwordReciteExerciseComponent,
     CnwordReciteExerciseComponent,
-    AwardPlanComponent
+    AwardPlanComponent,
+    AwardBalanceComponent
   ],
   entryComponents: [
     QuizFailureDlgComponent,
@@ -126,7 +129,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     UserDetailService,
     AuthGuard,
     CanDeactivateGuard,
-    AwardPlanService
+    AwardPlanService,
+    AwardBalanceService
   ],
   bootstrap: [AppComponent]
 })

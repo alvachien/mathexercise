@@ -96,6 +96,8 @@ export class AppComponent implements OnInit {
       //{ name: 'Home.FormulaList', route: 'formula-list' },
       { name: 'Home.FormulaExercises', route: 'formula-ex' },
       { name: 'Home.PuzzleGames', route: 'puzz-game' },
+      { name: 'Home.AwardPlan', route: 'award-plan' },
+      { name: 'Home.AwardBalance', route: 'award-bal' },
       { name: 'Home.RetestPreviousFailures', route: 'fail-retest' },
       { name: 'Home.Statistics', route: 'user-stat' },
       { name: 'Home.UserDetail', route: 'user-detail' },
