@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import {
   PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, AdditionQuizItem,
   DefaultQuizAmount, DefaultFailedQuizFactor, QuizTypeEnum
@@ -38,6 +38,7 @@ export class AdditionExerciseComponent implements OnInit {
 
   constructor(private dialog: MdDialog,
     private _dlgsvc: DialogService,
+    private _zone: NgZone,
     private _router: Router) {
     this.quizInstance = new PrimarySchoolMathQuiz();
     this.quizInstance.QuizType = QuizTypeEnum.add;
@@ -147,7 +148,10 @@ export class AdditionExerciseComponent implements OnInit {
     // Start it!
     this.quizInstance.BasicInfo = '[' + this.LeftNumberRangeBgn.toString() + '...' + this.LeftNumberRangeEnd.toString() + ']'
       + ' + [' + this.RightNumberRangeBgn.toString() + '...' + this.RightNumberRangeEnd.toString() + ']';
-    this.quizInstance.Start(this.StartQuizAmount, this.FailedQuizFactor);
+     
+    this._zone.run(() => {
+      this.quizInstance.Start(this.StartQuizAmount, this.FailedQuizFactor);
+    });
 
     // Generated section
     this.generateQuizSection();

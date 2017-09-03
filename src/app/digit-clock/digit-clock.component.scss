@@ -9,33 +9,36 @@
  $clock-background-color: #565656;
  $clock-front-color: #eee;
 
-.clock { font-size: 2px; width:9em; height:14em;border:1px solid $clock-background-color; position:relative; display:inline-block; margin:0 2px;-webkit-text-size-adjust:none;}
+.clock { 
+    width:9em; height:14em; border:1px solid $clock-background-color; position:relative; display:inline-block; margin:0 2px;
+    -webkit-text-size-adjust:none;
+}
 //.clock { *display:inline;}
 .clock div { position: absolute; border-style:solid; }
-.clock .l,.clock .r,.clock .u,.clock .d{width:0;height:0;overflow:hidden;}
+.clock .l,.clock .r,.clock .u,.clock .d { width:0; height:0; overflow:hidden; }
 
-.clock .v{width:0;height:5em;border-width:0 0.5em;border-color: $clock-front-color;}
-.clock .v .u{border-style:dotted dotted solid dotted;border-width:0 0.5em 0.5em;border-color:transparent transparent $clock-front-color transparent;top:-0.5em;left:-0.5em;}
-.clock .v .d{border-style:solid dotted dotted dotted;border-width:0.5em 0.5em 0 0.5em;border-color: $clock-front-color transparent transparent transparent;left:-0.5em;bottom:-0.5em}
+.clock .v{ width:0;height:5em;border-width:0 0.5em;border-color: $clock-front-color;}
+.clock .v .u{ border-style:dotted dotted solid dotted;border-width:0 0.5em 0.5em;border-color:transparent transparent $clock-front-color transparent;top:-0.5em;left:-0.5em;}
+.clock .v .d{ border-style:solid dotted dotted dotted;border-width:0.5em 0.5em 0 0.5em;border-color: $clock-front-color transparent transparent transparent;left:-0.5em;bottom:-0.5em}
 
-.clock .h{width:5.5em;height:0;border-width:0.5em 0;border-color:$clock-front-color;}
-.clock .h .l{border-style:dotted solid dotted dotted;border-width:0.5em 0.5em 0.5em 0;border-color:transparent $clock-front-color transparent transparent;top:-0.5em;left:-0.5em;}
-.clock .h .r{border-style:dotted dotted dotted solid;border-width:0.5em 0 0.5em 0.5em;border-color:transparent transparent transparent $clock-front-color;top:-0.5em;right:-0.5em;}
+.clock .h{ width:5.5em;height:0;border-width:0.5em 0;border-color:$clock-front-color;}
+.clock .h .l{ border-style:dotted solid dotted dotted;border-width:0.5em 0.5em 0.5em 0;border-color:transparent $clock-front-color transparent transparent;top:-0.5em;left:-0.5em;}
+.clock .h .r{ border-style:dotted dotted dotted solid;border-width:0.5em 0 0.5em 0.5em;border-color:transparent transparent transparent $clock-front-color;top:-0.5em;right:-0.5em;}
 
-.clock .n1{left:0.5em;top:1.5em;}
-.clock .n2{left:0.5em;top:7.5em;}
-.clock .n4{left:7.5em;top:7.5em;}
-.clock .n5{left:7.5em;top:1.5em;}
+.clock .n1{ left:0.5em;top:1.5em; }
+.clock .n2{ left:0.5em;top:7.5em; }
+.clock .n4{ left:7.5em;top:7.5em; }
+.clock .n5{ left:7.5em;top:1.5em; }
 
-.clock .n6{top:0.4em;left:1.8em;}
-.clock .n3{top:12.5em;left:1.8em;}
-.clock .n7{top:6.5em;left:1.8em;}
+.clock .n6{ top:0.4em;left:1.8em;}
+.clock .n3{ top:12.5em;left:1.8em;}
+.clock .n7{ top:6.5em;left:1.8em;}
 
-.dot {width:2em;height:14em;}
+.dot { width:2em;height:14em;}
 .dot .dot1,.dot .dot2 {width:0;height:0;border:0.5em solid $clock-front-color;position:absolute;left:0.5em;}
-.dot .dot1{top:5.5em;}
-.dot .dot2{top:7.5em;}
-.putout .dot1,.putout .dot2 {display:none;}
+.dot .dot1{ top:5.5em;}
+.dot .dot2{ top:7.5em;}
+.putout .dot1,.putout .dot2 { display:none; }
 
 .c1 .n1,.c1 .n2,.c1 .n3,.c1 .n6,.c1 .n7,
 .c2 .n1,.c2 .n4,
@@ -45,12 +48,12 @@
 .c6 .n5,
 .c7 .n1,.c7 .n2,.c7 .n3,.c7 .n7,
 .c9 .n2,
-.c0 .n7{border-color:$clock-background-color;}
+.c0 .n7{ border-color:$clock-background-color; }
 
 .c1 .n3 .l,.c1 .n3 .r,.c1 .n6 .l,.c1 .n6 .r,.c1 .n7 .l,.c1 .n7 .r,
 .c4 .n3 .l,.c4 .n3 .r,.c4 .n6 .l,.c4 .n6 .r,
 .c7 .n3 .l,.c7 .n3 .r,.c7 .n7 .l,.c7 .n7 .r,
-.c0 .n7 .l,.c0 .n7 .r{border-left-color:$clock-background-color;border-right-color:$clock-background-color;}
+.c0 .n7 .l,.c0 .n7 .r{ border-left-color:$clock-background-color;border-right-color:$clock-background-color; }
 
 .c1 .n1 .u,.c1 .n1 .d,.c1 .n2 .u,.c1 .n2 .d,
 .c2 .n1 .u,.c2 .n1 .d,.c2 .n4 .u,.c2 .n4 .d,
@@ -59,4 +62,4 @@
 .c5 .n2 .u,.c5 .n2 .d,.c5 .n5 .u,.c5 .n5 .d,
 .c6 .n5 .u,.c6 .n5 .d,
 .c7 .n1 .u,.c7 .n1 .d,.c7 .n2 .u,.c7 .n2 .d,
-.c9 .n2 .u,.c9 .n2 .d{border-top-color:$clock-background-color;border-bottom-color:$clock-background-color;}
+.c9 .n2 .u,.c9 .n2 .d{ border-top-color:$clock-background-color;border-bottom-color:$clock-background-color; }

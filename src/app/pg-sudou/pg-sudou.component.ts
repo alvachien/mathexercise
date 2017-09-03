@@ -5,7 +5,7 @@ import {
 import {
   RPN, SudouUnit, Sudou, generateValidSudou, SudouSize,
   PrimarySchoolMathQuiz, QuizTypeEnum, PrimarySchoolMathQuizItem,
-  Cal24QuizItem, SudouQuizItem, LogLevel
+  Cal24QuizItem, SudouQuizItem, LogLevel, QuizDegreeOfDifficulity
 } from '../model';
 import { environment } from '../../environments/environment';
 
@@ -142,8 +142,12 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
   private _editingCellIndex: any = null;
   private _editPanel: SudouEditPanel = null;
   private _dataCells: any = [];
+  private _dod: QuizDegreeOfDifficulity;
+  private _started: boolean = false;
 
-  constructor() { }
+  constructor() {
+    this._dod = QuizDegreeOfDifficulity.medium;
+  }
 
   ngOnInit() {
     if (environment.LoggingLevel >= LogLevel.Debug) {
@@ -156,24 +160,8 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
     this._height = this.canvasSudou.nativeElement.height;
     this._itemWidth = this._width / SudouSize;
     this._itemHeight = this._height / SudouSize;
-  }
 
-  ngOnDestroy() {
-    if (environment.LoggingLevel >= LogLevel.Debug) {
-      console.log("AC Math Exercise [Debug]: Entering ngOnDestroy of PgSudouComponent");
-    }
-  }
-
-  @Output() finishEvent: EventEmitter<any> = new EventEmitter();
-
-  @Input()
-  set sudouObject(obj: Sudou) {
-    if (environment.LoggingLevel >= LogLevel.Debug) {
-      console.log("AC Math Exercise [Debug]: Entering setter of sudouObject in PgSudouComponent");
-    }
-    this._objSudou = obj;
-
-    if (this._objSudou != null) {
+    if (this._started && this._objSudou != null) {
       let datrst = this._objSudou.getDataCells();
       this._dataCells = [];
       for (let i: number = 0; i < SudouSize; i++) {
@@ -187,12 +175,40 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
       for (let i: number = 0; i < SudouSize; i++) {
         for (let j: number = 0; j < SudouSize; j++) {
           let cell: SudouCell = new SudouCell();
-          if (Math.random() * 6 < 2) {
-            cell.fixed = false;
-            cell.num = null;
-          } else {
-            cell.fixed = true;
-            cell.num = datrst[i][j];
+          switch(this._dod) {
+            case QuizDegreeOfDifficulity.medium: {
+              if (Math.random() * 6 < 2) {
+                cell.fixed = false;
+                cell.num = null;
+              } else {
+                cell.fixed = true;
+                cell.num = datrst[i][j];
+              }
+            }
+            break;
+
+            case QuizDegreeOfDifficulity.easy: {
+              if (Math.random() * 9 < 2) {
+                cell.fixed = false;
+                cell.num = null;
+              } else {
+                cell.fixed = true;
+                cell.num = datrst[i][j];
+              }
+            }
+            break;
+
+            case QuizDegreeOfDifficulity.hard:
+            default: {
+              if (Math.random() * 3 < 2) {
+                cell.fixed = false;
+                cell.num = null;
+              } else {
+                cell.fixed = true;
+                cell.num = datrst[i][j];
+              }
+            }
+            break;
           }
           cell.exp_num = datrst[i][j];
 
@@ -204,7 +220,57 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
     }
   }
 
+  ngOnDestroy() {
+    if (environment.LoggingLevel >= LogLevel.Debug) {
+      console.log("AC Math Exercise [Debug]: Entering ngOnDestroy of PgSudouComponent");
+    }
+  }
+
+  /**
+   * Finish event
+   */
+  @Output() finishEvent: EventEmitter<any> = new EventEmitter();
+  /**
+   * Degree of difficulity
+   */
+  @Input() 
+  set sudouDoD(dod: QuizDegreeOfDifficulity) {
+    if (environment.LoggingLevel >= LogLevel.Debug) {
+      console.log("AC Math Exercise [Debug]: Entering setter of sudouStart in PgSudouComponent" + dod.toString());
+    }
+
+    if (this._dod !== dod) {
+      this._dod = dod;
+    }
+  }
+  /**
+   * Sudou object
+   */
+  @Input()
+  set sudouObject(obj: Sudou) {
+    if (environment.LoggingLevel >= LogLevel.Debug) {
+      console.log("AC Math Exercise [Debug]: Entering setter of sudouObject in PgSudouComponent");
+    }
+
+    this._objSudou = obj;
+  }
+  /**
+   * Start the game
+   */
+  @Input() 
+  set sudouStart(bstart: boolean) {
+    if (environment.LoggingLevel >= LogLevel.Debug) {
+      console.log("AC Math Exercise [Debug]: Entering setter of sudouStart in PgSudouComponent" + bstart.toString());
+    }
+
+    this._started = bstart;
+  }
+
   private onDraw() {
+    if (environment.LoggingLevel >= LogLevel.Debug) {
+      console.log("AC Math Exercise [Debug]: Entering onDraw in PgSudouComponent");
+    }
+
     let cvBuffer = null;
     let ctx2 = this.canvasSudou.nativeElement.getContext("2d");
 

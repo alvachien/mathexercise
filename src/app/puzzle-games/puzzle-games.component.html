@@ -6,17 +6,6 @@
         <md-card-title>{{'Home.Calculate24' | translate}}</md-card-title>
       </md-card-header>
       <md-card-content>
-        <div class="demo-full-width" *ngIf="!Cal24Quiz.IsStarted">
-          <md-form-field>
-            <input mdInput type="number" placeholder="{{'Math.LeftNumber' | translate}}" [(ngModel)]="Cal24NumberRangeBgn" name="leftnrbgn"
-              required>
-          </md-form-field>
-          <md-form-field>
-            <input mdInput type="number" placeholder="{{'Math.RightNumber' | translate}}" [(ngModel)]="Cal24NumberRangeEnd" name="leftnrend"
-              required>
-          </md-form-field>
-        </div>
-
         <div class="demo-full-width" *ngIf="Cal24Quiz.IsStarted">
           <app-digit-clock [IsStart]="Cal24Quiz.IsStarted" style="display:block;"></app-digit-clock>
         </div>
@@ -55,11 +44,22 @@
       </md-card-header>
 
       <md-card-content>
+        <div class="demo-full-width" *ngIf="!sudouQuiz.IsStarted">
+          <md-select placeholder="{{'Home.DegreeOfDifficulty' | translate}}" [(ngModel)]="sudouDoD" name="sudoudod">
+              <md-option *ngFor="let dod of listDod" [value]="dod.value">
+                  {{ dod.displayas | translate }}
+              </md-option>
+          </md-select>
+        </div>
+
         <div class="demo-full-width" *ngIf="sudouQuiz.IsStarted">
           <app-digit-clock [IsStart]="sudouQuiz.IsStarted" style="display:block;"></app-digit-clock>
         </div>
 
-        <app-pg-sudou (finishEvent)="OnSudouComplete()" [sudouObject]="sudouInstance"></app-pg-sudou>
+        <div class="demo-full-width" *ngIf="sudouQuiz.IsStarted">
+          <app-pg-sudou (finishEvent)="OnSudouComplete()" [sudouObject]="sudouInstance" [sudouDoD]="sudouDoD"
+              [sudouStart]="sudouQuiz.IsStarted"></app-pg-sudou>
+        </div>
       </md-card-content>
 
       <md-card-actions>

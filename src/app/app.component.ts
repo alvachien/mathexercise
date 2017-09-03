@@ -41,6 +41,11 @@ export interface appNavItems {
   route: string;
 }
 
+export interface appLanguage {
+  displayas: string;
+  value: string;
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -49,15 +54,26 @@ export interface appNavItems {
 })
 export class AppComponent implements OnInit {
   public navItems: appNavItems[] = [];
-  public selectedLanguage: string;
-  public availableLanguages = [
-    { DisplayName: 'Languages.en', Value: 'en' },
-    { DisplayName: 'Languages.zh', Value: 'zh' }
+  public availableLanguages: appLanguage[] = [
+    { displayas: 'Languages.en', value: 'en' },
+    { displayas: 'Languages.zh', value: 'zh' }
   ];
   public isLoggedIn: boolean;
   public titleLogin: string;
   public userDisplayAs: string;
 
+  private _selLanguage: string;
+  get selectedLanguage(): string {
+    return this._selLanguage;
+  }
+  set selectedLanguage(lang: string) {
+    if (this._selLanguage !== lang && lang !== undefined && lang !== null) {
+      this._selLanguage = lang;
+
+      this.onLanguageChange();
+    }
+  }
+  
   constructor(private _element: ElementRef,
     private _translate: TranslateService,
     private _authService: AuthService,
@@ -65,28 +81,28 @@ export class AppComponent implements OnInit {
     private _zone: NgZone,
     private _router: Router) {
     // Setup the translate
-    this.selectedLanguage = 'zh';
-    this._translate.setDefaultLang('zh');
-    this._translate.use(this.selectedLanguage);
+    this._selLanguage = 'zh';
+    this._translate.setDefaultLang(this._selLanguage);
+    this._translate.use(this._selLanguage);
     this.userDisplayAs = '';
+
+    this.navItems = [
+      { name: 'Home.HomePage', route: '' },
+      { name: 'Home.AdditionExercises', route: 'add-ex' },
+      { name: 'Home.SubtractionExercises', route: 'sub-ex' },
+      { name: 'Home.MultiplicationExercises', route: 'multi-ex' },
+      { name: 'Home.DivisionExercises', route: 'divide-ex' },
+      { name: 'Home.MixedOperations', route: 'mixop-ex' },
+      //{ name: 'Home.FormulaList', route: 'formula-list' },
+      { name: 'Home.FormulaExercises', route: 'formula-ex' },
+      { name: 'Home.PuzzleGames', route: 'puzz-game' },
+      { name: 'Home.RetestPreviousFailures', route: 'fail-retest' },
+      { name: 'Home.Statistics', route: 'user-stat' },
+      { name: 'Home.UserDetail', route: 'user-detail' },
+    ];
 
     // Register the Auth service
     if (environment.LoginRequired) {
-      this.navItems = [
-        { name: 'Home.HomePage', route: '' },
-        { name: 'Home.AdditionExercises', route: 'add-ex' },
-        { name: 'Home.SubtractionExercises', route: 'sub-ex' },
-        { name: 'Home.MultiplicationExercises', route: 'multi-ex' },
-        { name: 'Home.DivisionExercises', route: 'divide-ex' },
-        { name: 'Home.MixedOperations', route: 'mixop-ex' },
-        //{ name: 'Home.FormulaList', route: 'formula-list' },
-        { name: 'Home.FormulaExercises', route: 'formula-ex' },
-        { name: 'Home.PuzzleGames', route: 'puzz-game' },
-        { name: 'Home.RetestPreviousFailures', route: 'fail-retest' },
-        { name: 'Home.Statistics', route: 'user-stat' },
-        { name: 'Home.UserDetail', route: 'user-detail' },
-      ];
-
       this._authService.authContent.subscribe(x => {
         this._zone.run(() => {
           this.isLoggedIn = x.isAuthorized;
@@ -110,17 +126,6 @@ export class AppComponent implements OnInit {
       });
     } else {
       this.isLoggedIn = false;
-      this.navItems = [
-        { name: 'Home.HomePage', route: '' },
-        { name: 'Home.AdditionExercises', route: 'add-ex' },
-        { name: 'Home.SubtractionExercises', route: 'sub-ex' },
-        { name: 'Home.MultiplicationExercises', route: 'multi-ex' },
-        { name: 'Home.DivisionExercises', route: 'divide-ex' },
-        { name: 'Home.MixedOperations', route: 'mixop-ex' },
-        //{ name: 'Home.FormulaList', route: 'formula-list' },
-        { name: 'Home.FormulaExercises', route: 'formula-ex' },
-        { name: 'Home.PuzzleGames', route: 'puzz-game' },
-      ];
     }
   }
 
@@ -159,9 +164,10 @@ export class AppComponent implements OnInit {
     }
   }
 
-  public onLanguageChange() {
-    if (this._translate.currentLang !== this.selectedLanguage) {
-      this._translate.use(this.selectedLanguage);
+  private onLanguageChange() {
+    if (this._translate.currentLang !== this._selLanguage &&
+      this._selLanguage !== undefined) {
+      this._translate.use(this._selLanguage);
 
       this.updateDocumentTitle();
     }

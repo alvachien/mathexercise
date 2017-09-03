@@ -103,7 +103,7 @@ export class FormulaQuizItemBase extends PrimarySchoolMathQuizItem {
      */
     public static restoreFromString(s: string): FormulaQuizItemBase | null {
         let idx = s.indexOf(QuizSplitter);
-        let ntype: PrimarySchoolFormulaEnum = <PrimarySchoolFormulaEnum>parseInt(s.substring(0, idx - 1));
+        let ntype: PrimarySchoolFormulaEnum = <PrimarySchoolFormulaEnum>parseInt(s.substring(0, idx));
         switch(ntype) {
             case PrimarySchoolFormulaEnum.CircumferenceOfCircle:
             return FormulaCOfCircleQuizItem.restoreFromString(s.substring(idx + 1));
@@ -246,7 +246,7 @@ export class FormulaCOfCircleQuizItem extends FormulaQuizItemBase {
         try {
             let idx = s.indexOf(QuizSplitter);
             
-            let nbol: number = parseInt(s.substring(0, idx - 1));
+            let nbol: number = parseInt(s.substring(0, idx));
             let nnum: number = parseFloat(s.substring(idx + 1));
             return new FormulaCOfCircleQuizItem(nnum, <FormulaCOfCircleCalcDirEum>nbol);
         }
@@ -372,7 +372,7 @@ export class FormulaCOfSquareQuizItem extends FormulaQuizItemBase {
         try {
             let idx = s.indexOf(QuizSplitter);
             
-            let nbol: number = parseInt(s.substring(0, idx - 1));
+            let nbol: number = parseInt(s.substring(0, idx));
             let nnum: number = parseFloat(s.substring(idx + 1));
 
             return new FormulaCOfSquareQuizItem(nnum, <FormulaCOfSquareCalcDirEum>nbol);
@@ -535,8 +535,8 @@ export class FormulaCOfRectangleQuizItem extends FormulaQuizItemBase {
             let idx = s.indexOf(QuizSplitter);
             let idx2 = s.indexOf(QuizSplitter, idx + 1);
             
-            let ndir: number = <FormulaCOfRectangleCalcDirEum>parseInt(s.substring(0, idx - 1));
-            let nnum1: number = parseFloat(s.substring(idx + 1, idx2 - 1));
+            let ndir: number = <FormulaCOfRectangleCalcDirEum>parseInt(s.substring(0, idx));
+            let nnum1: number = parseFloat(s.substring(idx + 1, idx2));
             let nnum2: number = parseFloat(s.substring(idx2 + 1));
             return new FormulaCOfRectangleQuizItem(nnum1, nnum2, ndir);
         }
@@ -707,8 +707,8 @@ export class FormulaDistAndSpeedQuizItem extends FormulaQuizItemBase {
             let idx = s.indexOf(QuizSplitter);
             let idx2 = s.indexOf(QuizSplitter, idx + 1);
             
-            let ndir: number = <FormulaDistAndSpeedCalcDirEum>parseInt(s.substring(0, idx - 1));
-            let nnum1: number = parseFloat(s.substring(idx + 1, idx2 - 1));
+            let ndir: number = <FormulaDistAndSpeedCalcDirEum>parseInt(s.substring(0, idx));
+            let nnum1: number = parseFloat(s.substring(idx + 1, idx2));
             let nnum2: number = parseFloat(s.substring(idx2 + 1));
             return new FormulaDistAndSpeedQuizItem(nnum1, nnum2, ndir);
         }
@@ -870,8 +870,8 @@ export class FormulaAreaOfRectangleQuizItem extends FormulaQuizItemBase {
             let idx = s.indexOf(QuizSplitter);
             let idx2 = s.indexOf(QuizSplitter, idx + 1);
             
-            let ndir: number = <FormulaAOfRectangleCalcDirEum>parseInt(s.substring(0, idx - 1));
-            let nnum1: number = parseFloat(s.substring(idx + 1, idx2 - 1));
+            let ndir: number = <FormulaAOfRectangleCalcDirEum>parseInt(s.substring(0, idx));
+            let nnum1: number = parseFloat(s.substring(idx + 1, idx2));
             let nnum2: number = parseFloat(s.substring(idx2 + 1));
             return new FormulaAreaOfRectangleQuizItem(nnum1, nnum2, ndir);
         }
@@ -995,7 +995,7 @@ export class FormulaAreaOfSquareQuizItem extends FormulaQuizItemBase {
         try {
             let idx = s.indexOf(QuizSplitter);
             
-            let nbol: number = parseInt(s.substring(0, idx - 1));
+            let nbol: number = parseInt(s.substring(0, idx));
             let nnum: number = parseFloat(s.substring(idx + 1));
 
             return new FormulaAreaOfSquareQuizItem(nnum, <FormulaAreaOfSquareCalcDirEum>nbol);

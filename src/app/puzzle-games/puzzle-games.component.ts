@@ -8,12 +8,17 @@ import { MdDialog } from '@angular/material';
 import {
   RPN, SudouUnit, Sudou, generateValidSudou, SudouSize,
   PrimarySchoolMathQuiz, QuizTypeEnum, PrimarySchoolMathQuizItem,
-  Cal24QuizItem, SudouQuizItem, LogLevel
+  Cal24QuizItem, SudouQuizItem, LogLevel, QuizDegreeOfDifficulity, QuizDegreeOfDifficulity2UIString
 } from '../model';
 import { environment } from '../../environments/environment';
 import { DialogService } from '../services/dialog.service';
 import { PgSummaryDlgInfo, PgSummaryDlgComponent } from '../pg-summary-dlg';
 import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } from '../message-dialog';
+
+export interface DegreeOfDifficulityUI {
+  value: QuizDegreeOfDifficulity;
+  displayas: string;
+}
 
 @Component({
   selector: 'app-puzzle-games',
@@ -26,14 +31,15 @@ export class PuzzleGamesComponent implements OnInit {
    * UI part
    */
   indexTab: number;
+  listDod: DegreeOfDifficulityUI[];
 
   /**
    * Cal24 part
    */
   Cal24Input: string = '';
   Cal24items: number[] = [];
-  Cal24NumberRangeBgn: number = 1;
-  Cal24NumberRangeEnd: number = 9;
+  private Cal24NumberRangeBgn: number = 1;
+  private Cal24NumberRangeEnd: number = 9;
   Cal24Quiz: PrimarySchoolMathQuiz;
   Cal24SurrendString: string = '';
 
@@ -41,6 +47,7 @@ export class PuzzleGamesComponent implements OnInit {
    * Sudou part
    */
   sudouQuiz: PrimarySchoolMathQuiz;
+  sudouDoD: QuizDegreeOfDifficulity;
   sudouInstance: Sudou;
 
   /**
@@ -58,12 +65,24 @@ export class PuzzleGamesComponent implements OnInit {
     private _zone: NgZone,
     private _router: Router) {
     this.indexTab = 0; // Defaul tab
+    this.listDod = [];
+    for(let dod in QuizDegreeOfDifficulity) {
+      if (Number.isNaN(+dod)) {
+      } else {
+        let dodui: DegreeOfDifficulityUI = {
+          value: +dod,
+          displayas: QuizDegreeOfDifficulity2UIString(+dod)
+        };
+        this.listDod.push(dodui);
+      }
+    }
 
     this.Cal24Quiz = new PrimarySchoolMathQuiz();
     this.Cal24Quiz.QuizType = QuizTypeEnum.cal24;
 
     this.sudouQuiz = new PrimarySchoolMathQuiz();
     this.sudouQuiz.QuizType = QuizTypeEnum.sudou;
+    this.sudouDoD = QuizDegreeOfDifficulity.medium;
 
     this.typingQuiz = new PrimarySchoolMathQuiz();
     this.typingQuiz.QuizType = QuizTypeEnum.typing;
@@ -320,12 +339,10 @@ export class PuzzleGamesComponent implements OnInit {
       haveARetry: true
     };
 
-    let dialogRef = this._dialog.open(PgSummaryDlgComponent, {
+    this._dialog.open(PgSummaryDlgComponent, {
       width: '500px',
       data: di
-    });
-
-    dialogRef.afterClosed().subscribe(x => {
+    }).afterClosed().subscribe(x => {
       if (di.haveARetry) {
         this.OnSudouStart();
       }
@@ -340,12 +357,10 @@ export class PuzzleGamesComponent implements OnInit {
       haveARetry: true
     };
 
-    let dialogRef = this._dialog.open(PgSummaryDlgComponent, {
+    this._dialog.open(PgSummaryDlgComponent, {
       width: '500px',
       data: di
-    });
-
-    dialogRef.afterClosed().subscribe(x => {
+    }).afterClosed().subscribe(x => {
       if (di.haveARetry) {
         this.OnSudouStart();
       }

@@ -94,6 +94,11 @@
         "AreaOfRectangleQuizForEFormat": "Given a rectangle whose area is {{area}}, and one ledge is {{edge}}, then what's the other edge?",
         "AreaOfSquareQuizForAFormat": "Given a square with edge is {{edge}}, then what's the Area?",
         "AreaOfSquareQuizForEFormat": "Given a circle with area is {{area}}, then what's the Edge?",
+        "DegreeOfDifficulty": "Degree of difficulty",
+        "Easy": "Easy",
+        "Medium": "Medium",
+        "Hard": "Hard",
+        "AwardPlan": "Award Plan",
         
         "Underconstruction": "Page still under construction"
     },

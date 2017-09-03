@@ -45,8 +45,10 @@ import { PgMinesweeperComponent } from './pg-minesweeper';
 import { PgTypingtourComponent } from './pg-typingtour';
 import { MixedopExerciseComponent } from './mixedop-exercise';
 import { PgSummaryDlgComponent } from './pg-summary-dlg';
-import { EnwordReciteExerciseComponent } from './enword-recite-exercise/enword-recite-exercise.component';
-import { CnwordReciteExerciseComponent } from './cnword-recite-exercise/cnword-recite-exercise.component';
+import { EnwordReciteExerciseComponent } from './enword-recite-exercise';
+import { CnwordReciteExerciseComponent } from './cnword-recite-exercise';
+import { AwardPlanComponent } from './award-plan';
+import { AwardPlanService } from './services/award-plan.service';
 
 @NgModule({
   exports: [
@@ -91,7 +93,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     MixedopExerciseComponent,
     PgSummaryDlgComponent,
     EnwordReciteExerciseComponent,
-    CnwordReciteExerciseComponent
+    CnwordReciteExerciseComponent,
+    AwardPlanComponent
   ],
   entryComponents: [
     QuizFailureDlgComponent,
@@ -122,7 +125,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     AuthService,
     UserDetailService,
     AuthGuard,
-    CanDeactivateGuard
+    CanDeactivateGuard,
+    AwardPlanService
   ],
   bootstrap: [AppComponent]
 })

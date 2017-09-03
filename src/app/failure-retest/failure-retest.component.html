@@ -7,11 +7,21 @@
     <div *ngFor="let qi of listFailItems">
       <span>{{qi.quizid}}, </span>
       <span>{{getUIStringForType(qi.quiztype) | translate}} </span>
-      <span>{{qi.qsInstance.getQuizFormat()}}</span>
-      <md-form-field *ngIf="IsASMType(qi.quiztype)">
-        <input mdInput type="number" placeholder="{{'Math.Sum' | translate }}" [(ngModel)]="qi.qsInstance.InputtedResult" name="inputrst"
-          required>
-      </md-form-field>
+      <div *ngIf="!IsFormulaType(qi.quiztype)">
+        <span style="font-size: 24px">{{qi.qsInstance.getQuizFormat()}}</span>
+      </div>
+
+      <div *ngIf="IsFormulaType(qi.quiztype)">
+        <span style="font-size: 24px">{{qi.qsInstance.getQuizFormat() | translate:qi.qsInstance.getQuizFormatParam()}}</span>
+      </div>
+
+      <div *ngIf="IsASMType(qi.quiztype)">
+        <md-form-field>
+          <input mdInput type="number" placeholder="{{'Home.Result' | translate }}" [(ngModel)]="qi.qsInstance.InputtedResult" name="inputrst"
+            required>
+        </md-form-field>
+      </div>
+
       <div *ngIf="IsDivType(qi.quiztype)">
         <md-form-field>
           <input mdInput type="number" placeholder="{{'Math.Quotient' | translate}}" [(ngModel)]="qi.qsInstance.InputtedQuotient" name="iptquot">
@@ -20,6 +30,13 @@
         <md-form-field>
           <input mdInput type="number" placeholder="{{'Math.Remainder' | translate}}" [(ngModel)]="qi.qsInstance.InputtedRemainder"
             name="iptrmd">
+        </md-form-field>
+      </div>
+
+      <div *ngIf="IsFormulaType(qi.quiztype)">
+        <md-form-field>
+          <input mdInput type="number" placeholder="{{'Home.Result' | translate }}" [(ngModel)]="qi.qsInstance.InputtedResult" name="inputfrst"
+            required>
         </md-form-field>
       </div>
     </div>

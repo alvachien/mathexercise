@@ -17,7 +17,7 @@ export enum QuizTypeEnum {
 }
 
 export function QuizTypeEnum2UIString(qt: QuizTypeEnum): string {
-    let rst: string;
+    let rst: string = '';
     switch (qt) {
         case QuizTypeEnum.add: rst = 'Home.AdditionExercises'; break;
         case QuizTypeEnum.sub: rst = 'Home.SubtractionExercises'; break;
@@ -28,8 +28,30 @@ export function QuizTypeEnum2UIString(qt: QuizTypeEnum): string {
         case QuizTypeEnum.sudou: rst = 'Home.Sudou'; break;
         case QuizTypeEnum.typing: rst = 'Home.TypingTutor'; break;
         case QuizTypeEnum.mixedop: rst = 'Home.MixedOperations'; break;
-        default: rst = ''; break;
+        default: break;
     }
+
+    return rst;
+}
+
+/**
+ * Degree of difficulity
+ */
+export enum QuizDegreeOfDifficulity {
+    easy = 0,
+    medium = 1,
+    hard = 2
+}
+
+export function QuizDegreeOfDifficulity2UIString(qd: QuizDegreeOfDifficulity): string {
+    let rst: string = '';
+    switch(qd) {
+        case QuizDegreeOfDifficulity.easy: rst = 'Home.Easy'; break;
+        case QuizDegreeOfDifficulity.medium: rst = 'Home.Medium'; break;
+        case QuizDegreeOfDifficulity.hard: rst = 'Home.Hard'; break;
+        default: break;
+    }
+
     return rst;
 }
 

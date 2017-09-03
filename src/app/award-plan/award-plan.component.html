@@ -1,0 +1,46 @@
+<md-card>
+  <md-card-header>
+    <md-card-title>{{'Home.AwardPlan' | translate}}</md-card-title>
+  </md-card-header>
+  <md-card-content>
+    <div>
+      <md-select placeholder="{{'Home.User' | translate}}" [(ngModel)]="curUser" name="usr" (change)="onUserChanged($event)">
+        <md-option *ngFor="let user of listUsers" [value]="user.attenduser">
+          {{ user.displayas }}
+        </md-option>
+      </md-select>
+    </div>
+
+    <div class="example-container mat-elevation-z8">
+        <md-table #table [dataSource]="dataSource">
+      
+          <!-- Position Column -->
+          <ng-container mdColumnDef="pid">
+            <md-header-cell *mdHeaderCellDef> No. </md-header-cell>
+            <md-cell *mdCellDef="let element"> {{element.position}} </md-cell>
+          </ng-container>
+      
+          <!-- Name Column -->
+          <ng-container mdColumnDef="usrid">
+            <md-header-cell *mdHeaderCellDef> Name </md-header-cell>
+            <md-cell *mdCellDef="let element"> {{element.name}} </md-cell>
+          </ng-container>
+      
+          <!-- Weight Column -->
+          <ng-container mdColumnDef="quiztype">
+            <md-header-cell *mdHeaderCellDef> Weight </md-header-cell>
+            <md-cell *mdCellDef="let element"> {{element.weight}} </md-cell>
+          </ng-container>
+      
+          <!-- Color Column -->
+          <ng-container mdColumnDef="award">
+            <md-header-cell *mdHeaderCellDef> Symbol </md-header-cell>
+            <md-cell *mdCellDef="let element"> {{element.symbol}} </md-cell>
+          </ng-container>
+      
+          <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+          <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
+        </md-table>
+      </div>
+  </md-card-content>
+</md-card>

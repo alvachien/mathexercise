@@ -2,7 +2,7 @@
   <md-sidenav #start>
     <div *ngIf="isLoggedIn" class="card">
       <div class="card-body">
-        <h4 class="card-title">{{titleLogin}}</h4>
+        <h4 class="card-title text-muted">{{titleLogin}}</h4>
         <h6 class="card-subtitle mb-2 text-muted">{{userDisplayAs}}</h6>
         <button (click)="onLogout()" md-button style="background: #525252;">{{'Home.Logout' | translate}}</button>
       </div>
@@ -29,9 +29,9 @@
             {{'Home.Logon' | translate }}
           </button>
           <button md-button *ngIf="isLoggedIn" (click)="onUserDetail()">{{titleLogin}}</button>
-          <md-select [(ngModel)]="selectedLanguage" (change)="onLanguageChange()" name="lang">
-            <md-option *ngFor="let lang of availableLanguages" [value]="lang.Value">
-              {{ lang.DisplayName | translate }}
+          <md-select [(ngModel)]="selectedLanguage" name="lang">
+            <md-option *ngFor="let lang of availableLanguages" [value]="lang.value">
+              {{lang.displayas | translate}}
             </md-option>
           </md-select>
           <button md-icon-button (click)="toggleFullscreen()" title="Toggle fullscreen">

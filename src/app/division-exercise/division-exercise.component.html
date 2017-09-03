@@ -48,7 +48,7 @@
 
       <div *ngIf="quizInstance.IsStarted">
         <div class="demo-full-width" *ngFor="let quiz of DisplayedQuizItems; trackBy: onQuizItemTrackBy">
-          <span>({{quiz.QuizIndex}}). {{quiz.Dividend}} ÷ {{quiz.Divisor}} = </span>
+          <span>({{quiz.QuizIndex}}). </span><span style="font-size: 24px">{{quiz.Dividend}} ÷ {{quiz.Divisor}} = </span>
           <md-form-field>
             <input mdInput type="number" placeholder="{{'Math.Quotient' | translate}}" [(ngModel)]="quiz.InputtedQuotient" name="iptquot">
           </md-form-field>

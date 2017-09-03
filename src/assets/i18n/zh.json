@@ -94,7 +94,12 @@
         "AreaOfRectangleQuizForEFormat": "已知长方形的面积为{{area}}, 一条边长为{{edge}}, 求另一条边长?",
         "AreaOfSquareQuizForAFormat": "已知正方形的边长是{{edge}}, 求其面积?",
         "AreaOfSquareQuizForEFormat": "已知正方形的周长是{{area}}, 求其边长?",
-
+        "DegreeOfDifficulty": "难度",
+        "Easy": "简易",
+        "Medium": "中等",
+        "Hard": "困难",
+        "AwardPlan": "奖励计划",
+        
         "Underconstruction": "当前页还在开发中"
     },
     "Math": {

@@ -6,7 +6,9 @@ import { environment } from '../../environments/environment';
 import { AuthService } from '../services/auth.service';
 import { DialogService } from '../services/dialog.service';
 import { QuizTypeEnum, PrimarySchoolMathQuizItem, QuizTypeEnum2UIString, LogLevel,
-  AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem } from '../model';
+  AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem,
+  FormulaQuizItemBase
+} from '../model';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
 import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } from '../message-dialog';
 
@@ -58,9 +60,9 @@ export class FailureRetestComponent implements OnInit {
               console.log('AC Math Exericse [Debug]: ' + si);
             }
             let qi: QuizFailureItem = new QuizFailureItem();
-            qi.quiztype = si.quizType;
-            qi.quizid = si.quizID;
-            qi.quizfailidx = si.quizFailIndex;
+            qi.quiztype = +si.quizType;
+            qi.quizid = +si.quizID;
+            qi.quizfailidx = +si.quizFailIndex;
             qi.quizitemstore = si.expected;
             qi.inputted = si.inputted;
             qi.submitdate = new Date(si.submitDate);
@@ -69,11 +71,15 @@ export class FailureRetestComponent implements OnInit {
               case QuizTypeEnum.sub: qi.qsInstance = SubtractionQuizItem.restoreFromString(si.expected); break;
               case QuizTypeEnum.multi: qi.qsInstance = MultiplicationQuizItem.restoreFromString(si.expected); break;
               case QuizTypeEnum.div: qi.qsInstance = DivisionQuizItem.restoreFromString(si.expected); break;
-              default: break;
+              case QuizTypeEnum.formula: qi.qsInstance = FormulaQuizItemBase.restoreFromString(si.expected); break;
+              default: {
+                // No support type, just skip it!
+                if (environment.LoggingLevel >= LogLevel.Debug) {
+                  console.log('AC Math Exericse [Debug]: No supported item found: ' + qi.quiztype);
+                }
+                continue;
+              }
             }
-            if (environment.LoggingLevel >= LogLevel.Debug) {
-              console.log('AC Math Exericse [Debug]: ' + qi);
-            }        
 
             this.listFailItems.push(qi);
           }
@@ -119,6 +125,10 @@ export class FailureRetestComponent implements OnInit {
     return qt === QuizTypeEnum.div;
   }
 
+  public IsFormulaType(qt: QuizTypeEnum): boolean {
+    return qt === QuizTypeEnum.formula;
+  }
+
   public CanSubmit(): boolean {
     if (this.listFailItems.length <= 0) {
       return false;
@@ -158,6 +168,15 @@ export class FailureRetestComponent implements OnInit {
           if (dqi.InputtedQuotient === undefined || dqi.InputtedQuotient === null
             || dqi.InputtedRemainder === undefined || dqi.InputtedRemainder === null) {
               return false;
+          }
+        }
+        break;
+
+        case QuizTypeEnum.formula: {
+          let fqi: FormulaQuizItemBase = <FormulaQuizItemBase>fi.qsInstance;
+          if (fqi.InputtedResult === undefined
+            || fqi.InputtedResult === null) {
+            return false;
           }
         }
         break;
@@ -206,20 +225,28 @@ export class FailureRetestComponent implements OnInit {
         }
         break;
 
+        case QuizTypeEnum.formula: {
+          let fqi: FormulaQuizItemBase = <FormulaQuizItemBase>fi.qsInstance;
+          if (!fqi.IsCorrect()) {
+            this._dlgsvc.FailureItems.push(fqi);
+          }
+        }
+        break;
+
         default: break;
       }
 
       if (this._dlgsvc.FailureItems.length > 0) {
         this._dlgsvc.CurrentScore = Math.round(100 - 100 * this._dlgsvc.FailureItems.length / this.listFailItems.length);
-        let dialogRef = this.dialog.open(QuizFailureDlgComponent, {
+        this.dialog.open(QuizFailureDlgComponent, {
           disableClose: false,
           width: '500px'
-        });
-  
-        dialogRef.afterClosed().subscribe(x => {
+        }).afterClosed().subscribe(x => {
           // Do nothing!
         });
       } else {
+        this.listFailItems = [];
+        
         // Also show a dialog
         let dlginfo: MessageDialogInfo = {
           Header: 'Home.Finished',

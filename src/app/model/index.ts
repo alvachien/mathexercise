@@ -9,3 +9,4 @@ export * from './userinfo';
 export * from './rpn';
 export * from './sudou';
 export * from './puzzlegamequiz';
+export * from './award';

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, Input, ViewChild, ElementRef } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { LogLevel, UserAuthInfo } from '../model';
 import * as moment from 'moment';
@@ -8,7 +8,7 @@ import * as moment from 'moment';
   templateUrl: './digit-clock.component.html',
   styleUrls: ['./digit-clock.component.scss']
 })
-export class DigitClockComponent implements OnInit, OnDestroy {
+export class DigitClockComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild("digitclock") clockElement: ElementRef;
 
   private _dateStart: Date;
@@ -18,16 +18,34 @@ export class DigitClockComponent implements OnInit, OnDestroy {
   private _min: number = 0;
   private _sec: number = 0;
   private _isStart: boolean = false;
+  private _isInitialized: boolean;
 
-  constructor() { }
+  constructor() {
+    this._isInitialized = false;
+  }
 
   ngOnInit() {
+    if (environment.LoggingLevel >= LogLevel.Debug) {
+      console.log("AC Math Exercise [Debug]: Entering ngOnInit of digit-clock");
+    }
+    this._isInitialized = true;
+
+    this.onStart();
+  }
+
+  ngAfterViewInit() {
+    if (environment.LoggingLevel >= LogLevel.Debug) {
+      console.log("AC Math Exercise [Debug]: Entering ngAfterViewInit of digit-clock: ");
+    }
+    //this.onSetSize();    
   }
 
   ngOnDestroy() {
     if (environment.LoggingLevel >= LogLevel.Debug) {
-      console.log("AC Math Exercise [Debug]: Entering ngOnDestroy of digit-clock" + this._handler);
+      console.log("AC Math Exercise [Debug]: Entering ngOnDestroy of digit-clock: " + this._handler);
     }
+
+    this._isInitialized = false;
     if (this._handler !== null) {
       clearInterval(this._handler);
       this._handler = null;
@@ -39,25 +57,46 @@ export class DigitClockComponent implements OnInit, OnDestroy {
     if (environment.LoggingLevel >= LogLevel.Debug) {
       console.log("AC Math Exercise [Debug]: setter IsStart in Digit-clock:" + istart);
     }
+    this._isStart = istart;
 
-    if (this._isStart !== istart) {
-      this._isStart = istart;
+    this.onStart();
+  }
 
-      if (this._isStart === true) {
-        this._dateStart = new Date();
-        this._handler = setInterval(() => { this.onInterval(); }, 500); // Set to 0.5 sec for the dot
-        if (environment.LoggingLevel >= LogLevel.Debug) {
-          console.log("AC Math Exercise [Debug]: After start the interval Digit-clock:" + this._handler);
-        }
-      } else {
-        if (environment.LoggingLevel >= LogLevel.Debug) {
-          console.log("AC Math Exercise [Debug]: Try to stop the interval Digit-clock:" + this._handler);
-        }
+  private onSetSize() {
+    let clocks = this.clockElement.nativeElement.children;
+    let i = 0, k = clocks.length;
+    let fontsize = "4px", halfsize = "2px";
+    if (environment.LoggingLevel >= LogLevel.Debug) {
+      console.log("AC Math Exercise [Debug]: onSetSize in Digit-clock:" + clocks[0].style.fontSize);
+    }
 
-        if (this._handler !== null) {
-          clearInterval(this._handler);
-          this._handler = null;
-        }
+    for (; i < 5;) {
+      clocks[i++].style.fontSize = fontsize;
+    }
+    for (; i < k;) {
+      clocks[i++].style.fontSize = halfsize;
+    }
+  }
+
+  private onStart() {
+    if (environment.LoggingLevel >= LogLevel.Debug) {
+      console.log("AC Math Exercise [Debug]: onStart in Digit-clock:" + this._isStart);
+    }
+
+    if (this._isStart && this._isInitialized) {
+      this._dateStart = new Date();
+      this._handler = setInterval(() => { this.onInterval(); }, 500); // Set to 0.5 sec for the dot
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.log("AC Math Exercise [Debug]: After start the interval Digit-clock:" + this._handler);
+      }
+    } else {
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.log("AC Math Exercise [Debug]: Try to stop the interval Digit-clock:" + this._handler);
+      }
+
+      if (this._handler !== null) {
+        clearInterval(this._handler);
+        this._handler = null;
       }
     }
   }
