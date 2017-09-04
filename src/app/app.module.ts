@@ -12,7 +12,7 @@ import {
   MdListModule, MdMenuModule, MdProgressBarModule, MdProgressSpinnerModule,
   MdRadioModule, MdSelectModule, MdSidenavModule, MdSliderModule, MdSortModule,
   MdSlideToggleModule, MdSnackBarModule, MdTableModule, MdTabsModule, MdToolbarModule,
-  MdTooltipModule, MdFormFieldModule, MdExpansionModule, MdNativeDateModule
+  MdTooltipModule, MdFormFieldModule, MdExpansionModule, MdNativeDateModule, MD_DATE_FORMATS, DateAdapter
 } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk/table';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -125,6 +125,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpModule
   ],
   providers: [
+    { provide: DateAdapter, useClass: ACDateAdapter },
+    //{ provide: MD_DATE_FORMATS, useValue: MY_DATE_FORMATS },
     DialogService,
     AuthService,
     UserDetailService,

@@ -1,4 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { environment } from '../../environments/environment';
+import { LogLevel, UserAuthInfo } from '../model';
 
 export interface AudioContent {
   beginpoint: number;
@@ -31,13 +33,18 @@ export class EnwordReciteExerciseComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.audioER.nativeElement.currentTime = this.contentList[this.idxContent].beginpoint;
-    this.audioER.nativeElement.play();
-    setTimeout(() => {
-      console.log("Time is up, pause it!");
+    try {
+      this.audioER.nativeElement.currentTime = this.contentList[this.idxContent].beginpoint;
+      this.audioER.nativeElement.play();
+      setTimeout(() => {
+        console.log("Time is up, pause it!");
+  
+        // Do nothing
+        this.audioER.nativeElement.pause();
+      }, 1000 * (this.contentList[this.idxContent].endpoint - this.contentList[this.idxContent].beginpoint));
+    }
+    catch(exp) {
 
-      // Do nothing
-      this.audioER.nativeElement.pause();
-    }, 1000 * (this.contentList[this.idxContent].endpoint - this.contentList[this.idxContent].beginpoint));
+    }
   }
 }

@@ -101,7 +101,7 @@ export class AppComponent implements OnInit {
       { name: 'Home.RetestPreviousFailures', route: 'fail-retest' },
       { name: 'Home.Statistics', route: 'user-stat' },
       { name: 'Home.UserDetail', route: 'user-detail' },
-      { name: 'Test', route: 'enword-recite' }
+      { name: 'Home.EnglishWordDictation', route: 'enword-recite' }
     ];
 
     // Register the Auth service

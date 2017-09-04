@@ -120,6 +120,8 @@
         "ExpenseReason": "Expense reason",
         "ConfirmOnDeletion": "Confirm on Deletion",
         "ConfirmOnDeletionDetail": "Please be aware that the deletion cannot be undo, please confirm to continue",
+        "EnglishWordDictation": "English Word Dictation",
+        "ChineseWordDictation": "Chinese Word Dictation",
         
         "Underconstruction": "Page still under construction"
     },
