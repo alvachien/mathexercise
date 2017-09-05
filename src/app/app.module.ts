@@ -52,6 +52,7 @@ import { AwardPlanService } from './services/award-plan.service';
 import { AwardBalanceComponent } from './award-balance';
 import { AwardBalanceService } from './services/award-balance.service';
 import { QuizService } from './services/quiz.service';
+import { MOMENT_DATE_FORMATS, MomentDateAdapter } from './utility';
 
 @NgModule({
   exports: [
@@ -125,8 +126,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpModule
   ],
   providers: [
-    { provide: DateAdapter, useClass: ACDateAdapter },
-    //{ provide: MD_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+    { provide: DateAdapter, useClass: MomentDateAdapter },
+    { provide: MD_DATE_FORMATS, useValue: MOMENT_DATE_FORMATS },
     DialogService,
     AuthService,
     UserDetailService,

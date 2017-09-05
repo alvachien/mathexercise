@@ -1,9 +1,17 @@
 <md-card>
     <md-card-header>
-      <md-card-title>{{'Home.AwardBalance' | translate}}</md-card-title>
+        <md-card-title>{{'Home.AwardBalance' | translate}}</md-card-title>
     </md-card-header>
     <md-card-content>
-        <!-- <audio src="assets/audio/test.mp3" controls #audioCtrl>
-        </audio> -->
+        <div *ngIf="!IsQuizStarted">
+            <div class="demo-full-width" *ngFor="let fs of contentList">
+                <md-checkbox [(ngModel)]="fs.selected"><span>{{fs.word}}</span></md-checkbox>
+            </div>
+        </div>
+        <audio src="assets/audio/test.mp3" #audioCtrl>
+        </audio>
     </md-card-content>
+    <md-card-actions>
+        <button md-button (click)="onQuizStart()" [disabled]="!CanStart()">{{'Home.StartButton' | translate }}</button>
+    </md-card-actions>
 </md-card>
