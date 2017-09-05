@@ -1,13 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { LogLevel, UserAuthInfo } from '../model';
-
-export interface AudioContent {
-  word: string;
-  beginpoint: number;
-  endpoint: number;
-  selected: boolean;
-}
+import { LogLevel, AudioContent } from '../model';
 
 @Component({
   selector: 'app-enword-recite-exercise',
