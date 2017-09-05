@@ -26,21 +26,21 @@
           <md-header-cell *mdHeaderCellDef> # </md-header-cell>
           <md-cell *mdCellDef="let element">
             <button md-mini-fab (click)="onEditPlan(element)">
-              <md-icon class="md-18" aria-label="Edit">edit</md-icon>
+              <md-icon class="md-14" aria-label="Edit">edit</md-icon>
             </button>
             <button md-mini-fab (click)="onDeletePlan(element)">
-              <md-icon class="md-18" aria-label="Delete">delete</md-icon>
+              <md-icon class="md-14" aria-label="Delete">delete</md-icon>
             </button>
             {{element.ID}} 
           </md-cell>
         </ng-container>
         <ng-container mdColumnDef="ValidFrom">
           <md-header-cell *mdHeaderCellDef> {{'Home.ValidFrom' | translate }} </md-header-cell>
-          <md-cell *mdCellDef="let element"> {{element.ValidFrom}} </md-cell>
+          <md-cell *mdCellDef="let element"> {{element.ValidFrom.format('YYYY-MM-DD')}} </md-cell>
         </ng-container>
         <ng-container mdColumnDef="ValidTo">
           <md-header-cell *mdHeaderCellDef> {{'Home.ValidTo' | translate }} </md-header-cell>
-          <md-cell *mdCellDef="let element"> {{element.ValidTo}} </md-cell>
+          <md-cell *mdCellDef="let element"> {{element.ValidTo.format('YYYY-MM-DD')}} </md-cell>
         </ng-container>
         <ng-container mdColumnDef="QuizType">
           <md-header-cell *mdHeaderCellDef> {{'Home.QuizType' | translate }} </md-header-cell>

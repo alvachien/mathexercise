@@ -1,4 +1,5 @@
-
+import * as moment from 'moment';
+import { DateFormat } from './datedef';
 import { QuizTypeEnum, QuizTypeEnum2UIString } from './quizconcept';
 
 export class AwardPlan {
@@ -26,19 +27,19 @@ export class AwardPlan {
         this._crtby = ctby;
     }
 
-    private _validfrom: Date;
-    get ValidFrom(): Date {
+    private _validfrom: moment.Moment;
+    get ValidFrom(): moment.Moment {
         return this._validfrom;
     }
-    set ValidFrom(vf: Date) {
+    set ValidFrom(vf: moment.Moment) {
         this._validfrom = vf;
     }
 
-    private _validto: Date;
-    get ValidTo(): Date {
+    private _validto: moment.Moment;
+    get ValidTo(): moment.Moment {
         return this._validto;
     }
-    set ValidTo(vt: Date) {
+    set ValidTo(vt: moment.Moment) {
         this._validto = vt;
     }
 
@@ -75,8 +76,9 @@ export class AwardPlan {
     }
 
     constructor() {
-        this.ValidFrom = new Date();
-        this.ValidTo = new Date(this.ValidFrom.getTime() + 30 * 24 * 60 * 60 * 1000) ;
+        this.ValidFrom = moment();
+        this.ValidTo = this.ValidFrom.day(30);
+        // new Date(this.ValidFrom.getTime() + 30 * 24 * 60 * 60 * 1000) ;
         //this.ValidTo = new Date(this.ValidFrom.GetY)
     }
 
@@ -113,8 +115,8 @@ export class AwardPlan {
         if (jdata.createdBy) {
             this._crtby = jdata.createdBy;
         }
-        this._validfrom = jdata.validFrom;
-        this._validto = jdata.validTo;
+        this._validfrom = moment(jdata.validFrom, DateFormat);
+        this._validto = moment(jdata.validTo, DateFormat);
         this._qtype = +jdata.quizType;
         if (jdata.minQuizScore) {
             this._minScore = jdata.minQuizScore;
@@ -124,18 +126,20 @@ export class AwardPlan {
         }
         this._award = jdata.award;
     }
+
     public prepareData(): AwardPlanJson {
         const rst: AwardPlanJson = {
             planID: this._id,
             targetUser: this._tgtuser,
             createdBy: this._crtby,
-            validFrom: this._validfrom,
-            validTo: this._validto,
+            validFrom: this._validfrom.format(DateFormat),
+            validTo: this._validto.format(DateFormat),
             quizType: this._qtype,
             minQuizScore: this._minScore,
             minQuizAvgTime: this._minAvgTime,
             award: this._award
         };
+
         return rst;
     }
 }
@@ -144,8 +148,8 @@ export interface AwardPlanJson {
     planID: number;
     targetUser: string;
     createdBy?: string;
-    validFrom: Date;
-    validTo: Date;
+    validFrom: string;
+    validTo: string;
     quizType: number;
     minQuizScore?: number;
     minQuizAvgTime?: number;
@@ -155,7 +159,7 @@ export interface AwardPlanJson {
 export interface UserAwardJson {
     awardID: number;
     userID: string;
-    awardDate: Date;
+    awardDate: string;
     award: number;
     awardPlanID?: number;
     quizType?: number;
@@ -180,11 +184,11 @@ export class UserAward {
         this._userid = uid;
     }
 
-    private _awdDate: Date;
-    get AwardDate(): Date {
+    private _awdDate: moment.Moment;
+    get AwardDate(): moment.Moment {
         return this._awdDate;
     }
-    set AwardDate(ad: Date) {
+    set AwardDate(ad: moment.Moment) {
         this._awdDate = ad;
     }
 
@@ -231,7 +235,7 @@ export class UserAward {
     public parseData(jdata: UserAwardJson) {
         this._id = +jdata.awardID;
         this._userid = jdata.userID;
-        this._awdDate = jdata.awardDate;
+        this._awdDate = moment(jdata.awardDate, DateFormat);
         this._awd = jdata.award;
         this._awdpid = jdata.awardPlanID;
         this._quizid = jdata.quizID;
@@ -243,7 +247,7 @@ export class UserAward {
         const data: UserAwardJson = {
             awardID: this._id,
             userID: this._userid,
-            awardDate: this._awdDate,
+            awardDate: this._awdDate.format(DateFormat),
             award: this._awd,
             awardPlanID: this._awdpid,
             quizID: this._quizid,

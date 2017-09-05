@@ -1,4 +1,5 @@
 import { DateAdapter, MdDateFormats } from '@angular/material';
+import { DateFormat } from '../model';
 import * as moment from 'moment';
 
 const MONTHS = {
@@ -14,7 +15,7 @@ const DAYS = {
 
 export const MOMENT_DATE_FORMATS: MdDateFormats = {
     parse: {
-        dateInput: 'YYYY-MM-DD',
+        dateInput: DateFormat,
     },
     display: {
         dateInput: { year: 'numeric', month: 'numeric', day: 'numeric' },
@@ -32,6 +33,7 @@ export class MomentDateAdapter extends DateAdapter<moment.Moment> {
      * @returns The year component.
      */
     getYear(date: moment.Moment): number {
+        console.log(`entering getYear.. ${date}`);
         return date.year();
     }
 
@@ -41,6 +43,7 @@ export class MomentDateAdapter extends DateAdapter<moment.Moment> {
      * @returns The month component (0-indexed, 0 = January).
      */
     getMonth(date: moment.Moment): number {
+        console.log(`entering getMonth.. ${date}`);
         return date.month();
     }
 
@@ -50,6 +53,7 @@ export class MomentDateAdapter extends DateAdapter<moment.Moment> {
      * @returns The month component (1-indexed, 1 = first of month).
      */
     getDate(date: moment.Moment): number {
+        console.log(`entering getDate.. ${date}`);
         return date.date();
     }
 
@@ -59,6 +63,7 @@ export class MomentDateAdapter extends DateAdapter<moment.Moment> {
      * @returns The month component (0-indexed, 0 = Sunday).
      */
     getDayOfWeek(date: moment.Moment): number {
+        console.log("entering getDayOfWeek...");
         return date.day();
     }
 
@@ -68,6 +73,7 @@ export class MomentDateAdapter extends DateAdapter<moment.Moment> {
      * @returns An ordered list of all month names, starting with January.
      */
     getMonthNames(style: 'long' | 'short' | 'narrow'): string[] {
+        console.log("entering getMonthNames...");
         return MONTHS[style]();
     }
 
@@ -76,6 +82,7 @@ export class MomentDateAdapter extends DateAdapter<moment.Moment> {
      * @returns An ordered list of all date of the month names, starting with '1'.
      */
     getDateNames(): string[] {
+        console.log("entering getDateNames...");
         const dateNames = [];
         for (let i = 1; i <= 31; i++) {
             dateNames.push(i.toString());
@@ -90,6 +97,7 @@ export class MomentDateAdapter extends DateAdapter<moment.Moment> {
      * @returns An ordered list of all weekday names, starting with Sunday.
      */
     getDayOfWeekNames(style: 'long' | 'short' | 'narrow'): string[] {
+        console.log("entering getDayOfWeekNames...");
         return DAYS[style]();
     }
 
@@ -99,6 +107,7 @@ export class MomentDateAdapter extends DateAdapter<moment.Moment> {
      * @returns The name of the given year (e.g. '2017').
      */
     getYearName(date: moment.Moment): string {
+        console.log("entering getYearName...");
         return date.year().toString();
     }
 
@@ -107,6 +116,7 @@ export class MomentDateAdapter extends DateAdapter<moment.Moment> {
      * @returns The first day of the week (0-indexed, 0 = Sunday).
      */
     getFirstDayOfWeek(): number {
+        console.log("entering getFirstDayOfWeek...");
         return 1; // Monday
     }
 
@@ -116,6 +126,7 @@ export class MomentDateAdapter extends DateAdapter<moment.Moment> {
      * @returns The number of days in the month of the given date.
      */
     getNumDaysInMonth(date: moment.Moment): number {
+        console.log(`entering getNumDaysInMonth.. ${date}`);
         return date.daysInMonth();
     }
 
@@ -125,6 +136,7 @@ export class MomentDateAdapter extends DateAdapter<moment.Moment> {
      * @returns A new date equal to the given date.
      */
     clone(date: moment.Moment): moment.Moment {
+        console.log(`entering clone.. ${date}`);
         return date.clone();
     }
 
@@ -137,8 +149,9 @@ export class MomentDateAdapter extends DateAdapter<moment.Moment> {
      * @returns The new date, or null if invalid.
      */
     createDate(year: number, month: number, date: number): moment.Moment {
+        console.log("entering createDate...");
         const value = year + '-' + (month + 1) + '-' + date;
-        const theDate = moment(value, 'YYYY-MM-DD');
+        const theDate = moment(value, DateFormat);
         return theDate.isValid() ? theDate : null;
     }
 
@@ -147,6 +160,7 @@ export class MomentDateAdapter extends DateAdapter<moment.Moment> {
      * @returns Today's date.
      */
     today(): moment.Moment {
+        console.log("entering today...");
         return moment();
     }
 
@@ -158,6 +172,7 @@ export class MomentDateAdapter extends DateAdapter<moment.Moment> {
      * @returns The parsed date, or null if date could not be parsed.
      */
     parse(value: any, parseFormat: any): moment.Moment | null {
+        console.log(`entering parse.. ${value} ${parseFormat}`);
         return moment(value, parseFormat);
     }
 
@@ -168,7 +183,8 @@ export class MomentDateAdapter extends DateAdapter<moment.Moment> {
      * @returns The parsed date, or null if date could not be parsed.
      */
     format(date: moment.Moment, displayFormat: any): string {
-        return date.format('YYYY-MM-DD');
+        console.log(`entering format.. ${date}`);
+        return date.format(DateFormat);
     }
 
     /**
@@ -180,6 +196,7 @@ export class MomentDateAdapter extends DateAdapter<moment.Moment> {
      * @returns A new date equal to the given one with the specified number of years added.
      */
     addCalendarYears(date: moment.Moment, years: number): moment.Moment {
+        console.log(`entering addCalendarYears.. ${date}`);
         return date.clone().add(years, 'years');
     }
     /**
@@ -191,6 +208,7 @@ export class MomentDateAdapter extends DateAdapter<moment.Moment> {
      * @returns A new date equal to the given one with the specified number of months added.
      */
     addCalendarMonths(date: moment.Moment, months: number): moment.Moment {
+        console.log(`entering addCalendarMonths.. ${date}`);
         // console.log('date', date);
         // console.log('newdate', date.clone().add(months, 'months'));
 
@@ -205,6 +223,7 @@ export class MomentDateAdapter extends DateAdapter<moment.Moment> {
      * @returns A new date equal to the given one with the specified number of days added.
      */
     addCalendarDays(date: moment.Moment, days: number): moment.Moment {
+        console.log(`entering addCalendarDays.. ${date}`);
         return date.clone().add(days, 'days');
     }
 
@@ -215,23 +234,27 @@ export class MomentDateAdapter extends DateAdapter<moment.Moment> {
      * @returns The ISO date string date string.
      */
     getISODateString(date: moment.Moment): string {
+        console.log(`entering getISODateString.. ${date}`);
         return date.toISOString();
     }
+
     /**
      * Checks whether the given object is considered a date instance by this DateAdapter.
      * @param obj The object to check
      * @returns Whether the object is a date instance.
      */
     isDateInstance(obj: any): boolean {
-        //return typeof(obj) === 'moment.Moment';'
-        return true;
+        console.log(`entering isDateInstance.. ${obj}, ${typeof obj}`);
+        return obj instanceof moment;
     }
+
     /**
      * Checks whether the given date is valid.
      * @param date The date to check.
      * @returns Whether the date is valid.
      */
-    isValid(date:moment.Moment): boolean {
+    isValid(date: moment.Moment): boolean {
+        console.log(`entering isValid.. ${date},  ` + typeof date);
         return date.isValid();
     }
 }

@@ -35,7 +35,7 @@
       </ng-container>
       <ng-container mdColumnDef="AwardDate">
         <md-header-cell *mdHeaderCellDef> {{'Home.Date' | translate }} </md-header-cell>
-        <md-cell *mdCellDef="let element"> {{element.AwardDate}} </md-cell>
+        <md-cell *mdCellDef="let element"> {{element.AwardDate.format(DateFormat)}} </md-cell>
       </ng-container>
       <ng-container mdColumnDef="AwardPlanID">
         <md-header-cell *mdHeaderCellDef> {{'Home.AwardPlan' | translate }} </md-header-cell>

@@ -4,7 +4,7 @@ import { Http, RequestOptions, Headers, Response } from '@angular/http';
 import { MdDialog } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
-import { AwardPlan, QuizTypeEnum, QuizTypeEnum2UIString, LogLevel } from '../model';
+import { AwardPlan, QuizTypeEnum, QuizTypeEnum2UIString, LogLevel, DateFormat } from '../model';
 import { AwardPlanService, QuizAttendUser, UserDetailService, DialogService, AuthService } from '../services';
 import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } from '../message-dialog';
 
@@ -144,8 +144,12 @@ export class AwardPlanComponent implements OnInit {
 
   public onEditPlan(row) {
     // Todo
-    // this._curPlan = row;
-    // this.setDetailView('Home.EditAwardPlan');
+    try {
+      this._curPlan = row;
+      this.setDetailView('Home.EditAwardPlan');
+    } catch (exp) {
+      console.error(exp);
+    }
   }
 
   public onDeletePlan(row) {
@@ -169,7 +173,6 @@ export class AwardPlanComponent implements OnInit {
         this._apService.deleteAwardPlan(row);
       }
     });
-
   }
 
   public onUserChanged(event) {
@@ -226,6 +229,16 @@ export class AwardPlanComponent implements OnInit {
   }
 
   public onDetailPlanSubmit(): void {
+    if ((this.CurrentPlan.ID)) {
+      // Update mode
+      this.onChangePlanImpl();
+    } else {
+      // Create mode
+      this.onCreatePlanImpl();
+    }
+  }
+
+  private onCreatePlanImpl(): void {
     // Submit to the API
     const apiurl = environment.APIBaseUrl + 'AwardPlan';
 
@@ -239,6 +252,67 @@ export class AwardPlanComponent implements OnInit {
 
     const options = new RequestOptions({ headers: headers }); // Create a request option
     this._http.post(apiurl, data, options)
+      .map((response: Response) => {
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log('AC Math Exercise [Debug]:' + response);
+        }
+        return response.json();
+      })
+      .subscribe(x => {
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log('AC Math Exericse [Debug]: ' + x);
+        }
+
+        // Show a dialog for success
+        const dlginfo: MessageDialogInfo = {
+          Header: 'Home.Success',
+          Content: 'Home.AwardPlanCreatedSuccessfully',
+          Button: MessageDialogButtonEnum.onlyok
+        };
+        this._dialog.open(MessageDialogComponent, {
+          disableClose: false,
+          width: '500px',
+          data: dlginfo
+        }).afterClosed().subscribe(x => {
+          // Do nothing!
+          this.setListView();
+        });
+      }, error => {
+        if (environment.LoggingLevel >= LogLevel.Error) {
+          console.log('AC Math Exericse [Debug]: ' + error);
+        }
+        // Also show a dialog for error
+        const dlginfo: MessageDialogInfo = {
+          Header: 'Home.Error',
+          Content: error,
+          Button: MessageDialogButtonEnum.onlyok
+        };
+        this._dialog.open(MessageDialogComponent, {
+          disableClose: false,
+          width: '500px',
+          data: dlginfo
+        }).afterClosed().subscribe(x => {
+          // Do nothing!
+          //this.setListView();
+        });
+      }, () => {
+      });
+  }
+
+  private onChangePlanImpl(): void {
+    // Submit to the API
+    const apiurl = environment.APIBaseUrl + 'AwardPlan/' + this.CurrentPlan.ID;
+
+    const jdata = this.CurrentPlan.prepareData();
+    const data = JSON && JSON.stringify(jdata);
+
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
+
+    const options = new RequestOptions({ headers: headers }); // Create a request option
+    this._http.put(apiurl, data, options)
       .map((response: Response) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log('AC Math Exercise [Debug]:' + response);

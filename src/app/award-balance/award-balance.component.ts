@@ -4,7 +4,7 @@ import { Http, RequestOptions, Headers, Response } from '@angular/http';
 import { MdDialog } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
-import { UserAward, QuizTypeEnum, QuizTypeEnum2UIString, LogLevel } from '../model';
+import { UserAward, QuizTypeEnum, QuizTypeEnum2UIString, LogLevel, DateFormat } from '../model';
 import { AwardBalanceService, QuizAttendUser, UserDetailService, DialogService, AuthService } from '../services';
 import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } from '../message-dialog';
 
