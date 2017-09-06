@@ -1,7 +1,12 @@
 {
   "name": "mathexercise",
   "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alvachien/mathexercise.git"
+  },
   "license": "MIT",
+  "author": "Alva Chien",
   "scripts": {
     "ng": "ng",
     "start": "webpack-dev-server --port=20000",

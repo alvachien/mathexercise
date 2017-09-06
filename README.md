@@ -4,7 +4,7 @@ This web app which used to generate exercises of Math (actually it is more than 
 # demo
 A demo was deployed in [github.io](https://alvachien.github.io/mathexercise/).
 
-This demo does not support the functionalities requires login, in other word, this simple app supports neither trace the result of the quiz nor award system.
+The demo above does not support the functionalities requires login, in other words, this simple app supports neither trace the result of the quiz nor award system.
 
 # content
 The features of web app including:
@@ -35,8 +35,8 @@ The features of web app including:
 
 # dependencies
 This web app depends on the following project
-1. [AC IdServer](https://github.com/alvachien/acidserver)
-2. [AC QuizAPI](https://github.com/alvachien/acquizapi)
+1. [AC Identity Server](https://github.com/alvachien/acidserver)
+2. [AC Quiz API](https://github.com/alvachien/acquizapi)
 
 # credits
 This web app credits to the following libraries:
@@ -49,6 +49,7 @@ This web app credits to the following libraries:
 7. [d3.js](https://d3js.org)
 8. [ngx-charts](https://swimlane.github.io/ngx-charts/)
 9. [moment](https://github.com/moment/moment)
+10. [howler.js](https://howlerjs.com/)
 
 # author
 **Alva Chien (Hongjun Qian) | 钱红俊**
