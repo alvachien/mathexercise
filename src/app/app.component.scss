@@ -1,4 +1,4 @@
-body {
+md-sidenav-container {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 
   // Helps fonts on OSX looks more consistent with other systems
@@ -8,12 +8,12 @@ body {
     -moz-osx-font-smoothing: grayscale;
   }
 
-  .mat-sidenav {
+  md-sidenav {
     min-width: 100px !important;
     width: 15vw !important;
     max-width: 200px !important;
 
-    .mat-button {
+    md-button {
       width: 100%;
       position: relative;
       bottom: 0;
@@ -26,8 +26,8 @@ body {
     box-sizing: border-box;
   }
 
-  .mat-toolbar {
-    .mat-icon {
+  md-toolbar {
+    md-icon {
       cursor: pointer;
     }
 

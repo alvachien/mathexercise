@@ -46,6 +46,7 @@ export class UserDetailService {
 
     this._usrDisplayAs = '';
     this._isloaded = false;
+    this._islistloaded = false;
   }
 
   public fetchUserDetail(): Observable<any> {
