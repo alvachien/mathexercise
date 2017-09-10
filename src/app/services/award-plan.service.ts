@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, RequestOptions, Response, Headers, URLSearchParams } from '@angular/http';
+import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
@@ -11,7 +11,7 @@ export class AwardPlanService {
   private _awardPlans: AwardPlan[];
   public dataChangedSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  constructor(private _http: Http,
+  constructor(private _http: HttpClient,
     private _authService: AuthService) {
     this._awardPlans = [];
   }
@@ -19,22 +19,21 @@ export class AwardPlanService {
   public fetchPlansForUser(usr: string): Observable<any> {
     const apiurl = environment.APIBaseUrl + 'AwardPlan';
 
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-    const params: URLSearchParams = new URLSearchParams();
-    params.set('tgtuser', usr);
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json')
+      .append('Accept', 'application/json')
+      .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
+    let params: HttpParams = new HttpParams();
+    params = params.set('tgtuser', usr);
 
-    const options = new RequestOptions({ search: params, headers: headers }); // Create a request option
-    return this._http.get(apiurl, options)
-      .map((response: Response) => {
+    return this._http.get(apiurl, { headers: headers, params: params, withCredentials: true })
+      .map((response: HttpResponse<any>) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log(response);
         }
 
         this._awardPlans = []; // Clear it first
-        const rjs = response.json();
+        const rjs = <any>response;
         if (rjs instanceof Array && rjs.length > 0) {
           for (const si of rjs) {
             const ap: AwardPlan = new AwardPlan();

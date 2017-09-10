@@ -1,6 +1,6 @@
 import { environment } from '../../environments/environment';
 import { Injectable, EventEmitter } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
+import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -38,7 +38,7 @@ export class UserDetailService {
     return this._listUsers;
   }
 
-  constructor(private _http: Http,
+  constructor(private _http: HttpClient,
     private _authService: AuthService) {
     if (environment.LoggingLevel >= LogLevel.Debug) {
       console.log('ACMathExercies Log [Debug]: Entering UserDetailService constructor...');
@@ -51,11 +51,10 @@ export class UserDetailService {
 
   public fetchUserDetail(): Observable<any> {
     if (!this._isloaded) {
-      const headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-      headers.append('Accept', 'application/json');
-      headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-      const options = new RequestOptions({ headers: headers }); // Create a request option
+      let headers = new HttpHeaders();
+      headers = headers.append('Content-Type', 'application/json')
+        .append('Accept', 'application/json')
+        .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
       const apiurl = environment.APIBaseUrl + 'UserDetail/' + this._authService.authSubject.getValue().getUserId();
 
       // !!!
@@ -87,14 +86,18 @@ export class UserDetailService {
       //     return Observable.of(null);
       //   });
 
-      return this._http.get(apiurl, options).map((response: Response) => {
-        this._isloaded = true;
+      return this._http.get(apiurl, {
+          headers: headers,
+          withCredentials: true
+        })
+        .map((response: HttpResponse<any>) => {
+          this._isloaded = true;
 
-        const jdata = response.json();
+          const jdata = <any>response;
 
-        this._usrDisplayAs = jdata.displayAs;
-        return this._usrDisplayAs;
-      });
+          this._usrDisplayAs = jdata.displayAs;
+          return this._usrDisplayAs;
+        });
     } else {
       return Observable.of(this._usrDisplayAs);
     }
@@ -109,11 +112,10 @@ export class UserDetailService {
       return;
     }
 
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-    const options = new RequestOptions({ headers: headers }); // Create a request option
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json')
+      .append('Accept', 'application/json')
+      .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
     let apiurl = environment.APIBaseUrl + 'UserDetail';
 
     const data: any = {};
@@ -124,12 +126,15 @@ export class UserDetailService {
 
     if (this._usrDisplayAs.length === 0) {
       // Not exist yet, create
-      this._http.post(apiurl, jdata, options)
-        .map((response: Response) => {
+      this._http.post(apiurl, jdata, {
+          headers: headers,
+          withCredentials: true
+        })
+        .map((response: HttpResponse<any>) => {
           if (environment.LoggingLevel >= LogLevel.Debug) {
             console.log('AC Math Exercise [Debug]:' + response);
           }
-          return response.json();
+          return <any>response;
         })
         .subscribe((data) => {
           if (environment.LoggingLevel >= LogLevel.Debug) {
@@ -137,7 +142,7 @@ export class UserDetailService {
           }
 
           this._usrDisplayAs = dis;
-        }, (err: Response) => {
+        }, (err: HttpResponse<any>) => {
           if (environment.LoggingLevel >= LogLevel.Error) {
             console.error(err.toString());
           }
@@ -145,12 +150,15 @@ export class UserDetailService {
     } else {
       // Update
       apiurl = apiurl + '/' + this._authService.authSubject.getValue().getUserId();
-      this._http.put(apiurl, jdata, options)
-        .map((response: Response) => {
+      this._http.put(apiurl, jdata, {
+          headers: headers,
+          withCredentials: true
+        })
+        .map((response: HttpResponse<any>) => {
           if (environment.LoggingLevel >= LogLevel.Debug) {
             console.log('AC Math Exercise [Debug]:' + response);
           }
-          return response.json();
+          return <any>response;
         })
         .subscribe((data) => {
           if (environment.LoggingLevel >= LogLevel.Debug) {
@@ -158,7 +166,7 @@ export class UserDetailService {
           }
 
           this._usrDisplayAs = dis;
-        }, (err: Response) => {
+        }, (err: HttpResponse<any>) => {
           if (environment.LoggingLevel >= LogLevel.Error) {
             console.error('AC Math Exercise [Error]:' + err.toString());
           }
@@ -170,21 +178,22 @@ export class UserDetailService {
     if (!this._islistloaded) {
       const apiurl = environment.APIBaseUrl + 'AttendedUser';
 
-      const headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-      headers.append('Accept', 'application/json');
-      headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-
-      const options = new RequestOptions({ headers: headers }); // Create a request option
-      return this._http.get(apiurl, options)
-        .map((response: Response) => {
+      let headers = new HttpHeaders();
+      headers = headers.append('Content-Type', 'application/json')
+        .append('Accept', 'application/json')
+        .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
+      return this._http.get(apiurl, {
+          headers: headers,
+          withCredentials: true
+        })
+        .map((response: HttpResponse<any>) => {
           if (environment.LoggingLevel >= LogLevel.Debug) {
             console.log(response);
           }
 
           this._islistloaded = true;
 
-          const rjs = response.json();
+          const rjs = <any>response;
           this._listUsers = [];
           if (rjs instanceof Array && rjs.length > 0) {
             for (const si of rjs) {

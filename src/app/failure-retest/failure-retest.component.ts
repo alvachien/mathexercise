@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angular/http';
+import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { MdDialog } from '@angular/material';
 import { environment } from '../../environments/environment';
@@ -30,7 +30,7 @@ export class QuizFailureItem {
 export class FailureRetestComponent implements OnInit {
   listFailItems: QuizFailureItem[] = [];
 
-  constructor(private _http: Http,
+  constructor(private _http: HttpClient,
     private dialog: MdDialog,
     private _dlgsvc: DialogService,
     private _authService: AuthService,
@@ -41,17 +41,19 @@ export class FailureRetestComponent implements OnInit {
     const usr = this._authService.authSubject.getValue().getUserId();
     const apiurl = environment.APIBaseUrl + 'quizfailure/' + usr;
 
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-    const options = new RequestOptions({ headers: headers }); // Create a request option
-    this._http.get(apiurl, options)
-      .map((response: Response) => {
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json')
+              .append('Accept', 'application/json')
+              .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
+    this._http.get(apiurl, {
+        headers: headers,
+        withCredentials: true
+      })
+      .map((response: HttpResponse<any>) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log('AC Math Exericse [Debug]: ' + response);
         }
-        return response.json();
+        return <any>response;
       })
       .subscribe(x => {
         if (x instanceof Array && x.length > 0) {

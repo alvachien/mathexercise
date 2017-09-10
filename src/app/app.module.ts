@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ApplicationRef, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
@@ -110,7 +109,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
-    HttpModule,
     ReactiveFormsModule,
     RouterModule.forRoot(AppRoutes),
     DSMaterialModule,
@@ -122,8 +120,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
-    }),
-    HttpModule
+    })
   ],
   providers: [
     { provide: DateAdapter, useClass: MomentDateAdapter },

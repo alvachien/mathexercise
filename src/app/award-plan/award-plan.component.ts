@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
-import { Http, RequestOptions, Headers, Response } from '@angular/http';
+import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
 import { MdDialog } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
@@ -101,7 +101,7 @@ export class AwardPlanComponent implements OnInit {
     return this._curPlan;
   }
 
-  constructor(private _http: Http,
+  constructor(private _http: HttpClient,
     private _dialog: MdDialog,
     private _apService: AwardPlanService,
     private _authService: AuthService,
@@ -245,18 +245,20 @@ export class AwardPlanComponent implements OnInit {
     const jdata = this.CurrentPlan.prepareData();
     const data = JSON && JSON.stringify(jdata);
 
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json')
+              .append('Accept', 'application/json')
+              .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
 
-    const options = new RequestOptions({ headers: headers }); // Create a request option
-    this._http.post(apiurl, data, options)
-      .map((response: Response) => {
+    this._http.post(apiurl, data, {
+        headers: headers,
+        withCredentials: true
+      })
+      .map((response: HttpResponse<any>) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log('AC Math Exercise [Debug]:' + response);
         }
-        return response.json();
+        return <any>response;
       })
       .subscribe(x => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
@@ -306,13 +308,14 @@ export class AwardPlanComponent implements OnInit {
     const jdata = this.CurrentPlan.prepareData();
     const data = JSON && JSON.stringify(jdata);
 
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-
-    const options = new RequestOptions({ headers: headers }); // Create a request option
-    this._http.put(apiurl, data, options)
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json')
+              .append('Accept', 'application/json')
+              .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
+    this._http.put(apiurl, data, {
+        headers: headers,
+        withCredentials: true
+      })
       .map((response: Response) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log('AC Math Exercise [Debug]:' + response);

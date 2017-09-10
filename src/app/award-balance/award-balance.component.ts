@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
-import { Http, RequestOptions, Headers, Response } from '@angular/http';
+import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
 import { MdDialog } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
@@ -75,7 +75,7 @@ export class AwardBalanceComponent implements OnInit {
     }
   }
 
-  constructor(private _http: Http,
+  constructor(private _http: HttpClient,
     private _dialog: MdDialog,
     private _abService: AwardBalanceService,
     private _authService: AuthService,

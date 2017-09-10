@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angular/http';
 import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
@@ -96,8 +95,7 @@ export class QuizSummaryComponent implements OnInit {
 
   constructor(private _dlgsvc: DialogService,
     private _authService: AuthService,
-    private _quizService: QuizService,
-    private _http: Http) {
+    private _quizService: QuizService) {
   }
 
   ngOnInit() {

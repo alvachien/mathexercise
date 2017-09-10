@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Http, Headers, Response, RequestOptions, URLSearchParams } from '@angular/http';
+import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../services/auth.service';
 import {
@@ -74,7 +74,7 @@ export class UserStatisticsComponent implements OnInit {
   yAxisLabelItemAmountByType = 'Amount';
   dataItemAmountByType: any[] = [];
 
-  constructor(private _http: Http,
+  constructor(private _http: HttpClient,
     private _tranService: TranslateService,
     private _authService: AuthService,
     private _userDetailService: UserDetailService) {
@@ -159,14 +159,16 @@ export class UserStatisticsComponent implements OnInit {
   private fetchQuizAmountByDate(usr: string) {
     const apiurl = environment.APIBaseUrl + 'StatisticQuizAmountByDate/' + usr;
 
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-    const options = new RequestOptions({ headers: headers }); // Create a request option
-    this._http.get(apiurl, options)
-      .map((response: Response) => {
-        return response.json();
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json')
+              .append('Accept', 'application/json')
+              .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
+    this._http.get(apiurl, {
+        headers: headers,
+        withCredentials: true
+      })
+      .map((response: HttpResponse<any>) => {
+        return <any>response;
       })
       .subscribe(x => {
         if (x instanceof Array && x.length > 0) {
@@ -187,14 +189,16 @@ export class UserStatisticsComponent implements OnInit {
   private fetchQuizAmountByType(usr: string) {
     const apiurl = environment.APIBaseUrl + 'StatisticQuizAmountByType/' + usr;
 
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-    const options = new RequestOptions({ headers: headers }); // Create a request option
-    this._http.get(apiurl, options)
-      .map((response: Response) => {
-        return response.json();
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json')
+              .append('Accept', 'application/json')
+              .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
+    this._http.get(apiurl, {
+        headers: headers,
+        withCredentials: true
+      })
+      .map((response: HttpResponse<any>) => {
+        return <any>response;
       })
       .subscribe(x => {
         if (x instanceof Array && x.length > 0) {
@@ -220,14 +224,16 @@ export class UserStatisticsComponent implements OnInit {
   private fetchQuizItemAmountByDate(usr: string) {
     const apiurl = environment.APIBaseUrl + 'StatisticQuizItemAmountByDate/' + usr;
 
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-    const options = new RequestOptions({ headers: headers }); // Create a request option
-    this._http.get(apiurl, options)
-      .map((response: Response) => {
-        return response.json();
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json')
+              .append('Accept', 'application/json')
+              .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
+    this._http.get(apiurl, {
+        headers: headers,
+        withCredentials: true
+      })
+      .map((response: HttpResponse<any>) => {
+        return <any>response;
       })
       .subscribe(x => {
         this.dataItemAmountByDate = [];
@@ -255,14 +261,16 @@ export class UserStatisticsComponent implements OnInit {
   private fetchQuizItemAmountByType(usr: string) {
     const apiurl = environment.APIBaseUrl + 'StatisticQuizItemAmountByType/' + usr;
 
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-    const options = new RequestOptions({ headers: headers }); // Create a request option
-    this._http.get(apiurl, options)
-      .map((response: Response) => {
-        return response.json();
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json')
+              .append('Accept', 'application/json')
+              .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
+    this._http.get(apiurl, {
+        headers: headers,
+        withCredentials: true
+      })
+      .map((response: HttpResponse<any>) => {
+        return <any>response;
       })
       .subscribe(x => {
         this.dataItemAmountByType = [];

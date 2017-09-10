@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, RequestOptions, Response, Headers, URLSearchParams } from '@angular/http';
+import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
@@ -9,7 +9,7 @@ import { AuthService } from './auth.service';
 @Injectable()
 export class QuizService {
 
-  constructor(private _http: Http,
+  constructor(private _http: HttpClient,
     private _authService: AuthService) {
   }
 
@@ -42,19 +42,18 @@ export class QuizService {
     }
     const data = JSON && JSON.stringify(result);
 
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json')
+      .append('Accept', 'application/json')
+      .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
 
-    const options = new RequestOptions({ headers: headers }); // Create a request option
-    return this._http.post(apiurl, data, options)
-      .map((response: Response) => {
+    return this._http.post(apiurl, data, { headers: headers, withCredentials: true})
+      .map((response: HttpResponse<any>) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log('AC Math Exercise [Debug]:' + response);
         }
 
-        const cr: QuizCreateResultJSON = <QuizCreateResultJSON>response.json();
+        const cr: QuizCreateResultJSON = <QuizCreateResultJSON><any>response;
         return cr;
       });
   }

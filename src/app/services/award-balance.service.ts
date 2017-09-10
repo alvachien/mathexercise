@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, RequestOptions, Response, Headers, URLSearchParams } from '@angular/http';
+import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
@@ -11,7 +11,7 @@ export class AwardBalanceService {
   private _awards: UserAward[];
   public dataChangedSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  constructor(private _http: Http,
+  constructor(private _http: HttpClient,
     private _authService: AuthService) {
     this._awards = [];
   }
@@ -19,15 +19,18 @@ export class AwardBalanceService {
   public fetchAwardsForUser(usr: string): Observable<any> {
     const apiurl = environment.APIBaseUrl + 'UserAward';
 
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    headers.append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-    const params: URLSearchParams = new URLSearchParams();
-    params.set('userid', usr);
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json')
+              .append('Accept', 'application/json')
+              .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
+    let params: HttpParams = new HttpParams();
+    params = params.append('userid', usr);
 
-    const options = new RequestOptions({ search: params, headers: headers }); // Create a request option
-    return this._http.get(apiurl, options)
+    return this._http.get(apiurl, {
+          headers: headers,
+          params: params,
+          withCredentials: true
+       })
       .map((response: Response) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log(response);
