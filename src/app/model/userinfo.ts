@@ -1,36 +1,157 @@
 import { User } from 'oidc-client';
 
-export class UserDetail {
+export const AuthorityControl_Create: string = 'C';
+export const AuthorityControl_Update: string = 'U';
+export const AuthorityControl_Delete: string = 'D';
+
+
+/**
+ * UserDetailInfoJson: Format to communicate with API
+ */
+export interface UserDetailInfoJson {
+    userID: string;
+    displayAs: string;
+    others: string;
+    awardControl: string;
+    awardPlanControl: string;
+}
+
+/**
+ * User detail
+ */
+export class UserDetailInfo {
+    constructor() {
+        this.UserId = '';
+        this.DisplayAs = '';
+        this.Others = '';
+        this._awardControl = '';
+        this._awardPlanControl = '';
+    }
+
     public UserId: string;
     public DisplayAs: string;
-    public Email: string;
     public Others: string;
+    private _awardControl: string;
+    private _awardPlanControl: string;
 
-    public onSetData(data: any) {
+    get AwardCreate(): boolean {
+        return this._awardControl.includes(AuthorityControl_Create);
+    }
+    set AwardCreate(ac: boolean) {
+        if (ac) {
+            if (!this._awardControl.includes(AuthorityControl_Create)) {
+                this._awardControl += AuthorityControl_Create;
+            }
+        } else {
+            if (this._awardControl.includes(AuthorityControl_Create)) {
+                this._awardControl = this._awardControl.replace(AuthorityControl_Create, '');
+            }
+        }
+    }
+    get AwardUpdate(): boolean {
+        return this._awardControl.includes(AuthorityControl_Update);        
+    }
+    set AwardUpdate(ac: boolean) {
+        if (ac) {
+            if (!this._awardControl.includes(AuthorityControl_Update)) {
+                this._awardControl += AuthorityControl_Update;
+            }
+        } else {
+            if (this._awardControl.includes(AuthorityControl_Update)) {
+                this._awardControl = this._awardControl.replace(AuthorityControl_Update, '');
+            }
+        }
+    }
+    get AwardDelete(): boolean {
+        return this._awardControl.includes(AuthorityControl_Delete);
+    }
+    set AwardDelete(ac: boolean) {
+        if (ac) {
+            if (!this._awardControl.includes(AuthorityControl_Delete)) {
+                this._awardControl += AuthorityControl_Delete;
+            }
+        } else {
+            if (this._awardControl.includes(AuthorityControl_Delete)) {
+                this._awardControl = this._awardControl.replace(AuthorityControl_Delete, '');
+            }
+        }
+    }
+
+    get AwardPlanCreate(): boolean {
+        return this._awardPlanControl.includes(AuthorityControl_Create);
+    }
+    set AwardPlanCreate(ac: boolean) {
+        if (ac) {
+            if (!this._awardPlanControl.includes(AuthorityControl_Create)) {
+                this._awardPlanControl += AuthorityControl_Create;
+            }
+        } else {
+            if (this._awardPlanControl.includes(AuthorityControl_Create)) {
+                this._awardPlanControl = this._awardPlanControl.replace(AuthorityControl_Create, '');
+            }
+        }
+    }
+    get AwardPlanUpdate(): boolean {
+        return this._awardPlanControl.includes(AuthorityControl_Update);
+    }
+    set AwardPlanUpdate(ac: boolean) {
+        if (ac) {
+            if (!this._awardPlanControl.includes(AuthorityControl_Update)) {
+                this._awardPlanControl += AuthorityControl_Update;
+            }
+        } else {
+            if (this._awardPlanControl.includes(AuthorityControl_Update)) {
+                this._awardPlanControl = this._awardPlanControl.replace(AuthorityControl_Update, '');
+            }
+        }
+    }
+    get AwardPlanDelete(): boolean {
+        return this._awardPlanControl.includes(AuthorityControl_Delete);
+    }
+    set AwardPlanDelete(ac: boolean) {
+        if (ac) {
+            if (!this._awardPlanControl.includes(AuthorityControl_Delete)) {
+                this._awardPlanControl += AuthorityControl_Delete;
+            }
+        } else {
+            if (this._awardPlanControl.includes(AuthorityControl_Delete)) {
+                this._awardPlanControl = this._awardPlanControl.replace(AuthorityControl_Delete, '');
+            }
+        }
+    }
+
+    public clone(): UserDetailInfo {
+        let udi = new UserDetailInfo();
+        udi.UserId = this.UserId;
+        udi.DisplayAs = this.DisplayAs;
+        udi.Others = this.Others;
+        udi._awardControl = this._awardControl;
+        udi._awardPlanControl = this._awardPlanControl;
+        return udi;
+    }
+    
+    public onSetData(data: UserDetailInfoJson) {
         this.UserId = data.userID;
         this.DisplayAs = data.displayAs;
-        this.Email = data.email;
         this.Others = data.others;
+        this._awardControl = data.awardControl;
+        this._awardPlanControl = data.awardPlanControl;
+    }
+
+    public generateJSON(): UserDetailInfoJson {
+        return {
+            userID: this.UserId,
+            displayAs: this.DisplayAs,
+            others: this.Others,
+            awardControl: this._awardControl,
+            awardPlanControl: this._awardPlanControl
+        };
     }
 }
 
-export class UserHistory {
-    public UserId: string;
-    public SeqNo: number;
-    public HistType: number;
-    public TimePoint: Date;
-    public Others: string;
-
-    public onSetData(data: any) {
-
-        this.UserId = data.userId;
-        this.SeqNo = data.seqNo;
-        this.HistType = data.histType;
-        this.TimePoint = data.timePoint;
-        this.Others = data.others;
-    }
-}
-
+/**
+ * Auth info of the user
+ */
 export class UserAuthInfo {
     public isAuthorized: boolean;
     private currentUser: User;

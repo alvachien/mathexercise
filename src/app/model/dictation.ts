@@ -1,4 +1,7 @@
 
+/**
+ * Audio content
+ */
 export interface AudioContent {
     word: string;
     beginpoint: number;

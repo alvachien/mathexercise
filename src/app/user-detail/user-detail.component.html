@@ -8,17 +8,33 @@
         <input mdInput placeholder="{{'Home.UserID' | translate}}" maxlength="60" readonly [(ngModel)]="UserID" name="User">
       </md-form-field>
     </div>
-    <div class="demo-full-width">
+
+    <div class="demo-full-width" *ngIf="!instanceUserDetailInfo">
       <md-form-field>
         <input mdInput placeholder="{{'Home.Mailbox' | translate }}" readonly [(ngModel)]="Mailbox" name="mailbox">
       </md-form-field>
     </div>
+
     <div class="demo-full-width">
       <md-form-field>
         <input mdInput placeholder="{{'Home.DisplayAs' | translate }}" [(ngModel)]="DisplayAs" name="dispas" required>
         <md-error>This field is required</md-error>
       </md-form-field>
     </div>
+
+    <section class="example-section">
+      <label class="example-margin">{{'Home.AwardPlan' | translate}}</label>
+      <md-checkbox class="example-margin" [(ngModel)]="awardPlanCreate" disabled>{{'Home.Create' | translate}}</md-checkbox>
+      <md-checkbox class="example-margin" [(ngModel)]="awardPlanUpdate" disabled>{{'Home.Update' | translate}}</md-checkbox>
+      <md-checkbox class="example-margin" [(ngModel)]="awardPlanDelete" disabled>{{'Home.Delete' | translate}}</md-checkbox>
+    </section>
+
+    <section class="example-section">
+      <label class="example-margin">{{'Home.Award' | translate}}</label>
+      <md-checkbox class="example-margin" [(ngModel)]="awardCreate" disabled>{{'Home.Create' | translate}}</md-checkbox>
+      <md-checkbox class="example-margin" [(ngModel)]="awardUpdate" disabled>{{'Home.Update' | translate}}</md-checkbox>
+      <md-checkbox class="example-margin" [(ngModel)]="awardDelete" disabled>{{'Home.Delete' | translate}}</md-checkbox>
+    </section>
   </md-card-content>
   <md-card-actions>
     <button md-button (click)="onSave()" [disabled]="!CanSave()">{{'Home.SaveButton' | translate}}</button>

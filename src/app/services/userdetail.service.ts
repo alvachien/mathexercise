@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { LogLevel, UserAuthInfo } from '../model';
+import { LogLevel, UserAuthInfo, UserDetailInfo, UserDetailInfoJson } from '../model';
 import { AuthService } from './auth.service';
 
 /**
@@ -23,9 +23,18 @@ export class UserDetailService {
     return this._isloaded;
   }
 
-  private _usrDisplayAs: string;
+  private _usrDetialInfo: UserDetailInfo;
+  get UserId(): string {
+    return this._usrDetialInfo.UserId;
+  }
   get DisplayAs(): string {
-    return this._usrDisplayAs;
+    return this._usrDetialInfo.DisplayAs;
+  }
+  get Others(): string {
+    return this._usrDetialInfo.Others;
+  }
+  get UserDetailInfoInstance(): UserDetailInfo {
+    return this._usrDetialInfo;
   }
 
   private _islistloaded: boolean;
@@ -44,12 +53,12 @@ export class UserDetailService {
       console.log('ACMathExercies Log [Debug]: Entering UserDetailService constructor...');
     }
 
-    this._usrDisplayAs = '';
+    this._usrDetialInfo = null;
     this._isloaded = false;
     this._islistloaded = false;
   }
 
-  public fetchUserDetail(): Observable<any> {
+  public fetchUserDetail(): Observable<UserDetailInfo> {
     if (!this._isloaded) {
       let headers = new HttpHeaders();
       headers = headers.append('Content-Type', 'application/json')
@@ -95,36 +104,26 @@ export class UserDetailService {
 
           const jdata = <any>response;
 
-          this._usrDisplayAs = jdata.displayAs;
-          return this._usrDisplayAs;
+          this._usrDetialInfo = new UserDetailInfo();
+          this._usrDetialInfo.onSetData(jdata);
+          return this._usrDetialInfo;
         });
     } else {
-      return Observable.of(this._usrDisplayAs);
+      return Observable.of(this._usrDetialInfo);
     }
   }
 
-  public saveUserDetail(dis: string) {
-    if (dis.length <= 0) {
-      return;
-    }
-
-    if (!this._isloaded) {
-      return;
-    }
-
+  public saveUserDetail(usrdtl: UserDetailInfo) {
     let headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json')
       .append('Accept', 'application/json')
       .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
     let apiurl = environment.APIBaseUrl + 'UserDetail';
 
-    const data: any = {};
-    data.userID = this._authService.authSubject.getValue().getUserId();
-    data.displayAs = dis;
-    data.others = '';
+    const data: UserDetailInfoJson = usrdtl.generateJSON();
     const jdata = JSON && JSON.stringify(data);
 
-    if (this._usrDisplayAs.length === 0) {
+    if (this._usrDetialInfo === null) {
       // Not exist yet, create
       this._http.post(apiurl, jdata, {
           headers: headers,
@@ -132,19 +131,21 @@ export class UserDetailService {
         })
         .map((response: HttpResponse<any>) => {
           if (environment.LoggingLevel >= LogLevel.Debug) {
-            console.log('AC Math Exercise [Debug]:' + response);
+            console.log(`AC Math Exercise [Debug]: User Detail Create Map: ${response}`);
           }
           return <any>response;
         })
         .subscribe((data) => {
           if (environment.LoggingLevel >= LogLevel.Debug) {
-            console.log('AC Math Exercise [Debug]:' + data);
+            console.log(`AC Math Exercise [Debug]: User Detail Post Subscribe: ${data}`);
           }
 
-          this._usrDisplayAs = dis;
+          this._usrDetialInfo = new UserDetailInfo();
+          this._usrDetialInfo.onSetData(data);
+          this._isloaded = true;
         }, (err: HttpResponse<any>) => {
           if (environment.LoggingLevel >= LogLevel.Error) {
-            console.error(err.toString());
+            console.error('AC Math Exercise [Error]:' + err.statusText + err.body);
           }
         });
     } else {
@@ -156,16 +157,18 @@ export class UserDetailService {
         })
         .map((response: HttpResponse<any>) => {
           if (environment.LoggingLevel >= LogLevel.Debug) {
-            console.log('AC Math Exercise [Debug]:' + response);
+            console.log(`AC Math Exercise [Debug]: User Detail Change Map:  ${response}`);
           }
           return <any>response;
         })
         .subscribe((data) => {
           if (environment.LoggingLevel >= LogLevel.Debug) {
-            console.log('AC Math Exercise [Debug]:' + data);
+            console.log(`AC Math Exercise [Debug]: User Detail Change Subscribe: ${data}`);
           }
 
-          this._usrDisplayAs = dis;
+          this._usrDetialInfo = new UserDetailInfo();
+          this._usrDetialInfo.onSetData(data);
+          this._isloaded = true;
         }, (err: HttpResponse<any>) => {
           if (environment.LoggingLevel >= LogLevel.Error) {
             console.error('AC Math Exercise [Error]:' + err.toString());

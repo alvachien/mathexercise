@@ -122,6 +122,9 @@
         "ConfirmOnDeletionDetail": "Please be aware that the deletion cannot be undo, please confirm to continue",
         "EnglishWordDictation": "English Word Dictation",
         "ChineseWordDictation": "Chinese Word Dictation",
+        "Create": "Create",
+        "Update": "Update",
+        "Delete": "Delete",
         
         "Underconstruction": "Page still under construction"
     },

@@ -114,8 +114,8 @@ export class AppComponent implements OnInit {
 
             // Get user detail
             this._userDetailService.fetchUserDetail().subscribe((x2) => {
-              if (x2 !== null && x2 !== undefined && x2.length > 0) {
-                this.userDisplayAs = x2;
+              if (x2 !== null && x2 !== undefined) {
+                this.userDisplayAs = x2.DisplayAs;
               }
             });
           }

@@ -316,11 +316,11 @@ export class AwardPlanComponent implements OnInit {
         headers: headers,
         withCredentials: true
       })
-      .map((response: Response) => {
+      .map((response: HttpResponse<any>) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log('AC Math Exercise [Debug]:' + response);
         }
-        return response.json();
+        return <any>response;
       })
       .subscribe(x => {
         if (environment.LoggingLevel >= LogLevel.Debug) {

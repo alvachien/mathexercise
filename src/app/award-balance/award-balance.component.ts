@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
-import { MdDialog } from '@angular/material';
+import { MdDialog, MdPaginator } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
-import { UserAward, QuizTypeEnum, QuizTypeEnum2UIString, LogLevel, DateFormat } from '../model';
+import { UserAward, QuizTypeEnum, QuizTypeEnum2UIString, LogLevel, DateFormat, UIMode } from '../model';
 import { AwardBalanceService, QuizAttendUser, UserDetailService, DialogService, AuthService } from '../services';
 import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } from '../message-dialog';
 
@@ -12,37 +12,37 @@ import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } fr
  * Award plan data source
  */
 export class AwardBalanceDataSource extends DataSource<any> {
-  constructor() {
+  constructor(private _abService: AwardBalanceService,
+    private _paginator: MdPaginator) {
     super();
-  }
-
-  private _abService: AwardBalanceService = null;
-  set AwardBalanceService(ab: AwardBalanceService) {
-    this._abService = ab;
-  }
-
-  private _curuser: string;
-  get CurrentUser(): string {
-    return this._curuser;
-  }
-  set CurrentUser(cu: string) {
-    this._curuser = cu;
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<UserAward[]> {
-    return this._abService.dataChangedSubject.switchMap((v: boolean) => {
-      if (this._curuser !== null && this._curuser !== undefined && this._curuser.length > 0) {
-        return this._abService.fetchAwardsForUser(this._curuser);
-      } else {
-        return Observable.of([]);
-      }
+    const displayDataChanges = [
+      this._abService.dataChangedSubject,
+      this._paginator.page,
+    ];
+
+    // return this._abService.dataChangedSubject.switchMap((v: boolean) => {
+    //   if (this._curuser !== null && this._curuser !== undefined && this._curuser.length > 0) {
+    //     return this._abService.fetchAwardsForUser(this._curuser);
+    //   } else {
+    //     return Observable.of([]);
+    //   }
+    // });
+
+    return Observable.merge(...displayDataChanges).map(() => {
+      const data = this._abService.Awards.slice();
+
+      // Grab the page's slice of data.
+      const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
+      return data.splice(startIndex, this._paginator.pageSize);
     });
   }
 
   disconnect() { }
 }
-
 
 @Component({
   selector: 'app-award-balance',
@@ -51,8 +51,28 @@ export class AwardBalanceDataSource extends DataSource<any> {
 })
 export class AwardBalanceComponent implements OnInit {
   displayedColumns = ['ID', 'AwardDate', 'AwardPlanID', 'QuizID', 'Award', 'UsedReason'];
-  dataSource: AwardBalanceDataSource = null;
+  dataSource: AwardBalanceDataSource | null;
+  @ViewChild(MdPaginator) paginator: MdPaginator;
   listUsers: QuizAttendUser[] = [];
+  _curMode: UIMode = UIMode.ListView;
+  curAward: UserAward;
+
+  get IsListView(): boolean {
+    return this._curMode === UIMode.ListView;
+  }
+  get IsCreateView(): boolean {
+    return this._curMode === UIMode.Create;
+  }
+  get IsUpdateView(): boolean {
+    return this._curMode === UIMode.Update;
+  }
+  get IsDisplayView(): boolean {
+    return this._curMode === UIMode.Display;
+  }
+  get IsViewChangable(): boolean {
+    return this._curMode === UIMode.Create
+      || this._curMode === UIMode.Update;
+  }
 
   private _curUser: QuizAttendUser;
   get CurrentUser(): QuizAttendUser {
@@ -62,27 +82,26 @@ export class AwardBalanceComponent implements OnInit {
     if ((this._curUser === null || this._curUser === undefined)
       && (cu !== null && cu !== undefined)) {
       this._curUser = cu;
-      this.dataSource.CurrentUser = this._curUser.attenduser;
     } else if ((this._curUser !== null || this._curUser !== undefined)
       && (cu === null && cu === undefined)) {
       this._curUser = null;
-      this.dataSource.CurrentUser = null;
     } else if ((this._curUser !== null || this._curUser !== undefined)
       && (cu !== null && cu !== undefined)
       && this._curUser.attenduser !== cu.attenduser) {
       this._curUser = cu;
-      this.dataSource.CurrentUser = this._curUser.attenduser;
     }
   }
 
   constructor(private _http: HttpClient,
     private _dialog: MdDialog,
-    private _abService: AwardBalanceService,
+    public _abService: AwardBalanceService,
     private _authService: AuthService,
     private _userDetailService: UserDetailService) {
-    this.dataSource = new AwardBalanceDataSource();
-    this.dataSource.AwardBalanceService = this._abService;
+  }
 
+  ngOnInit() {
+    this.dataSource = new AwardBalanceDataSource(this._abService, this.paginator);
+    
     // Attended user
     this._userDetailService.fetchAllUsers().subscribe((listUsrs) => {
       if (listUsrs !== null && listUsrs !== undefined || listUsrs.length > 0) {
@@ -91,12 +110,10 @@ export class AwardBalanceComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-  }
   public onUserChanged(event) {
     // User selection changed
     // Refetch the whole plan list!
-    this._abService.triggerDataChange();
+    this._abService.fetchAwardsForUser(this._curUser.attenduser);
   }
 
   public canDeactivate(): boolean {
@@ -104,14 +121,32 @@ export class AwardBalanceComponent implements OnInit {
   }
 
   public onCreateNewExpense(): void {
+    this.curAward = new UserAward();
+    this._curMode = UIMode.Create;
+  }
 
+  public CanDetailAwardSubmit(): boolean {
+    if (!this.IsViewChangable) {
+      return false;
+    }
+
+    return true;
+  }
+
+  public onDetailAwardSubmit(): void {
+    // Do the submit!
   }
 
   public onEditAward(data) {
-
+    this.curAward = data.clone();
+    this._curMode = UIMode.Display;
   }
 
   public onDeleteAward(data) {
-    
+
+  }
+
+  public onDetailAwardCancel(): void {
+
   }
 }

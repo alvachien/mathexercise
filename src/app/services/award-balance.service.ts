@@ -8,15 +8,16 @@ import { AuthService } from './auth.service';
 
 @Injectable()
 export class AwardBalanceService {
-  private _awards: UserAward[];
-  public dataChangedSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public dataChangedSubject: BehaviorSubject<UserAward[]> = new BehaviorSubject<UserAward[]>([]);
+  get Awards(): UserAward[] {
+    return this.dataChangedSubject.value;
+  }
 
   constructor(private _http: HttpClient,
     private _authService: AuthService) {
-    this._awards = [];
   }
 
-  public fetchAwardsForUser(usr: string): Observable<any> {
+  public fetchAwardsForUser(usr: string) {
     const apiurl = environment.APIBaseUrl + 'UserAward';
 
     let headers = new HttpHeaders();
@@ -26,7 +27,7 @@ export class AwardBalanceService {
     let params: HttpParams = new HttpParams();
     params = params.append('userid', usr);
 
-    return this._http.get(apiurl, {
+    this._http.get(apiurl, {
           headers: headers,
           params: params,
           withCredentials: true
@@ -36,22 +37,32 @@ export class AwardBalanceService {
           console.log(response);
         }
 
-        this._awards = []; // Clear it first
-        const rjs = response.json();
+        let awards = []; // Clear it first
+        const rjs = <any>response;
 
         if (rjs instanceof Array && rjs.length > 0) {
           for (const si of rjs) {
             const ap: UserAward = new UserAward();
             ap.parseData(<UserAwardJson>si);
-            this._awards.push(ap);
+            awards.push(ap);
           }
         }
 
-        return this._awards;
-      });
-  }
+        return awards;
+      })
+      .subscribe(x => {
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log(`AC Math Exercise [Debug]: Succeed in fetchAwardsForUser in AwardBalanceService: ${x}`);
+        }
 
-  public triggerDataChange() {
-    this.dataChangedSubject.next(true);
+        let copiedData = x;
+        this.dataChangedSubject.next(copiedData);
+      }, error => {
+        if (environment.LoggingLevel >= LogLevel.Error) {
+          console.log(`AC Math Exercise [Error]: Error occurred in fetchAwardsForUser in AwardBalanceService: ${error}`);
+        }
+      }, () => {
+
+      });
   }
 }

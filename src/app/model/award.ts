@@ -2,6 +2,24 @@ import * as moment from 'moment';
 import { DateFormat } from './datedef';
 import { QuizTypeEnum, QuizTypeEnum2UIString } from './quizconcept';
 
+/**
+ * Award plan JSON: Communicate with API
+ */
+export interface AwardPlanJson {
+    planID: number;
+    targetUser: string;
+    createdBy?: string;
+    validFrom: string;
+    validTo: string;
+    quizType: number;
+    minQuizScore?: number;
+    minQuizAvgTime?: number;
+    award: number;
+}
+
+/**
+ * Award plan
+ */
 export class AwardPlan {
     private _id: number;
     get ID(): number {
@@ -144,18 +162,9 @@ export class AwardPlan {
     }
 }
 
-export interface AwardPlanJson {
-    planID: number;
-    targetUser: string;
-    createdBy?: string;
-    validFrom: string;
-    validTo: string;
-    quizType: number;
-    minQuizScore?: number;
-    minQuizAvgTime?: number;
-    award: number;
-}
-
+/**
+ * User Award JSON format
+ */
 export interface UserAwardJson {
     awardID: number;
     userID: string;
@@ -167,6 +176,9 @@ export interface UserAwardJson {
     usedReason?: string;
 }
 
+/**
+ * User Award
+ */
 export class UserAward {
     private _id: number;
     get ID(): number {

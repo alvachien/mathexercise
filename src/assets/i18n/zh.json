@@ -122,6 +122,9 @@
         "ConfirmOnDeletionDetail": "删除操作无法回滚，请确认以继续删除操作。",
         "EnglishWordDictation": "英语单词听写",
         "ChineseWordDictation": "中文单词听写",
+        "Create": "创建",
+        "Update": "更新",
+        "Delete": "删除",
         
         "Underconstruction": "当前页还在开发中"
     },

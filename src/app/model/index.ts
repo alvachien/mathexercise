@@ -12,3 +12,4 @@ export * from './sudou';
 export * from './puzzlegamequiz';
 export * from './award';
 export * from './dictation';
+export * from './uicommon';
