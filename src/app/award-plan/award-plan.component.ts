@@ -106,7 +106,7 @@ export class AwardPlanComponent implements OnInit {
 
   constructor(private _http: HttpClient,
     private _dialog: MdDialog,
-    private _apService: AwardPlanService,
+    public _apService: AwardPlanService,
     private _authService: AuthService,
     private _userDetailService: UserDetailService) {
 
