@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
-import { MdDialog } from '@angular/material';
+import { MdDialog, MdPaginator } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
-import { AwardPlan, QuizTypeEnum, QuizTypeEnum2UIString, LogLevel, DateFormat } from '../model';
+import { AwardPlan, QuizTypeEnum, QuizTypeEnum2UIString, LogLevel, DateFormat, UserDetailInfo } from '../model';
 import { AwardPlanService, QuizAttendUser, UserDetailService, DialogService, AuthService } from '../services';
 import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } from '../message-dialog';
 
@@ -12,31 +12,31 @@ import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } fr
  * Award plan data source
  */
 export class AwardPlanDataSource extends DataSource<any> {
-  constructor() {
+  constructor(private _apService: AwardPlanService,
+    private _paginator: MdPaginator) {
     super();
-  }
-
-  private _apService: AwardPlanService = null;
-  set AwardPlanService(ap: AwardPlanService) {
-    this._apService = ap;
-  }
-
-  private _curuser: string;
-  get CurrentUser(): string {
-    return this._curuser;
-  }
-  set CurrentUser(cu: string) {
-    this._curuser = cu;
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<AwardPlan[]> {
-    return this._apService.dataChangedSubject.switchMap((v: boolean) => {
-      if (this._curuser !== null && this._curuser !== undefined && this._curuser.length > 0) {
-        return this._apService.fetchPlansForUser(this._curuser);
-      } else {
-        return Observable.of([]);
-      }
+    // return this._apService.listSubject.switchMap((v: boolean) => {
+    //   if (this._selUser !== null && this._selUser !== undefined && this._selUser.length > 0) {
+    //     return this._apService.fetchPlansForUser(this._selUser);
+    //   } else {
+    //     return Observable.of([]);
+    //   }
+    // });
+
+    const displayDataChanges = [
+      this._apService.listSubject,
+      this._paginator.page,
+    ];
+    return Observable.merge(...displayDataChanges).map(() => {
+      const data = this._apService.AwardPlans.slice();
+
+      // Grab the page's slice of data.
+      const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
+      return data.splice(startIndex, this._paginator.pageSize);
     });
   }
 
@@ -58,6 +58,7 @@ export class AwardPlanComponent implements OnInit {
   pageHeader: string;
   dataSource: AwardPlanDataSource = null;
   listUsers: QuizAttendUser[] = [];
+  @ViewChild(MdPaginator) paginator: MdPaginator;
 
   private _isListView: boolean;
   get IsListView(): boolean {
@@ -73,25 +74,27 @@ export class AwardPlanComponent implements OnInit {
   set IsDetailView(dv: boolean) {
     this._isDetailView = dv;
   }
-  private _curUser: QuizAttendUser;
-  get CurrentUser(): QuizAttendUser {
-    return this._curUser;
+  private _selUser: QuizAttendUser;
+  get SelectedUser(): QuizAttendUser {
+    return this._selUser;
   }
-  set CurrentUser(cu: QuizAttendUser) {
-    if ((this._curUser === null || this._curUser === undefined)
+  set SelectedUser(cu: QuizAttendUser) {
+    if ((this._selUser === null || this._selUser === undefined)
       && (cu !== null && cu !== undefined)) {
-      this._curUser = cu;
-      this.dataSource.CurrentUser = this._curUser.attenduser;
-    } else if ((this._curUser !== null || this._curUser !== undefined)
+      this._selUser = cu;
+    } else if ((this._selUser !== null || this._selUser !== undefined)
       && (cu === null && cu === undefined)) {
-      this._curUser = null;
-      this.dataSource.CurrentUser = null;
-    } else if ((this._curUser !== null || this._curUser !== undefined)
+      this._selUser = null;
+    } else if ((this._selUser !== null || this._selUser !== undefined)
       && (cu !== null && cu !== undefined)
-      && this._curUser.attenduser !== cu.attenduser) {
-      this._curUser = cu;
-      this.dataSource.CurrentUser = this._curUser.attenduser;
+      && this._selUser.attenduser !== cu.attenduser) {
+      this._selUser = cu;
     }
+  }
+
+  // Current logon user - authority control!
+  get CurrentUser(): UserDetailInfo {
+    return this._userDetailService.UserDetailInfoInstance;
   }
 
   listQTypes: QuizTypeUI[] = [];
@@ -106,9 +109,8 @@ export class AwardPlanComponent implements OnInit {
     private _apService: AwardPlanService,
     private _authService: AuthService,
     private _userDetailService: UserDetailService) {
-    this.dataSource = new AwardPlanDataSource();
-    this.dataSource.AwardPlanService = this._apService;
 
+    this._selUser = null;
     for (const qt in QuizTypeEnum) {
       if (!Number.isNaN(+qt)) {
         const qtu: QuizTypeUI = {
@@ -130,11 +132,12 @@ export class AwardPlanComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dataSource = new AwardPlanDataSource(this._apService, this.paginator);
   }
 
   public onCreatePlan() {
     this._curPlan = new AwardPlan();
-    this._curPlan.TargetUser = this.CurrentUser.attenduser;
+    this._curPlan.TargetUser = this.SelectedUser.attenduser;
     this._curPlan.CreatedBy = this._authService.authSubject.getValue().getUserId();
 
     this.setDetailView('Home.CreateAwardPlan');
@@ -176,9 +179,12 @@ export class AwardPlanComponent implements OnInit {
   }
 
   public onUserChanged(event) {
-    // User selection changed
     // Refetch the whole plan list!
-    this._apService.triggerDataChange();
+    if (this._selUser === null) {
+      this._apService.fetchPlansForUser();
+    } else {
+      this._apService.fetchPlansForUser(this._selUser.attenduser);
+    }
   }
 
   public canDeactivate(): boolean {
@@ -239,94 +245,56 @@ export class AwardPlanComponent implements OnInit {
   }
 
   private onCreatePlanImpl(): void {
-    // Submit to the API
-    const apiurl = environment.APIBaseUrl + 'AwardPlan';
+    this._apService.createEvent.subscribe(x => {
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.log('AC Math Exericse [Debug]: ' + x);
+      }
 
-    const jdata = this.CurrentPlan.prepareData();
-    const data = JSON && JSON.stringify(jdata);
-
-    let headers = new HttpHeaders();
-    headers = headers.append('Content-Type', 'application/json')
-              .append('Accept', 'application/json')
-              .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-
-    this._http.post(apiurl, data, {
-        headers: headers,
-        withCredentials: true
-      })
-      .map((response: HttpResponse<any>) => {
-        if (environment.LoggingLevel >= LogLevel.Debug) {
-          console.log('AC Math Exercise [Debug]:' + response);
-        }
-        return <any>response;
-      })
-      .subscribe(x => {
-        if (environment.LoggingLevel >= LogLevel.Debug) {
-          console.log('AC Math Exericse [Debug]: ' + x);
-        }
-
-        // Show a dialog for success
-        const dlginfo: MessageDialogInfo = {
-          Header: 'Home.Success',
-          Content: 'Home.AwardPlanCreatedSuccessfully',
-          Button: MessageDialogButtonEnum.onlyok
-        };
-        this._dialog.open(MessageDialogComponent, {
-          disableClose: false,
-          width: '500px',
-          data: dlginfo
-        }).afterClosed().subscribe(x => {
-          // Do nothing!
-          this.setListView();
-        });
-      }, error => {
-        if (environment.LoggingLevel >= LogLevel.Error) {
-          console.log('AC Math Exericse [Debug]: ' + error);
-        }
-        // Also show a dialog for error
-        const dlginfo: MessageDialogInfo = {
-          Header: 'Home.Error',
-          Content: error,
-          Button: MessageDialogButtonEnum.onlyok
-        };
-        this._dialog.open(MessageDialogComponent, {
-          disableClose: false,
-          width: '500px',
-          data: dlginfo
-        }).afterClosed().subscribe(x => {
-          // Do nothing!
-          //this.setListView();
-        });
-      }, () => {
+      // Show a dialog for success
+      const dlginfo: MessageDialogInfo = {
+        Header: 'Home.Success',
+        Content: 'Home.AwardPlanCreatedSuccessfully',
+        Button: MessageDialogButtonEnum.onlyok
+      };
+      this._dialog.open(MessageDialogComponent, {
+        disableClose: false,
+        width: '500px',
+        data: dlginfo
+      }).afterClosed().subscribe(x => {
+        // Do nothing!
+        this.setListView();
       });
+    }, error => {
+      if (environment.LoggingLevel >= LogLevel.Error) {
+        console.log('AC Math Exericse [Debug]: ' + error);
+      }
+      // Also show a dialog for error
+      const dlginfo: MessageDialogInfo = {
+        Header: 'Home.Error',
+        Content: error,
+        Button: MessageDialogButtonEnum.onlyok
+      };
+      this._dialog.open(MessageDialogComponent, {
+        disableClose: false,
+        width: '500px',
+        data: dlginfo
+      }).afterClosed().subscribe(x => {
+        // Do nothing!
+        //this.setListView();
+      });
+    });
+
+    this.CurrentPlan.TargetUser = this.SelectedUser.attenduser;
+    this._apService.createAwardPlan(this.CurrentPlan);
   }
 
   private onChangePlanImpl(): void {
-    // Submit to the API
-    const apiurl = environment.APIBaseUrl + 'AwardPlan/' + this.CurrentPlan.ID;
+    this._apService.changeEvent.subscribe(x => {
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.log('AC Math Exericse [Debug]: ' + x);
+      }
 
-    const jdata = this.CurrentPlan.prepareData();
-    const data = JSON && JSON.stringify(jdata);
-
-    let headers = new HttpHeaders();
-    headers = headers.append('Content-Type', 'application/json')
-              .append('Accept', 'application/json')
-              .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-    this._http.put(apiurl, data, {
-        headers: headers,
-        withCredentials: true
-      })
-      .map((response: HttpResponse<any>) => {
-        if (environment.LoggingLevel >= LogLevel.Debug) {
-          console.log('AC Math Exercise [Debug]:' + response);
-        }
-        return <any>response;
-      })
-      .subscribe(x => {
-        if (environment.LoggingLevel >= LogLevel.Debug) {
-          console.log('AC Math Exericse [Debug]: ' + x);
-        }
-
+      if (x instanceof AwardPlan) {
         // Show a dialog for success
         const dlginfo: MessageDialogInfo = {
           Header: 'Home.Success',
@@ -337,30 +305,29 @@ export class AwardPlanComponent implements OnInit {
           disableClose: false,
           width: '500px',
           data: dlginfo
-        }).afterClosed().subscribe(x => {
+        }).afterClosed().subscribe(x2 => {
           // Do nothing!
           this.setListView();
         });
-      }, error => {
-        if (environment.LoggingLevel >= LogLevel.Error) {
-          console.log('AC Math Exericse [Debug]: ' + error);
-        }
+      } else {
         // Also show a dialog for error
         const dlginfo: MessageDialogInfo = {
           Header: 'Home.Error',
-          Content: error,
+          Content: x === null? 'Home.Error' : x,
           Button: MessageDialogButtonEnum.onlyok
         };
         this._dialog.open(MessageDialogComponent, {
           disableClose: false,
           width: '500px',
           data: dlginfo
-        }).afterClosed().subscribe(x => {
+        }).afterClosed().subscribe(x2 => {
           // Do nothing!
           //this.setListView();
         });
-      }, () => {
-      });
+      }
+    });
+
+    this._apService.changeAwardPlan(this.CurrentPlan);
   }
 
   public onDetailPlanCancel(): void {

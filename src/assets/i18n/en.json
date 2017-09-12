@@ -125,6 +125,7 @@
         "Create": "Create",
         "Update": "Update",
         "Delete": "Delete",
+        "AwardCreatedSuccessfully": "Award was created successfully!",
         
         "Underconstruction": "Page still under construction"
     },

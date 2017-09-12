@@ -3,14 +3,15 @@
     <md-card-title>{{pageHeader | translate}}</md-card-title>
   </md-card-header>
   <md-card-content>
-    <md-toolbar color="primary" *ngIf="IsListView">
-      <md-select placeholder="{{'Home.User' | translate}}" [disabled]="!IsListView" [(ngModel)]="CurrentUser" name="usr" (change)="onUserChanged($event)">
+    <md-toolbar color="primary">
+      <md-select placeholder="{{'Home.User' | translate}}" [disabled]="!IsListView" 
+        [(ngModel)]="SelectedUser" name="usr" (change)="onUserChanged($event)">
         <md-option *ngFor="let user of listUsers" [value]="user">
           {{ user.displayas }}
         </md-option>
       </md-select>
 
-      <button md-icon-button [disabled]="!CurrentUser" (click)="onCreatePlan()">
+      <button md-icon-button [disabled]="(SelectedUser === null) || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardPlanCreate)" (click)="onCreatePlan()">
         <md-icon class="md-24" aria-label="Create">create_new_folder</md-icon>
       </button>
 
@@ -19,16 +20,18 @@
       <span>{{'Home.AwardPlanByUser' | translate}}</span>
     </md-toolbar>
 
-    <div *ngIf="IsListView" class="example-container mat-elevation-z8">
+    <div class="example-container mat-elevation-z8">
       <md-table #table [dataSource]="dataSource">
 
         <ng-container mdColumnDef="ID">
           <md-header-cell *mdHeaderCellDef> # </md-header-cell>
           <md-cell *mdCellDef="let element">
-            <button md-mini-fab (click)="onEditPlan(element)">
+            <button md-mini-fab [disabled]="!IsListView || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardPlanUpdate)" 
+              (click)="onEditPlan(element)">
               <md-icon class="md-14" aria-label="Edit">edit</md-icon>
             </button>
-            <button md-mini-fab (click)="onDeletePlan(element)">
+            <button md-mini-fab [disabled]="!IsListView || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardPlanDelete)" 
+              (click)="onDeletePlan(element)">
               <md-icon class="md-14" aria-label="Delete">delete</md-icon>
             </button>
             {{element.ID}} 
@@ -36,11 +39,11 @@
         </ng-container>
         <ng-container mdColumnDef="ValidFrom">
           <md-header-cell *mdHeaderCellDef> {{'Home.ValidFrom' | translate }} </md-header-cell>
-          <md-cell *mdCellDef="let element"> {{element.ValidFrom.format('YYYY-MM-DD')}} </md-cell>
+          <md-cell *mdCellDef="let element"> {{element.ValidFromFormatString}} </md-cell>
         </ng-container>
         <ng-container mdColumnDef="ValidTo">
           <md-header-cell *mdHeaderCellDef> {{'Home.ValidTo' | translate }} </md-header-cell>
-          <md-cell *mdCellDef="let element"> {{element.ValidTo.format('YYYY-MM-DD')}} </md-cell>
+          <md-cell *mdCellDef="let element"> {{element.ValidToFormatString}} </md-cell>
         </ng-container>
         <ng-container mdColumnDef="QuizType">
           <md-header-cell *mdHeaderCellDef> {{'Home.QuizType' | translate }} </md-header-cell>
@@ -59,12 +62,16 @@
         <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
         <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
       </md-table>
+
+      <md-paginator #paginator [length]="_apService.AwardPlans.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+      </md-paginator>
+      
     </div>
 
     <div *ngIf="IsDetailView">
       <div class="demo-full-width">
         <md-form-field>
-          <input mdInput type="text" placeholder="{{'Home.User' | translate}}" readonly [(ngModel)]="CurrentUser.displayas">
+          <input mdInput type="text" placeholder="{{'Home.User' | translate}}" readonly [(ngModel)]="SelectedUser.displayas">
         </md-form-field>
       </div>
 

@@ -125,6 +125,7 @@
         "Create": "创建",
         "Update": "更新",
         "Delete": "删除",
+        "AwardCreatedSuccessfully": "奖励创建成功!",
         
         "Underconstruction": "当前页还在开发中"
     },

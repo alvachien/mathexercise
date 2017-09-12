@@ -52,6 +52,9 @@ export class AwardPlan {
     set ValidFrom(vf: moment.Moment) {
         this._validfrom = vf;
     }
+    get ValidFromFormatString() {
+        return this._validfrom.format(DateFormat);
+    }
 
     private _validto: moment.Moment;
     get ValidTo(): moment.Moment {
@@ -59,6 +62,9 @@ export class AwardPlan {
     }
     set ValidTo(vt: moment.Moment) {
         this._validto = vt;
+    }
+    get ValidToFormatString() {
+        return this._validto.format(DateFormat);
     }
 
     private _qtype: QuizTypeEnum;
@@ -96,8 +102,6 @@ export class AwardPlan {
     constructor() {
         this.ValidFrom = moment();
         this.ValidTo = this.ValidFrom.day(30);
-        // new Date(this.ValidFrom.getTime() + 30 * 24 * 60 * 60 * 1000) ;
-        //this.ValidTo = new Date(this.ValidFrom.GetY)
     }
 
     public getAwardScoreCondition(): string {
@@ -203,6 +207,9 @@ export class UserAward {
     set AwardDate(ad: moment.Moment) {
         this._awdDate = ad;
     }
+    get AwardDateFormatString(): string {
+        return this._awdDate.format(DateFormat);
+    }
 
     private _awd: number;
     get Award(): number {
@@ -242,6 +249,10 @@ export class UserAward {
     }
     set UsedReason(ur: string) {
         this._usdrsn = ur;
+    }
+
+    constructor() {
+        this._awdDate = moment();
     }
 
     public parseData(jdata: UserAwardJson) {

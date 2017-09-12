@@ -5,36 +5,38 @@
   <md-card-content>
     <div>
       <md-toolbar color="primary">
-        <md-select placeholder="{{'Home.User' | translate}}" [(ngModel)]="CurrentUser" name="usr" (change)="onUserChanged($event)">
+        <md-select placeholder="{{'Home.User' | translate}}" [disabled]="!IsListView"
+          [(ngModel)]="SelectedUser" name="usr" (change)="onUserChanged($event)">
           <md-option *ngFor="let user of listUsers" [value]="user">
             {{ user.displayas }}
           </md-option>
         </md-select>
 
-        <button md-icon-button [disabled]="!CurrentUser" (click)="onCreateNewExpense()">
-        <md-icon class="md-24" aria-label="Create">create_new_folder</md-icon>
-      </button>
+        <button md-icon-button [disabled]="!SelectedUser" [disabled]="!IsListView" (click)="onCreateNewExpense()">
+          <md-icon class="md-24" aria-label="Create">create_new_folder</md-icon>
+        </button>
 
         <!-- This fills the remaining space of the current row -->
         <span class="example-fill-remaining-space"></span>
-        <span>{{'Home.AwardBalanceByUser' | translate}}</span>
+        <span>{{'Home.AwardBalanceByUser' | translate}} : </span>
+        <span>{{_abService.AwardBalance}}</span>
       </md-toolbar>
 
       <md-table #table [dataSource]="dataSource">
         <ng-container mdColumnDef="ID">
           <md-header-cell *mdHeaderCellDef> # </md-header-cell>
           <md-cell *mdCellDef="let element">
-            <button md-mini-fab (click)="onEditAward(element)">
+            <button md-mini-fab (click)="onEditAward(element)" [disabled]="!IsListView">
             <md-icon class="md-18" aria-label="Edit">edit</md-icon>
           </button>
-            <button md-mini-fab (click)="onDeleteAward(element)">
+            <button md-mini-fab (click)="onDeleteAward(element)" [disabled]="!IsListView">
             <md-icon class="md-18" aria-label="Delete">delete</md-icon>
           </button> {{element.ID}}
           </md-cell>
         </ng-container>
         <ng-container mdColumnDef="AwardDate">
           <md-header-cell *mdHeaderCellDef> {{'Home.Date' | translate }} </md-header-cell>
-          <md-cell *mdCellDef="let element"> {{element.AwardDate.format(DateFormat)}} </md-cell>
+          <md-cell *mdCellDef="let element"> {{element.AwardDateFormatString}} </md-cell>
         </ng-container>
         <ng-container mdColumnDef="AwardPlanID">
           <md-header-cell *mdHeaderCellDef> {{'Home.AwardPlan' | translate }} </md-header-cell>
@@ -63,7 +65,7 @@
     <div *ngIf="!IsListView">
       <div class="demo-full-width">
         <md-form-field>
-          <input mdInput type="text" placeholder="{{'Home.User' | translate}}" readonly [(ngModel)]="CurrentUser.displayas">
+          <input mdInput type="text" placeholder="{{'Home.User' | translate}}" readonly [(ngModel)]="SelectedUser.displayas">
         </md-form-field>
       </div>
 
@@ -80,7 +82,7 @@
       </md-form-field>
 
       <md-form-field class="demo-full-width">
-        <input mdInput type="text" placeholder="{{'Home.UsedReason' | translate}}" [(ngModel)]="curAward.UsedReason">
+        <input mdInput type="text" placeholder="{{'Home.ExpenseReason' | translate}}" [(ngModel)]="curAward.UsedReason">
       </md-form-field>        
 
     </div>

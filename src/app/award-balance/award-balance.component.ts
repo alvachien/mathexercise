@@ -4,7 +4,7 @@ import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '
 import { MdDialog, MdPaginator } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
-import { UserAward, QuizTypeEnum, QuizTypeEnum2UIString, LogLevel, DateFormat, UIMode } from '../model';
+import { UserAward, QuizTypeEnum, QuizTypeEnum2UIString, LogLevel, DateFormat, UIMode, UserDetailInfo } from '../model';
 import { AwardBalanceService, QuizAttendUser, UserDetailService, DialogService, AuthService } from '../services';
 import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } from '../message-dialog';
 
@@ -24,9 +24,12 @@ export class AwardBalanceDataSource extends DataSource<any> {
       this._paginator.page,
     ];
 
+    //
+    // Old style: handle it via SwitchMap!!!
+    //
     // return this._abService.dataChangedSubject.switchMap((v: boolean) => {
-    //   if (this._curuser !== null && this._curuser !== undefined && this._curuser.length > 0) {
-    //     return this._abService.fetchAwardsForUser(this._curuser);
+    //   if (this._selUser !== null && this._selUser !== undefined && this._selUser.length > 0) {
+    //     return this._abService.fetchAwardsForUser(this._selUser);
     //   } else {
     //     return Observable.of([]);
     //   }
@@ -55,7 +58,7 @@ export class AwardBalanceComponent implements OnInit {
   @ViewChild(MdPaginator) paginator: MdPaginator;
   listUsers: QuizAttendUser[] = [];
   _curMode: UIMode = UIMode.ListView;
-  curAward: UserAward;
+  curAward: UserAward | null;
 
   get IsListView(): boolean {
     return this._curMode === UIMode.ListView;
@@ -74,29 +77,36 @@ export class AwardBalanceComponent implements OnInit {
       || this._curMode === UIMode.Update;
   }
 
-  private _curUser: QuizAttendUser;
-  get CurrentUser(): QuizAttendUser {
-    return this._curUser;
+  private _selUser: QuizAttendUser;
+  // Selected user
+  get SelectedUser(): QuizAttendUser {
+    return this._selUser;
   }
-  set CurrentUser(cu: QuizAttendUser) {
-    if ((this._curUser === null || this._curUser === undefined)
+  set SelectedUser(cu: QuizAttendUser) {
+    if ((this._selUser === null || this._selUser === undefined)
       && (cu !== null && cu !== undefined)) {
-      this._curUser = cu;
-    } else if ((this._curUser !== null || this._curUser !== undefined)
+      this._selUser = cu;
+    } else if ((this._selUser !== null || this._selUser !== undefined)
       && (cu === null && cu === undefined)) {
-      this._curUser = null;
-    } else if ((this._curUser !== null || this._curUser !== undefined)
+      this._selUser = null;
+    } else if ((this._selUser !== null || this._selUser !== undefined)
       && (cu !== null && cu !== undefined)
-      && this._curUser.attenduser !== cu.attenduser) {
-      this._curUser = cu;
+      && this._selUser.attenduser !== cu.attenduser) {
+      this._selUser = cu;
     }
   }
 
+  // Current logon user - authority control!
+  get CurrentUser(): UserDetailInfo {
+    return this._userDetailService.UserDetailInfoInstance;
+  }
+  
   constructor(private _http: HttpClient,
     private _dialog: MdDialog,
     public _abService: AwardBalanceService,
     private _authService: AuthService,
     private _userDetailService: UserDetailService) {
+      this._selUser = null;
   }
 
   ngOnInit() {
@@ -113,10 +123,14 @@ export class AwardBalanceComponent implements OnInit {
   public onUserChanged(event) {
     // User selection changed
     // Refetch the whole plan list!
-    this._abService.fetchAwardsForUser(this._curUser.attenduser);
+    this._abService.fetchAwardsForUser(this._selUser.attenduser);
   }
 
   public canDeactivate(): boolean {
+    if (this._curMode === UIMode.Create || this._curMode === UIMode.Update) {
+      return false;
+    }
+
     return true;
   }
 
@@ -135,18 +149,65 @@ export class AwardBalanceComponent implements OnInit {
 
   public onDetailAwardSubmit(): void {
     // Do the submit!
+    if (this._curMode === UIMode.Create) {
+      // Create mode!
+      this._abService.createEvent.subscribe(x => {        
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log('AC Math Exericse [Debug]: ' + x);
+        }
+  
+        if (x instanceof UserAward) {
+          // Show a dialog for success
+          const dlginfo: MessageDialogInfo = {
+            Header: 'Home.Success',
+            Content: 'Home.AwardCreatedSuccessfully',
+            Button: MessageDialogButtonEnum.onlyok
+          };
+          this._dialog.open(MessageDialogComponent, {
+            disableClose: false,
+            width: '500px',
+            data: dlginfo
+          }).afterClosed().subscribe(x => {
+            // Do nothing!
+            this._curMode = UIMode.ListView;
+            this.curAward = null;
+          });
+        } else {
+          // Also show a dialog for error
+          const dlginfo: MessageDialogInfo = {
+            Header: 'Home.Error',
+            Content: x === null? 'Home.Error' : x,
+            Button: MessageDialogButtonEnum.onlyok
+          };
+          this._dialog.open(MessageDialogComponent, {
+            disableClose: false,
+            width: '500px',
+            data: dlginfo
+          }).afterClosed().subscribe(x2 => {
+            // Do nothing!
+            //this.setListView();
+          });
+        }
+      });
+
+      this.curAward.UserID = this.SelectedUser.attenduser;
+      this._abService.createAward(this.curAward);
+    } else if(this._curMode === UIMode.Update) {
+      // Update mode!
+      this._abService.updateAward(this.curAward);
+    }
   }
 
-  public onEditAward(data) {
-    this.curAward = data.clone();
-    this._curMode = UIMode.Display;
+  public onEditAward(data: UserAward) {
+    this.curAward = data;
+    this._curMode = UIMode.Update;
   }
 
   public onDeleteAward(data) {
-
   }
 
   public onDetailAwardCancel(): void {
-
+    this._curMode = UIMode.ListView;
+    this.curAward = null;
   }
 }
