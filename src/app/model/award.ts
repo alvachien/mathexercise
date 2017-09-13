@@ -104,30 +104,30 @@ export class AwardPlan {
         this.ValidTo = this.ValidFrom.day(30);
     }
 
-    public getAwardScoreCondition(): string {
+    get getAwardScoreCondition(): string {
         if (Number.isInteger(this._minScore)) {
             return 'Home.AwardPlanScoreConidiotn';
         }
         return '';
     }
-    public getAwardScoreConditionParam(): any {
+    get getAwardScoreConditionParam(): any {
         return {
             score: this._minScore
         };
     }
-    public getAwardAvgTimeCondition(): string {
+    get getAwardAvgTimeCondition(): string {
         if (Number.isInteger(this._minAvgTime)) {
             return 'Home.AwardPlanScoreConidiotn';
         }
         return '';
     }
-    public getAwardAvgTimeConditionParam(): any {
+    get getAwardAvgTimeConditionParam(): any {
         return {
             avgtime: this._minAvgTime
         };
     }
 
-    public getQuizTypeUIString(): string {
+    get QuizTypeUIString(): string {
         return QuizTypeEnum2UIString(this._qtype);
     }
 

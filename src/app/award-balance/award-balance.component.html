@@ -44,7 +44,7 @@
         </ng-container>
         <ng-container mdColumnDef="QuizID">
           <md-header-cell *mdHeaderCellDef> {{'Home.QuizType' | translate }} </md-header-cell>
-          <md-cell *mdCellDef="let element"> {{element.QuizTypeString}} </md-cell>
+          <md-cell *mdCellDef="let element"> {{element.QuizTypeString | translate }} </md-cell>
         </ng-container>
         <ng-container mdColumnDef="Award">
           <md-header-cell *mdHeaderCellDef> {{'Home.Award' | translate }} </md-header-cell>

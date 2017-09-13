@@ -47,13 +47,13 @@
         </ng-container>
         <ng-container mdColumnDef="QuizType">
           <md-header-cell *mdHeaderCellDef> {{'Home.QuizType' | translate }} </md-header-cell>
-          <md-cell *mdCellDef="let element"> {{element.getQuizTypeUIString() | translate}} </md-cell>
+          <md-cell *mdCellDef="let element"> {{element.QuizTypeUIString | translate}} </md-cell>
         </ng-container>
         <ng-container mdColumnDef="AwardCondition">
           <md-header-cell *mdHeaderCellDef> {{'Home.AwardCondition' | translate }} </md-header-cell>
           <md-cell *mdCellDef="let element"> 
-            <span>{{element.getAwardScoreCondition() | translate: element.getAwardScoreConditionParam()}} ;</span> 
-            <span>{{element.getAwardAvgTimeCondition() | translate: element.getAwardAvgTimeConditionParam()}}</span> </md-cell>
+            <span>{{ element.getAwardScoreCondition | translate:element.getAwardScoreConditionParam }} ;</span> 
+            <span>{{ element.getAwardAvgTimeCondition | translate:element.getAwardAvgTimeConditionParam }}</span> </md-cell>
         </ng-container>
         <ng-container mdColumnDef="Award">
           <md-header-cell *mdHeaderCellDef> {{'Home.Award' | translate }} </md-header-cell>
