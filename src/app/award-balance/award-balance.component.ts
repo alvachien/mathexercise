@@ -53,12 +53,17 @@ export class AwardBalanceDataSource extends DataSource<any> {
   styleUrls: ['./award-balance.component.scss']
 })
 export class AwardBalanceComponent implements OnInit {
-  displayedColumns = ['ID', 'AwardDate', 'AwardPlanID', 'QuizID', 'Award', 'UsedReason'];
+  displayedColumns = ['ID', 'AwardDate', 'AwardPlanID', 'QuizID', 'Award', 'Publish', 'UsedReason'];
   dataSource: AwardBalanceDataSource | null;
   @ViewChild(MdPaginator) paginator: MdPaginator;
   listUsers: QuizAttendUser[] = [];
   _curMode: UIMode = UIMode.ListView;
   curAward: UserAward | null;
+  private _awardBalance: number = 0;
+
+  get AwardBalance(): number {
+    return this._awardBalance;
+  }
 
   get IsListView(): boolean {
     return this._curMode === UIMode.ListView;
@@ -107,6 +112,10 @@ export class AwardBalanceComponent implements OnInit {
     private _authService: AuthService,
     private _userDetailService: UserDetailService) {
       this._selUser = null;
+
+      this._abService.dataChangedSubject.subscribe(() => {
+        this.updateBalance();
+      });
   }
 
   ngOnInit() {
@@ -141,6 +150,10 @@ export class AwardBalanceComponent implements OnInit {
 
   public CanDetailAwardSubmit(): boolean {
     if (!this.IsViewChangable) {
+      return false;
+    }
+
+    if (!this.curAward.Award) {
       return false;
     }
 
@@ -194,6 +207,45 @@ export class AwardBalanceComponent implements OnInit {
       this._abService.createAward(this.curAward);
     } else if(this._curMode === UIMode.Update) {
       // Update mode!
+      this._abService.changeEvent.subscribe(x => {        
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log('AC Math Exericse [Debug]: ' + x);
+        }
+  
+        if (x instanceof UserAward) {
+          // Show a dialog for success
+          const dlginfo: MessageDialogInfo = {
+            Header: 'Home.Success',
+            Content: 'Home.AwardChangedSuccessfully',
+            Button: MessageDialogButtonEnum.onlyok
+          };
+          this._dialog.open(MessageDialogComponent, {
+            disableClose: false,
+            width: '500px',
+            data: dlginfo
+          }).afterClosed().subscribe(x => {
+            // Do nothing!
+            this._curMode = UIMode.ListView;
+            this.curAward = null;
+          });
+        } else {
+          // Also show a dialog for error
+          const dlginfo: MessageDialogInfo = {
+            Header: 'Home.Error',
+            Content: x === null? 'Home.Error' : x,
+            Button: MessageDialogButtonEnum.onlyok
+          };
+          this._dialog.open(MessageDialogComponent, {
+            disableClose: false,
+            width: '500px',
+            data: dlginfo
+          }).afterClosed().subscribe(x2 => {
+            // Do nothing!
+            //this.setListView();
+          });
+        }
+      });
+
       this._abService.updateAward(this.curAward);
     }
   }
@@ -204,10 +256,49 @@ export class AwardBalanceComponent implements OnInit {
   }
 
   public onDeleteAward(data) {
+    // Show a dialog for Confirm
+    const dlginfo: MessageDialogInfo = {
+      Header: 'Home.ConfirmOnDeletion',
+      Content: 'Home.ConfirmOnDeletionDetail',
+      Button: MessageDialogButtonEnum.yesno
+    };
+    this._dialog.open(MessageDialogComponent, {
+      disableClose: false,
+      width: '500px',
+      data: dlginfo
+    }).afterClosed().subscribe(x => {
+      if (x) {
+        this._abService.deleteEvent.subscribe(x => {
+          this.curAward = null;
+          this._curMode = UIMode.ListView;
+        }, error => {
+          const dlginfo2: MessageDialogInfo = {
+            Header: 'Home.Error',
+            Content: error ? error.toString() : 'Unknown reason',
+            Button: MessageDialogButtonEnum.onlyok
+          };
+          this._dialog.open(MessageDialogComponent, {
+            disableClose: false,
+            width: '500px',
+            data: dlginfo2
+          });
+        });
+
+        this._abService.deleteAward(data.ID);
+      }
+    });
   }
 
   public onDetailAwardCancel(): void {
     this._curMode = UIMode.ListView;
     this.curAward = null;
+  }
+
+  private updateBalance() {
+    this._awardBalance = 0;
+
+    for(let ua of this._abService.Awards) {
+      this._awardBalance += ua.Award;
+    }
   }
 }

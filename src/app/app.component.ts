@@ -81,9 +81,6 @@ export class AppComponent implements OnInit {
     private _zone: NgZone,
     private _router: Router) {
     // Setup the translate
-    this._selLanguage = 'zh';
-    this._translate.setDefaultLang(this._selLanguage);
-    this._translate.use(this._selLanguage);
     this.userDisplayAs = '';
 
     this.navItems = [
@@ -133,7 +130,12 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.updateDocumentTitle();
+    const deflang: string = 'zh';
+    this._translate.setDefaultLang(deflang);
+    this._translate.use(deflang).subscribe(() => {
+      this._selLanguage = deflang;
+      this.updateDocumentTitle();
+    });    
   }
 
   public onLogon() {

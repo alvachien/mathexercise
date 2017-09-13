@@ -13,11 +13,7 @@ export class AwardBalanceService {
     return this.dataChangedSubject.value;
   }
 
-  private _awardBalance: number = 0;
-  get AwardBalance(): number {
-    return this._awardBalance;
-  }
-
+  // Events
   createEvent: EventEmitter<UserAward | string> = new EventEmitter(null);
   changeEvent: EventEmitter<UserAward | string> = new EventEmitter(null);
   deleteEvent: EventEmitter<boolean | string> = new EventEmitter(false);
@@ -52,13 +48,11 @@ export class AwardBalanceService {
 
         let awards = []; // Clear it first
         const rjs = <any>response;
-        this._awardBalance = 0;
 
         if (rjs instanceof Array && rjs.length > 0) {
           for (const si of rjs) {
             const ap: UserAward = new UserAward();
             ap.parseData(<UserAwardJson>si);
-            this._awardBalance += ap.Award;
             awards.push(ap);
           }
         }
@@ -95,9 +89,9 @@ export class AwardBalanceService {
     const jdata = JSON && JSON.stringify(data);
 
     this._http.post(apiurl, jdata, {
-        headers: headers,
-        withCredentials: true
-      })
+      headers: headers,
+      withCredentials: true
+    })
       .map((response: HttpResponse<any>) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log(response);
@@ -108,7 +102,6 @@ export class AwardBalanceService {
         const awards = this.Awards.slice();
         const ap: UserAward = new UserAward();
         ap.parseData(<UserAwardJson>rjs);
-        this._awardBalance += ap.Award;
         awards.push(ap);
 
         this.dataChangedSubject.next(awards);
@@ -135,7 +128,7 @@ export class AwardBalanceService {
    * @param award Award to be updated
    */
   public updateAward(award: UserAward) {
-    const apiurl = environment.APIBaseUrl + 'UserAward';
+    const apiurl = environment.APIBaseUrl + 'UserAward/' + award.ID.toString();
 
     let headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json')
@@ -144,14 +137,14 @@ export class AwardBalanceService {
 
     const data = award.prepareData();
     const jdata = JSON && JSON.stringify(data);
-    let params: HttpParams = new HttpParams();
-    params = params.append('id', award.ID.toString());
+    // let params: HttpParams = new HttpParams();
+    // params = params.append('id', award.ID.toString());
 
     this._http.put(apiurl, jdata, {
-        headers: headers,
-        params: params,
-        withCredentials: true
-      })
+      headers: headers,
+      //params: params,
+      withCredentials: true
+    })
       .map((response: HttpResponse<any>) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log(response);
@@ -184,18 +177,18 @@ export class AwardBalanceService {
    * @param awardid ID of award
    */
   public deleteAward(awardid: number) {
-    const apiurl = environment.APIBaseUrl + 'UserAward';
+    const apiurl = environment.APIBaseUrl + 'UserAward/' + awardid.toString();
 
     let headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json')
       .append('Accept', 'application/json')
       .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-    let params: HttpParams = new HttpParams();
-    params = params.append('id', awardid.toString());
+    // let params: HttpParams = new HttpParams();
+    // params = params.append('id', awardid.toString());
 
     this._http.delete(apiurl, {
         headers: headers,
-        params: params,
+        //params: params,
         withCredentials: true
       })
       .map((response: HttpResponse<any>) => {
@@ -214,7 +207,7 @@ export class AwardBalanceService {
           this.deleteEvent.emit(true);
         } else {
           this.deleteEvent.emit(false);
-        }        
+        }
       }, error => {
         if (environment.LoggingLevel >= LogLevel.Error) {
           console.log(`AC Math Exercise [Error]: Error occurred in deleteAward in AwardBalanceService: ${error}`);

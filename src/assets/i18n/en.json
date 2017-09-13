@@ -126,6 +126,8 @@
         "Update": "Update",
         "Delete": "Delete",
         "AwardCreatedSuccessfully": "Award was created successfully!",
+        "AwardChangedSuccessfully": "Award was updated successfully!",
+        "IsPublish": "Is Publish",
         
         "Underconstruction": "Page still under construction"
     },

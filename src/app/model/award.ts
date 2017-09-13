@@ -178,6 +178,7 @@ export interface UserAwardJson {
     quizType?: number;
     quizID?: number;
     usedReason?: string;
+    publish?: boolean;
 }
 
 /**
@@ -242,6 +243,9 @@ export class UserAward {
     set QuizType(qt: QuizTypeEnum) {
         this._quiztype = qt;
     }
+    get QuizTypeString(): string {
+        return QuizTypeEnum2UIString(this._quiztype);
+    }
 
     private _usdrsn: string;
     get UsedReason(): string {
@@ -249,6 +253,14 @@ export class UserAward {
     }
     set UsedReason(ur: string) {
         this._usdrsn = ur;
+    }
+
+    private _publish: boolean;
+    get Publish(): boolean {
+        return this._publish;
+    }
+    set Publish(isp: boolean) {
+        this._publish = isp;
     }
 
     constructor() {
@@ -264,6 +276,7 @@ export class UserAward {
         this._quizid = jdata.quizID;
         this._quiztype = +jdata.quizType;
         this._usdrsn = jdata.usedReason;
+        this._publish = jdata.publish;
     }
 
     public prepareData(): UserAwardJson {
@@ -274,7 +287,8 @@ export class UserAward {
             award: this._awd,
             awardPlanID: this._awdpid,
             quizID: this._quizid,
-            usedReason: this._usdrsn
+            usedReason: this._usdrsn,
+            publish: this._publish
         };
 
         return data;

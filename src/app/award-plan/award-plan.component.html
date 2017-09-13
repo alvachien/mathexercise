@@ -11,7 +11,7 @@
         </md-option>
       </md-select>
 
-      <button md-icon-button [disabled]="(SelectedUser === null) || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardPlanCreate)" (click)="onCreatePlan()">
+      <button md-icon-button [disabled]="!IsListView || (SelectedUser === null) || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardPlanCreate)" (click)="onCreatePlan()">
         <md-icon class="md-24" aria-label="Create">create_new_folder</md-icon>
       </button>
 
@@ -51,8 +51,9 @@
         </ng-container>
         <ng-container mdColumnDef="AwardCondition">
           <md-header-cell *mdHeaderCellDef> {{'Home.AwardCondition' | translate }} </md-header-cell>
-          <md-cell *mdCellDef="let element"> {{element.getAwardScoreCondition() | translate: element.getAwardScoreConditionParam()}} ; {{element.getAwardAvgTimeCondition()
-            | translate: element.getAwardAvgTimeConditionParam()}} </md-cell>
+          <md-cell *mdCellDef="let element"> 
+            <span>{{element.getAwardScoreCondition() | translate: element.getAwardScoreConditionParam()}} ;</span> 
+            <span>{{element.getAwardAvgTimeCondition() | translate: element.getAwardAvgTimeConditionParam()}}</span> </md-cell>
         </ng-container>
         <ng-container mdColumnDef="Award">
           <md-header-cell *mdHeaderCellDef> {{'Home.Award' | translate }} </md-header-cell>
@@ -64,11 +65,10 @@
       </md-table>
 
       <md-paginator #paginator [length]="_apService.AwardPlans.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
-      </md-paginator>
-      
+      </md-paginator>      
     </div>
 
-    <div *ngIf="IsDetailView">
+    <div *ngIf="!IsListView">
       <div class="demo-full-width">
         <md-form-field>
           <input mdInput type="text" placeholder="{{'Home.User' | translate}}" readonly [(ngModel)]="SelectedUser.displayas">
@@ -108,7 +108,7 @@
     </div>
   </md-card-content>
   <md-card-actions>
-    <button md-button *ngIf="IsDetailView" (click)="onDetailPlanSubmit()" [disabled]="!CanDetailPlanSubmit()">{{'Home.SubmitButton' | translate }}</button>
-    <button md-button *ngIf="IsDetailView" (click)="onDetailPlanCancel()">{{'Home.CancelButton' | translate }}</button>
+    <button md-button *ngIf="!IsListView" (click)="onDetailPlanSubmit()" [disabled]="!CanDetailPlanSubmit()">{{'Home.SubmitButton' | translate }}</button>
+    <button md-button *ngIf="!IsListView" (click)="onDetailPlanCancel()">{{'Home.CancelButton' | translate }}</button>
   </md-card-actions>
 </md-card>

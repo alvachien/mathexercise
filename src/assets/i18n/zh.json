@@ -126,6 +126,8 @@
         "Update": "更新",
         "Delete": "删除",
         "AwardCreatedSuccessfully": "奖励创建成功!",
+        "AwardChangedSuccessfully": "奖励更新成功!",
+        "IsPublish": "罚没",
         
         "Underconstruction": "当前页还在开发中"
     },

@@ -12,24 +12,24 @@
           </md-option>
         </md-select>
 
-        <button md-icon-button [disabled]="!SelectedUser" [disabled]="!IsListView" (click)="onCreateNewExpense()">
+        <button md-icon-button [disabled]="!SelectedUser || !IsListView || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardCreate)" (click)="onCreateNewExpense()">
           <md-icon class="md-24" aria-label="Create">create_new_folder</md-icon>
         </button>
 
         <!-- This fills the remaining space of the current row -->
         <span class="example-fill-remaining-space"></span>
         <span>{{'Home.AwardBalanceByUser' | translate}} : </span>
-        <span>{{_abService.AwardBalance}}</span>
+        <span>{{AwardBalance}}</span>
       </md-toolbar>
 
       <md-table #table [dataSource]="dataSource">
         <ng-container mdColumnDef="ID">
           <md-header-cell *mdHeaderCellDef> # </md-header-cell>
           <md-cell *mdCellDef="let element">
-            <button md-mini-fab (click)="onEditAward(element)" [disabled]="!IsListView">
+            <button md-mini-fab (click)="onEditAward(element)" [disabled]="!IsListView || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardUpdate)">
             <md-icon class="md-18" aria-label="Edit">edit</md-icon>
           </button>
-            <button md-mini-fab (click)="onDeleteAward(element)" [disabled]="!IsListView">
+            <button md-mini-fab (click)="onDeleteAward(element)" [disabled]="!IsListView || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardDelete)">
             <md-icon class="md-18" aria-label="Delete">delete</md-icon>
           </button> {{element.ID}}
           </md-cell>
@@ -44,12 +44,17 @@
         </ng-container>
         <ng-container mdColumnDef="QuizID">
           <md-header-cell *mdHeaderCellDef> {{'Home.QuizType' | translate }} </md-header-cell>
-          <md-cell *mdCellDef="let element"> {{element.QuizType}} </md-cell>
+          <md-cell *mdCellDef="let element"> {{element.QuizTypeString}} </md-cell>
         </ng-container>
         <ng-container mdColumnDef="Award">
           <md-header-cell *mdHeaderCellDef> {{'Home.Award' | translate }} </md-header-cell>
           <md-cell *mdCellDef="let element"> {{element.Award}} </md-cell>
         </ng-container>
+        <ng-container mdColumnDef="Publish">
+          <md-header-cell *mdHeaderCellDef> {{'Home.IsPublish' | translate }} </md-header-cell>
+          <md-cell *mdCellDef="let element"> <md-checkbox [(ngModel)]="element.Publish" disabled></md-checkbox> </md-cell>
+        </ng-container>
+
         <ng-container mdColumnDef="UsedReason">
           <md-header-cell *mdHeaderCellDef> {{'Home.ExpenseReason' | translate }} </md-header-cell>
           <md-cell *mdCellDef="let element"> {{element.UsedReason}} </md-cell>
@@ -80,6 +85,10 @@
       <md-form-field class="demo-full-width">
         <input mdInput type="number" placeholder="{{'Home.AwardPoint' | translate}}" [(ngModel)]="curAward.Award">
       </md-form-field>
+
+      <div class="demo-full-width">
+        <md-checkbox [(ngModel)]="curAward.Publish" >{{'Home.IsPublish' | translate }}</md-checkbox>
+      </div>      
 
       <md-form-field class="demo-full-width">
         <input mdInput type="text" placeholder="{{'Home.ExpenseReason' | translate}}" [(ngModel)]="curAward.UsedReason">

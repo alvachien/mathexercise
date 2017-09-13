@@ -4,7 +4,7 @@ import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '
 import { MdDialog, MdPaginator } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
-import { AwardPlan, QuizTypeEnum, QuizTypeEnum2UIString, LogLevel, DateFormat, UserDetailInfo } from '../model';
+import { AwardPlan, QuizTypeEnum, QuizTypeEnum2UIString, LogLevel, DateFormat, UserDetailInfo, UIMode } from '../model';
 import { AwardPlanService, QuizAttendUser, UserDetailService, DialogService, AuthService } from '../services';
 import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } from '../message-dialog';
 
@@ -58,22 +58,18 @@ export class AwardPlanComponent implements OnInit {
   pageHeader: string;
   dataSource: AwardPlanDataSource = null;
   listUsers: QuizAttendUser[] = [];
+  listQTypes: QuizTypeUI[] = [];
   @ViewChild(MdPaginator) paginator: MdPaginator;
+  private uiMode: UIMode = UIMode.ListView;
 
-  private _isListView: boolean;
   get IsListView(): boolean {
-    return this._isListView;
+    return this.uiMode === UIMode.ListView;;
   }
-  set IsListView(lv: boolean) {
-    this._isListView = lv;
+  get IsViewChangable(): boolean {
+    return this.uiMode === UIMode.Create
+      || this.uiMode === UIMode.Update;
   }
-  private _isDetailView: boolean;
-  get IsDetailView(): boolean {
-    return this._isDetailView;
-  }
-  set IsDetailView(dv: boolean) {
-    this._isDetailView = dv;
-  }
+
   private _selUser: QuizAttendUser;
   get SelectedUser(): QuizAttendUser {
     return this._selUser;
@@ -96,8 +92,6 @@ export class AwardPlanComponent implements OnInit {
   get CurrentUser(): UserDetailInfo {
     return this._userDetailService.UserDetailInfoInstance;
   }
-
-  listQTypes: QuizTypeUI[] = [];
 
   private _curPlan: AwardPlan;
   get CurrentPlan(): AwardPlan {
@@ -140,16 +134,16 @@ export class AwardPlanComponent implements OnInit {
     this._curPlan.TargetUser = this.SelectedUser.attenduser;
     this._curPlan.CreatedBy = this._authService.authSubject.getValue().getUserId();
 
-    this.setDetailView('Home.CreateAwardPlan');
-    this.IsListView = false;
-    this.IsDetailView = true;
+    this.uiMode = UIMode.Create;
+    this.pageHeader = 'Home.CreateAwardPlan';
   }
 
   public onEditPlan(row) {
     // Todo
     try {
       this._curPlan = row;
-      this.setDetailView('Home.EditAwardPlan');
+      this.uiMode = UIMode.Update;
+      this.pageHeader = 'Home.EditAwardPlan';
     } catch (exp) {
       console.error(exp);
     }
@@ -188,7 +182,7 @@ export class AwardPlanComponent implements OnInit {
   }
 
   public canDeactivate(): boolean {
-    if (this.IsDetailView) {
+    if (this.uiMode === UIMode.Create || this.uiMode === UIMode.Update) {
       const dlginfo: MessageDialogInfo = {
         Header: 'Home.Error',
         Content: 'Home.QuizIsOngoing',
@@ -211,7 +205,7 @@ export class AwardPlanComponent implements OnInit {
   }
 
   public CanDetailPlanSubmit(): boolean {
-    if (!this._isDetailView) {
+    if (this.uiMode === UIMode.ListView || this.uiMode === UIMode.Display) {
       return false;
     }
 
@@ -338,13 +332,6 @@ export class AwardPlanComponent implements OnInit {
 
   private setListView() {
     this.pageHeader = 'Home.AwardPlan';
-    this._isDetailView = false;
-    this._isListView = true;
-  }
-
-  private setDetailView(header: string) {
-    this._isListView = false;
-    this.pageHeader = header;
-    this._isDetailView = true;
+    this.uiMode = UIMode.ListView;
   }
 }
