@@ -67,7 +67,7 @@ export class AwardBalanceService {
         this.dataChangedSubject.next(x);
       }, error => {
         if (environment.LoggingLevel >= LogLevel.Error) {
-          console.log(`AC Math Exercise [Error]: Error occurred in fetchAwardsForUser in AwardBalanceService: ${error}`);
+          console.error(`AC Math Exercise [Error]: Error occurred in fetchAwardsForUser in AwardBalanceService: ${error}`);
         }
       }, () => {
       });
@@ -89,9 +89,9 @@ export class AwardBalanceService {
     const jdata = JSON && JSON.stringify(data);
 
     this._http.post(apiurl, jdata, {
-      headers: headers,
-      withCredentials: true
-    })
+        headers: headers,
+        withCredentials: true
+      })
       .map((response: HttpResponse<any>) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log(response);
@@ -115,7 +115,7 @@ export class AwardBalanceService {
         this.createEvent.emit(x);
       }, error => {
         if (environment.LoggingLevel >= LogLevel.Error) {
-          console.log(`AC Math Exercise [Error]: Error occurred in createAward in AwardBalanceService: ${error}`);
+          console.error(`AC Math Exercise [Error]: Error occurred in createAward in AwardBalanceService: ${error}`);
         }
 
         this.createEvent.emit(error);
@@ -141,10 +141,10 @@ export class AwardBalanceService {
     // params = params.append('id', award.ID.toString());
 
     this._http.put(apiurl, jdata, {
-      headers: headers,
-      //params: params,
-      withCredentials: true
-    })
+        headers: headers,
+        //params: params,
+        withCredentials: true
+      })
       .map((response: HttpResponse<any>) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log(response);
@@ -164,7 +164,7 @@ export class AwardBalanceService {
         this.changeEvent.emit(x);
       }, error => {
         if (environment.LoggingLevel >= LogLevel.Error) {
-          console.log(`AC Math Exercise [Error]: Error occurred in updateAward in AwardBalanceService: ${error}`);
+          console.error(`AC Math Exercise [Error]: Error occurred in updateAward in AwardBalanceService: ${error}`);
         }
 
         this.changeEvent.emit(error);
@@ -210,7 +210,7 @@ export class AwardBalanceService {
         }
       }, error => {
         if (environment.LoggingLevel >= LogLevel.Error) {
-          console.log(`AC Math Exercise [Error]: Error occurred in deleteAward in AwardBalanceService: ${error}`);
+          console.error(`AC Math Exercise [Error]: Error occurred in deleteAward in AwardBalanceService: ${error}`);
         }
 
         this.deleteEvent.emit(error);

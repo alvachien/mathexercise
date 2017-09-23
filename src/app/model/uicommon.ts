@@ -9,3 +9,4 @@ export enum UIMode {
     Update = 2,
     Display = 3
 }
+

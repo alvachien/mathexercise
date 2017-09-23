@@ -135,7 +135,7 @@ export class AuthService {
       }
     }).catch(function (e) {
       if (environment.LoggingLevel >= LogLevel.Debug) {
-        console.log('clearStateState error', e.message);
+        console.error('clearStateState error', e.message);
       }
     });
   }
@@ -148,7 +148,7 @@ export class AuthService {
 
       this.userLoadededEvent.emit(user);
     }).catch(function (err) {
-      console.log(err);
+      console.error(err);
     });
   }
 
@@ -159,7 +159,7 @@ export class AuthService {
         console.log('user removed');
       }
     }).catch(function (err) {
-      console.log(err);
+      console.error(err);
     });
   }
 
@@ -169,7 +169,7 @@ export class AuthService {
         console.log('signinRedirect done');
       }
     }).catch(function (err) {
-      console.log(err);
+      console.error(err);
     });
   }
 
@@ -179,7 +179,7 @@ export class AuthService {
         console.log('signed in', user);
       }
     }).catch(function (err) {
-      console.log(err);
+      console.error(err);
     });
   }
 
@@ -192,7 +192,7 @@ export class AuthService {
         console.log('testing to see if fired...');
       });
     }).catch(function (err) {
-      console.log(err);
+      console.error(err);
     });
   };
 
@@ -202,7 +202,7 @@ export class AuthService {
         console.log('signed out', resp);
       }
     }).catch(function (err) {
-      console.log(err);
+      console.error(err);
     });
   };
 

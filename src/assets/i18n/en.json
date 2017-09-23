@@ -115,6 +115,7 @@
         "AwardPlanByUser": "All Available Plans for current user",
         "AwardCondition": "Condition",
         "AwardBalance": "Award Balance",
+        "AwardOverview": "Award Overview",
         "AwardBalanceByUser": "Award Balance for current user",
         "AwardPointAssigned": "Award Points Assigned",
         "ExpenseReason": "Expense reason",
@@ -127,7 +128,8 @@
         "Delete": "Delete",
         "AwardCreatedSuccessfully": "Award was created successfully!",
         "AwardChangedSuccessfully": "Award was updated successfully!",
-        "IsPublish": "Is Publish",
+        "IsPunishment": "Is Punishment",
+        "Overview": "Overview",
         
         "Underconstruction": "Page still under construction"
     },

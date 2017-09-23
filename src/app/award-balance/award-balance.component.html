@@ -1,6 +1,6 @@
 <md-card>
   <md-card-header>
-    <md-card-title>{{'Home.AwardBalance' | translate}}</md-card-title>
+    <md-card-title>{{'Home.AwardOverview' | translate}}</md-card-title>
   </md-card-header>
   <md-card-content>
     <div>
@@ -51,7 +51,7 @@
           <md-cell *mdCellDef="let element"> {{element.Award}} </md-cell>
         </ng-container>
         <ng-container mdColumnDef="Publish">
-          <md-header-cell *mdHeaderCellDef> {{'Home.IsPublish' | translate }} </md-header-cell>
+          <md-header-cell *mdHeaderCellDef> {{'Home.IsPunishment' | translate }} </md-header-cell>
           <md-cell *mdCellDef="let element"> <md-checkbox [(ngModel)]="element.Publish" disabled></md-checkbox> </md-cell>
         </ng-container>
 

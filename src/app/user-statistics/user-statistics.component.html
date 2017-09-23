@@ -11,16 +11,58 @@
             </md-select>
         </div>
         <md-tab-group>
+            <md-tab label="{{'Home.Overview' | translate}}">
+                <div class="example-container mat-elevation-z8">
+                    <md-table #table [dataSource]="dataSource">
+
+                        <!-- QuizID Column -->
+                        <ng-container mdColumnDef="QuizID">
+                            <md-header-cell *mdHeaderCellDef>#</md-header-cell>
+                            <md-cell *mdCellDef="let row"> {{row.quizID}} </md-cell>
+                        </ng-container>
+
+                        <!-- Date Column -->
+                        <ng-container mdColumnDef="Date">
+                            <md-header-cell *mdHeaderCellDef> {{'Home.Date' | translate}} </md-header-cell>
+                            <md-cell *mdCellDef="let row"> {{row.submitDate}} </md-cell>
+                        </ng-container>
+
+                        <!-- Type Column -->
+                        <ng-container mdColumnDef="QuizType">
+                            <md-header-cell *mdHeaderCellDef> Type </md-header-cell>
+                            <md-cell *mdCellDef="let row"> {{row.quizTypeString | translate}} </md-cell>
+                        </ng-container>
+
+                        <!-- Score Column -->
+                        <ng-container mdColumnDef="Score">
+                            <md-header-cell *mdHeaderCellDef>Score </md-header-cell>
+                            <md-cell *mdCellDef="let row"> {{row.averageScore}} </md-cell>
+                        </ng-container>
+
+                        <!-- Time Column -->
+                        <ng-container mdColumnDef="TimeSpent">
+                            <md-header-cell *mdHeaderCellDef>TimeSpent </md-header-cell>
+                            <md-cell *mdCellDef="let row"> {{row.averageTimeSpent}} </md-cell>
+                        </ng-container>
+
+                        <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+                        <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
+                    </md-table>
+
+                    <md-paginator #paginator [length]="Quizs.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+                    </md-paginator>
+                </div>
+            </md-tab>
+
             <md-tab label="{{'Home.QuizAmountByDate' | translate}}">
-                <ngx-charts-bar-vertical [view]="viewQuizAmountByDate" [scheme]="colorSchemeGeneral" [results]="dataQuizAmountByDate"
-                    [gradient]="gradientQuizAmountByDate" [xAxis]="showXAxisQuizAmountByDate" [yAxis]="showYAxisQuizAmountByDate"
-                    [legend]="showLegendQuizAmountByDate" [showXAxisLabel]="showXAxisLabelQuizAmountByDate" [showYAxisLabel]="showYAxisLabelQuizAmountByDate"
-                    [xAxisLabel]="xAxisLabelQuizAmountByDate" [yAxisLabel]="yAxisLabelQuizAmountByDate" (select)="onQuizAmountByDateSelect($event)">
+                <ngx-charts-bar-vertical [view]="viewQuizAmountByDate" [scheme]="colorSchemeGeneral" [results]="dataQuizAmountByDate" [gradient]="gradientQuizAmountByDate"
+                    [xAxis]="showXAxisQuizAmountByDate" [yAxis]="showYAxisQuizAmountByDate" [legend]="showLegendQuizAmountByDate"
+                    [showXAxisLabel]="showXAxisLabelQuizAmountByDate" [showYAxisLabel]="showYAxisLabelQuizAmountByDate" [xAxisLabel]="xAxisLabelQuizAmountByDate"
+                    [yAxisLabel]="yAxisLabelQuizAmountByDate" (select)="onQuizAmountByDateSelect($event)">
                 </ngx-charts-bar-vertical>
             </md-tab>
             <md-tab label="{{'Home.QuizAmountByType' | translate}}">
-                <ngx-charts-number-card [view]="viewQuizAmountByType" [scheme]="colorSchemeGeneral" [results]="dataQuizAmountByType"
-                    (select)="onQuizAmountByTypeSelect($event)">
+                <ngx-charts-number-card [view]="viewQuizAmountByType" [scheme]="colorSchemeGeneral" [results]="dataQuizAmountByType" (select)="onQuizAmountByTypeSelect($event)">
                 </ngx-charts-number-card>
             </md-tab>
             <md-tab label="{{'Home.ItemAmountByDate' | translate}}">

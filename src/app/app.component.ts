@@ -6,6 +6,10 @@ import { AuthService } from './services/auth.service';
 import { UserDetailService } from './services/userdetail.service';
 import { environment } from '../environments/environment';
 import { LogLevel } from './model';
+import * as moment from 'moment';
+import 'moment/locale/zh-cn';
+import { DateAdapter } from '@angular/material';
+import { MomentDateAdapter } from './utility';
 
 @Component({
   selector: 'app-root-home',
@@ -79,7 +83,8 @@ export class AppComponent implements OnInit {
     private _authService: AuthService,
     private _userDetailService: UserDetailService,
     private _zone: NgZone,
-    private _router: Router) {
+    private _router: Router,
+    private _dateAdapter: DateAdapter<MomentDateAdapter>) {
     // Setup the translate
     this.userDisplayAs = '';
 
@@ -94,7 +99,7 @@ export class AppComponent implements OnInit {
       { name: 'Home.FormulaExercises', route: 'formula-ex' },
       { name: 'Home.PuzzleGames', route: 'puzz-game' },
       { name: 'Home.AwardPlan', route: 'award-plan' },
-      { name: 'Home.AwardBalance', route: 'award-bal' },
+      { name: 'Home.AwardOverview', route: 'award-bal' },
       { name: 'Home.RetestPreviousFailures', route: 'fail-retest' },
       { name: 'Home.Statistics', route: 'user-stat' },
       { name: 'Home.UserDetail', route: 'user-detail' },
@@ -134,6 +139,7 @@ export class AppComponent implements OnInit {
     this._translate.setDefaultLang(deflang);
     this._translate.use(deflang).subscribe(() => {
       this._selLanguage = deflang;
+      this._dateAdapter.setLocale('zh-cn');
       this.updateDocumentTitle();
     });    
   }
@@ -173,6 +179,14 @@ export class AppComponent implements OnInit {
     if (this._translate.currentLang !== this._selLanguage &&
       this._selLanguage !== undefined) {
       this._translate.use(this._selLanguage);
+
+      if (this._selLanguage === 'zh') {
+        moment.locale('zh-cn');
+        this._dateAdapter.setLocale('zh-cn');
+      } else if (this._selLanguage === 'en') {
+        moment.locale('en');
+        this._dateAdapter.setLocale('en');
+      }
 
       this.updateDocumentTitle();
     }

@@ -1,19 +1,61 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../services/auth.service';
 import {
-  QuizTypeEnum, PrimarySchoolMathQuizItem, QuizTypeEnum2UIString, LogLevel,
+  QuizTypeEnum, PrimarySchoolMathQuizItem, QuizTypeEnum2UIString, LogLevel, APIQuizSection, APIQuizFailLog, APIQuiz,
   AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem
 } from '../model';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { environment } from '../../environments/environment';
 import { QuizAttendUser, UserDetailService } from '../services/userdetail.service';
+import { DataSource } from '@angular/cdk/collections';
+import { MdDialog, MdPaginator } from '@angular/material';
+import { Observable } from 'rxjs/Observable';
+import * as moment from 'moment';
 
 export interface quiztypeui {
   qtype: QuizTypeEnum;
   i18term: string;
   display: string;
 }
+
+export interface userquizinfo {
+  quizid: number;
+  quizdate: moment.Moment;
+  quiztype: QuizTypeEnum;
+  quizscore: number;
+  quiztime: number;
+}
+
+/**
+ * Quiz data source
+ */
+export class QuizDataSource extends DataSource<APIQuiz> {
+  constructor(private _parentComponent: UserStatisticsComponent,
+    private _paginator: MdPaginator) {
+    super();
+  }
+
+  /** Connect function called by the table to retrieve one stream containing the data to render. */
+  connect(): Observable<APIQuiz[]> {
+    const displayDataChanges = [
+      this._parentComponent.listQuizSubject,
+      this._paginator.page,
+    ];
+
+    return Observable.merge(...displayDataChanges).map(() => {
+      const data = this._parentComponent.Quizs.slice();
+
+      // Grab the page's slice of data.
+      const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
+      return data.splice(startIndex, this._paginator.pageSize);
+    });
+  }
+
+  disconnect() { }
+}
+
 
 @Component({
   selector: 'app-user-statistics',
@@ -33,7 +75,14 @@ export class UserStatisticsComponent implements OnInit {
   colorSchemeGeneral = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA', '#BBBBBB', '#CCCCCC']
   };
-
+  public listQuizSubject: BehaviorSubject<APIQuiz[]> = new BehaviorSubject<APIQuiz[]>([]);
+  get Quizs(): APIQuiz[] {
+    return this.listQuizSubject.value;
+  }
+  displayedColumns = ['QuizID', 'Date', 'QuizType', 'Score', 'TimeSpent'];
+  dataSource: QuizDataSource | null;
+  @ViewChild(MdPaginator) paginator: MdPaginator;
+  
   // Quiz amount by date
   viewQuizAmountByDate: any[] = [700, 400];
   showXAxisQuizAmountByDate = true;
@@ -129,10 +178,12 @@ export class UserStatisticsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dataSource = new QuizDataSource(this, this.paginator);
   }
 
   public onUserChanged(evnt: any) {
     if (this.curUser !== undefined && this.curUser !== null && this.curUser.length > 0) {
+      this.fetchQuizDate(this.curUser);
       this.fetchQuizAmountByDate(this.curUser);
       this.fetchQuizAmountByType(this.curUser);
       this.fetchQuizItemAmountByDate(this.curUser);
@@ -156,6 +207,36 @@ export class UserStatisticsComponent implements OnInit {
 
   }
 
+  private fetchQuizDate(usr: string) {
+    const apiurl = environment.APIBaseUrl + 'quiz';
+
+    let headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json')
+              .append('Accept', 'application/json')
+              .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
+    let params = new HttpParams();
+    params = params.set('usrid', usr);
+    this._http.get(apiurl, {
+        headers: headers,
+        params: params,
+        withCredentials: true
+      })
+      .map((response: HttpResponse<any>) => {
+        return <any>response;
+      })
+      .subscribe(x => {
+        let ndata: APIQuiz[] = [];          
+        if (x instanceof Array && x.length > 0) {
+          for (const si of x) {
+            let aq: APIQuiz = <APIQuiz>si;
+            ndata.push(aq);
+          }
+        }
+
+        this.listQuizSubject.next(ndata);
+      });
+  }
+  
   private fetchQuizAmountByDate(usr: string) {
     const apiurl = environment.APIBaseUrl + 'StatisticQuizAmountByDate/' + usr;
 

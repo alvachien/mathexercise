@@ -1,5 +1,7 @@
 
 import { QuizSplitter } from './quizconstants';
+import * as moment from 'moment';
+import  { DateFormat } from './datedef';
 
 /**
  * Quiz type
@@ -375,4 +377,85 @@ export interface QuizCreateResultJSON {
     quizID: number;
     totalAwardPoint: number;
     awardIDList: number[];
+}
+
+/**
+ * API for quiz
+ * Used to communicate with API
+ */
+export class APIQuizSection {
+    sectionID: number;
+    timeSpent: number;
+    totalItems: number;
+    failedItems: number;
+
+    public fromPSMathQuizSection(qs: PrimarySchoolMathQuizSection) {
+        this.sectionID = qs.SectionNumber;
+        this.timeSpent = qs.TimeSpent;
+        this.totalItems = qs.ItemsCount;
+        this.failedItems = qs.ItemsFailed;
+    }
+}
+
+export class APIQuizFailLog {
+    quizFailIndex: number;
+    expected: string;
+    inputted: string;
+
+    public fromPSMathQuizFailed(fl: PrimarySchoolMathQuizItem) {
+        this.quizFailIndex = fl.QuizIndex;
+        this.expected = fl.storeToString();
+        this.inputted = fl.getInputtedForumla();
+    }  
+}
+
+export class APIQuiz {
+    quizID: number;
+    quizType: QuizTypeEnum;
+    basicInfo: string;
+    submitDate: string;
+    attendUser: string;
+    failLogs: APIQuizFailLog[] = [];
+    sections: APIQuizSection[] = [];
+    get quizTypeString() : string {
+        return QuizTypeEnum2UIString(this.quizType);
+    }
+    get averageScore(): number {
+        let total: number = 0;
+        let corr: number = 0;
+        for(let sec of this.sections) {
+            total += sec.totalItems;
+            corr += (sec.totalItems - sec.failedItems);
+        }
+        return Math.round(100 * corr / total);
+    }
+    get averageTimeSpent(): number {
+        let total: number = 0;
+        let tspent: number = 0;
+        for(let sec of this.sections) {
+            total += sec.totalItems;
+            tspent += sec.timeSpent;
+        }
+        return Math.round(tspent / total);
+    }
+
+    public fromPSMathQuiz(objQuiz: PrimarySchoolMathQuiz, atuser: string) {
+        this.quizType = objQuiz.QuizType;
+        this.basicInfo = objQuiz.BasicInfo;
+        this.submitDate = moment().format(DateFormat);
+        this.attendUser = atuser;
+
+        for (const fl of objQuiz.FailedItems) {
+            const flog: APIQuizFailLog = new APIQuizFailLog();
+            flog.fromPSMathQuizFailed(fl);
+            this.failLogs.push(flog);
+        }
+
+        for (const qs of objQuiz.ElderRuns()) {
+            const qsect: APIQuizSection = new APIQuizSection();
+            qsect.fromPSMathQuizSection(qs);
+      
+            this.sections.push(qsect);
+        }
+    }
 }

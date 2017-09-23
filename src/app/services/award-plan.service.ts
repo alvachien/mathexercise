@@ -86,9 +86,9 @@ export class AwardPlanService {
       .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
 
     this._http.post(apiurl, jdata, {
-      headers: headers,
-      withCredentials: true
-    })
+        headers: headers,
+        withCredentials: true
+      })
       .map((response: HttpResponse<any>) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log('AC Math Exercise [Debug]: Map in createAwardPlan of AwardPlanService: ' + response);
@@ -103,10 +103,14 @@ export class AwardPlanService {
           console.log('AC Math Exericse [Debug]: Success createAwardPlan of AwardPlanService: ' + x);
         }
 
+        // Add the buffer?
+        // Todo!
+        
+        // Raise the event
         this.createEvent.emit(x);
       }, error => {
         if (environment.LoggingLevel >= LogLevel.Error) {
-          console.log('AC Math Exericse [Debug]: Failed createAwardPlan of AwardPlanService: ' + error);
+          console.error('AC Math Exericse [Error]: Failed createAwardPlan of AwardPlanService: ' + error);
         }
 
         this.createEvent.emit(error);
@@ -125,6 +129,7 @@ export class AwardPlanService {
     headers = headers.append('Content-Type', 'application/json')
               .append('Accept', 'application/json')
               .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
+
     this._http.put(apiurl, data, {
         headers: headers,
         withCredentials: true
@@ -146,7 +151,7 @@ export class AwardPlanService {
         this.changeEvent.emit(x);
       }, error => {
         if (environment.LoggingLevel >= LogLevel.Error) {
-          console.log('AC Math Exericse [Debug]: ' + error);
+          console.error('AC Math Exericse [Error]: ' + error);
         }
 
         this.changeEvent.emit(error);
@@ -162,6 +167,7 @@ export class AwardPlanService {
     headers = headers.append('Content-Type', 'application/json')
               .append('Accept', 'application/json')
               .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
+
     this._http.delete(apiurl, {
         headers: headers,
         withCredentials: true
@@ -181,7 +187,7 @@ export class AwardPlanService {
         this.deleteEvent.emit(x);
       }, error => {
         if (environment.LoggingLevel >= LogLevel.Error) {
-          console.log('AC Math Exericse [Debug]: ' + error);
+          console.error('AC Math Exericse [Error]: ' + error);
         }
 
         this.deleteEvent.emit(error);

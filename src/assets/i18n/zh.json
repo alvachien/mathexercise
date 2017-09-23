@@ -114,6 +114,7 @@
         "AwardPlanAvgTimeCondition": "平均时间小于{{avgtime}}",
         "AwardPlanByUser": "当前用户名下所有的奖励计划",
         "AwardCondition": "奖励条件",
+        "AwardOverview": "奖励总览",
         "AwardBalance": "奖励盈余",
         "AwardBalanceByUser": "当前用户名下的奖励积点盈余",
         "AwardPointAssigned": "赋予奖励积点",
@@ -127,7 +128,8 @@
         "Delete": "删除",
         "AwardCreatedSuccessfully": "奖励创建成功!",
         "AwardChangedSuccessfully": "奖励更新成功!",
-        "IsPublish": "罚没",
+        "IsPunishment": "罚没",
+        "Overview": "总览",
         
         "Underconstruction": "当前页还在开发中"
     },

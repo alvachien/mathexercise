@@ -3,7 +3,8 @@ import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
-import { LogLevel, UserAuthInfo, PrimarySchoolMathQuiz, QuizCreateResultJSON } from '../model';
+import { LogLevel, UserAuthInfo, PrimarySchoolMathQuiz, QuizCreateResultJSON,
+  APIQuizSection, APIQuizFailLog, APIQuiz } from '../model';
 import { AuthService } from './auth.service';
 
 @Injectable()
@@ -14,32 +15,10 @@ export class QuizService {
   }
 
   public saveDB(objQuiz: PrimarySchoolMathQuiz): Observable<QuizCreateResultJSON> {
-    const apiurl = environment.APIBaseUrl + 'quiz';
+    const apiurl = environment.APIBaseUrl + 'quiz';    
 
-    const result: any = {};
-    result.quizType = objQuiz.QuizType;
-    result.basicInfo = objQuiz.BasicInfo;
-    result.submitDate = new Date();
-    result.attendUser = 'test';
-
-    result.failLogs = [];
-    for (const fl of objQuiz.FailedItems) {
-      const flog: any = {};
-      flog.quizFailIndex = fl.QuizIndex;
-      flog.expected = fl.storeToString();
-      flog.inputted = fl.getInputtedForumla();
-      result.failLogs.push(flog);
-    }
-
-    result.sections = [];
-    for (const qs of objQuiz.ElderRuns()) {
-      const qsect: any = {};
-      qsect.sectionID = qs.SectionNumber;
-      qsect.timeSpent = qs.TimeSpent;
-      qsect.totalItems = qs.ItemsCount;
-      qsect.failedItems = qs.ItemsFailed;
-      result.sections.push(qsect);
-    }
+    const result: APIQuiz = new APIQuiz;
+    result.fromPSMathQuiz(objQuiz, this._authService.authSubject.value.getUserId());
     const data = JSON && JSON.stringify(result);
 
     let headers = new HttpHeaders();
