@@ -101,7 +101,7 @@ export class AwardPlan {
 
     constructor() {
         this.ValidFrom = moment();
-        this.ValidTo = this.ValidFrom.day(30);
+        this.ValidTo = this.ValidFrom.add(30, 'd');
     }
 
     get getAwardScoreCondition(): string {

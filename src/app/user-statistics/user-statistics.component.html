@@ -3,46 +3,47 @@
         <md-card-title>{{'Home.Statistics' | translate}}</md-card-title>
     </md-card-header>
     <md-card-content>
-        <div>
+        <md-toolbar color="primary">
             <md-select placeholder="{{'Home.User' | translate}}" [(ngModel)]="curUser" name="usr" (change)="onUserChanged($event)">
                 <md-option *ngFor="let user of listUsers" [value]="user.attenduser">
                     {{ user.displayas }}
                 </md-option>
             </md-select>
-        </div>
+        </md-toolbar>
+
         <md-tab-group>
             <md-tab label="{{'Home.Overview' | translate}}">
                 <div class="example-container mat-elevation-z8">
-                    <md-table #table [dataSource]="dataSource">
+                    <md-table #table [dataSource]="dataSource" mdSort>
 
                         <!-- QuizID Column -->
-                        <ng-container mdColumnDef="QuizID">
-                            <md-header-cell *mdHeaderCellDef>#</md-header-cell>
+                        <ng-container mdColumnDef="QuizID" >
+                            <md-header-cell *mdHeaderCellDef md-sort-header>#</md-header-cell>
                             <md-cell *mdCellDef="let row"> {{row.quizID}} </md-cell>
                         </ng-container>
 
                         <!-- Date Column -->
                         <ng-container mdColumnDef="Date">
-                            <md-header-cell *mdHeaderCellDef> {{'Home.Date' | translate}} </md-header-cell>
+                            <md-header-cell *mdHeaderCellDef md-sort-header> {{'Home.Date' | translate}} </md-header-cell>
                             <md-cell *mdCellDef="let row"> {{row.submitDate}} </md-cell>
                         </ng-container>
 
                         <!-- Type Column -->
                         <ng-container mdColumnDef="QuizType">
-                            <md-header-cell *mdHeaderCellDef> Type </md-header-cell>
+                            <md-header-cell *mdHeaderCellDef md-sort-header> {{'Home.Type' | translate}} </md-header-cell>
                             <md-cell *mdCellDef="let row"> {{row.quizTypeString | translate}} </md-cell>
                         </ng-container>
 
                         <!-- Score Column -->
                         <ng-container mdColumnDef="Score">
-                            <md-header-cell *mdHeaderCellDef>Score </md-header-cell>
-                            <md-cell *mdCellDef="let row"> {{row.averageScore}} </md-cell>
+                            <md-header-cell *mdHeaderCellDef md-sort-header>{{'Home.Score' | translate}} </md-header-cell>
+                            <md-cell *mdCellDef="let row"> {{row.TotalScore}} </md-cell>
                         </ng-container>
 
                         <!-- Time Column -->
                         <ng-container mdColumnDef="TimeSpent">
-                            <md-header-cell *mdHeaderCellDef>TimeSpent </md-header-cell>
-                            <md-cell *mdCellDef="let row"> {{row.averageTimeSpent}} </md-cell>
+                            <md-header-cell *mdHeaderCellDef md-sort-header>{{'Home.AvgTimeSpentEachInSeconds' | translate}} </md-header-cell>
+                            <md-cell *mdCellDef="let row"> {{row.TotalAverageTime}} </md-cell>
                         </ng-container>
 
                         <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>

@@ -420,24 +420,41 @@ export class APIQuiz {
     get quizTypeString() : string {
         return QuizTypeEnum2UIString(this.quizType);
     }
-    get averageScore(): number {
-        let total: number = 0;
-        let corr: number = 0;
-        for(let sec of this.sections) {
-            total += sec.totalItems;
-            corr += (sec.totalItems - sec.failedItems);
-        }
-        return Math.round(100 * corr / total);
+
+    private _totalScore: number;
+    get TotalScore(): number {
+        return this._totalScore;
     }
-    get averageTimeSpent(): number {
-        let total: number = 0;
-        let tspent: number = 0;
-        for(let sec of this.sections) {
-            total += sec.totalItems;
-            tspent += sec.timeSpent;
-        }
-        return Math.round(tspent / total);
+    set TotalScore(ts: number) {
+        this._totalScore = ts;
     }
+
+    private _totalAverageTime: number;
+    get TotalAverageTime(): number {
+        return this._totalAverageTime;
+    }
+    set TotalAverageTime(tat: number) {
+        this._totalAverageTime = tat;
+    }
+    
+    // get averageScore(): number {
+    //     let total: number = 0;
+    //     let corr: number = 0;
+    //     for(let sec of this.sections) {
+    //         total += sec.totalItems;
+    //         corr += (sec.totalItems - sec.failedItems);
+    //     }
+    //     return Math.round(100 * corr / total);
+    // }
+    // get averageTimeSpent(): number {
+    //     let total: number = 0;
+    //     let tspent: number = 0;
+    //     for(let sec of this.sections) {
+    //         total += sec.totalItems;
+    //         tspent += sec.timeSpent;
+    //     }
+    //     return Math.round(tspent / total);
+    // }
 
     public fromPSMathQuiz(objQuiz: PrimarySchoolMathQuiz, atuser: string) {
         this.quizType = objQuiz.QuizType;

@@ -138,6 +138,21 @@ export class AwardPlanComponent implements OnInit {
     this.pageHeader = 'Home.CreateAwardPlan';
   }
 
+  public onCreatePlanByCopy(row) {
+    this._curPlan = new AwardPlan();
+    this._curPlan.TargetUser = this.SelectedUser.attenduser;
+    this._curPlan.CreatedBy = this._authService.authSubject.getValue().getUserId();
+    this._curPlan.Award = row.Award;
+    this._curPlan.MinQuizAvgTime = row.MinQuizAvgTime;
+    this._curPlan.MinQuizScore = row.MinQuizScore;
+    this._curPlan.QuizType = row.QuizType;
+    this._curPlan.ValidFrom = row.ValidFrom;
+    this._curPlan.ValidTo = row.ValidTo;
+
+    this.uiMode = UIMode.Create;
+    this.pageHeader = 'Home.CreateAwardPlan';
+  }
+
   public onEditPlan(row) {
     // Todo
     try {

@@ -26,6 +26,10 @@
         <ng-container mdColumnDef="ID">
           <md-header-cell *mdHeaderCellDef> # </md-header-cell>
           <md-cell *mdCellDef="let element">
+            <button md-mini-fab [disabled]="!IsListView || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardPlanCreate)" 
+              (click)="onCreatePlanByCopy(element)">
+              <md-icon class="md-14" aria-label="Copy">content_copy</md-icon>
+            </button>
             <button md-mini-fab [disabled]="!IsListView || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardPlanUpdate)" 
               (click)="onEditPlan(element)">
               <md-icon class="md-14" aria-label="Edit">edit</md-icon>
@@ -68,7 +72,7 @@
       </md-paginator>      
     </div>
 
-    <div *ngIf="!IsListView">
+    <div *ngIf="!IsListView" class="mt-5 pt-5">
       <div class="demo-full-width">
         <md-form-field>
           <input mdInput type="text" placeholder="{{'Home.User' | translate}}" readonly [(ngModel)]="SelectedUser.displayas">
