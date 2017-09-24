@@ -130,6 +130,7 @@
         "AwardChangedSuccessfully": "奖励更新成功!",
         "IsPunishment": "罚没",
         "Overview": "总览",
+        "IncludeInvalidOne": "包含已失效项",
         
         "Underconstruction": "当前页还在开发中"
     },

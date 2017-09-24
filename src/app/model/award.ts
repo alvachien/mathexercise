@@ -101,7 +101,7 @@ export class AwardPlan {
 
     constructor() {
         this.ValidFrom = moment();
-        this.ValidTo = this.ValidFrom.add(30, 'd');
+        this.ValidTo = moment().add(30, 'd');
     }
 
     get getAwardScoreCondition(): string {
@@ -117,7 +117,7 @@ export class AwardPlan {
     }
     get getAwardAvgTimeCondition(): string {
         if (Number.isInteger(this._minAvgTime)) {
-            return 'Home.AwardPlanScoreConidiotn';
+            return 'Home.AwardPlanAvgTimeCondition';
         }
         return '';
     }

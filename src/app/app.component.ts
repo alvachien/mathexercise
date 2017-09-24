@@ -135,13 +135,13 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    const deflang: string = 'zh';
+    const deflang = 'zh';
     this._translate.setDefaultLang(deflang);
     this._translate.use(deflang).subscribe(() => {
       this._selLanguage = deflang;
       this._dateAdapter.setLocale('zh-cn');
       this.updateDocumentTitle();
-    });    
+    });
   }
 
   public onLogon() {

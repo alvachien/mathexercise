@@ -55,7 +55,7 @@ export class MomentDateAdapter extends DateAdapter<Moment> {
   setLocale(locale: string) {
     super.setLocale(locale);
 
-    let momentLocaleData = moment.localeData(locale);
+    const momentLocaleData = moment.localeData(locale);
     this._localeData = {
       firstDayOfWeek: momentLocaleData.firstDayOfWeek(),
       longMonths: momentLocaleData.months(),
@@ -129,7 +129,7 @@ export class MomentDateAdapter extends DateAdapter<Moment> {
       throw Error(`Invalid date "${date}". Date has to be greater than 0.`);
     }
 
-    let result = moment({year, month, date}).locale(this.locale);
+    const result = moment({year, month, date}).locale(this.locale);
 
     // If the result isn't valid, the date must have been out of bounds for this month.
     if (!result.isValid()) {
@@ -175,7 +175,7 @@ export class MomentDateAdapter extends DateAdapter<Moment> {
   }
 
   fromIso8601(iso8601String: string): Moment | null {
-    let d = moment(iso8601String, moment.ISO_8601).locale(this.locale);
+    const d = moment(iso8601String, moment.ISO_8601).locale(this.locale);
     return this.isValid(d) ? d : null;
   }
 

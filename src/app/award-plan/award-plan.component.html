@@ -10,6 +10,7 @@
           {{ user.displayas }}
         </md-option>
       </md-select>
+      <md-checkbox [(ngModel)]="allowInvalid">{{'Home.IncludeInvalidOne' | translate}}</md-checkbox>
 
       <button md-icon-button [disabled]="!IsListView || (SelectedUser === null) || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardPlanCreate)" (click)="onCreatePlan()">
         <md-icon class="md-24" aria-label="Create">create_new_folder</md-icon>

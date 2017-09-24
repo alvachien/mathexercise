@@ -24,7 +24,7 @@ export class AwardBalanceService {
 
   /**
    * Fetch all awards for specified user
-   * @param usr User 
+   * @param usr User
    */
   public fetchAwardsForUser(usr: string) {
     const apiurl = environment.APIBaseUrl + 'UserAward';
@@ -46,7 +46,7 @@ export class AwardBalanceService {
           console.log(response);
         }
 
-        let awards = []; // Clear it first
+        const awards = []; // Clear it first
         const rjs = <any>response;
 
         if (rjs instanceof Array && rjs.length > 0) {

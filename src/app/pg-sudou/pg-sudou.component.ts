@@ -149,7 +149,7 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
    * Finish event
    */
   @Output() finishEvent: EventEmitter<any> = new EventEmitter();
-  
+
   /**
    * Degree of difficulity
    */
@@ -304,7 +304,7 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
     }
     ctx2.lineWidth = 1.0;
     ctx2.strokeStyle = '#000000';
-    for (let i: number = 0; i < 10; i++) {
+    for (let i = 0; i < 10; i++) {
       if (i % 3 === 0) {
         ctx2.lineWidth = 3.0;
       } else {

@@ -59,7 +59,7 @@ export class AwardBalanceComponent implements OnInit {
   listUsers: QuizAttendUser[] = [];
   _curMode: UIMode = UIMode.ListView;
   curAward: UserAward | null;
-  private _awardBalance: number = 0;
+  private _awardBalance = 0;
 
   get AwardBalance(): number {
     return this._awardBalance;
@@ -105,7 +105,7 @@ export class AwardBalanceComponent implements OnInit {
   get CurrentUser(): UserDetailInfo {
     return this._userDetailService.UserDetailInfoInstance;
   }
-  
+
   constructor(private _http: HttpClient,
     private _dialog: MdDialog,
     public _abService: AwardBalanceService,
@@ -120,7 +120,7 @@ export class AwardBalanceComponent implements OnInit {
 
   ngOnInit() {
     this.dataSource = new AwardBalanceDataSource(this._abService, this.paginator);
-    
+
     // Attended user
     this._userDetailService.fetchAllUsers().subscribe((listUsrs) => {
       if (listUsrs !== null && listUsrs !== undefined || listUsrs.length > 0) {
@@ -164,11 +164,11 @@ export class AwardBalanceComponent implements OnInit {
     // Do the submit!
     if (this._curMode === UIMode.Create) {
       // Create mode!
-      this._abService.createEvent.subscribe(x => {        
+      this._abService.createEvent.subscribe(x => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log('AC Math Exericse [Debug]: ' + x);
         }
-  
+
         if (x instanceof UserAward) {
           // Show a dialog for success
           const dlginfo: MessageDialogInfo = {
@@ -189,7 +189,7 @@ export class AwardBalanceComponent implements OnInit {
           // Also show a dialog for error
           const dlginfo: MessageDialogInfo = {
             Header: 'Home.Error',
-            Content: x === null? 'Home.Error' : x,
+            Content: x === null ? 'Home.Error' : x,
             Button: MessageDialogButtonEnum.onlyok
           };
           this._dialog.open(MessageDialogComponent, {
@@ -205,13 +205,13 @@ export class AwardBalanceComponent implements OnInit {
 
       this.curAward.UserID = this.SelectedUser.attenduser;
       this._abService.createAward(this.curAward);
-    } else if(this._curMode === UIMode.Update) {
+    } else if (this._curMode === UIMode.Update) {
       // Update mode!
-      this._abService.changeEvent.subscribe(x => {        
+      this._abService.changeEvent.subscribe(x => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log('AC Math Exericse [Debug]: ' + x);
         }
-  
+
         if (x instanceof UserAward) {
           // Show a dialog for success
           const dlginfo: MessageDialogInfo = {
@@ -232,7 +232,7 @@ export class AwardBalanceComponent implements OnInit {
           // Also show a dialog for error
           const dlginfo: MessageDialogInfo = {
             Header: 'Home.Error',
-            Content: x === null? 'Home.Error' : x,
+            Content: x === null ? 'Home.Error' : x,
             Button: MessageDialogButtonEnum.onlyok
           };
           this._dialog.open(MessageDialogComponent, {
@@ -297,7 +297,7 @@ export class AwardBalanceComponent implements OnInit {
   private updateBalance() {
     this._awardBalance = 0;
 
-    for(let ua of this._abService.Awards) {
+    for (const ua of this._abService.Awards) {
       this._awardBalance += ua.Award;
     }
   }

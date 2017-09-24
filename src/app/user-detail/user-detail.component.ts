@@ -9,17 +9,17 @@ import { LogLevel, UserDetailInfo } from '../model';
   templateUrl: './user-detail.component.html',
   styleUrls: ['./user-detail.component.scss']
 })
-export class UserDetailComponent implements OnInit {  
-  UserID: string = '';
-  Mailbox: string = '';
-  DisplayAs: string = '';
-  Others: string = '';
-  awardPlanCreate: boolean = false;
-  awardPlanUpdate: boolean = false;
-  awardPlanDelete: boolean = false;
-  awardCreate: boolean =  false;
-  awardUpdate: boolean = false;
-  awardDelete: boolean = false;
+export class UserDetailComponent implements OnInit {
+  UserID = '';
+  Mailbox = '';
+  DisplayAs = '';
+  Others = '';
+  awardPlanCreate = false;
+  awardPlanUpdate = false;
+  awardPlanDelete = false;
+  awardCreate =  false;
+  awardUpdate = false;
+  awardDelete = false;
   instanceUserDetailInfo: UserDetailInfo = null;
 
   constructor(private _authService: AuthService,
@@ -77,7 +77,7 @@ export class UserDetailComponent implements OnInit {
     if (this.instanceUserDetailInfo === null) {
       this.instanceUserDetailInfo = new UserDetailInfo();
     }
-    
+
     this.instanceUserDetailInfo.UserId = this.UserID;
     this.instanceUserDetailInfo.DisplayAs = this.DisplayAs;
     this.instanceUserDetailInfo.Others = this.Others;

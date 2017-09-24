@@ -80,12 +80,12 @@ export class QuizDataSource extends DataSource<APIQuiz> {
         case 'TimeSpent': [propertyA, propertyB] = [a.TotalAverageTime, b.TotalAverageTime]; break;
       }
 
-      let valueA = isNaN(+propertyA) ? propertyA : +propertyA;
-      let valueB = isNaN(+propertyB) ? propertyB : +propertyB;
+      const valueA = isNaN(+propertyA) ? propertyA : +propertyA;
+      const valueB = isNaN(+propertyB) ? propertyB : +propertyB;
 
       return (valueA < valueB ? -1 : 1) * (this._sort.direction == 'asc' ? 1 : -1);
     });
-  }  
+  }
 }
 
 
@@ -267,15 +267,15 @@ export class UserStatisticsComponent implements OnInit {
         return <any>response;
       })
       .subscribe(x => {
-        let ndata: APIQuiz[] = [];          
+        const ndata: APIQuiz[] = [];
         if (x instanceof Array && x.length > 0) {
           for (const si of x) {
-            let aq: APIQuiz = new APIQuiz();
+            const aq: APIQuiz = new APIQuiz();
             aq.TotalScore = +si.totalScore;
             aq.TotalAverageTime = +si.totalAverageTime;
             aq.basicInfo = si.basicInfo;
-            for(const flog of si.failLogs) {
-              let fl = new APIQuizFailLog();
+            for (const flog of si.failLogs) {
+              const fl = new APIQuizFailLog();
               fl.expected = flog.expected;
               fl.inputted = flog.inputted;
               fl.quizFailIndex = flog.quizFailIndex;
@@ -284,8 +284,8 @@ export class UserStatisticsComponent implements OnInit {
             aq.quizID = +si.quizID;
             aq.quizType = +si.quizType;
             aq.submitDate = si.submitDate;
-            for(const sec of si.sections) {
-              let sc = new APIQuizSection();
+            for (const sec of si.sections) {
+              const sc = new APIQuizSection();
               sc.failedItems = sec.failedItems;
               sc.sectionID = sec.sectionID;
               sc.timeSpent = sec.timeSpent;
@@ -299,7 +299,7 @@ export class UserStatisticsComponent implements OnInit {
         this.listQuizSubject.next(ndata);
       });
   }
-  
+
   private fetchQuizAmountByDate(usr: string) {
     const apiurl = environment.APIBaseUrl + 'StatisticQuizAmountByDate/' + usr;
 

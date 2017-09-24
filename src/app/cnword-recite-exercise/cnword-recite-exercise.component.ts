@@ -11,10 +11,10 @@ export class CnwordReciteExerciseComponent implements OnInit {
   @ViewChild('audioCtrl') audioER: ElementRef;
   contentList: AudioContent[] = [];
   idxContent: number;
-  IsQuizStarted: boolean = false;
+  IsQuizStarted = false;
   idxSequence: number[] = [];
 
-  constructor() { 
+  constructor() {
     this.idxContent = 0; // First item
   }
 
@@ -29,8 +29,8 @@ export class CnwordReciteExerciseComponent implements OnInit {
       return false;
     }
 
-    let amt: number = 0;
-    for (let cl of this.contentList) {
+    let amt = 0;
+    for (const cl of this.contentList) {
       if (cl.selected) {
         amt++;
       }
@@ -43,7 +43,7 @@ export class CnwordReciteExerciseComponent implements OnInit {
 
     try {
       this.idxSequence = [];
-      for (let i: number = 0; i < this.contentList.length; i++) {
+      for (let i = 0; i < this.contentList.length; i++) {
         if (this.contentList[i].selected) {
           this.idxSequence.push(i);
         }
@@ -54,7 +54,7 @@ export class CnwordReciteExerciseComponent implements OnInit {
         this.audioER.nativeElement.currentTime = this.contentList[0].beginpoint;
         this.audioER.nativeElement.play();
         setTimeout(() => {
-          console.log("Time is up, pause it!");
+          console.log('Time is up, pause it!');
 
           // Do nothing
           this.audioER.nativeElement.pause();
@@ -79,10 +79,10 @@ export class CnwordReciteExerciseComponent implements OnInit {
   public sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
-  
+
   private async onPlayNextRecord() {
     this.idxContent++;
-    console.log("Entering onPlayNextRecord");
+    console.log('Entering onPlayNextRecord');
     this.audioER.nativeElement.pause();
 
     if (this.idxContent < this.idxSequence.length) {
@@ -103,7 +103,7 @@ export class CnwordReciteExerciseComponent implements OnInit {
   }
 
   private onShuffleArray(ar: any[]): any[] {
-    var currentIndex = ar.length, temporaryValue, randomIndex;
+    let currentIndex = ar.length, temporaryValue, randomIndex;
 
     // While there remain elements to shuffle...
     while (0 !== currentIndex) {

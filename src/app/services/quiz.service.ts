@@ -15,7 +15,7 @@ export class QuizService {
   }
 
   public saveDB(objQuiz: PrimarySchoolMathQuiz): Observable<QuizCreateResultJSON> {
-    const apiurl = environment.APIBaseUrl + 'quiz';    
+    const apiurl = environment.APIBaseUrl + 'quiz';
 
     const result: APIQuiz = new APIQuiz;
     result.fromPSMathQuiz(objQuiz, this._authService.authSubject.value.getUserId());

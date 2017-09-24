@@ -406,7 +406,7 @@ export class APIQuizFailLog {
         this.quizFailIndex = fl.QuizIndex;
         this.expected = fl.storeToString();
         this.inputted = fl.getInputtedForumla();
-    }  
+    }
 }
 
 export class APIQuiz {
@@ -436,7 +436,7 @@ export class APIQuiz {
     set TotalAverageTime(tat: number) {
         this._totalAverageTime = tat;
     }
-    
+
     // get averageScore(): number {
     //     let total: number = 0;
     //     let corr: number = 0;
@@ -471,7 +471,7 @@ export class APIQuiz {
         for (const qs of objQuiz.ElderRuns()) {
             const qsect: APIQuizSection = new APIQuizSection();
             qsect.fromPSMathQuizSection(qs);
-      
+
             this.sections.push(qsect);
         }
     }

@@ -16,7 +16,7 @@ export class AwardPlanService {
   createEvent: EventEmitter<AwardPlan | string> = new EventEmitter(null);
   changeEvent: EventEmitter<AwardPlan | string> = new EventEmitter(null);
   deleteEvent: EventEmitter<boolean | string> = new EventEmitter(false);
-  
+
   constructor(private _http: HttpClient,
     private _authService: AuthService) {
   }
@@ -25,7 +25,7 @@ export class AwardPlanService {
    * Fetch plans for specified user
    * @param usr User
    */
-  public fetchPlansForUser(usr?: string) {
+  public fetchPlansForUser(usr?: string, allowInvalid?: boolean) {
     if (usr === undefined || usr === null) {
       this.listSubject.next([]);
       return;
@@ -39,14 +39,16 @@ export class AwardPlanService {
       .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
     let params: HttpParams = new HttpParams();
     params = params.set('tgtuser', usr);
-
+    if (allowInvalid) {
+      params = params.set('incInvalid', allowInvalid.toString());
+    }
     this._http.get(apiurl, { headers: headers, params: params, withCredentials: true })
       .map((response: HttpResponse<any>) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log(response);
         }
 
-        let aplans = [];
+        const aplans = [];
         const rjs = <any>response;
         if (rjs instanceof Array && rjs.length > 0) {
           for (const si of rjs) {
@@ -94,7 +96,7 @@ export class AwardPlanService {
           console.log('AC Math Exercise [Debug]: Map in createAwardPlan of AwardPlanService: ' + response);
         }
 
-        let ap: AwardPlan = new AwardPlan;
+        const ap: AwardPlan = new AwardPlan;
         ap.parseData(<any>response);
         return ap;
       })
@@ -107,7 +109,7 @@ export class AwardPlanService {
         const data = this.listSubject.value;
         data.push(x);
         this.listSubject.next(data);
-        
+
         // Raise the event
         this.createEvent.emit(x);
       }, error => {
@@ -123,10 +125,10 @@ export class AwardPlanService {
   public changeAwardPlan(aplan: AwardPlan) {
     // Submit to the API
     const apiurl = environment.APIBaseUrl + 'AwardPlan/' + aplan.ID;
-    
+
     const data = aplan.prepareData();
     const jdata = JSON && JSON.stringify(data);
-    
+
     let headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json')
               .append('Accept', 'application/json')
@@ -141,7 +143,7 @@ export class AwardPlanService {
           console.log('AC Math Exercise [Debug]:' + response);
         }
 
-        let aplan2: AwardPlan = new AwardPlan();
+        const aplan2: AwardPlan = new AwardPlan();
         aplan2.parseData(<any>response);
         return aplan2;
       })
@@ -158,13 +160,13 @@ export class AwardPlanService {
 
         this.changeEvent.emit(error);
       }, () => {
-      });   
+      });
   }
 
   public deleteAwardPlan(aplanid: number) {
     // Submit to the API
     const apiurl = environment.APIBaseUrl + 'AwardPlan/' + aplanid;
-    
+
     let headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json')
               .append('Accept', 'application/json')
@@ -194,6 +196,6 @@ export class AwardPlanService {
 
         this.deleteEvent.emit(error);
       }, () => {
-      });   
+      });
   }
 }

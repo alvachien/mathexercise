@@ -1,4 +1,4 @@
-import { Component, OnInit,ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
 import { MdDialog, MdPaginator } from '@angular/material';
@@ -63,7 +63,7 @@ export class AwardPlanComponent implements OnInit {
   private uiMode: UIMode = UIMode.ListView;
 
   get IsListView(): boolean {
-    return this.uiMode === UIMode.ListView;;
+    return this.uiMode === UIMode.ListView; ;
   }
   get IsViewChangable(): boolean {
     return this.uiMode === UIMode.Create
@@ -74,6 +74,7 @@ export class AwardPlanComponent implements OnInit {
   get SelectedUser(): QuizAttendUser {
     return this._selUser;
   }
+
   set SelectedUser(cu: QuizAttendUser) {
     if ((this._selUser === null || this._selUser === undefined)
       && (cu !== null && cu !== undefined)) {
@@ -85,6 +86,17 @@ export class AwardPlanComponent implements OnInit {
       && (cu !== null && cu !== undefined)
       && this._selUser.attenduser !== cu.attenduser) {
       this._selUser = cu;
+    }
+  }
+  private _allowInvalid: boolean = false;
+  get allowInvalid(): boolean {
+    return this._allowInvalid;
+  }
+  set allowInvalid(ai: boolean) {
+    if (this._allowInvalid !== ai) {
+      this._allowInvalid = ai;
+
+      this.onUserChanged(null);
     }
   }
 
@@ -196,7 +208,7 @@ export class AwardPlanComponent implements OnInit {
     if (this._selUser === null) {
       this._apService.fetchPlansForUser();
     } else {
-      this._apService.fetchPlansForUser(this._selUser.attenduser);
+      this._apService.fetchPlansForUser(this._selUser.attenduser, this.allowInvalid);
     }
   }
 
@@ -326,7 +338,7 @@ export class AwardPlanComponent implements OnInit {
         // Also show a dialog for error
         const dlginfo: MessageDialogInfo = {
           Header: 'Home.Error',
-          Content: x === null? 'Home.Error' : x,
+          Content: x === null ? 'Home.Error' : x,
           Button: MessageDialogButtonEnum.onlyok
         };
         this._dialog.open(MessageDialogComponent, {

@@ -1,8 +1,8 @@
 import { User } from 'oidc-client';
 
-export const AuthorityControl_Create: string = 'C';
-export const AuthorityControl_Update: string = 'U';
-export const AuthorityControl_Delete: string = 'D';
+export const AuthorityControl_Create = 'C';
+export const AuthorityControl_Update = 'U';
+export const AuthorityControl_Delete = 'D';
 
 
 /**
@@ -49,7 +49,7 @@ export class UserDetailInfo {
         }
     }
     get AwardUpdate(): boolean {
-        return this._awardControl.includes(AuthorityControl_Update);        
+        return this._awardControl.includes(AuthorityControl_Update);
     }
     set AwardUpdate(ac: boolean) {
         if (ac) {
@@ -121,7 +121,7 @@ export class UserDetailInfo {
     }
 
     public clone(): UserDetailInfo {
-        let udi = new UserDetailInfo();
+        const udi = new UserDetailInfo();
         udi.UserId = this.UserId;
         udi.DisplayAs = this.DisplayAs;
         udi.Others = this.Others;
@@ -129,7 +129,7 @@ export class UserDetailInfo {
         udi._awardPlanControl = this._awardPlanControl;
         return udi;
     }
-    
+
     public onSetData(data: UserDetailInfoJson) {
         this.UserId = data.userID;
         this.DisplayAs = data.displayAs;

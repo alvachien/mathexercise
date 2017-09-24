@@ -11,29 +11,29 @@ export class EnwordReciteExerciseComponent implements OnInit, AfterViewInit {
   @ViewChild('audioCtrl') audioER: ElementRef;
   contentList: AudioContent[] = [];
   idxContent: number;
-  IsQuizStarted: boolean = false;
+  IsQuizStarted = false;
   idxSequence: number[] = [];
 
   constructor() {
-    // 正月：0:00-0:02 
-    // 坐落0:03-0:04 
-    // 红摩纸0:05-0:07 
-    // 娓娓动听0:07-0:09 
-    // 炊烟袅袅0:10-0:12 
-    // 歇脚 0:13-0:14 
-    // 念叨 0:15-0:16 
-    // 喝彩 0:17-0:18 
-    // 身临其境0:18-0:20 
-    // 戛然而止0:20-0:23 
-    // 引人入胜 0:23-0:25 
-    // 受业 0:25-0:27 
-    // 滋润0:27-0:29 
-    // 想象力 0:29-0:31 
-    // 开窍0:31-0:32 
-    // 拄拐杖 0:33-0:35 
-    // 恭恭敬敬0:36-0:38 
-    // 无心插柳柳成阴0:38-0:41 
-    // 十年树木百年树人0:41-0:47    
+    // 正月：0:00-0:02
+    // 坐落0:03-0:04
+    // 红摩纸0:05-0:07
+    // 娓娓动听0:07-0:09
+    // 炊烟袅袅0:10-0:12
+    // 歇脚 0:13-0:14
+    // 念叨 0:15-0:16
+    // 喝彩 0:17-0:18
+    // 身临其境0:18-0:20
+    // 戛然而止0:20-0:23
+    // 引人入胜 0:23-0:25
+    // 受业 0:25-0:27
+    // 滋润0:27-0:29
+    // 想象力 0:29-0:31
+    // 开窍0:31-0:32
+    // 拄拐杖 0:33-0:35
+    // 恭恭敬敬0:36-0:38
+    // 无心插柳柳成阴0:38-0:41
+    // 十年树木百年树人0:41-0:47
     this.contentList = [{
       word: '正月',
       beginpoint: 1,
@@ -145,8 +145,8 @@ export class EnwordReciteExerciseComponent implements OnInit, AfterViewInit {
       return false;
     }
 
-    let amt: number = 0;
-    for (let cl of this.contentList) {
+    let amt = 0;
+    for (const cl of this.contentList) {
       if (cl.selected) {
         amt++;
       }
@@ -159,7 +159,7 @@ export class EnwordReciteExerciseComponent implements OnInit, AfterViewInit {
 
     try {
       this.idxSequence = [];
-      for (let i: number = 0; i < this.contentList.length; i++) {
+      for (let i = 0; i < this.contentList.length; i++) {
         if (this.contentList[i].selected) {
           this.idxSequence.push(i);
         }
@@ -170,7 +170,7 @@ export class EnwordReciteExerciseComponent implements OnInit, AfterViewInit {
         this.audioER.nativeElement.currentTime = this.contentList[0].beginpoint;
         this.audioER.nativeElement.play();
         setTimeout(() => {
-          console.log("Time is up, pause it!");
+          console.log('Time is up, pause it!');
 
           // Do nothing
           this.audioER.nativeElement.pause();
@@ -195,16 +195,16 @@ export class EnwordReciteExerciseComponent implements OnInit, AfterViewInit {
   public sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
-  
+
   // public async demo() {
   //   console.log('Taking a break...');
   //   await this.sleep(2000);
   //   console.log('Two second later');
   // }
-  
+
   private async onPlayNextRecord() {
     this.idxContent++;
-    console.log("Entering onPlayNextRecord");
+    console.log('Entering onPlayNextRecord');
     this.audioER.nativeElement.pause();
 
     if (this.idxContent < this.idxSequence.length) {
@@ -225,7 +225,7 @@ export class EnwordReciteExerciseComponent implements OnInit, AfterViewInit {
   }
 
   private onShuffleArray(ar: any[]): any[] {
-    var currentIndex = ar.length, temporaryValue, randomIndex;
+    let currentIndex = ar.length, temporaryValue, randomIndex;
 
     // While there remain elements to shuffle...
     while (0 !== currentIndex) {
