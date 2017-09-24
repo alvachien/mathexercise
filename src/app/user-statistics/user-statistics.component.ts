@@ -268,12 +268,15 @@ export class UserStatisticsComponent implements OnInit {
       })
       .subscribe(x => {
         const ndata: APIQuiz[] = [];
+        this.dataQuizAmountByDate = [];
+
         if (x instanceof Array && x.length > 0) {
           for (const si of x) {
             const aq: APIQuiz = new APIQuiz();
             aq.TotalScore = +si.totalScore;
             aq.TotalAverageTime = +si.totalAverageTime;
             aq.basicInfo = si.basicInfo;
+
             for (const flog of si.failLogs) {
               const fl = new APIQuizFailLog();
               fl.expected = flog.expected;
@@ -281,6 +284,7 @@ export class UserStatisticsComponent implements OnInit {
               fl.quizFailIndex = flog.quizFailIndex;
               aq.failLogs.push(flog);
             }
+
             aq.quizID = +si.quizID;
             aq.quizType = +si.quizType;
             aq.submitDate = si.submitDate;
@@ -292,6 +296,7 @@ export class UserStatisticsComponent implements OnInit {
               sc.totalItems = sec.totalItems;
               aq.sections.push(sc);
             }
+
             ndata.push(aq);
           }
         }

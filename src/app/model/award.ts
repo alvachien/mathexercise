@@ -13,7 +13,7 @@ export interface AwardPlanJson {
     validTo: string;
     quizType: number;
     minQuizScore?: number;
-    minQuizAvgTime?: number;
+    maxQuizAvgTime?: number;
     award: number;
 }
 
@@ -83,12 +83,12 @@ export class AwardPlan {
         this._minScore = scr;
     }
 
-    private _minAvgTime: number;
-    get MinQuizAvgTime(): number {
-        return this._minAvgTime;
+    private _maxAvgTime: number;
+    get MaxQuizAvgTime(): number {
+        return this._maxAvgTime;
     }
-    set MinQuizAvgTime(qat: number) {
-        this._minAvgTime = qat;
+    set MaxQuizAvgTime(qat: number) {
+        this._maxAvgTime = qat;
     }
 
     private _award: number;
@@ -116,14 +116,14 @@ export class AwardPlan {
         };
     }
     get getAwardAvgTimeCondition(): string {
-        if (Number.isInteger(this._minAvgTime)) {
+        if (Number.isInteger(this._maxAvgTime)) {
             return 'Home.AwardPlanAvgTimeCondition';
         }
         return '';
     }
     get getAwardAvgTimeConditionParam(): any {
         return {
-            avgtime: this._minAvgTime
+            avgtime: this._maxAvgTime
         };
     }
 
@@ -143,8 +143,8 @@ export class AwardPlan {
         if (jdata.minQuizScore) {
             this._minScore = jdata.minQuizScore;
         }
-        if (jdata.minQuizAvgTime) {
-            this._minAvgTime = jdata.minQuizAvgTime;
+        if (jdata.maxQuizAvgTime) {
+            this._maxAvgTime = jdata.maxQuizAvgTime;
         }
         this._award = jdata.award;
     }
@@ -158,7 +158,7 @@ export class AwardPlan {
             validTo: this._validto.format(DateFormat),
             quizType: this._qtype,
             minQuizScore: this._minScore,
-            minQuizAvgTime: this._minAvgTime,
+            maxQuizAvgTime: this._maxAvgTime,
             award: this._award
         };
 

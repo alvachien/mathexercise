@@ -159,7 +159,7 @@ export class AwardPlanComponent implements OnInit {
     this._curPlan.TargetUser = this.SelectedUser.attenduser;
     this._curPlan.CreatedBy = this._authService.authSubject.getValue().getUserId();
     this._curPlan.Award = row.Award;
-    this._curPlan.MinQuizAvgTime = row.MinQuizAvgTime;
+    this._curPlan.MaxQuizAvgTime = row.MaxQuizAvgTime;
     this._curPlan.MinQuizScore = row.MinQuizScore;
     this._curPlan.QuizType = row.QuizType;
     this._curPlan.ValidFrom = row.ValidFrom;

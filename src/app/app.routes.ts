@@ -35,6 +35,6 @@ export const AppRoutes: Routes = [
   { path: 'mixop-ex', component: MixedopExerciseComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateGuard] },
   { path: 'award-plan', component: AwardPlanComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateGuard] },
   { path: 'award-bal', component: AwardBalanceComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateGuard] },
-  { path: 'enword-recite', component: EnwordReciteExerciseComponent, },
-  { path: 'cnword-recite', component: CnwordReciteExerciseComponent, },
+  { path: 'enword-recite', component: EnwordReciteExerciseComponent, canActivate: [AuthGuard] },
+  { path: 'cnword-recite', component: CnwordReciteExerciseComponent, canActivate: [AuthGuard] },
 ];

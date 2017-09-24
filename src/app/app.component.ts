@@ -103,6 +103,7 @@ export class AppComponent implements OnInit {
       { name: 'Home.RetestPreviousFailures', route: 'fail-retest' },
       { name: 'Home.Statistics', route: 'user-stat' },
       { name: 'Home.UserDetail', route: 'user-detail' },
+      { name: 'Home.ChineseWordDictation', route: 'cnword-recite' },
       { name: 'Home.EnglishWordDictation', route: 'enword-recite' }
     ];
 
