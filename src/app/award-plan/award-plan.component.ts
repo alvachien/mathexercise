@@ -129,6 +129,10 @@ export class AwardPlanComponent implements OnInit {
     this.dataSource = new AwardPlanDataSource(this._apService, this.paginator);
   }
 
+  public onRefreshPlan() {
+    this.onUserChanged(null);
+  }
+
   public onCreatePlan() {
     this._curPlan = new AwardPlan();
     this._curPlan.TargetUser = this.SelectedUser.attenduser;

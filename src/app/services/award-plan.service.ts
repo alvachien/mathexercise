@@ -103,8 +103,10 @@ export class AwardPlanService {
           console.log('AC Math Exericse [Debug]: Success createAwardPlan of AwardPlanService: ' + x);
         }
 
-        // Add the buffer?
-        // Todo!
+        // Add the buffer!
+        const data = this.listSubject.value;
+        data.push(x);
+        this.listSubject.next(data);
         
         // Raise the event
         this.createEvent.emit(x);

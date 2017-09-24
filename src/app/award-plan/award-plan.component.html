@@ -14,7 +14,10 @@
       <button md-icon-button [disabled]="!IsListView || (SelectedUser === null) || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardPlanCreate)" (click)="onCreatePlan()">
         <md-icon class="md-24" aria-label="Create">create_new_folder</md-icon>
       </button>
-
+      <button md-icon-button [disabled]="!IsListView || (SelectedUser === null) || (CurrentUser === null)" (click)="onRefreshPlan()">
+        <md-icon class="md-24" aria-label="Create">refresh</md-icon>
+      </button>
+  
       <!-- This fills the remaining space of the current row -->
       <span class="example-fill-remaining-space"></span>
       <span>{{'Home.AwardPlanByUser' | translate}}</span>
@@ -72,7 +75,7 @@
       </md-paginator>      
     </div>
 
-    <div *ngIf="!IsListView" class="mt-5 pt-5">
+    <div *ngIf="!IsListView" class="mt-2 pt-2">
       <div class="demo-full-width">
         <md-form-field>
           <input mdInput type="text" placeholder="{{'Home.User' | translate}}" readonly [(ngModel)]="SelectedUser.displayas">
