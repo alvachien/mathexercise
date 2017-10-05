@@ -32,10 +32,11 @@ export interface formulaTypeUISelect {
 export class FormulaExerciseComponent implements OnInit {
   StartQuizAmount: number = DefaultQuizAmount;
   FailedQuizFactor: number = DefaultFailedQuizFactor;
-  UsedQuizAmount = 0;
+  UsedQuizAmount: number = 0;
 
-  NumberRangeBgn = 1;
-  NumberRangeEnd = 10;
+  NumberRangeBgn: number = 1;
+  NumberRangeEnd: number = 10;
+  AlloweDecimal: boolean = false;
 
   quizInstance: PrimarySchoolMathQuiz = null;
   QuizItems: FormulaQuizItemBase[] = [];

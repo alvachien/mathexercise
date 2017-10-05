@@ -32,6 +32,8 @@
       <div class="demo-full-width" *ngFor="let fs of formulaDef">
         <md-checkbox [(ngModel)]="fs.selected" [disabled]="fs.disabled"><span>{{fs.name | translate}}</span><span style="white-space:pre">  </span><span [innerHtml]="fs.formula"></span></md-checkbox>
       </div>
+
+      <md-checkbox [(ngModel)]="AlloweDecimal">{{'Home.AllowDecimal' | translate}}</md-checkbox>>
     </div>
 
     <div *ngIf="quizInstance.IsStarted">
