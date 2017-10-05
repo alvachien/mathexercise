@@ -35,10 +35,14 @@
     </div>
 
     <div *ngIf="quizInstance.IsStarted">
-      <div class="demo-full-width" *ngFor="let quiz of DisplayedQuizItems; trackBy: onQuizItemTrackBy">
-        <span>({{quiz.QuizIndex}}). </span><span style="font-size: 24px">{{quiz.getQuizFormat() | translate:quiz.getQuizFormatParam()}} </span>
+      <div class="demo-full-width">
+        <app-digit-clock [IsStart]="quizInstance.IsStarted" style="display:block;"></app-digit-clock>
+      </div>
+
+      <div class="demo-full-width" *ngFor="let qi of DisplayedQuizItems; trackBy: onQuizItemTrackBy">
+        <span>({{qi.QuizIndex}}). </span><span style="font-size: 24px">{{qi.getQuizFormat() | translate:qi.getQuizFormatParam()}} </span>
         <md-form-field>
-          <input mdInput type="number" placeholder="{{'Home.Result' | translate}}" [(ngModel)]="quiz.InputtedResult" name="iptquot">
+          <input mdInput type="number" placeholder="{{'Home.Result' | translate}}" [(ngModel)]="qi.InputtedResult" name="iptquot">
         </md-form-field>
       </div>
 

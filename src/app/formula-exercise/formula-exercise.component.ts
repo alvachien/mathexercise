@@ -4,7 +4,7 @@ import {
   DefaultQuizAmount, DefaultFailedQuizFactor, PrimarySchoolFormulaEnum, getFormulaNameString, getFormulaUIString,
   FormulaCOfCircleCalcDirEum, FormulaCOfSquareCalcDirEum, FormulaCOfRectangleCalcDirEum, isFormulaTypeEnabled,
   FormulaCOfCircleQuizItem, FormulaCOfSquareQuizItem, FormulaCOfRectangleQuizItem, FormulaDistAndSpeedCalcDirEum, FormulaDistAndSpeedQuizItem,
-  FormulaAOfRectangleCalcDirEum, FormulaAreaOfRectangleQuizItem
+  FormulaAOfRectangleCalcDirEum, FormulaAreaOfRectangleQuizItem, FormulaAreaOfSquareQuizItem, FormulaAreaOfSquareCalcDirEum
 } from '../model';
 import { MdDialog } from '@angular/material';
 import { DialogService } from '../services/dialog.service';
@@ -85,7 +85,7 @@ export class FormulaExerciseComponent implements OnInit {
       qzidx = Math.round(Math.random() * qztypamt - 1);
       if (qzidx < 0) {
         qzidx = 0;
-      }
+      } 
 
       if (!this.formulaDef[qzidx].disabled && this.formulaDef[qzidx].selected) {
         break;
@@ -145,6 +145,20 @@ export class FormulaExerciseComponent implements OnInit {
         return qz;
       }
 
+      case PrimarySchoolFormulaEnum.AreaOfSquare: {
+        const qz: FormulaAreaOfSquareQuizItem = new FormulaAreaOfSquareQuizItem(
+          Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
+          <FormulaAreaOfSquareCalcDirEum>Math.round(Math.random() * 2)
+        );
+        qz.QuizIndex = idx;
+
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log('AC Math Exercise [Debug]: generating Quiz Item for AreaOfSquare: ' + qz.storeToString());
+        }
+
+        return qz;
+      }
+
       case PrimarySchoolFormulaEnum.DistanceAndSpeed: {
         const qz: FormulaDistAndSpeedQuizItem = new FormulaDistAndSpeedQuizItem(
           Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
@@ -157,14 +171,14 @@ export class FormulaExerciseComponent implements OnInit {
           console.log('AC Math Exercise [Debug]: generating Quiz Item for DistanceAndSpeed: ' + qz.storeToString());
         }
         return qz;
-
       }
 
       default: {
         if (environment.LoggingLevel >= LogLevel.Debug) {
-          console.error('AC Math Exercise [Debug]: generating Quiz Item: FAILED' );
+          console.error(`AC Math Exercise [Debug]: generating Quiz Item: FAILED: ${this.formulaDef[qzidx].formulatype}`);
         }
       }
+
       return null;
     }
   }

@@ -1,3 +1,47 @@
-<p>
-  pg-minesweeper works!
-</p>
+<div class="mine-wrap" #mscontainer>
+  <div class="title clearfix">
+    <div class="title-txt">Minesweeper</div>
+    <div class="window-control">
+      <div class="window-min"></div>
+      <div class="window-max"></div>
+      <div class="window-close"></div>
+    </div>
+  </div>
+
+  <div class="mine-main clearfix">
+    <div class="mine-menu clearfix">
+      <ul class="mine-menu-ul clearfix">
+        <li class="menu-game">Game
+          <ul class="menu-sub clearfix">
+            <!-- <li><span class="menu-sub-left"><input type="radio" name="mine-type" value ="0"></span><span class="menu-sub-right">初级</span></li>
+            <li><span class="menu-sub-left"><input type="radio" name="mine-type" value ="1"></span><span class="menu-sub-right">中级</span></li>
+            <li><span class="menu-sub-left"><input type="radio" name="mine-type" value ="2"></span><span class="menu-sub-right">高级</span></li>
+            <li><span class="menu-sub-left"><input type="radio" name="mine-type" value ="3"></span><span class="menu-sub-right">自定义</span></li> -->
+          </ul>
+        </li>
+        <li>Help</li>
+      </ul>
+    </div>
+
+    <div class="mine-con">
+      <div class="game-tags clearfix">
+        <div #gametags class="game-tag-images">
+          <img src="assets/image/mineresource/d0.jpg">
+          <img src="assets/image/mineresource/d0.jpg">
+          <img src="assets/image/mineresource/d0.jpg">
+        </div>
+        <div class="game-face">
+          <img src="assets/mineresource/image/face_normal.jpg" (click)="onReset()" #face>
+        </div>
+        <div #gametime class="game-time-images">
+          <img src="assets/image/mineresource/d0.jpg">
+          <img src="assets/image/mineresource/d0.jpg">
+          <img src="assets/image/mineresource/d0.jpg">
+        </div>
+      </div>
+      <div class="mine-canvas">
+        <canvas #canvasmine></canvas>
+      </div>
+    </div>
+  </div>
+</div>

@@ -4,7 +4,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../services/auth.service';
 import {
   QuizTypeEnum, PrimarySchoolMathQuizItem, QuizTypeEnum2UIString, LogLevel, APIQuizSection, APIQuizFailLog, APIQuiz,
-  AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem, DateFormat
+  AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem, DateFormat, 
+  StatisticsDateRange, StatisticsDateRangeEnum, getStatisticsDateRangeEnumString, getStatisticsDateRangeDate
 } from '../model';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { environment } from '../../environments/environment';
@@ -32,6 +33,12 @@ export interface userquizinfo {
   quiztype: QuizTypeEnum;
   quizscore: number;
   quiztime: number;
+}
+
+export interface daterangeui {
+  daterange: StatisticsDateRangeEnum,
+  i18term: string;
+  display: string;
 }
 
 /**
@@ -103,6 +110,8 @@ export class UserStatisticsComponent implements OnInit {
 
   listUsers: QuizAttendUser[] = [];
   curUser = '';
+  listRanges: daterangeui[] = [];
+  curRange: StatisticsDateRangeEnum = StatisticsDateRangeEnum.CurrentMonth;
   listqtype: quiztypeui[] = [];
   colorSchemeGeneral = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA', '#BBBBBB', '#CCCCCC']
@@ -117,7 +126,7 @@ export class UserStatisticsComponent implements OnInit {
   @ViewChild(MdSort) sort: MdSort;
 
   // Quiz amount by date
-  viewQuizAmountByDate: any[] = [700, 400];
+  viewGraph: any[] = [700, 400];
   showXAxisQuizAmountByDate = true;
   showYAxisQuizAmountByDate = true;
   gradientQuizAmountByDate = false;
@@ -130,10 +139,8 @@ export class UserStatisticsComponent implements OnInit {
 
   // Quiz amount by type
   dataQuizAmountByType: any[] = [];
-  viewQuizAmountByType: any[] = [700, 400];
 
   // Item amount by date
-  viewItemAmountByDate: any[] = [700, 400];
   showXAxisItemAmountByDate = true;
   showYAxisItemAmountByDate = true;
   gradientItemAmountByDate = false;
@@ -145,7 +152,6 @@ export class UserStatisticsComponent implements OnInit {
   dataItemAmountByDate: any[] = [];
 
   // Item amount by type
-  viewItemAmountByType: any[] = [700, 400];
   showXAxisItemAmountByType = true;
   showYAxisItemAmountByType = true;
   gradientItemAmountByType = false;
@@ -191,6 +197,21 @@ export class UserStatisticsComponent implements OnInit {
       }
     });
 
+    // Get date range display tring
+    for(const dr in StatisticsDateRangeEnum) {
+      if (isNaN(Number(dr))) {        
+      } else {
+        const astr = getStatisticsDateRangeEnumString(Number(dr));
+
+        const dru: daterangeui = {
+          daterange: Number(dr),
+          i18term: astr,
+          display: ''
+        };
+        this.listRanges.push(dru);
+      }
+    }
+
     // Other strings
     arstrs = ['Home.Amount', 'Home.Type', 'Home.Date', 'Home.CorrectedAmount', 'FailedAmount'];
     this._tranService.get(arstrs).subscribe(x => {
@@ -225,39 +246,41 @@ export class UserStatisticsComponent implements OnInit {
 
   public onUserChanged(evnt: any) {
     if (this.curUser !== undefined && this.curUser !== null && this.curUser.length > 0) {
-      this.fetchQuizDate(this.curUser);
-      this.fetchQuizAmountByDate(this.curUser);
-      this.fetchQuizAmountByType(this.curUser);
-      this.fetchQuizItemAmountByDate(this.curUser);
-      this.fetchQuizItemAmountByType(this.curUser);
+      this.fetchQuizData();
+      // this.fetchQuizAmountByDate(this.curUser);
+      // this.fetchQuizAmountByType(this.curUser);
+      // this.fetchQuizItemAmountByDate(this.curUser);
+      // this.fetchQuizItemAmountByType(this.curUser);
     }
+  }
+  public onDateRangeChanged(event: any) {
+    this.fetchQuizData();
   }
 
   public onQuizAmountByDateSelect(evnt: any) {
-
   }
 
   public onQuizAmountByTypeSelect(evnt: any) {
-
   }
 
   public onItemAmountByDateSelect(evnt: any) {
-
   }
 
   public onItemAmountByTypeSelect(evnt: any) {
-
   }
 
-  private fetchQuizDate(usr: string) {
+  private fetchQuizData() {
     const apiurl = environment.APIBaseUrl + 'quiz';
-
+    const { BeginDate: bgn,  EndDate: end }  = getStatisticsDateRangeDate(this.curRange);
+    
     let headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json')
               .append('Accept', 'application/json')
               .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
     let params = new HttpParams();
-    params = params.set('usrid', usr);
+    params = params.set('usrid', this.curUser);
+    params = params.set('dtBegin', bgn.format(DateFormat));
+    params = params.set('dtEnd', end.format(DateFormat));
     this._http.get(apiurl, {
         headers: headers,
         params: params,
@@ -269,6 +292,9 @@ export class UserStatisticsComponent implements OnInit {
       .subscribe(x => {
         const ndata: APIQuiz[] = [];
         this.dataQuizAmountByDate = [];
+        this.dataQuizAmountByType = [];
+        this.dataItemAmountByDate = [];
+        this.dataItemAmountByType = [];
 
         if (x instanceof Array && x.length > 0) {
           for (const si of x) {
@@ -288,13 +314,81 @@ export class UserStatisticsComponent implements OnInit {
             aq.quizID = +si.quizID;
             aq.quizType = +si.quizType;
             aq.submitDate = si.submitDate;
+
+            let itemtotalamt = 0;
+            let failtotalamt = 0;
             for (const sec of si.sections) {
               const sc = new APIQuizSection();
               sc.failedItems = sec.failedItems;
               sc.sectionID = sec.sectionID;
               sc.timeSpent = sec.timeSpent;
               sc.totalItems = sec.totalItems;
+
+              failtotalamt += sc.failedItems;
+              itemtotalamt += sc.totalItems;
               aq.sections.push(sc);
+            }
+
+            // Amount by date
+            let idx = this.dataQuizAmountByDate.findIndex((val) => {
+              return val.name === aq.submitDate;
+            });
+            if (idx === -1) {
+              this.dataQuizAmountByDate.push({
+                name: aq.submitDate,
+                value: 1
+              });
+
+              this.dataItemAmountByDate.push({
+                name: aq.submitDate,
+                series: [{
+                  name: 'Success',
+                  value: itemtotalamt - failtotalamt,
+                },
+                {
+                  name: 'Failed',
+                  value: itemtotalamt - failtotalamt,
+                }]
+              });
+            } else {
+              this.dataQuizAmountByDate[idx].value ++;
+              this.dataItemAmountByDate[idx].series[0].value += ( itemtotalamt - failtotalamt );
+              this.dataItemAmountByDate[idx].series[1].value += failtotalamt;
+            }
+
+            // Amount by type
+            idx = this.dataQuizAmountByType.findIndex(val => {
+              return val.quizType === aq.quizType;
+            });
+            if (idx === -1) {
+              let typename = '';
+              for (const qtu of this.listqtype) {
+                if (qtu.qtype === Number(aq.quizType)) {
+                  typename = qtu.display;
+                }
+              }
+
+              this.dataQuizAmountByType.push({
+                quizType: aq.quizType,
+                name: typename,
+                value: 1
+              });
+
+              this.dataItemAmountByType.push({
+                name: typename,
+                series: [{
+                  name: 'Success',
+                  value: itemtotalamt - failtotalamt,
+                },
+                {
+                  name: 'Failed',
+                  value: itemtotalamt - failtotalamt,
+                }]
+              });
+            } else {
+              this.dataQuizAmountByType[idx].value ++;
+              this.dataItemAmountByType[idx].series[0].value += ( itemtotalamt - failtotalamt );
+              this.dataItemAmountByType[idx].series[1].value += failtotalamt;
             }
 
             ndata.push(aq);

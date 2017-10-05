@@ -34,6 +34,7 @@
         "NoButton": "否",
         "QuizAmount": "试题数量",
         "FailedFactor": "错误扩散因子",
+        "FailedFactorHint": "用来强迫测验在有错误项时继续. 例子：因子数为5，2个错误项，测验会继续10个项。",
         "Failure": "失败",
         "RetestPreviousFailures": "错题重做",
         "Summary": "练习总结",
@@ -131,6 +132,15 @@
         "IsPunishment": "罚没",
         "Overview": "总览",
         "IncludeInvalidOne": "包含已失效项",
+        "CurrentMonth": "本月",
+        "PreviousMonth": "上个月",
+        "CurrentYear": "本年",
+        "PreviousYear": "去年",
+        "All": "全部",
+        "DateRange": "范围",
+        "InvalidMathFormat": "无效的数学计算式",
+        "Backspace": "退格",
+        "Reset": "重置",
         
         "Underconstruction": "当前页还在开发中"
     },

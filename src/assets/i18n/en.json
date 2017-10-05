@@ -34,6 +34,7 @@
         "NoButton": "NO",
         "QuizAmount": "Amount of Quiz",
         "FailedFactor": "Failed Factor",
+        "FailedFactorHint": "Used to continues the quzi if failed items occurs. Example: set to 5, and 2 failed item, the quiz will continue with 10 items.",
         "Failure": "Failure",
         "RetestPreviousFailures": "Retest previous Failures",
         "Summary": "Summary",
@@ -131,6 +132,15 @@
         "IsPunishment": "Is Punishment",
         "Overview": "Overview",
         "IncludeInvalidOne": "Include invalid one",
+        "CurrentMonth": "Current Month",
+        "PreviousMonth": "Previous Month",
+        "CurrentYear": "Current Year",
+        "PreviousYear": "Previous Year",
+        "All": "All",
+        "DateRange": "Range",
+        "InvalidMathFormat": "Invalid Math Format",
+        "Backspace": "Backspace",
+        "Reset": "Reset",
         
         "Underconstruction": "Page still under construction"
     },

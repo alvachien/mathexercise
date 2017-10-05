@@ -10,6 +10,8 @@ import * as moment from 'moment';
 import 'moment/locale/zh-cn';
 import { DateAdapter } from '@angular/material';
 import { MomentDateAdapter } from './utility';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/Rx';
 
 @Component({
   selector: 'app-root-home',
@@ -116,9 +118,12 @@ export class AppComponent implements OnInit {
             this.titleLogin = x.getUserName();
 
             // Get user detail
-            this._userDetailService.fetchUserDetail().subscribe((x2) => {
-              if (x2 !== null && x2 !== undefined) {
-                this.userDisplayAs = x2.DisplayAs;
+            Observable.forkJoin(
+              this._userDetailService.fetchUserDetail(),
+              this._userDetailService.fetchAllUsers()
+            ).subscribe((x2) => {
+              if (x2[0] !== null && x2[0] !== undefined) {
+                this.userDisplayAs = x2[0].DisplayAs;
               }
             });
           }

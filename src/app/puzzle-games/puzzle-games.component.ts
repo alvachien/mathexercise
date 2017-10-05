@@ -1,6 +1,6 @@
 import {
   Component, ViewChild, ElementRef, AfterContentInit, NgZone,
-  OnInit, Renderer, HostListener
+  OnInit, Renderer, HostListener, ViewChildren, QueryList
 } from '@angular/core';
 import { MdTabChangeEvent } from '@angular/material';
 import { Router } from '@angular/router';
@@ -46,6 +46,7 @@ export class PuzzleGamesComponent implements OnInit {
   private Cal24NumberRangeEnd = 9;
   Cal24Quiz: PrimarySchoolMathQuiz;
   Cal24SurrendString = '';
+  @ViewChild('cal24btntbr') cal24BtnToolbar: ElementRef;
 
   /**
    * Sudou part
@@ -183,6 +184,20 @@ export class PuzzleGamesComponent implements OnInit {
       }
     }
 
+    // Enable the buttons
+    if (this.cal24BtnToolbar) {
+      let btnidx = 0;
+      for(let btn of this.cal24BtnToolbar.nativeElement.children) {
+        if (!this.Cal24items.includes(btnidx + 1)) {
+          btn.disabled = true;
+        } else {
+          btn.disabled = false;
+        }
+
+        btnidx ++;
+      }
+    }
+
     this.Cal24Quiz.BasicInfo = this.Cal24items.join(',');
     this.Cal24Quiz.Start(1, 0); // Single item and no failor
     this.Cal24Quiz.CurrentRun().SectionStart();
@@ -196,33 +211,57 @@ export class PuzzleGamesComponent implements OnInit {
       return false;
     }
 
-    for (const ch of this.Cal24Input) {
-      if (ch === '('
-        || ch === ')'
-        || ch === '+'
-        || ch === '-'
-        || ch === '*'
-        || ch === '/'
-      ) {
-        continue;
-      } else {
-        const nch = parseInt(ch);
-        const nExistIdx = this.Cal24items.findIndex((val) => { return val === nch; });
-        if (nExistIdx === -1) {
-          return false;
-        }
-      }
-    }
+    // for (const ch of this.Cal24Input) {
+    //   if (ch === '('
+    //     || ch === ')'
+    //     || ch === '+'
+    //     || ch === '-'
+    //     || ch === '÷'
+    //     || ch === '×'
+    //   ) {
+    //     continue;
+    //   } else {
+    //     const nch = parseInt(ch);
+    //     const nExistIdx = this.Cal24items.findIndex((val) => { return val === nch; });
+    //     if (nExistIdx === -1) {
+    //       return false;
+    //     }
+    //   }
+    // }
 
     return true;
   }
 
+  public OnCal24Append(char: string) {
+    this.Cal24Input += char;
+  }
+  public OnCal24Backspace() {
+    if (this.Cal24Input.length > 1) {
+      this.Cal24Input = this.Cal24Input.substring(0, this.Cal24Input.length - 1);
+    } else {
+      this.Cal24Input = '';
+    }
+  }
+  public OnCal24Reset() {
+    this.Cal24Input = '';
+  }
+
   public OnCal24Submit(): void {
-    const rst: number = <number>eval(this.Cal24Input);
+    let rst: number = 0;
+    let errmsg: string = '';
+
+    try {
+      let realstring = this.Cal24Input.replace('×', '*');
+      realstring = realstring.replace('÷', '/');
+      rst = <number>eval(this.Cal24Input);
+    } catch(exp) {
+      errmsg = exp.toString();
+    }
+
     if (rst !== 24) {
       const dlginfo: MessageDialogInfo = {
         Header: 'Home.Error',
-        Content: this.Cal24Input + ' = ' + rst.toString() + ' != 24',
+        Content: errmsg ? errmsg : (this.Cal24Input + ' = ' + rst.toString() + ' != 24'),
         Button: MessageDialogButtonEnum.onlyok
       };
 
@@ -248,7 +287,7 @@ export class PuzzleGamesComponent implements OnInit {
         }
       }, error => {
         if (environment.LoggingLevel >= LogLevel.Error) {
-          console.log(`AC Math Exericse [Debug]: Error in save quiz ${error}`);
+          console.error(`AC Math Exericse [Debug]: Error in save quiz ${error}`);
         }
       });
 
@@ -290,7 +329,7 @@ export class PuzzleGamesComponent implements OnInit {
       }
     }, error => {
       if (environment.LoggingLevel >= LogLevel.Error) {
-        console.log(`AC Math Exericse [Debug]: Error in save quiz ${error}`);
+        console.error(`AC Math Exericse [Debug]: Error in save quiz ${error}`);
       }
     });
 
@@ -369,7 +408,7 @@ export class PuzzleGamesComponent implements OnInit {
       }
     }, error => {
       if (environment.LoggingLevel >= LogLevel.Error) {
-        console.log(`AC Math Exericse [Debug]: Error in save quiz ${error}`);
+        console.error(`AC Math Exericse [Debug]: Error in save quiz ${error}`);
       }
     });
 
@@ -399,7 +438,7 @@ export class PuzzleGamesComponent implements OnInit {
       }
     }, error => {
       if (environment.LoggingLevel >= LogLevel.Error) {
-        console.log(`AC Math Exericse [Debug]: Error in save quiz ${error}`);
+        console.error(`AC Math Exericse [Debug]: Error in save quiz ${error}`);
       }
     });
 

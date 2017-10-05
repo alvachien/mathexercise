@@ -78,52 +78,52 @@ export function getFormulaUIString(fe: PrimarySchoolFormulaEnum): string {
     let rst = '';
     switch (fe) {
         case PrimarySchoolFormulaEnum.AreaOfCircle: {
-            rst = 'S = πr<sup>2</sup>';
+            rst = '<var>S</var> = π<var>r</var><sup>2</sup>';
         }
         break;
 
         case PrimarySchoolFormulaEnum.AreaOfParallelogram: {
-            rst = 'S = ah';
+            rst = '<var>S</var> = <var>a</var> × <var>h</var>';
         }
         break;
 
         case PrimarySchoolFormulaEnum.AreaOfRectangle: {
-            rst = 'S = ab';
+            rst = '<var>S</var> = <var>a</var> × <var>b</var>';
         }
         break;
 
         case PrimarySchoolFormulaEnum.AreaOfSquare: {
-            rst = 'S = a<sup>2</sup>';
+            rst = '<var>S</var> = <var>a</var> <sup>2</sup>';
         }
         break;
 
         case PrimarySchoolFormulaEnum.AreaOfTrapezoid: {
-            rst = 'S = (a+b)h/2';
+            rst = '<var>S</var> = (<var>a</var> + <var>b</var>) × <var>h</var> ÷ 2';
         }
         break;
 
         case PrimarySchoolFormulaEnum.AreaOfTriangle: {
-            rst = 'S = (ah)/ 2';
+            rst = '<var>S</var> = (<var>a</var> × <var>h</var>) ÷ 2';
         }
         break;
 
         case PrimarySchoolFormulaEnum.CircumferenceOfCircle: {
-            rst = 'C = πD = 2πr';
+            rst = '<var>C</var> = π<var>D</var> = 2π<var>r</var>';
         }
         break;
 
         case PrimarySchoolFormulaEnum.CircumferenceOfSquare: {
-            rst = 'C = 4a';
+            rst = '<var>C</var> = 4 × <var>a</var>';
         }
         break;
 
         case PrimarySchoolFormulaEnum.CircumferenceOfRectangle: {
-            rst = 'C = 2(a+b)';
+            rst = '<var>C</var> = 2 × (<var>a</var> + <var>b</var>)';
         }
         break;
 
         case PrimarySchoolFormulaEnum.DistanceAndSpeed: {
-            rst = 'S = vh';
+            rst = '<var>S</var> = <var>v</var> × <var>h</var>';
         }
         break;
 

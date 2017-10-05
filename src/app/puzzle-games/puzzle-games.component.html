@@ -10,6 +10,28 @@
           <app-digit-clock [IsStart]="Cal24Quiz.IsStarted" style="display:block;"></app-digit-clock>
         </div>
 
+        <div class="demo-full-width">
+          <div #cal24btntbr>
+            <button md-mini-fab color="primary" (click)="OnCal24Append('1')">1</button>
+            <button md-mini-fab color="primary" (click)="OnCal24Append('2')">2</button>
+            <button md-mini-fab color="primary" (click)="OnCal24Append('3')">3</button>
+            <button md-mini-fab color="primary" (click)="OnCal24Append('4')">4</button>
+            <button md-mini-fab color="primary" (click)="OnCal24Append('5')">5</button>
+            <button md-mini-fab color="primary" (click)="OnCal24Append('6')">6</button>
+            <button md-mini-fab color="primary" (click)="OnCal24Append('7')">7</button>
+            <button md-mini-fab color="primary" (click)="OnCal24Append('8')">8</button>
+            <button md-mini-fab color="primary" (click)="OnCal24Append('9')">9</button>
+          </div>
+          <button md-mini-fab color="accent" (click)="OnCal24Append('+')">+</button>
+          <button md-mini-fab color="accent" (click)="OnCal24Append('-')">-</button>
+          <button md-mini-fab color="accent" (click)="OnCal24Append('×')">×</button>
+          <button md-mini-fab color="accent" (click)="OnCal24Append('÷')">÷</button>
+          <button md-mini-fab color="accent" (click)="OnCal24Append('(')">(</button>
+          <button md-mini-fab color="accent" (click)="OnCal24Append(')')">)</button>
+          <button md-raised-button color="warn" (click)="OnCal24Backspace()">{{'Home.Backspace' | translate}}</button>
+          <button md-raised-button color="warn" (click)="OnCal24Reset()">{{'Home.Reset' | translate}}</button>
+        </div>
+
         <div class="demo-full-width" *ngIf="Cal24Quiz.IsStarted">
           <h2 class="demo-full-width">
             <span *ngFor="let it of Cal24items; let i = index">{{it}}<span *ngIf="i !== Cal24items.length - 1">,</span></span>
@@ -22,8 +44,7 @@
 
           <div class="demo-full-width">
             <md-form-field>
-              <input mdInput type="text" placeholder="{{'Home.Calculate24' | translate }}" [(ngModel)]="Cal24Input" name="cal24inp" required>
-              <md-error>This field is required</md-error>
+              <input mdInput type="text" placeholder="{{'Home.Calculate24' | translate }}" [(ngModel)]="Cal24Input" name="cal24inp" readonly required>
             </md-form-field>
           </div>
         </div>
@@ -105,7 +126,10 @@
   <!-- Tab: Minesweeper -->
   <md-tab label="{{'Home.Minesweeper' | translate}}">
     <md-card class="example-card">
-      <p>{{'Home.Underconstruction' | translate}}</p>
+      <md-card-content>
+          <app-pg-minesweeper></app-pg-minesweeper>
+      </md-card-content>
     </md-card>
   </md-tab>
+  
 </md-tab-group>
