@@ -1,94 +1,94 @@
-<md-card>
-  <md-card-header>
-    <md-card-title>{{'Home.Statistics' | translate}}</md-card-title>
-  </md-card-header>
-  <md-card-content>
-    <md-toolbar color="primary">
-      <md-select placeholder="{{'Home.User' | translate}}" [(ngModel)]="curUser" name="usr" (change)="onUserChanged($event)">
-        <md-option *ngFor="let user of listUsers" [value]="user.attenduser">
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{'Home.Statistics' | translate}}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-toolbar color="primary">
+      <mat-select placeholder="{{'Home.User' | translate}}" [(ngModel)]="curUser" name="usr" (change)="onUserChanged($event)">
+        <mat-option *ngFor="let user of listUsers" [value]="user.attenduser">
           {{ user.displayas }}
-        </md-option>
-      </md-select>
+        </mat-option>
+      </mat-select>
 
-      <md-select placeholder="{{'Home.DateRange' | translate}}" [(ngModel)]="curRange" name="dtrange" (change)="onDateRangeChanged($event)">
-        <md-option *ngFor="let rge of listRanges" [value]="rge.daterange">
+      <mat-select placeholder="{{'Home.DateRange' | translate}}" [(ngModel)]="curRange" name="dtrange" (change)="onDateRangeChanged($event)">
+        <mat-option *ngFor="let rge of listRanges" [value]="rge.daterange">
           {{ rge.i18term | translate }}
-        </md-option>
-      </md-select>
-    </md-toolbar>
+        </mat-option>
+      </mat-select>
+    </mat-toolbar>
 
-    <md-tab-group>
-      <md-tab label="{{'Home.Overview' | translate}}">
+    <mat-tab-group>
+      <mat-tab label="{{'Home.Overview' | translate}}">
         <div class="example-container mat-elevation-z8">
-          <md-table #table [dataSource]="dataSource" mdSort>
+          <mat-table #table [dataSource]="dataSource" matSort>
 
             <!-- QuizID Column -->
-            <ng-container mdColumnDef="QuizID">
-              <md-header-cell *mdHeaderCellDef md-sort-header>#</md-header-cell>
-              <md-cell *mdCellDef="let row"> {{row.quizID}} </md-cell>
+            <ng-container matColumnDef="QuizID">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.quizID}} </mat-cell>
             </ng-container>
 
             <!-- Date Column -->
-            <ng-container mdColumnDef="Date">
-              <md-header-cell *mdHeaderCellDef md-sort-header> {{'Home.Date' | translate}} </md-header-cell>
-              <md-cell *mdCellDef="let row"> {{row.submitDate}} </md-cell>
+            <ng-container matColumnDef="Date">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{'Home.Date' | translate}} </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.submitDate}} </mat-cell>
             </ng-container>
 
             <!-- Type Column -->
-            <ng-container mdColumnDef="QuizType">
-              <md-header-cell *mdHeaderCellDef md-sort-header> {{'Home.Type' | translate}} </md-header-cell>
-              <md-cell *mdCellDef="let row"> {{row.quizTypeString | translate}} </md-cell>
+            <ng-container matColumnDef="QuizType">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{'Home.Type' | translate}} </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.quizTypeString | translate}} </mat-cell>
             </ng-container>
 
             <!-- Score Column -->
-            <ng-container mdColumnDef="Score">
-              <md-header-cell *mdHeaderCellDef md-sort-header>{{'Home.Score' | translate}} </md-header-cell>
-              <md-cell *mdCellDef="let row"> {{row.TotalScore}} </md-cell>
+            <ng-container matColumnDef="Score">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>{{'Home.Score' | translate}} </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.TotalScore}} </mat-cell>
             </ng-container>
 
             <!-- Time Column -->
-            <ng-container mdColumnDef="TimeSpent">
-              <md-header-cell *mdHeaderCellDef md-sort-header>{{'Home.AvgTimeSpentEachInSeconds' | translate}} </md-header-cell>
-              <md-cell *mdCellDef="let row"> {{row.TotalAverageTime}} </md-cell>
+            <ng-container matColumnDef="TimeSpent">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>{{'Home.AvgTimeSpentEachInSeconds' | translate}} </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.TotalAverageTime}} </mat-cell>
             </ng-container>
 
-            <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
-            <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
-          </md-table>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          </mat-table>
 
-          <md-paginator #paginator [length]="Quizs.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
-          </md-paginator>
+          <mat-paginator #paginator [length]="Quizs.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+          </mat-paginator>
         </div>
-      </md-tab>
+      </mat-tab>
 
-      <md-tab label="{{'Home.QuizAmountByDate' | translate}}">
+      <mat-tab label="{{'Home.QuizAmountByDate' | translate}}">
         <ngx-charts-bar-vertical [view]="viewGraph" [scheme]="colorSchemeGeneral" [results]="dataQuizAmountByDate" [gradient]="gradientQuizAmountByDate"
           [xAxis]="showXAxisQuizAmountByDate" [yAxis]="showYAxisQuizAmountByDate" [legend]="showLegendQuizAmountByDate" [showXAxisLabel]="showXAxisLabelQuizAmountByDate"
           [showYAxisLabel]="showYAxisLabelQuizAmountByDate" [xAxisLabel]="xAxisLabelQuizAmountByDate" [yAxisLabel]="yAxisLabelQuizAmountByDate"
           (select)="onQuizAmountByDateSelect($event)">
         </ngx-charts-bar-vertical>
-      </md-tab>
+      </mat-tab>
 
-      <md-tab label="{{'Home.QuizAmountByType' | translate}}">
+      <mat-tab label="{{'Home.QuizAmountByType' | translate}}">
         <ngx-charts-number-card [view]="viewGraph" [scheme]="colorSchemeGeneral" [results]="dataQuizAmountByType" (select)="onQuizAmountByTypeSelect($event)">
         </ngx-charts-number-card>
-      </md-tab>
+      </mat-tab>
 
-      <md-tab label="{{'Home.ItemAmountByDate' | translate}}">
+      <mat-tab label="{{'Home.ItemAmountByDate' | translate}}">
         <ngx-charts-bar-vertical-stacked [view]="viewGraph" [scheme]="colorSchemeGeneral" [results]="dataItemAmountByDate"
           [gradient]="gradientItemAmountByDate" [xAxis]="showXAxisItemAmountByDate" [yAxis]="showYAxisItemAmountByDate" [legend]="showLegendItemAmountByDate"
           [showXAxisLabel]="showXAxisLabelItemAmountByDate" [showYAxisLabel]="showYAxisLabelItemAmountByDate" [xAxisLabel]="xAxisLabelItemAmountByDate"
           [yAxisLabel]="yAxisLabelItemAmountByDate" (select)="onItemAmountByDateSelect($event)">
         </ngx-charts-bar-vertical-stacked>
-      </md-tab>
+      </mat-tab>
 
-      <md-tab label="{{'Home.ItemAmountByType' | translate}}">
+      <mat-tab label="{{'Home.ItemAmountByType' | translate}}">
         <ngx-charts-bar-vertical-stacked [view]="viewGraph" [scheme]="colorSchemeGeneral" [results]="dataItemAmountByType"
           [gradient]="gradientItemAmountByType" [xAxis]="showXAxisItemAmountByType" [yAxis]="showYAxisItemAmountByType" [legend]="showLegendItemAmountByType"
           [showXAxisLabel]="showXAxisLabelItemAmountByType" [showYAxisLabel]="showYAxisLabelItemAmountByType" [xAxisLabel]="xAxisLabelItemAmountByType"
           [yAxisLabel]="yAxisLabelItemAmountByType" (select)="onItemAmountByTypeSelect($event)">
         </ngx-charts-bar-vertical-stacked>
-      </md-tab>
-    </md-tab-group>
-  </md-card-content>
-</md-card>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+</mat-card>

@@ -1,51 +1,51 @@
-<md-sidenav-container class="demo-root" fullscreen>
-  <md-sidenav #start>
+<mat-sidenav-container class="demo-root" fullscreen>
+  <mat-sidenav #start>
     <div *ngIf="isLoggedIn" class="card">
       <div class="card-body">
         <h4 class="card-title text-muted">{{titleLogin}}</h4>
         <h6 class="card-subtitle mb-2 text-muted">{{userDisplayAs}}</h6>
-        <button (click)="onLogout()" md-button style="background: #525252;">{{'Home.Logout' | translate}}</button>
+        <button (click)="onLogout()" mat-button style="background: #525252;">{{'Home.Logout' | translate}}</button>
       </div>
     </div>
 
-    <md-nav-list dense>
-      <a *ngFor="let navItem of navItems; let i = index" md-list-item (click)="start.close()" [routerLink]="[navItem.route]">
+    <mat-nav-list dense>
+      <a *ngFor="let navItem of navItems; let i = index" mat-list-item (click)="start.close()" [routerLink]="[navItem.route]">
         {{i}} - {{navItem.name | translate}}
       </a>
-    </md-nav-list>
+    </mat-nav-list>
     <hr />
-    <button md-button (click)="start.close()">{{'Home.CloseButton' | translate}}</button>
-  </md-sidenav>
+    <button mat-button (click)="start.close()">{{'Home.CloseButton' | translate}}</button>
+  </mat-sidenav>
 
   <div>
-    <md-toolbar color="primary">
-      <button md-icon-button (click)="start.open()">
-        <md-icon class="md-24">menu</md-icon>
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="start.open()">
+        <mat-icon class="md-24">menu</mat-icon>
       </button>
       <div class="demo-toolbar">
         <h1>{{'Home.MathExercise' | translate}}</h1>
         <div>
-          <button md-button *ngIf="!isLoggedIn" (click)="onLogon()" title="Logon">
+          <button mat-button *ngIf="!isLoggedIn" (click)="onLogon()" title="Logon">
             {{'Home.Logon' | translate }}
           </button>
-          <button md-button *ngIf="isLoggedIn" (click)="onUserDetail()">{{titleLogin}}</button>
-          <md-select [(ngModel)]="selectedLanguage" name="lang">
-            <md-option *ngFor="let lang of availableLanguages" [value]="lang.value">
+          <button mat-button *ngIf="isLoggedIn" (click)="onUserDetail()">{{titleLogin}}</button>
+          <mat-select [(ngModel)]="selectedLanguage" name="lang">
+            <mat-option *ngFor="let lang of availableLanguages" [value]="lang.value">
               {{lang.displayas | translate}}
-            </md-option>
-          </md-select>
-          <button md-icon-button (click)="toggleFullscreen()" title="Toggle fullscreen">
-            <md-icon class="md-24">fullscreen</md-icon>
+            </mat-option>
+          </mat-select>
+          <button mat-icon-button (click)="toggleFullscreen()" title="Toggle fullscreen">
+            <mat-icon class="md-24">fullscreen</mat-icon>
           </button>
-          <a md-icon-button href="https://github.com/alvachien/mathexercise" target="_blank" title="Go to Source repo">
-            <md-icon class="md-24">code</md-icon>
+          <a mat-icon-button href="https://github.com/alvachien/mathexercise" target="_blank" title="Go to Source repo">
+            <mat-icon class="md-24">code</mat-icon>
           </a>
         </div>
       </div>
-    </md-toolbar>
+    </mat-toolbar>
 
     <div class="demo-content">
       <router-outlet></router-outlet>
     </div>
   </div>
-</md-sidenav-container>
+</mat-sidenav-container>

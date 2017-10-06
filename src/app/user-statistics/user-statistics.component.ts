@@ -11,7 +11,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { environment } from '../../environments/environment';
 import { QuizAttendUser, UserDetailService } from '../services/userdetail.service';
 import { DataSource } from '@angular/cdk/collections';
-import { MdDialog, MdPaginator, MdSort } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment';
 import 'rxjs/add/operator/startWith';
@@ -46,8 +46,8 @@ export interface daterangeui {
  */
 export class QuizDataSource extends DataSource<APIQuiz> {
   constructor(private _parentComponent: UserStatisticsComponent,
-    private _paginator: MdPaginator,
-    private _sort: MdSort) {
+    private _paginator: MatPaginator,
+    private _sort: MatSort) {
     super();
   }
 
@@ -122,8 +122,8 @@ export class UserStatisticsComponent implements OnInit {
   }
   displayedColumns = ['QuizID', 'Date', 'QuizType', 'Score', 'TimeSpent'];
   dataSource: QuizDataSource | null;
-  @ViewChild(MdPaginator) paginator: MdPaginator;
-  @ViewChild(MdSort) sort: MdSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   // Quiz amount by date
   viewGraph: any[] = [700, 400];

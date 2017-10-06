@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
-import { MdDialog, MdPaginator } from '@angular/material';
+import { MatDialog, MatPaginator } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
 import { AwardPlan, QuizTypeEnum, QuizTypeEnum2UIString, LogLevel, DateFormat, UserDetailInfo, UIMode } from '../model';
@@ -13,7 +13,7 @@ import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } fr
  */
 export class AwardPlanDataSource extends DataSource<any> {
   constructor(private _apService: AwardPlanService,
-    private _paginator: MdPaginator) {
+    private _paginator: MatPaginator) {
     super();
   }
 
@@ -59,7 +59,7 @@ export class AwardPlanComponent implements OnInit {
   dataSource: AwardPlanDataSource = null;
   listUsers: QuizAttendUser[] = [];
   listQTypes: QuizTypeUI[] = [];
-  @ViewChild(MdPaginator) paginator: MdPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   private uiMode: UIMode = UIMode.ListView;
 
   get IsListView(): boolean {
@@ -111,7 +111,7 @@ export class AwardPlanComponent implements OnInit {
   }
 
   constructor(private _http: HttpClient,
-    private _dialog: MdDialog,
+    private _dialog: MatDialog,
     public _apService: AwardPlanService,
     private _authService: AuthService,
     private _userDetailService: UserDetailService) {

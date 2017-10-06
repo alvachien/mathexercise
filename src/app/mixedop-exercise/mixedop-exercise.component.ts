@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, PrimarySchoolMathQuizItem, QuizTypeEnum,
   DefaultQuizAmount, DefaultFailedQuizFactor, MixedOperationQuizItem, RPN
 } from '../model';
-import { MdDialog } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { DialogService } from '../services/dialog.service';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
 import { QuizSummaryComponent } from '../quiz-summary/quiz-summary.component';
@@ -36,7 +36,7 @@ export class MixedopExerciseComponent implements OnInit {
   pageSize: number;
   pageIndex: number;
 
-  constructor(private dialog: MdDialog,
+  constructor(private dialog: MatDialog,
     private _dlgsvc: DialogService,
     private _router: Router) {
     this.quizInstance = new PrimarySchoolMathQuiz();

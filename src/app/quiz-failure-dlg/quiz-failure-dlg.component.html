@@ -1,34 +1,34 @@
-<h2 md-dialog-title>{{'Home.Failure' | translate}}</h2>
-<md-dialog-content>
+<h2 matDialogTitle>{{'Home.Failure' | translate}}</h2>
+<mat-dialog-content>
   <h2 class="demo-full-width">
     <span>{{'Home.Score' | translate}}</span>
     <span [style.color]="currentScore > 80 ? 'lightyellow': 'red'">{{currentScore}}</span>
   </h2>
   <div class="example-container mat-elevation-z8">
-    <md-table #table [dataSource]="dataSource">
+    <mat-table #table [dataSource]="dataSource">
       <!-- ID Column -->
       <ng-container cdkColumnDef="qid">
-        <md-header-cell *cdkHeaderCellDef>#</md-header-cell>
-        <md-cell *cdkCellDef="let row"> {{row.qid}} </md-cell>
+        <mat-header-cell *cdkHeaderCellDef>#</mat-header-cell>
+        <mat-cell *cdkCellDef="let row"> {{row.qid}} </mat-cell>
       </ng-container>
 
       <!-- Expected Column -->
       <ng-container cdkColumnDef="expected">
-        <md-header-cell *cdkHeaderCellDef>{{'Home.Expected' | translate}}</md-header-cell>
-        <md-cell *cdkCellDef="let row" style="color:#00FF00;"> {{row.expected}} </md-cell>
+        <mat-header-cell *cdkHeaderCellDef>{{'Home.Expected' | translate}}</mat-header-cell>
+        <mat-cell *cdkCellDef="let row" style="color:#00FF00;"> {{row.expected}} </mat-cell>
       </ng-container>
 
       <!-- Inputted Column -->
       <ng-container cdkColumnDef="inputted">
-        <md-header-cell *cdkHeaderCellDef> {{'Home.Inputted' | translate}} </md-header-cell>
-        <md-cell *cdkCellDef="let row" style="color:#FF0000;"> {{row.inputted}} </md-cell>
+        <mat-header-cell *cdkHeaderCellDef> {{'Home.Inputted' | translate}} </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" style="color:#FF0000;"> {{row.inputted}} </mat-cell>
       </ng-container>
 
-      <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
-      <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
-    </md-table>
+      <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *cdkRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
   </div>
-</md-dialog-content>
-<md-dialog-actions>
-  <button md-button [md-dialog-close]="true" tabindex="1">{{'Home.ContinueButton' | translate}}</button>
-</md-dialog-actions>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button [matDialogClose]="true" tabindex="1">{{'Home.ContinueButton' | translate}}</button>
+</mat-dialog-actions>

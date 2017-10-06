@@ -1,9 +1,9 @@
-<md-card>
-  <md-card-header>
-    <md-card-title>{{'Home.Summary' | translate}} - {{quizType | translate}}</md-card-title>
-    <md-card-subtitle>{{quizBaseInfo}}</md-card-subtitle>
-  </md-card-header>
-  <md-card-content>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{'Home.Summary' | translate}} - {{quizType | translate}}</mat-card-title>
+    <mat-card-subtitle>{{quizBaseInfo}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
     <div class="demo-full-width">
       <h3><span>{{'Home.Score' | translate}}: </span> <span>{{totalScore}}</span></h3>
     </div>
@@ -14,46 +14,46 @@
       <h3><span>{{'Home.AwardPointAssigned' | translate}}: </span> <span>{{totalAwardPoints}}</span></h3>
     </div>
     <div class="example-container mat-elevation-z8">
-      <md-table #table [dataSource]="dataSource">
+      <mat-table #table [dataSource]="dataSource">
         <!-- ID Column -->
         <ng-container cdkColumnDef="runid">
-          <md-header-cell *cdkHeaderCellDef>#</md-header-cell>
-          <md-cell *cdkCellDef="let row"> {{row.id}} </md-cell>
+          <mat-header-cell *cdkHeaderCellDef>#</mat-header-cell>
+          <mat-cell *cdkCellDef="let row"> {{row.id}} </mat-cell>
         </ng-container>
 
         <!-- Total amount Column -->
         <ng-container cdkColumnDef="totalamt">
-          <md-header-cell *cdkHeaderCellDef>{{'Home.Total' | translate}}</md-header-cell>
-          <md-cell *cdkCellDef="let row"> {{row.totalamt}} </md-cell>
+          <mat-header-cell *cdkHeaderCellDef>{{'Home.Total' | translate}}</mat-header-cell>
+          <mat-cell *cdkCellDef="let row"> {{row.totalamt}} </mat-cell>
         </ng-container>
 
         <!-- Failed Column -->
         <ng-container cdkColumnDef="failedamt">
-          <md-header-cell *cdkHeaderCellDef> {{'Home.Failure' | translate}} </md-header-cell>
-          <md-cell *cdkCellDef="let row"> {{row.failedamt}} </md-cell>
+          <mat-header-cell *cdkHeaderCellDef> {{'Home.Failure' | translate}} </mat-header-cell>
+          <mat-cell *cdkCellDef="let row"> {{row.failedamt}} </mat-cell>
         </ng-container>
 
         <!-- Timespent Column -->
         <ng-container cdkColumnDef="timespent">
-          <md-header-cell *cdkHeaderCellDef>{{'Home.TimeSpentInSeconds' | translate}}</md-header-cell>
-          <md-cell *cdkCellDef="let row"> {{row.timespent}} </md-cell>
+          <mat-header-cell *cdkHeaderCellDef>{{'Home.TimeSpentInSeconds' | translate}}</mat-header-cell>
+          <mat-cell *cdkCellDef="let row"> {{row.timespent}} </mat-cell>
         </ng-container>
 
         <!-- TimespentEach Column -->
         <ng-container cdkColumnDef="avgtimespent">
-          <md-header-cell *cdkHeaderCellDef>{{'Home.AvgTimeSpentEachInSeconds' | translate}}</md-header-cell>
-          <md-cell *cdkCellDef="let row"> {{row.avgtimespent}} </md-cell>
+          <mat-header-cell *cdkHeaderCellDef>{{'Home.AvgTimeSpentEachInSeconds' | translate}}</mat-header-cell>
+          <mat-cell *cdkCellDef="let row"> {{row.avgtimespent}} </mat-cell>
         </ng-container>
 
         <!-- AdjTimespentEach Column -->
         <ng-container cdkColumnDef="adjavgtimespent">
-          <md-header-cell *cdkHeaderCellDef>{{'Home.AdjAvgTimeSpentEachInSeconds' | translate}}</md-header-cell>
-          <md-cell *cdkCellDef="let row"> {{row.adjavgtimespent}} </md-cell>
+          <mat-header-cell *cdkHeaderCellDef>{{'Home.AdjAvgTimeSpentEachInSeconds' | translate}}</mat-header-cell>
+          <mat-cell *cdkCellDef="let row"> {{row.adjavgtimespent}} </mat-cell>
         </ng-container>
 
-        <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
-        <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
-      </md-table>
+        <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *cdkRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
     </div>
-  </md-card-content>
-</md-card>
+  </mat-card-content>
+</mat-card>

@@ -1,35 +1,35 @@
-<md-tab-group (selectChange)="onTabSelectChanged($event)">
+<mat-tab-group (selectChange)="onTabSelectChanged($event)">
   <!-- Tab: Calculate 24 -->
-  <md-tab label="{{'Home.Calculate24' | translate}}">
-    <md-card class="example-card">
-      <md-card-header>
-        <md-card-title>{{'Home.Calculate24' | translate}}</md-card-title>
-      </md-card-header>
-      <md-card-content>
+  <mat-tab label="{{'Home.Calculate24' | translate}}">
+    <mat-card class="example-card">
+      <mat-card-header>
+        <mat-card-title>{{'Home.Calculate24' | translate}}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
         <div class="demo-full-width" *ngIf="Cal24Quiz.IsStarted">
           <app-digit-clock [IsStart]="Cal24Quiz.IsStarted" style="display:block;"></app-digit-clock>
         </div>
 
         <div class="demo-full-width">
           <div #cal24btntbr>
-            <button md-mini-fab color="primary" (click)="OnCal24Append('1')">1</button>
-            <button md-mini-fab color="primary" (click)="OnCal24Append('2')">2</button>
-            <button md-mini-fab color="primary" (click)="OnCal24Append('3')">3</button>
-            <button md-mini-fab color="primary" (click)="OnCal24Append('4')">4</button>
-            <button md-mini-fab color="primary" (click)="OnCal24Append('5')">5</button>
-            <button md-mini-fab color="primary" (click)="OnCal24Append('6')">6</button>
-            <button md-mini-fab color="primary" (click)="OnCal24Append('7')">7</button>
-            <button md-mini-fab color="primary" (click)="OnCal24Append('8')">8</button>
-            <button md-mini-fab color="primary" (click)="OnCal24Append('9')">9</button>
+            <button mat-mini-fab color="primary" (click)="OnCal24Append('1')">1</button>
+            <button mat-mini-fab color="primary" (click)="OnCal24Append('2')">2</button>
+            <button mat-mini-fab color="primary" (click)="OnCal24Append('3')">3</button>
+            <button mat-mini-fab color="primary" (click)="OnCal24Append('4')">4</button>
+            <button mat-mini-fab color="primary" (click)="OnCal24Append('5')">5</button>
+            <button mat-mini-fab color="primary" (click)="OnCal24Append('6')">6</button>
+            <button mat-mini-fab color="primary" (click)="OnCal24Append('7')">7</button>
+            <button mat-mini-fab color="primary" (click)="OnCal24Append('8')">8</button>
+            <button mat-mini-fab color="primary" (click)="OnCal24Append('9')">9</button>
           </div>
-          <button md-mini-fab color="accent" (click)="OnCal24Append('+')">+</button>
-          <button md-mini-fab color="accent" (click)="OnCal24Append('-')">-</button>
-          <button md-mini-fab color="accent" (click)="OnCal24Append('×')">×</button>
-          <button md-mini-fab color="accent" (click)="OnCal24Append('÷')">÷</button>
-          <button md-mini-fab color="accent" (click)="OnCal24Append('(')">(</button>
-          <button md-mini-fab color="accent" (click)="OnCal24Append(')')">)</button>
-          <button md-raised-button color="warn" (click)="OnCal24Backspace()">{{'Home.Backspace' | translate}}</button>
-          <button md-raised-button color="warn" (click)="OnCal24Reset()">{{'Home.Reset' | translate}}</button>
+          <button mat-mini-fab color="accent" (click)="OnCal24Append('+')">+</button>
+          <button mat-mini-fab color="accent" (click)="OnCal24Append('-')">-</button>
+          <button mat-mini-fab color="accent" (click)="OnCal24Append('×')">×</button>
+          <button mat-mini-fab color="accent" (click)="OnCal24Append('÷')">÷</button>
+          <button mat-mini-fab color="accent" (click)="OnCal24Append('(')">(</button>
+          <button mat-mini-fab color="accent" (click)="OnCal24Append(')')">)</button>
+          <button mat-raised-button color="warn" (click)="OnCal24Backspace()">{{'Home.Backspace' | translate}}</button>
+          <button mat-raised-button color="warn" (click)="OnCal24Reset()">{{'Home.Reset' | translate}}</button>
         </div>
 
         <div class="demo-full-width" *ngIf="Cal24Quiz.IsStarted">
@@ -43,34 +43,34 @@
           </h2>
 
           <div class="demo-full-width">
-            <md-form-field>
-              <input mdInput type="text" placeholder="{{'Home.Calculate24' | translate }}" [(ngModel)]="Cal24Input" name="cal24inp" readonly required>
-            </md-form-field>
+            <mat-form-field>
+              <input matInput type="text" placeholder="{{'Home.Calculate24' | translate }}" [(ngModel)]="Cal24Input" name="cal24inp" readonly required>
+            </mat-form-field>
           </div>
         </div>
-      </md-card-content>
-      <md-card-actions>
-        <button md-button [disabled]="!CanCal24Start()" (click)="OnCal24Start()">{{'Home.StartButton' | translate}}</button>
-        <button md-button [disabled]="!CanCal24Submit()" (click)="OnCal24Submit()">{{'Home.SubmitButton' | translate}}</button>
-        <button md-raised-button *ngIf="Cal24Quiz.IsStarted" (click)="OnCal24Surrender()">{{'Home.SurrenderButton' | translate}}</button>
-      </md-card-actions>
-    </md-card>
-  </md-tab>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button [disabled]="!CanCal24Start()" (click)="OnCal24Start()">{{'Home.StartButton' | translate}}</button>
+        <button mat-button [disabled]="!CanCal24Submit()" (click)="OnCal24Submit()">{{'Home.SubmitButton' | translate}}</button>
+        <button mat-raised-button *ngIf="Cal24Quiz.IsStarted" (click)="OnCal24Surrender()">{{'Home.SurrenderButton' | translate}}</button>
+      </mat-card-actions>
+    </mat-card>
+  </mat-tab>
 
   <!-- Tab: Sudou -->
-  <md-tab label="{{'Home.Sudou' | translate}}">
-    <md-card class="example-card">
-      <md-card-header>
-        <md-card-title>{{'Home.Sudou' | translate}}</md-card-title>
-      </md-card-header>
+  <mat-tab label="{{'Home.Sudou' | translate}}">
+    <mat-card class="example-card">
+      <mat-card-header>
+        <mat-card-title>{{'Home.Sudou' | translate}}</mat-card-title>
+      </mat-card-header>
 
-      <md-card-content>
+      <mat-card-content>
         <div class="demo-full-width" *ngIf="!sudouQuiz.IsStarted">
-          <md-select placeholder="{{'Home.DegreeOfDifficulty' | translate}}" [(ngModel)]="sudouDoD" name="sudoudod">
-              <md-option *ngFor="let dod of listDod" [value]="dod.value">
+          <mat-select placeholder="{{'Home.DegreeOfDifficulty' | translate}}" [(ngModel)]="sudouDoD" name="sudoudod">
+              <mat-option *ngFor="let dod of listDod" [value]="dod.value">
                   {{ dod.displayas | translate }}
-              </md-option>
-          </md-select>
+              </mat-option>
+          </mat-select>
         </div>
 
         <div class="demo-full-width" *ngIf="sudouQuiz.IsStarted">
@@ -81,55 +81,55 @@
           <app-pg-sudou (finishEvent)="OnSudouComplete()" [sudouObject]="sudouInstance" [sudouDoD]="sudouDoD"
               [sudouStart]="sudouQuiz.IsStarted"></app-pg-sudou>
         </div>
-      </md-card-content>
+      </mat-card-content>
 
-      <md-card-actions>
-        <button md-button [disabled]="!CanSudouStart()" (click)="OnSudouStart()">{{'Home.StartButton' | translate}}</button>
-        <button md-raised-button *ngIf="sudouQuiz.IsStarted" (click)="OnSudouSurrender()">{{'Home.SurrenderButton' | translate}}</button>
-      </md-card-actions>
-    </md-card>
-  </md-tab>
+      <mat-card-actions>
+        <button mat-button [disabled]="!CanSudouStart()" (click)="OnSudouStart()">{{'Home.StartButton' | translate}}</button>
+        <button mat-raised-button *ngIf="sudouQuiz.IsStarted" (click)="OnSudouSurrender()">{{'Home.SurrenderButton' | translate}}</button>
+      </mat-card-actions>
+    </mat-card>
+  </mat-tab>
 
   <!-- Tab: Typing Tutor -->
-  <md-tab label="{{'Home.TypingTutor' | translate}}">
-    <md-card class="example-card">
-      <md-card-header>
-          <md-card-title>{{'Home.TypingTutor' | translate}}</md-card-title>
-      </md-card-header>
-      <md-card-content>
+  <mat-tab label="{{'Home.TypingTutor' | translate}}">
+    <mat-card class="example-card">
+      <mat-card-header>
+          <mat-card-title>{{'Home.TypingTutor' | translate}}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
         <div class="demo-full-width" *ngIf="!typingQuiz.IsStarted">
-          <md-form-field>
-            <input mdInput type="number" placeholder="{{'Home.Amount' | translate}}" [(ngModel)]="typingMaxLength" name="typmaxnr" required>
-          </md-form-field>
+          <mat-form-field>
+            <input matInput type="number" placeholder="{{'Home.Amount' | translate}}" [(ngModel)]="typingMaxLength" name="typmaxnr" required>
+          </mat-form-field>
         </div>
         <div class="demo-full-width" *ngIf="!typingQuiz.IsStarted">
-          <md-checkbox [(ngModel)]="typingIncCaptial">{{'Home.IncludeCaptial' | translate}}</md-checkbox>
+          <mat-checkbox [(ngModel)]="typingIncCaptial">{{'Home.IncludeCaptial' | translate}}</mat-checkbox>
         </div>
         <div class="demo-full-width" *ngIf="!typingQuiz.IsStarted">
-          <md-checkbox [(ngModel)]="typingIncNumber">{{'Home.IncludeNumber' | translate}}</md-checkbox>
+          <mat-checkbox [(ngModel)]="typingIncNumber">{{'Home.IncludeNumber' | translate}}</mat-checkbox>
         </div>
         <div class="demo-full-width" *ngIf="!typingQuiz.IsStarted">
-          <md-checkbox [(ngModel)]="typingIncSymbols">{{'Home.IncludeSymbol' | translate}}</md-checkbox>
+          <mat-checkbox [(ngModel)]="typingIncSymbols">{{'Home.IncludeSymbol' | translate}}</mat-checkbox>
         </div>
 
         <div class="demo-full-width" *ngIf="typingQuiz.IsStarted">
           <app-pg-typingtour [expectedString]="typingExpected" (finishEvent)="OnTypingComplete()"></app-pg-typingtour>
         </div>
-      </md-card-content>
-      <md-card-actions>
-          <button md-button [disabled]="!CanTypingStart()" (click)="OnTypingStart()">{{'Home.StartButton' | translate}}</button>
-          <button md-raised-button *ngIf="typingQuiz.IsStarted" (click)="OnTypingSurrender()">{{'Home.SurrenderButton' | translate}}</button>
-        </md-card-actions>
-    </md-card>
-  </md-tab>
+      </mat-card-content>
+      <mat-card-actions>
+          <button mat-button [disabled]="!CanTypingStart()" (click)="OnTypingStart()">{{'Home.StartButton' | translate}}</button>
+          <button mat-raised-button *ngIf="typingQuiz.IsStarted" (click)="OnTypingSurrender()">{{'Home.SurrenderButton' | translate}}</button>
+        </mat-card-actions>
+    </mat-card>
+  </mat-tab>
   
   <!-- Tab: Minesweeper -->
-  <md-tab label="{{'Home.Minesweeper' | translate}}">
-    <md-card class="example-card">
-      <md-card-content>
+  <mat-tab label="{{'Home.Minesweeper' | translate}}">
+    <mat-card class="example-card">
+      <mat-card-content>
           <app-pg-minesweeper></app-pg-minesweeper>
-      </md-card-content>
-    </md-card>
-  </md-tab>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
   
-</md-tab-group>
+</mat-tab-group>

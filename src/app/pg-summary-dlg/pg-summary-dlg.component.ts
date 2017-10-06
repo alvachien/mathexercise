@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 export interface PgSummaryDlgInfo {
   gameWin: boolean;
@@ -13,8 +13,8 @@ export interface PgSummaryDlgInfo {
   styleUrls: ['./pg-summary-dlg.component.scss']
 })
 export class PgSummaryDlgComponent {
-  constructor(public dialogRef: MdDialogRef<PgSummaryDlgComponent>,
-    @Inject(MD_DIALOG_DATA) public dlgInfo: PgSummaryDlgInfo) {
+  constructor(public dialogRef: MatDialogRef<PgSummaryDlgComponent>,
+    @Inject(MAT_DIALOG_DATA) public dlgInfo: PgSummaryDlgInfo) {
   }
 
   public onNoClick() {

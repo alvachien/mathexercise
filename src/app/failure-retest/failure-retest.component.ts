@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { MdDialog } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../services/auth.service';
 import { DialogService } from '../services/dialog.service';
@@ -31,7 +31,7 @@ export class FailureRetestComponent implements OnInit {
   listFailItems: QuizFailureItem[] = [];
 
   constructor(private _http: HttpClient,
-    private dialog: MdDialog,
+    private dialog: MatDialog,
     private _dlgsvc: DialogService,
     private _authService: AuthService,
     private _router: Router) {

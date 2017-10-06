@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
-import { MdDialog, MdPaginator } from '@angular/material';
+import { MatDialog, MatPaginator } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
 import { UserAward, QuizTypeEnum, QuizTypeEnum2UIString, LogLevel, DateFormat, UIMode, UserDetailInfo } from '../model';
@@ -13,7 +13,7 @@ import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } fr
  */
 export class AwardBalanceDataSource extends DataSource<any> {
   constructor(private _abService: AwardBalanceService,
-    private _paginator: MdPaginator) {
+    private _paginator: MatPaginator) {
     super();
   }
 
@@ -55,7 +55,7 @@ export class AwardBalanceDataSource extends DataSource<any> {
 export class AwardBalanceComponent implements OnInit {
   displayedColumns = ['ID', 'AwardDate', 'AwardPlanID', 'QuizID', 'Award', 'Publish', 'UsedReason'];
   dataSource: AwardBalanceDataSource | null;
-  @ViewChild(MdPaginator) paginator: MdPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   listUsers: QuizAttendUser[] = [];
   _curMode: UIMode = UIMode.ListView;
   curAward: UserAward | null;
@@ -107,7 +107,7 @@ export class AwardBalanceComponent implements OnInit {
   }
 
   constructor(private _http: HttpClient,
-    private _dialog: MdDialog,
+    private _dialog: MatDialog,
     public _abService: AwardBalanceService,
     private _authService: AuthService,
     private _userDetailService: UserDetailService) {

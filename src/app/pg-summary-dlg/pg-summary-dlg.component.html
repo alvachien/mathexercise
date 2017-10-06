@@ -1,13 +1,13 @@
-<h2 md-dialog-title *ngIf="dlgInfo.gameWin" style="color: red;">{{'Home.YouWin' | translate}}</h2>
-<h2 md-dialog-title *ngIf="!dlgInfo.gameWin" style="color:floralwhite;">{{'Home.YouLose' | translate}}</h2>
-<md-dialog-content>
+<h2 matDialogTitle *ngIf="dlgInfo.gameWin" style="color: red;">{{'Home.YouWin' | translate}}</h2>
+<h2 matDialogTitle *ngIf="!dlgInfo.gameWin" style="color:floralwhite;">{{'Home.YouLose' | translate}}</h2>
+<mat-dialog-content>
   <div>
     <span>{{'Home.TimeSpentInSeconds' | translate}}</span>
     <span>: </span>
     <span>{{dlgInfo.timeSpent}} S</span>
   </div>
-</md-dialog-content>
-<md-dialog-actions>
-  <button md-button [md-dialog-close]="dlgInfo.haveARetry" tabindex="2">{{'Home.HaveARetryButton' | translate}}</button>
-  <button md-button (click)="onNoClick()" tabindex="-1">{{'Home.NoThanksButton' | translate}}</button>
-</md-dialog-actions>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button [matDialogClose]="dlgInfo.haveARetry" tabindex="2">{{'Home.HaveARetryButton' | translate}}</button>
+  <button mat-button (click)="onNoClick()" tabindex="-1">{{'Home.NoThanksButton' | translate}}</button>
+</mat-dialog-actions>

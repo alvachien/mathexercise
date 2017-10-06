@@ -2,9 +2,9 @@ import {
   Component, ViewChild, ElementRef, AfterContentInit, NgZone,
   OnInit, Renderer, HostListener, ViewChildren, QueryList
 } from '@angular/core';
-import { MdTabChangeEvent } from '@angular/material';
+import { MatTabChangeEvent } from '@angular/material';
 import { Router } from '@angular/router';
-import { MdDialog } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import {
   RPN, SudouUnit, Sudou, generateValidSudou, SudouSize,
   PrimarySchoolMathQuiz, QuizTypeEnum, PrimarySchoolMathQuizItem,
@@ -66,7 +66,7 @@ export class PuzzleGamesComponent implements OnInit {
   typingExpected: string;
 
   constructor(private _dlgsvc: DialogService,
-    private _dialog: MdDialog,
+    private _dialog: MatDialog,
     private _zone: NgZone,
     private _router: Router,
     private _quizService: QuizService) {
@@ -102,7 +102,7 @@ export class PuzzleGamesComponent implements OnInit {
   ngOnInit() {
   }
 
-  public onTabSelectChanged(event: MdTabChangeEvent) {
+  public onTabSelectChanged(event: MatTabChangeEvent) {
     //console.log(event);
     this.indexTab = event.index;
   }

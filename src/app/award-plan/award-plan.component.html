@@ -1,122 +1,122 @@
-<md-card>
-  <md-card-header>
-    <md-card-title>{{pageHeader | translate}}</md-card-title>
-  </md-card-header>
-  <md-card-content>
-    <md-toolbar color="primary">
-      <md-select placeholder="{{'Home.User' | translate}}" [disabled]="!IsListView" 
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{pageHeader | translate}}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-toolbar color="primary">
+      <mat-select placeholder="{{'Home.User' | translate}}" [disabled]="!IsListView" 
         [(ngModel)]="SelectedUser" name="usr" (change)="onUserChanged($event)">
-        <md-option *ngFor="let user of listUsers" [value]="user">
+        <mat-option *ngFor="let user of listUsers" [value]="user">
           {{ user.displayas }}
-        </md-option>
-      </md-select>
-      <md-checkbox [(ngModel)]="allowInvalid">{{'Home.IncludeInvalidOne' | translate}}</md-checkbox>
+        </mat-option>
+      </mat-select>
+      <mat-checkbox [(ngModel)]="allowInvalid">{{'Home.IncludeInvalidOne' | translate}}</mat-checkbox>
 
-      <button md-icon-button [disabled]="!IsListView || (SelectedUser === null) || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardPlanCreate)" (click)="onCreatePlan()">
-        <md-icon class="md-24" aria-label="Create">create_new_folder</md-icon>
+      <button mat-icon-button [disabled]="!IsListView || (SelectedUser === null) || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardPlanCreate)" (click)="onCreatePlan()">
+        <mat-icon class="md-24" aria-label="Create">create_new_folder</mat-icon>
       </button>
-      <button md-icon-button [disabled]="!IsListView || (SelectedUser === null) || (CurrentUser === null)" (click)="onRefreshPlan()">
-        <md-icon class="md-24" aria-label="Create">refresh</md-icon>
+      <button mat-icon-button [disabled]="!IsListView || (SelectedUser === null) || (CurrentUser === null)" (click)="onRefreshPlan()">
+        <mat-icon class="md-24" aria-label="Create">refresh</mat-icon>
       </button>
   
       <!-- This fills the remaining space of the current row -->
       <span class="example-fill-remaining-space"></span>
       <span>{{'Home.AwardPlanByUser' | translate}}</span>
-    </md-toolbar>
+    </mat-toolbar>
 
     <div class="example-container mat-elevation-z8">
-      <md-table #table [dataSource]="dataSource">
+      <mat-table #table [dataSource]="dataSource">
 
-        <ng-container mdColumnDef="ID">
-          <md-header-cell *mdHeaderCellDef> # </md-header-cell>
-          <md-cell *mdCellDef="let element">
-            <button md-mini-fab [disabled]="!IsListView || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardPlanCreate)" 
+        <ng-container matColumnDef="ID">
+          <mat-header-cell *matHeaderCellDef> # </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <button mat-mini-fab [disabled]="!IsListView || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardPlanCreate)" 
               (click)="onCreatePlanByCopy(element)">
-              <md-icon class="md-14" aria-label="Copy">content_copy</md-icon>
+              <mat-icon class="md-14" aria-label="Copy">content_copy</mat-icon>
             </button>
-            <button md-mini-fab [disabled]="!IsListView || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardPlanUpdate)" 
+            <button mat-mini-fab [disabled]="!IsListView || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardPlanUpdate)" 
               (click)="onEditPlan(element)">
-              <md-icon class="md-14" aria-label="Edit">edit</md-icon>
+              <mat-icon class="md-14" aria-label="Edit">edit</mat-icon>
             </button>
-            <button md-mini-fab [disabled]="!IsListView || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardPlanDelete)" 
+            <button mat-mini-fab [disabled]="!IsListView || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardPlanDelete)" 
               (click)="onDeletePlan(element)">
-              <md-icon class="md-14" aria-label="Delete">delete</md-icon>
+              <mat-icon class="md-14" aria-label="Delete">delete</mat-icon>
             </button>
             {{element.ID}} 
-          </md-cell>
+          </mat-cell>
         </ng-container>
-        <ng-container mdColumnDef="ValidFrom">
-          <md-header-cell *mdHeaderCellDef> {{'Home.ValidFrom' | translate }} </md-header-cell>
-          <md-cell *mdCellDef="let element"> {{element.ValidFromFormatString}} </md-cell>
+        <ng-container matColumnDef="ValidFrom">
+          <mat-header-cell *matHeaderCellDef> {{'Home.ValidFrom' | translate }} </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.ValidFromFormatString}} </mat-cell>
         </ng-container>
-        <ng-container mdColumnDef="ValidTo">
-          <md-header-cell *mdHeaderCellDef> {{'Home.ValidTo' | translate }} </md-header-cell>
-          <md-cell *mdCellDef="let element"> {{element.ValidToFormatString}} </md-cell>
+        <ng-container matColumnDef="ValidTo">
+          <mat-header-cell *matHeaderCellDef> {{'Home.ValidTo' | translate }} </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.ValidToFormatString}} </mat-cell>
         </ng-container>
-        <ng-container mdColumnDef="QuizType">
-          <md-header-cell *mdHeaderCellDef> {{'Home.QuizType' | translate }} </md-header-cell>
-          <md-cell *mdCellDef="let element"> {{element.QuizTypeUIString | translate}} </md-cell>
+        <ng-container matColumnDef="QuizType">
+          <mat-header-cell *matHeaderCellDef> {{'Home.QuizType' | translate }} </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.QuizTypeUIString | translate}} </mat-cell>
         </ng-container>
-        <ng-container mdColumnDef="AwardCondition">
-          <md-header-cell *mdHeaderCellDef> {{'Home.AwardCondition' | translate }} </md-header-cell>
-          <md-cell *mdCellDef="let element"> 
+        <ng-container matColumnDef="AwardCondition">
+          <mat-header-cell *matHeaderCellDef> {{'Home.AwardCondition' | translate }} </mat-header-cell>
+          <mat-cell *matCellDef="let element"> 
             <span>{{ element.getAwardScoreCondition | translate:element.getAwardScoreConditionParam }} ;</span> 
-            <span>{{ element.getAwardAvgTimeCondition | translate:element.getAwardAvgTimeConditionParam }}</span> </md-cell>
+            <span>{{ element.getAwardAvgTimeCondition | translate:element.getAwardAvgTimeConditionParam }}</span> </mat-cell>
         </ng-container>
-        <ng-container mdColumnDef="Award">
-          <md-header-cell *mdHeaderCellDef> {{'Home.Award' | translate }} </md-header-cell>
-          <md-cell *mdCellDef="let element"> {{element.Award}} </md-cell>
+        <ng-container matColumnDef="Award">
+          <mat-header-cell *matHeaderCellDef> {{'Home.Award' | translate }} </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.Award}} </mat-cell>
         </ng-container>
 
-        <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
-        <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
-      </md-table>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
 
-      <md-paginator #paginator [length]="_apService.AwardPlans.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
-      </md-paginator>      
+      <mat-paginator #paginator [length]="_apService.AwardPlans.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+      </mat-paginator>      
     </div>
 
     <div *ngIf="!IsListView" class="mt-2 pt-2">
       <div class="demo-full-width">
-        <md-form-field>
-          <input mdInput type="text" placeholder="{{'Home.User' | translate}}" readonly [(ngModel)]="SelectedUser.displayas">
-        </md-form-field>
+        <mat-form-field>
+          <input matInput type="text" placeholder="{{'Home.User' | translate}}" readonly [(ngModel)]="SelectedUser.displayas">
+        </mat-form-field>
       </div>
 
       <div class="demo-full-width">
-        <md-form-field>
-          <input mdInput [(ngModel)]="CurrentPlan.ValidFrom" [mdDatepicker]="vfmpicker" placeholder="{{'Home.ValidFrom' | translate}}">
-          <md-datepicker-toggle mdSuffix [for]="vfmpicker"></md-datepicker-toggle>
-          <md-datepicker #vfmpicker></md-datepicker>
-        </md-form-field>
-        <md-form-field>
-          <input mdInput [(ngModel)]="CurrentPlan.ValidTo" [mdDatepicker]="vtopicker" placeholder="{{'Home.ValidTo' | translate}}">
-          <md-datepicker-toggle mdSuffix [for]="vtopicker"></md-datepicker-toggle>
-          <md-datepicker #vtopicker></md-datepicker>
-        </md-form-field>
+        <mat-form-field>
+          <input matInput [(ngModel)]="CurrentPlan.ValidFrom" [matDatepicker]="vfmpicker" placeholder="{{'Home.ValidFrom' | translate}}">
+          <mat-datepicker-toggle matSuffix [for]="vfmpicker"></mat-datepicker-toggle>
+          <mat-datepicker #vfmpicker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput [(ngModel)]="CurrentPlan.ValidTo" [matDatepicker]="vtopicker" placeholder="{{'Home.ValidTo' | translate}}">
+          <mat-datepicker-toggle matSuffix [for]="vtopicker"></mat-datepicker-toggle>
+          <mat-datepicker #vtopicker></mat-datepicker>
+        </mat-form-field>
       </div>
 
-      <md-select class="demo-full-width" placeholder="{{'Home.Type' | translate}}" [(ngModel)]="CurrentPlan.QuizType" name="planqtype">
-        <md-option *ngFor="let qt of listQTypes" [value]="qt.value">
+      <mat-select class="demo-full-width" placeholder="{{'Home.Type' | translate}}" [(ngModel)]="CurrentPlan.QuizType" name="planqtype">
+        <mat-option *ngFor="let qt of listQTypes" [value]="qt.value">
           {{ qt.displayas | translate }}
-        </md-option>
-      </md-select>
+        </mat-option>
+      </mat-select>
 
-      <md-form-field class="demo-full-width">
-        <input mdInput type="number" placeholder="{{'Home.Score' | translate}}" [(ngModel)]="CurrentPlan.MinQuizScore">
-      </md-form-field>
+      <mat-form-field class="demo-full-width">
+        <input matInput type="number" placeholder="{{'Home.Score' | translate}}" [(ngModel)]="CurrentPlan.MinQuizScore">
+      </mat-form-field>
 
-      <md-form-field class="demo-full-width">
-        <input mdInput type="number" placeholder="{{'Home.AdjAvgTimeSpentEachInSeconds' | translate}}" [(ngModel)]="CurrentPlan.MaxQuizAvgTime">
-      </md-form-field>
+      <mat-form-field class="demo-full-width">
+        <input matInput type="number" placeholder="{{'Home.AdjAvgTimeSpentEachInSeconds' | translate}}" [(ngModel)]="CurrentPlan.MaxQuizAvgTime">
+      </mat-form-field>
 
-      <md-form-field class="demo-full-width">
-        <input mdInput type="number" placeholder="{{'Home.AwardPoint' | translate}}" [(ngModel)]="CurrentPlan.Award">
-      </md-form-field>
+      <mat-form-field class="demo-full-width">
+        <input matInput type="number" placeholder="{{'Home.AwardPoint' | translate}}" [(ngModel)]="CurrentPlan.Award">
+      </mat-form-field>
     </div>
-  </md-card-content>
-  <md-card-actions>
-    <button md-button *ngIf="!IsListView" (click)="onDetailPlanSubmit()" [disabled]="!CanDetailPlanSubmit()">{{'Home.SubmitButton' | translate }}</button>
-    <button md-button *ngIf="!IsListView" (click)="onDetailPlanCancel()">{{'Home.CancelButton' | translate }}</button>
-  </md-card-actions>
-</md-card>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button *ngIf="!IsListView" (click)="onDetailPlanSubmit()" [disabled]="!CanDetailPlanSubmit()">{{'Home.SubmitButton' | translate }}</button>
+    <button mat-button *ngIf="!IsListView" (click)="onDetailPlanCancel()">{{'Home.CancelButton' | translate }}</button>
+  </mat-card-actions>
+</mat-card>

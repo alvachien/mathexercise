@@ -3,7 +3,7 @@ import {
   PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, AdditionQuizItem,
   DefaultQuizAmount, DefaultFailedQuizFactor, QuizTypeEnum
 } from '../model';
-import { MdDialog } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { PageEvent } from '@angular/material';
 import { DialogService } from '../services/dialog.service';
@@ -36,7 +36,7 @@ export class AdditionExerciseComponent implements OnInit {
   pageSize: number;
   pageIndex: number;
 
-  constructor(private dialog: MdDialog,
+  constructor(private dialog: MatDialog,
     private _dlgsvc: DialogService,
     private _zone: NgZone,
     private _router: Router) {
