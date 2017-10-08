@@ -52,23 +52,21 @@ export function getStatisticsDateRangeDate(scope: StatisticsDateRangeEnum): Stat
   let end = moment();
 
   if (scope === StatisticsDateRangeEnum.CurrentMonth) {
-    bgn.set('day', 0);
+    bgn.startOf('month');
     end.endOf('month');
   } else if (scope === StatisticsDateRangeEnum.CurrentYear) {
-    bgn.set('day', 0);
-    bgn.set('month', 0);
+    bgn.startOf('year');
     
     end.endOf('year');
   } else if (scope === StatisticsDateRangeEnum.PreviousMonth) {
-    bgn.set('day', 0);
     bgn.subtract(1, 'M');
+    bgn.startOf('month');
 
     end = bgn.clone();
     end.endOf('month');
   } else if (scope === StatisticsDateRangeEnum.PreviousYear) {
-    bgn.set('day', 0);
-    bgn.set('month', 0);
     bgn.subtract(1, 'y');
+    bgn.startOf('year');
 
     end = bgn.clone();
     end.endOf('year');
