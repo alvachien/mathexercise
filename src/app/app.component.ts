@@ -9,9 +9,9 @@ import { LogLevel } from './model';
 import * as moment from 'moment';
 import 'moment/locale/zh-cn';
 import { DateAdapter } from '@angular/material';
-import { MomentDateAdapter } from './utility';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 
 @Component({
   selector: 'app-root-home',

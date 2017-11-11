@@ -14,7 +14,6 @@ import {
   MatTooltipModule, MatFormFieldModule, MatExpansionModule,
   MatNativeDateModule, MAT_DATE_FORMATS, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_LOCALE_PROVIDER,
 } from '@angular/material';
-import { MATERIAL_COMPATIBILITY_MODE } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk/table';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -53,7 +52,7 @@ import { AwardPlanService } from './services/award-plan.service';
 import { AwardBalanceComponent } from './award-balance';
 import { AwardBalanceService } from './services/award-balance.service';
 import { QuizService } from './services/quiz.service';
-import { MD_MOMENT_DATE_FORMATS, MomentDateAdapter } from './utility';
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 
 @NgModule({
   exports: [
@@ -127,8 +126,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   providers: [
     MAT_DATE_LOCALE_PROVIDER,
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MD_MOMENT_DATE_FORMATS },
-    { provide: MATERIAL_COMPATIBILITY_MODE, useValue: true },
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
     DialogService,
     AuthService,
     UserDetailService,
