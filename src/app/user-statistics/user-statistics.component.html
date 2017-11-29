@@ -4,17 +4,21 @@
   </mat-card-header>
   <mat-card-content>
     <mat-toolbar color="primary">
-      <mat-select placeholder="{{'Home.User' | translate}}" [(ngModel)]="curUser" name="usr" (change)="onUserChanged($event)">
-        <mat-option *ngFor="let user of listUsers" [value]="user.attenduser">
-          {{ user.displayas }}
-        </mat-option>
-      </mat-select>
+      <mat-form-field>
+        <mat-select placeholder="{{'Home.User' | translate}}" [(ngModel)]="curUser" name="usr" (change)="onUserChanged($event)">
+          <mat-option *ngFor="let user of listUsers" [value]="user.attenduser">
+            {{ user.displayas }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field> 
 
-      <mat-select placeholder="{{'Home.DateRange' | translate}}" [(ngModel)]="curRange" name="dtrange" (change)="onDateRangeChanged($event)">
-        <mat-option *ngFor="let rge of listRanges" [value]="rge.daterange">
-          {{ rge.i18term | translate }}
-        </mat-option>
-      </mat-select>
+      <mat-form-field>
+        <mat-select placeholder="{{'Home.DateRange' | translate}}" [(ngModel)]="curRange" name="dtrange" (change)="onDateRangeChanged($event)">
+          <mat-option *ngFor="let rge of listRanges" [value]="rge.daterange">
+            {{ rge.i18term | translate }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </mat-toolbar>
 
     <mat-tab-group>

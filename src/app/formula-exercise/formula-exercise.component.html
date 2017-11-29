@@ -33,7 +33,8 @@
         <mat-checkbox [(ngModel)]="fs.selected" [disabled]="fs.disabled"><span>{{fs.name | translate}}</span><span style="white-space:pre">  </span><span [innerHtml]="fs.formula"></span></mat-checkbox>
       </div>
 
-      <mat-checkbox [(ngModel)]="AlloweDecimal">{{'Home.AllowDecimal' | translate}}</mat-checkbox>>
+      <hr />
+      <mat-checkbox [(ngModel)]="AlloweDecimal">{{'Home.AllowDecimal' | translate}}</mat-checkbox>
     </div>
 
     <div *ngIf="quizInstance.IsStarted">
