@@ -76,7 +76,7 @@ export class AppComponent implements OnInit {
     if (this._selLanguage !== lang && lang !== undefined && lang !== null) {
       this._selLanguage = lang;
 
-      this.onLanguageChange();
+      this.onLanguageChanged();
     }
   }
 
@@ -97,7 +97,7 @@ export class AppComponent implements OnInit {
       { name: 'Home.MultiplicationExercises', route: 'multi-ex' },
       { name: 'Home.DivisionExercises', route: 'divide-ex' },
       { name: 'Home.MixedOperations', route: 'mixop-ex' },
-      //{ name: 'Home.FormulaList', route: 'formula-list' },
+      // { name: 'Home.FormulaList', route: 'formula-list' },
       { name: 'Home.FormulaExercises', route: 'formula-ex' },
       { name: 'Home.PuzzleGames', route: 'puzz-game' },
       { name: 'Home.AwardPlan', route: 'award-plan' },
@@ -169,7 +169,7 @@ export class AppComponent implements OnInit {
   }
 
   public toggleFullscreen(): void {
-    const elem = this._element.nativeElement.querySelector('.demo-content');
+    const elem = this._element.nativeElement.querySelector('.me-content');
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
     } else if (elem.webkitRequestFullScreen) {
@@ -181,7 +181,17 @@ export class AppComponent implements OnInit {
     }
   }
 
-  private onLanguageChange() {
+  public onOpenGithubRepo(): void {
+    window.open('https://github.com/alvachien/mathexercise', '_blank');
+  }
+  public onOpenHIH(): void {
+    window.open(environment.AppHIH, '_blank');
+  }
+  public onOpenPhotoGallery(): void {
+    window.open(environment.AppGallery, '_blank');
+  }
+
+  public onLanguageChanged(): void {
     if (this._translate.currentLang !== this._selLanguage &&
       this._selLanguage !== undefined) {
       this._translate.use(this._selLanguage);

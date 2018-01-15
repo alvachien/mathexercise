@@ -9,5 +9,8 @@ export const environment = {
   AppLoginCallbackUrl: 'http://118.178.58.187:5230/logincallback.html',
   AppLoginSlientRevewCallbackUrl: 'http://118.178.58.187:5230/silentrenewcallback.html',
   AppLogoutCallbackUrl: 'http://118.178.58.187:5230/index.html',
-  AppHost: 'http://118.178.58.187:5230'
+  AppHost: 'http://118.178.58.187:5230',
+
+  AppHIH: 'http://118.178.58.187:5200',
+  AppGallery: 'http://118.178.58.187:5210',
 };
