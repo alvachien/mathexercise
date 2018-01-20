@@ -127,7 +127,7 @@
   <mat-tab label="{{'Home.Minesweeper' | translate}}">
     <mat-card class="example-card">
       <mat-card-content>
-        <app-pg-minesweeper></app-pg-minesweeper>
+        <app-pg-minesweeper (startedEvent)="onMinesweeperStarted($event)" (finishedEvent)="onMinesweeperFinished($event)"></app-pg-minesweeper>
       </mat-card-content>
     </mat-card>
   </mat-tab>

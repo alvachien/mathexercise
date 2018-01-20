@@ -65,6 +65,12 @@ export class PuzzleGamesComponent implements OnInit {
   typingIncSymbols: boolean;
   typingExpected: string;
 
+  /**
+   * Minesweeper
+   */
+  mineSweepQuiz: PrimarySchoolMathQuiz;
+  mineSweepDoD: QuizDegreeOfDifficulity;
+
   constructor(private _dlgsvc: DialogService,
     private _dialog: MatDialog,
     private _zone: NgZone,
@@ -97,6 +103,10 @@ export class PuzzleGamesComponent implements OnInit {
     this.typingIncNumber = true;
     this.typingIncSymbols = true;
     this.typingExpected = '';
+
+    this.mineSweepQuiz = new PrimarySchoolMathQuiz();
+    this.mineSweepQuiz.QuizType = QuizTypeEnum.minesweep;
+    this.mineSweepDoD = QuizDegreeOfDifficulity.hard;
   }
 
   ngOnInit() {
@@ -108,12 +118,13 @@ export class PuzzleGamesComponent implements OnInit {
   }
 
   public canDeactivate(): boolean {
-    if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted) {
+    if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted || this.typingQuiz.IsStarted || this.mineSweepQuiz.IsStarted) {
       const dlginfo: MessageDialogInfo = {
         Header: 'Home.Error',
         Content: 'Home.QuizIsOngoing',
         Button: MessageDialogButtonEnum.onlyok
       };
+
       this._dialog.open(MessageDialogComponent, {
         disableClose: false,
         width: '500px',
@@ -164,7 +175,7 @@ export class PuzzleGamesComponent implements OnInit {
   }
 
   public CanCal24Start(): boolean {
-    if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted || this.typingQuiz.IsStarted) {
+    if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted || this.typingQuiz.IsStarted || this.mineSweepQuiz.IsStarted) {
       return false;
     }
 
@@ -211,38 +222,20 @@ export class PuzzleGamesComponent implements OnInit {
       return false;
     }
 
-    // for (const ch of this.Cal24Input) {
-    //   if (ch === '('
-    //     || ch === ')'
-    //     || ch === '+'
-    //     || ch === '-'
-    //     || ch === '÷'
-    //     || ch === '×'
-    //   ) {
-    //     continue;
-    //   } else {
-    //     const nch = parseInt(ch);
-    //     const nExistIdx = this.Cal24items.findIndex((val) => { return val === nch; });
-    //     if (nExistIdx === -1) {
-    //       return false;
-    //     }
-    //   }
-    // }
-
     return true;
   }
 
-  public OnCal24Append(char: string) {
+  public OnCal24Append(char: string): void {
     this.Cal24Input += char;
   }
-  public OnCal24Backspace() {
+  public OnCal24Backspace(): void {
     if (this.Cal24Input.length > 1) {
       this.Cal24Input = this.Cal24Input.substring(0, this.Cal24Input.length - 1);
     } else {
       this.Cal24Input = '';
     }
   }
-  public OnCal24Reset() {
+  public OnCal24Reset(): void {
     this.Cal24Input = '';
   }
 
@@ -543,6 +536,51 @@ export class PuzzleGamesComponent implements OnInit {
     this.typingQuiz.SubmitCurrentRun();
     // Save it!
     this._quizService.saveDB(this.typingQuiz).subscribe(x => {
+      // Do nothing for now
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.log(`AC Math Exericse [Debug]: Save quiz: ${x}`);
+      }
+    }, error => {
+      if (environment.LoggingLevel >= LogLevel.Error) {
+        console.log(`AC Math Exericse [Debug]: Error in save quiz ${error}`);
+      }
+    });
+
+    const di: PgSummaryDlgInfo = {
+      gameWin: true,
+      timeSpent: this.typingQuiz.ElderRuns()[0].TimeSpent,
+      haveARetry: true
+    };
+
+    this._dialog.open(PgSummaryDlgComponent, {
+      width: '500px',
+      data: di
+    }).afterClosed().subscribe(x => {
+      if (di.haveARetry) {
+        this.OnTypingStart();
+      }
+    });
+  }
+
+  /**
+   * Minesweeper
+   */
+  public onMinesweeperStarted(data: any): void {
+    this.mineSweepQuiz.BasicInfo = '';
+    this.mineSweepQuiz.Start(1, 0); // Single item and no failor
+    this.mineSweepQuiz.CurrentRun().SectionStart();
+  }
+
+  public onMinesweeperFinished(rst: boolean): void {
+    if (rst) {
+      // Succeed
+    } else {
+      // Failed
+    }
+    
+    this.mineSweepQuiz.SubmitCurrentRun();
+    // Save it!
+    this._quizService.saveDB(this.mineSweepQuiz).subscribe(x => {
       // Do nothing for now
       if (environment.LoggingLevel >= LogLevel.Debug) {
         console.log(`AC Math Exericse [Debug]: Save quiz: ${x}`);

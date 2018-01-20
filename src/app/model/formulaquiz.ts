@@ -3,7 +3,7 @@ import { PrimarySchoolFormulaEnum, getFormulaUIString } from './formuladef';
 import { PrimarySchoolMathQuizItem } from './quizconcept';
 
 /**
- *
+ * Is Forumlat type is supported by current version
  * @param fe Formula
  */
 export function isFormulaTypeEnabled(fe: PrimarySchoolFormulaEnum): boolean {

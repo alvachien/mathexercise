@@ -3,8 +3,8 @@
  * Audio content
  */
 export interface AudioContent {
-    word: string;
-    beginpoint: number;
-    endpoint: number;
-    selected: boolean;
+  word: string;
+  beginpoint: number;
+  endpoint: number;
+  selected: boolean;
 }

@@ -114,7 +114,7 @@ export class UserStatisticsComponent implements OnInit {
   curRange: StatisticsDateRangeEnum = StatisticsDateRangeEnum.CurrentMonth;
   listqtype: quiztypeui[] = [];
   colorSchemeGeneral = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA', '#BBBBBB', '#CCCCCC']
+    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA', '#BBBBBB', '#CCCCCC', '#AA0000', '#00AA00', '#0000AA']
   };
   public listQuizSubject: BehaviorSubject<APIQuiz[]> = new BehaviorSubject<APIQuiz[]>([]);
   get Quizs(): APIQuiz[] {

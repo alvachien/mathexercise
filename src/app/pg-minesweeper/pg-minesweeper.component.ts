@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, EventEmitter, Output } from '@angular/core';
 
 export interface MineSweepCell {
   isMine: boolean;
@@ -17,6 +17,8 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   @ViewChild('gametags') gametags: ElementRef;
   @ViewChild('gametime') gametime: ElementRef;
   @ViewChild('mscontainer') mscontainer: ElementRef;
+  @Output() startedEvent: EventEmitter<any> = new EventEmitter();
+  @Output() finishedEvent: EventEmitter<boolean> = new EventEmitter(false);
 
   PANE_SIZE: number = 16;
 
@@ -251,6 +253,9 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
       this.canvasMine.nativeElement.onmousemove = '';
 
       clearInterval(this.timer);
+
+      // Failed case
+      this.finishedEvent.emit(false);
     } else { 
       this.drawNum(pos, 0);
       var aroundMineNum = this.calAround(pos);
@@ -278,13 +283,16 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
 
     if (openNum === okNum) {
       this.face.nativeElement.src = "assets/image/mineresource/face_success.jpg";
-      alert("you win!");
+
       clearInterval(this.timer);
 
       // Cleanup the events
       this.canvasMine.nativeElement.onmouseup = '';
       this.canvasMine.nativeElement.onmousedown = '';
       this.canvasMine.nativeElement.onmousemove = '';
+
+      // It is finished!
+      this.finishedEvent.emit(true);
     }
   }
 
@@ -379,7 +387,7 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
 
     for (var i = 0; i < aroundArr.length; i++) {
       aroundMineNum = this.calAround(aroundArr[i]);
-      if (aroundMineNum === 0 && this.checkCell(aroundArr[i]) && arCells[aroundArr[i][0]][aroundArr[i][1]].isMine == false && !in_array(aroundArr[i], zeroArr)) {
+      if (aroundMineNum === 0 && this.checkCell(aroundArr[i]) && arCells[aroundArr[i][0]][aroundArr[i][1]].isMine == false && !this.isInArray(aroundArr[i], zeroArr)) {
         zeroArr.push(aroundArr[i]);
         this.calZeroMine(aroundArr[i], zeroArr);
       }

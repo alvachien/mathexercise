@@ -6,125 +6,125 @@ import { PrimarySchoolMathQuizItem } from './quizconcept';
  * Quiz item for Cal24
  */
 export class Cal24QuizItem extends PrimarySchoolMathQuizItem {
-    private _isSurrended: boolean;
-    get IsSurrended(): boolean {
-        return this._isSurrended;
+  private _isSurrended: boolean;
+  get IsSurrended(): boolean {
+    return this._isSurrended;
+  }
+  set IsSurrended(isrnd: boolean) {
+    this._isSurrended = isrnd;
+  }
+
+  private _arItems: number[];
+  get Items(): number[] {
+    return this._arItems;
+  }
+  set Items(aits: number[]) {
+    this._arItems = [];
+    for (const it of aits) {
+      this._arItems.push(it);
     }
-    set IsSurrended(isrnd: boolean) {
-        this._isSurrended = isrnd;
+  }
+
+  public IsCorrect(): boolean {
+    const brst = super.IsCorrect();
+    if (!brst) {
+      return false;
     }
 
-    private _arItems: number[];
-    get Items(): number[] {
-        return this._arItems;
-    }
-    set Items(aits: number[]) {
-        this._arItems = [];
-        for (const it of aits) {
-            this._arItems.push(it);
-        }
-    }
+    return !this.IsSurrended;
+  }
 
-    public IsCorrect(): boolean {
-        const brst = super.IsCorrect();
-        if (!brst) {
-            return false;
-        }
+  constructor() {
+    super();
+  }
 
-        return !this.IsSurrended;
-    }
+  public getQuizFormat(): string {
+    const rststr = super.getQuizFormat();
+    return rststr + this._arItems.join(QuizSplitter);
+  }
 
-    constructor() {
-        super();
-    }
+  public getCorrectFormula(): string {
+    const rststr = super.getCorrectFormula();
+    return rststr;
+  }
 
-    public getQuizFormat(): string {
-        const rststr = super.getQuizFormat();
-        return rststr + this._arItems.join(QuizSplitter);
-    }
+  public getInputtedForumla(): string {
+    const rststr = super.getInputtedForumla();
+    return rststr;
+  }
 
-    public getCorrectFormula(): string {
-        const rststr = super.getCorrectFormula();
-        return rststr;
-    }
+  public storeToString(): string {
+    let rstr = super.storeToString();
+    rstr = rstr + this._arItems.join(QuizSplitter);
+    return rstr;
+  }
 
-    public getInputtedForumla(): string {
-        const rststr = super.getInputtedForumla();
-        return rststr;
-    }
+  public static restoreFromString(s: string): Cal24QuizItem {
+    const cqi: Cal24QuizItem = new Cal24QuizItem();
+    // todo!!!
 
-    public storeToString(): string {
-        let rstr = super.storeToString();
-        rstr = rstr + this._arItems.join(QuizSplitter);
-        return rstr;
-    }
-
-    public static restoreFromString(s: string): Cal24QuizItem {
-        const cqi: Cal24QuizItem = new Cal24QuizItem();
-        // todo!!!
-
-        return cqi;
-    }
+    return cqi;
+  }
 }
 
 /**
  * Quiz item for Sudou
  */
 export class SudouQuizItem extends PrimarySchoolMathQuizItem {
-    private _isSurrended: boolean;
-    get IsSurrended(): boolean {
-        return this._isSurrended;
-    }
-    set IsSurrended(isrnd: boolean) {
-        this._isSurrended = isrnd;
+  private _isSurrended: boolean;
+  get IsSurrended(): boolean {
+    return this._isSurrended;
+  }
+  set IsSurrended(isrnd: boolean) {
+    this._isSurrended = isrnd;
+  }
+
+  private _info: string;
+  get DetailInfo(): string {
+    return this._info;
+  }
+  set DetailInfo(di: string) {
+    this._info = di;
+  }
+
+  public IsCorrect(): boolean {
+    const brst = super.IsCorrect();
+    if (!brst) {
+      return false;
     }
 
-    private _info: string;
-    get DetailInfo(): string {
-        return this._info;
-    }
-    set DetailInfo(di: string) {
-        this._info = di;
-    }
+    return !this.IsSurrended;
+  }
 
-    public IsCorrect(): boolean {
-        const brst = super.IsCorrect();
-        if (!brst) {
-            return false;
-        }
+  constructor() {
+    super();
+  }
 
-        return !this.IsSurrended;
-    }
+  public getQuizFormat(): string {
+    const rststr = super.getQuizFormat();
+    return rststr + this._info;
+  }
 
-    constructor() {
-        super();
-    }
+  public getCorrectFormula(): string {
+    const rststr = super.getCorrectFormula();
+    return rststr;
+  }
 
-    public getQuizFormat(): string {
-        const rststr = super.getQuizFormat();
-        return rststr + this._info;
-    }
+  public getInputtedForumla(): string {
+    const rststr = super.getInputtedForumla();
+    return rststr;
+  }
 
-    public getCorrectFormula(): string {
-        const rststr = super.getCorrectFormula();
-        return rststr;
-    }
+  public storeToString(): string {
+    let rstr = super.storeToString();
+    rstr = rstr + this._info;
+    return rstr;
+  }
 
-    public getInputtedForumla(): string {
-        const rststr = super.getInputtedForumla();
-        return rststr;
-    }
+  public static restoreFromString(s: string): Cal24QuizItem {
+    const cqi: Cal24QuizItem = new Cal24QuizItem();
+    // todo!!!
 
-    public storeToString(): string {
-        let rstr = super.storeToString();
-        rstr = rstr + this._info;
-        return rstr;
-    }
-
-    public static restoreFromString(s: string): Cal24QuizItem {
-        const cqi: Cal24QuizItem = new Cal24QuizItem();
-        // todo!!!
-
-        return cqi;
-    }
+    return cqi;
+  }
 }
