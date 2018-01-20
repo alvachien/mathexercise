@@ -94,7 +94,7 @@
   <mat-tab label="{{'Home.TypingTutor' | translate}}">
     <mat-card class="example-card">
       <mat-card-header>
-          <mat-card-title>{{'Home.TypingTutor' | translate}}</mat-card-title>
+        <mat-card-title>{{'Home.TypingTutor' | translate}}</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <div class="demo-full-width" *ngIf="!typingQuiz.IsStarted">
@@ -117,9 +117,9 @@
         </div>
       </mat-card-content>
       <mat-card-actions>
-          <button mat-button [disabled]="!CanTypingStart()" (click)="OnTypingStart()">{{'Home.StartButton' | translate}}</button>
-          <button mat-raised-button *ngIf="typingQuiz.IsStarted" (click)="OnTypingSurrender()">{{'Home.SurrenderButton' | translate}}</button>
-        </mat-card-actions>
+        <button mat-button [disabled]="!CanTypingStart()" (click)="OnTypingStart()">{{'Home.StartButton' | translate}}</button>
+        <button mat-raised-button *ngIf="typingQuiz.IsStarted" (click)="OnTypingSurrender()">{{'Home.SurrenderButton' | translate}}</button>
+      </mat-card-actions>
     </mat-card>
   </mat-tab>
   
@@ -127,7 +127,7 @@
   <mat-tab label="{{'Home.Minesweeper' | translate}}">
     <mat-card class="example-card">
       <mat-card-content>
-          <app-pg-minesweeper></app-pg-minesweeper>
+        <app-pg-minesweeper></app-pg-minesweeper>
       </mat-card-content>
     </mat-card>
   </mat-tab>
