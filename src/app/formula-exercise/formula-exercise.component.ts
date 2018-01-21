@@ -3,8 +3,10 @@ import {
   PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, PrimarySchoolMathQuizItem, QuizTypeEnum, FormulaQuizItemBase,
   DefaultQuizAmount, DefaultFailedQuizFactor, PrimarySchoolFormulaEnum, getFormulaNameString, getFormulaUIString,
   FormulaCOfCircleCalcDirEum, FormulaCOfSquareCalcDirEum, FormulaCOfRectangleCalcDirEum, isFormulaTypeEnabled,
-  FormulaCOfCircleQuizItem, FormulaCOfSquareQuizItem, FormulaCOfRectangleQuizItem, FormulaDistAndSpeedCalcDirEum, FormulaDistAndSpeedQuizItem,
-  FormulaAOfRectangleCalcDirEum, FormulaAreaOfRectangleQuizItem, FormulaAreaOfSquareQuizItem, FormulaAreaOfSquareCalcDirEum
+  FormulaCOfCircleQuizItem, FormulaCOfSquareQuizItem, FormulaCOfRectangleQuizItem, FormulaDistAndSpeedCalcDirEum, 
+  FormulaDistAndSpeedQuizItem, FormulaEfficiencyProblemQuizItem,
+  FormulaAOfRectangleCalcDirEum, FormulaAreaOfRectangleQuizItem, FormulaAreaOfSquareQuizItem, 
+  FormulaAreaOfSquareCalcDirEum, FormulaEfficiencyProblemCalcDirEum
 } from '../model';
 import { MatDialog } from '@angular/material';
 import { DialogService } from '../services/dialog.service';
@@ -174,6 +176,20 @@ export class FormulaExerciseComponent implements OnInit {
         return qz;
       }
 
+      case PrimarySchoolFormulaEnum.EfficiencyProblem: {
+        const qz: FormulaEfficiencyProblemQuizItem = new FormulaEfficiencyProblemQuizItem(
+          Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
+          Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
+          <FormulaEfficiencyProblemCalcDirEum>Math.round(Math.random() * 2)
+        );
+        qz.QuizIndex = idx;
+
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log('AC Math Exercise [Debug]: generating Quiz Item for EfficiencyProblem: ' + qz.storeToString());
+        }
+        return qz;
+      }
+      
       default: {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.error(`AC Math Exercise [Debug]: generating Quiz Item: FAILED: ${this.formulaDef[qzidx].formulatype}`);

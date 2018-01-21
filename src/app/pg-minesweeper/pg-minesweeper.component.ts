@@ -1,9 +1,15 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, EventEmitter, Output, Input } from '@angular/core';
+import { LogLevel, QuizDegreeOfDifficulity } from '../model';
+import { environment } from '../../environments/environment';
 
 export interface MineSweepCell {
   isMine: boolean;
   isOpened: boolean;
   tag: number;
+}
+export interface MineSweepCellPosition {
+  x: number;
+  y: number;
 }
 
 @Component({
@@ -19,9 +25,23 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   @ViewChild('mscontainer') mscontainer: ElementRef;
   @Output() startedEvent: EventEmitter<any> = new EventEmitter();
   @Output() finishedEvent: EventEmitter<boolean> = new EventEmitter(false);
+  /**
+   * Degree of difficulity
+   */
+  @Input()
+  set mineSweepDoD(dod: QuizDegreeOfDifficulity) {
+    if (environment.LoggingLevel >= LogLevel.Debug) {
+      console.log('AC Math Exercise [Debug]: Entering setter of sudouStart in PgSudouComponent' + dod.toString());
+    }
+
+    if (this._dod !== dod) {
+      this._dod = dod;
+    }
+  }
 
   PANE_SIZE: number = 16;
 
+  private _dod: QuizDegreeOfDifficulity;
   private _paneHeigh: number;
   private _paneWidth: number;
   private _minenum: number;
@@ -51,7 +71,10 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   }
 
   oldPos: any[] = [];
+  // Two-dimensional array
   arCells: any[] = [];
+  // Image arrays
+  arImgUrls: string[] = [];
   arMines: any[] = [];
   time: number = 0;
   notTaged: number = 0;
@@ -63,17 +86,22 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
     // Default values
     this._paneHeigh = 16;
     this._paneWidth = 30;
-    this._minenum = 99;
+
+    // Array of image urls
+    this.arImgUrls = ["../../assets/image/mineresource/blank.jpg", 
+      "../../assets/image/mineresource/0.jpg", 
+      "../../assets/image/mineresource/flag.jpg", 
+      "../../assets/image/mineresource/ask.jpg", 
+      "../../assets/image/mineresource/mine.png", 
+      "../../assets/image/mineresource/blood.jpg", 
+      "../../assets/image/mineresource/error.jpg"
+    ];
   }
 
   ngOnInit() {
   }
 
   ngAfterViewInit() {
-    this.onReset();
-  }
-
-  onReset() {
     if (this.mscontainer != null) {
       this.mscontainer.nativeElement.style.width = this.ComponentWidth + 'px';
       this.mscontainer.nativeElement.style.height = this.ComponentHeight + 'px';
@@ -87,22 +115,35 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
       this.face.nativeElement.src = "../../assets/image/mineresource/face_normal.jpg"
     }
 
+    switch(this.mineSweepDoD) {
+      case QuizDegreeOfDifficulity.easy: this._minenum = 9; break;
+      case QuizDegreeOfDifficulity.medium: this._minenum = 49; break;
+      case QuizDegreeOfDifficulity.hard:
+      default:
+        this._minenum = 99;
+        break;
+    }
+
+    this.onReset();
+  }
+
+  onReset() {
+    // Clean up variables
     this.oldPos = [0, 0];
     this.arCells = [];
     this.arMines = [];
     this.time = 0;
     this.notTaged = this._minenum;
 
-    this.numToImage(this.notTaged, true);
-    this.numToImage(this.time, false);
-
-    this.mousedownArr = '';
-    this.createCells(); 
-    this.inited = false;
-
+    this.setNumberImage(this.notTaged, true);
+    this.setNumberImage(this.time, false);
     if(this.timer !== undefined) {
       clearInterval(this.timer);
     }
+
+    this.mousedownArr = '';
+    this.initCells(); 
+    this.inited = false;
 
     // Event binding
     this.onRegisterMouseMove();
@@ -114,21 +155,21 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
 
   onRegisterMouseMove() {
     let that = this; 
-    this.canvasMine.nativeElement.onmousemove = e => {
+    this.canvasMine.nativeElement.onmousemove = (e) => {
 
       let pos = that.getCellPos(that.getEventPosition(e));
       let oldPos = that.oldPos;
       let arCells = that.arCells;
 
-      if (pos.toString() == oldPos.toString()) {
+      if (pos.toString() === oldPos.toString()) {
         return;
       }
 
-      if (that.checkCell(oldPos) && (arCells[oldPos[0]][oldPos[1]].isOpened == false && arCells[oldPos[0]][oldPos[1]].tag == 0)) {
+      if (that.checkCell(oldPos) && (arCells[oldPos[0]][oldPos[1]].isOpened === false && arCells[oldPos[0]][oldPos[1]].tag === 0)) {
         that.drawCell(oldPos, 1);
       }
 
-      if (that.checkCell(pos) && (arCells[pos[0]][pos[1]].isOpened == true || arCells[pos[0]][pos[1]].tag != 0)) {
+      if (that.checkCell(pos) && (arCells[pos[0]][pos[1]].isOpened === true || arCells[pos[0]][pos[1]].tag !== 0)) {
         that.oldPos = pos;
         return;
       }
@@ -140,9 +181,9 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
 
   onRegisterMouseOut() {
     let that = this;
-    this.canvasMine.nativeElement.onmouseout = e => {
+    this.canvasMine.nativeElement.onmouseout = (e) => {
       let pos = that.oldPos;
-      if (that.checkCell(pos) && (that.arCells[pos[0]][pos[1]].isOpened == true || that.arCells[pos[0]][pos[1]].tag != 0)) {
+      if (that.checkCell(pos) && (that.arCells[pos[0]][pos[1]].isOpened === true || that.arCells[pos[0]][pos[1]].tag !== 0)) {
         return;
       }
 
@@ -154,7 +195,7 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   onRegisterMouseClick() {
     var that = this;
 
-    this.canvasMine.nativeElement.onmouseup = e => {
+    this.canvasMine.nativeElement.onmouseup = (e) => {
       var pos = that.getCellPos(that.getEventPosition(e));
 
       if (that.inited == false) {
@@ -162,28 +203,28 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
         that.timer = setInterval(function () {
           that.time = that.time + 1;
 
-          that.numToImage(that.time, false);
+          that.setNumberImage(that.time, false);
         }, 1000);
         that.inited = true;
       }
       if (!e) { e = window.event; }
-      that.triggerClick(pos, e);
+      that.onClick(pos, e);
     }
   }
 
   onRegisterMouseDown() {
     var that = this;
-    this.canvasMine.nativeElement.onmousedown = e => {
+    this.canvasMine.nativeElement.onmousedown = (e) => {
       var pos = that.getCellPos(that.getEventPosition(e));
       if (!e) { e = window.event; }
       let theCell = that.arCells[pos[0]][pos[1]];
-      if (theCell.isOpened == true) {
+      if (theCell.isOpened === true) {
         let aroundMineNum = that.calAround(pos);
         let unknownArr = that.getAroundUnknown(pos);
         let tagNum = that.getAroundTag(pos);
 
-        if (aroundMineNum != tagNum) {
-          for (let t = 0, uLen = unknownArr.length; t < uLen; t++) {
+        if (aroundMineNum !== tagNum) {
+          for (let t = 0; t < unknownArr.length; t++) {
             that.drawNum(unknownArr[t], 0);
           }
           that.mousedownArr = unknownArr;
@@ -192,116 +233,11 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
     }
   }
 
-  triggerClick(pos, e) {
-    let currentCell: MineSweepCell = this.arCells[pos[0]][pos[1]];
-
-    if (currentCell.isOpened) {
-
-      if (e) {
-        let aroundMineNum = this.calAround(pos);
-        let unknownArr = this.getAroundUnknown(pos);
-        let tagNum = this.getAroundTag(pos);
-
-        if (aroundMineNum == tagNum) {
-          for (var t = 0, uLen = unknownArr.length; t < uLen; t++) {
-            this.triggerClick(unknownArr[t], undefined);
-          }
-        } else {
-          let mousedownArr = this.mousedownArr;
-          if (mousedownArr != "") {
-            for (var m = 0, mLen = mousedownArr.length; m < mLen; m++) {
-              this.drawCell(mousedownArr[m], 1);
-            };
-          }
-          this.mousedownArr = "";
-        }
-      }
-      return;
-    }
-
-    let tag = currentCell.tag;
-    if (e && e.button == 2) { 
-
-      if (tag === 0) {
-        this.drawCell(pos, 3);
-        currentCell.tag = 1;
-        this.notTaged--;
-        this.numToImage(this.notTaged, true);
-      }
-      else if (tag === 1) {
-        this.drawCell(pos, 4);
-        currentCell.tag = 2;
-        this.notTaged++;
-        this.numToImage(this.notTaged, true);
-      } else if (tag == 2) {
-        this.drawCell(pos, 1);
-        currentCell.tag = 0;
-      }
-      return;
-    }
-    if (tag !== 0) {
-      return;
-    }
-
-    if (currentCell.isMine) {
-      this.face.nativeElement.src = "assets/image/mineresource/face_fail.jpg";
-      this.showMine();
-      this.drawCell(pos, 6);
-      this.showWrongTag(); 
-      this.canvasMine.nativeElement.onmouseup = '';
-      this.canvasMine.nativeElement.onmousedown = '';
-      this.canvasMine.nativeElement.onmousemove = '';
-
-      clearInterval(this.timer);
-
-      // Failed case
-      this.finishedEvent.emit(false);
-    } else { 
-      this.drawNum(pos, 0);
-      var aroundMineNum = this.calAround(pos);
-      if (aroundMineNum != 0) {
-        this.drawNum(pos, aroundMineNum);
-      } else {
-        var zeroArr = [];
-        zeroArr.push(pos);
-        zeroArr = this.calZeroMine(pos, zeroArr);
-        this.openZeroArr(zeroArr);
-      }
-    }
-    currentCell.isOpened = true;
-
-    let okNum = this._paneWidth * this._paneHeigh - this._minenum;
-    let openNum = 0;
-    for (let i = 1; i <= this._paneWidth; i++) {
-
-      for (let j = 1; j <= this._paneHeigh; j++) {
-        if (this.arCells[i][j].isOpened == true) {
-          openNum++;
-        }
-      };
-    }
-
-    if (openNum === okNum) {
-      this.face.nativeElement.src = "assets/image/mineresource/face_success.jpg";
-
-      clearInterval(this.timer);
-
-      // Cleanup the events
-      this.canvasMine.nativeElement.onmouseup = '';
-      this.canvasMine.nativeElement.onmousedown = '';
-      this.canvasMine.nativeElement.onmousemove = '';
-
-      // It is finished!
-      this.finishedEvent.emit(true);
-    }
-  }
-
   getAroundUnknown(pos) {
     let unknowArr = [];
     let arCells = this.arCells;
     let aroundArr = [[pos[0] - 1, pos[1] - 1], [pos[0] - 1, pos[1]], [pos[0] - 1, pos[1] + 1], [pos[0], pos[1] - 1], [pos[0], pos[1] + 1], [pos[0] + 1, pos[1] - 1], [pos[0] + 1, pos[1]], [pos[0] + 1, pos[1] + 1]];
 
-    // var aroundUnknownNum = 0;
     for (let i: number = 0; i < aroundArr.length; i++) {
       if (this.checkCell(aroundArr[i]) && arCells[aroundArr[i][0]][aroundArr[i][1]].tag == 0 && arCells[aroundArr[i][0]][aroundArr[i][1]].isOpened == false) {
         unknowArr.push(aroundArr[i]);
@@ -316,31 +252,13 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
     let aroundArr = [[pos[0] - 1, pos[1] - 1], [pos[0] - 1, pos[1]], [pos[0] - 1, pos[1] + 1], [pos[0], pos[1] - 1], [pos[0], pos[1] + 1], [pos[0] + 1, pos[1] - 1], [pos[0] + 1, pos[1]], [pos[0] + 1, pos[1] + 1]];
     let tagNum = 0;
 
-    for (var i = 0; i < aroundArr.length; i++) {
-      if (this.checkCell(aroundArr[i]) && arCells[aroundArr[i][0]][aroundArr[i][1]].tag == 1) {
+    for (let i = 0; i < aroundArr.length; i++) {
+      if (this.checkCell(aroundArr[i]) && arCells[aroundArr[i][0]][aroundArr[i][1]].tag === 1) {
         tagNum++;
       }
-    };
-    return tagNum;
-  }
-
-  createCells() {
-    let paneheight = this._paneHeigh;
-    let panewidth = this._paneWidth;
-
-    for (let i = 1; i <= panewidth; i++) {
-      this.arCells[i] = [];
-
-      for (let j = 1; j <= paneheight; j++) {
-        this.arCells[i][j] = {
-          isMine: false,
-          isOpened: false,
-          tag: 0
-        };
-
-        this.drawCell([i, j], 1)
-      }
     }
+
+    return tagNum;
   }
 
   showMine() {
@@ -372,7 +290,7 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
     let aroundArr = [[pos[0] - 1, pos[1] - 1], [pos[0] - 1, pos[1]], [pos[0] - 1, pos[1] + 1], [pos[0], pos[1] - 1], [pos[0], pos[1] + 1], [pos[0] + 1, pos[1] - 1], [pos[0] + 1, pos[1]], [pos[0] + 1, pos[1] + 1]];
     let aroundMineNum: number = 0;
 
-    for (var i = 0; i < aroundArr.length; i++) {
+    for (let i = 0; i < aroundArr.length; i++) {
       aroundMineNum += this.checkMine(aroundArr[i]) ? 1 : 0;
     }
 
@@ -380,12 +298,12 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   }
 
   calZeroMine(pos, zeroArr) {
-    var arCells = this.arCells;
+    let arCells = this.arCells;
 
-    var aroundArr = [[pos[0] - 1, pos[1] - 1], [pos[0] - 1, pos[1]], [pos[0] - 1, pos[1] + 1], [pos[0], pos[1] - 1], [pos[0], pos[1] + 1], [pos[0] + 1, pos[1] - 1], [pos[0] + 1, pos[1]], [pos[0] + 1, pos[1] + 1]];
-    var aroundMineNum = 0;
+    let aroundArr = [[pos[0] - 1, pos[1] - 1], [pos[0] - 1, pos[1]], [pos[0] - 1, pos[1] + 1], [pos[0], pos[1] - 1], [pos[0], pos[1] + 1], [pos[0] + 1, pos[1] - 1], [pos[0] + 1, pos[1]], [pos[0] + 1, pos[1] + 1]];
+    let aroundMineNum = 0;
 
-    for (var i = 0; i < aroundArr.length; i++) {
+    for (let i = 0; i < aroundArr.length; i++) {
       aroundMineNum = this.calAround(aroundArr[i]);
       if (aroundMineNum === 0 && this.checkCell(aroundArr[i]) && arCells[aroundArr[i][0]][aroundArr[i][1]].isMine == false && !this.isInArray(aroundArr[i], zeroArr)) {
         zeroArr.push(aroundArr[i]);
@@ -421,21 +339,12 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   drawCell(pos, type) {
     let area = this.getCellArea(pos);
     let cxt = this.canvasMine.nativeElement.getContext('2d');
-    let image = new Image();
 
-    let srcArr = ["../../assets/image/mineresource/blank.jpg", 
-      "../../assets/image/mineresource/0.jpg", 
-      "../../assets/image/mineresource/flag.jpg", 
-      "../../assets/image/mineresource/ask.jpg", 
-      "../../assets/image/mineresource/mine.png", 
-      "../../assets/image/mineresource/blood.jpg", 
-      "../../assets/image/mineresource/error.jpg"];
-    
-    var index = type - 1;
-    image.src = srcArr[index];
-    image.onload = function () {
+    let image = new Image();
+    image.src = this.arImgUrls[type - 1];
+    image.onload = () => {
       cxt.drawImage(image, area[0], area[1], 16, 16);
-    }
+    };
   }
 
   drawNum(pos, num: number) {
@@ -495,33 +404,151 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
     };
   }
 
-  private numToImage(num: number, bTag: boolean) {
-    let snum: string;
-    if (num > 999) {
-      snum = '999';
-    } else if (num < 0) {
-      snum = '000';
-    } else if (num < 10) {
-      snum = "00" + num;
-    } else if (num < 100) {
-      snum = "0" + num;
-    } else {
-      snum = num.toString();
+  /**
+   * Handler of Click
+   */
+  onClick(pos, e) {
+    let currentCell: MineSweepCell = this.arCells[pos[0]][pos[1]];
+
+    if (currentCell.isOpened) {
+
+      if (e) {
+        let aroundMineNum = this.calAround(pos);
+        let unknownArr = this.getAroundUnknown(pos);
+        let tagNum = this.getAroundTag(pos);
+
+        if (aroundMineNum === tagNum) {
+          for (var t = 0, uLen = unknownArr.length; t < uLen; t++) {
+            this.onClick(unknownArr[t], undefined);
+          }
+        } else {
+          let mousedownArr = this.mousedownArr;
+          if (mousedownArr !== "") {
+            for (let m = 0; m < mousedownArr.length; m++) {
+              this.drawCell(mousedownArr[m], 1);
+            }
+          }
+
+          this.mousedownArr = "";
+        }
+      }
+
+      return;
     }
 
-    if (bTag) {
-      let childelem = this.gametags.nativeElement.getElementsByTagName('img');
-      for (let i = 0, eLen = childelem.length; i < eLen; i++) {
-        childelem[i].src = "../../assets/image/mineresource/d" + snum.charAt(i) + ".jpg";
+    let tag = currentCell.tag;
+    if (e && e.button == 2) { 
+
+      if (tag === 0) {
+        this.drawCell(pos, 3);
+        currentCell.tag = 1;
+        this.notTaged--;
+        this.setNumberImage(this.notTaged, true);
+      }
+      else if (tag === 1) {
+        this.drawCell(pos, 4);
+        currentCell.tag = 2;
+        this.notTaged++;
+        this.setNumberImage(this.notTaged, true);
+      } else if (tag == 2) {
+        this.drawCell(pos, 1);
+        currentCell.tag = 0;
+      }
+      return;
+    }
+    if (tag !== 0) {
+      return;
+    }
+
+    if (currentCell.isMine) {
+      this.showMine();
+      this.drawCell(pos, 6);
+      this.showWrongTag();
+
+      this.onFinishedWithFailed();
+    } else { 
+      this.drawNum(pos, 0);
+      var aroundMineNum = this.calAround(pos);
+      if (aroundMineNum != 0) {
+        this.drawNum(pos, aroundMineNum);
+      } else {
+        var zeroArr = [];
+        zeroArr.push(pos);
+        zeroArr = this.calZeroMine(pos, zeroArr);
+        this.openZeroArr(zeroArr);
+      }
+    }
+    currentCell.isOpened = true;
+
+    let okNum = this._paneWidth * this._paneHeigh - this._minenum;
+    let openNum = 0;
+    for (let i = 1; i <= this._paneWidth; i++) {
+
+      for (let j = 1; j <= this._paneHeigh; j++) {
+        if (this.arCells[i][j].isOpened == true) {
+          openNum++;
+        }
       };
-    } else {
-      let childelem = this.gametime.nativeElement.getElementsByTagName('img');
-      for (let i = 0, eLen = childelem.length; i < eLen; i++) {
-        childelem[i].src = "../../assets/image/mineresource/d" + snum.charAt(i) + ".jpg";
-      };
+    }
+
+    if (openNum === okNum) {      
+      this.onFinishedWithSuccess();
     }
   }
 
+  private onFinishedWithSuccess() {
+    this.face.nativeElement.src = "../assets/image/mineresource/face_success.jpg";
+    if (this.timer) {
+      clearInterval(this.timer);
+    }    
+
+    // Cleanup the events
+    this.canvasMine.nativeElement.onmouseup = '';
+    this.canvasMine.nativeElement.onmousedown = '';
+    this.canvasMine.nativeElement.onmousemove = '';
+
+    // It is finished!
+    this.finishedEvent.emit(true);
+  }
+  private onFinishedWithFailed() {
+    
+    this.face.nativeElement.src = "../assets/image/mineresource/face_fail.jpg";
+    this.canvasMine.nativeElement.onmouseup = '';
+    this.canvasMine.nativeElement.onmousedown = '';
+    this.canvasMine.nativeElement.onmousemove = '';
+
+    clearInterval(this.timer);
+
+    // Failed case
+    alert('Failed');
+    this.finishedEvent.emit(false);
+  }
+
+  /**
+   * Initial the cells
+   */
+  private initCells(): void {
+    for (let i: number = 1; i <= this._paneWidth; i++) {
+      // Each row
+      this.arCells[i] = [];
+
+      for (let j: number = 1; j <= this._paneHeigh; j++) {
+        // Each column
+        this.arCells[i][j] = {
+          isMine: false,
+          isOpened: false,
+          tag: 0
+        };
+
+        this.drawCell([i, j], 1)
+      }
+    }
+  }
+
+  /**
+   * Get point of the event
+   * @param evt Event
+   */
   private getEventPosition(evt: any) {
     let x = evt.clientX;
     let y = evt.clientY;
@@ -554,5 +581,41 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
     }
 
     return false;
-  }  
+  }
+  
+  /**
+   * Get prefix interger
+   * @param num Number to process
+   * @param length Length
+   */
+  private getPrefixInteger(num: number, length: number): string {
+    if (num > 999) {
+      num = 999;
+    } else if(num < 0) {
+      num = 0;
+    }
+
+    return (Array(length).join('0') + num).slice(-length);
+  }
+
+  /**
+   * Set number image
+   * @param num Number to set
+   * @param bTag Tag of Mine or tag of times
+   */
+  private setNumberImage(num: number, bTag: boolean): void {
+    let snum: string = this.getPrefixInteger(num, 3);
+
+    if (bTag) {
+      let childelem = this.gametags.nativeElement.getElementsByTagName('img');
+      for (let i: number = 0; i < childelem.length; i++) {
+        childelem[i].src = "../../assets/image/mineresource/d" + snum.charAt(i) + ".jpg";
+      }
+    } else {
+      let childelem = this.gametime.nativeElement.getElementsByTagName('img');
+      for (let i: number = 0; i < childelem.length; i++) {
+        childelem[i].src = "../../assets/image/mineresource/d" + snum.charAt(i) + ".jpg";
+      }
+    }
+  }
 }

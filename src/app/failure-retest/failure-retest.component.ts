@@ -237,37 +237,37 @@ export class FailureRetestComponent implements OnInit {
 
         default: break;
       }
+    }
 
-      if (this._dlgsvc.FailureItems.length > 0) {
-        this._dlgsvc.CurrentScore = Math.round(100 - 100 * this._dlgsvc.FailureItems.length / this.listFailItems.length);
-        this.dialog.open(QuizFailureDlgComponent, {
-          disableClose: false,
-          width: '500px'
-        }).afterClosed().subscribe(x => {
-          // Do nothing!
-        });
-      } else {
-        this.listFailItems = [];
+    if (this._dlgsvc.FailureItems.length > 0) {
+      this._dlgsvc.CurrentScore = Math.round(100 - 100 * this._dlgsvc.FailureItems.length / this.listFailItems.length);
+      this.dialog.open(QuizFailureDlgComponent, {
+        disableClose: false,
+        width: '500px'
+      }).afterClosed().subscribe(x => {
+        // Do nothing!
+      });
+    } else {
+      this.listFailItems = [];
 
-        // Also show a dialog
-        const dlginfo: MessageDialogInfo = {
-          Header: 'Home.Finished',
-          Content: 'Home.FailureRetestFinished',
-          Button: MessageDialogButtonEnum.onlyok
-        };
+      // Also show a dialog
+      const dlginfo: MessageDialogInfo = {
+        Header: 'Home.Finished',
+        Content: 'Home.FailureRetestFinished',
+        Button: MessageDialogButtonEnum.onlyok
+      };
 
-        this.dialog.open(MessageDialogComponent, {
-          disableClose: false,
-          width: '500px',
-          data: dlginfo
-        }).afterClosed().subscribe(x => {
-          // Do nothing!
-          if (environment.LoggingLevel >= LogLevel.Debug) {
-            console.log(`AC Math Exercise [Debug]: Message dialog result ${x}`);
-          }
-          this._router.navigate(['/']);
-        });
-      }
+      this.dialog.open(MessageDialogComponent, {
+        disableClose: false,
+        width: '500px',
+        data: dlginfo
+      }).afterClosed().subscribe(x => {
+        // Do nothing!
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log(`AC Math Exercise [Debug]: Message dialog result ${x}`);
+        }
+        this._router.navigate(['/']);
+      });
     }
   }
 }

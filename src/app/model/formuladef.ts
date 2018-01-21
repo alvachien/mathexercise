@@ -11,7 +11,8 @@ export enum PrimarySchoolFormulaEnum {
   CircumferenceOfSquare = 11,
   CircumferenceOfRectangle = 12,
 
-  DistanceAndSpeed = 20
+  DistanceAndSpeed = 20,
+  EfficiencyProblem = 21
 }
 
 export function getFormulaNameString(fe: PrimarySchoolFormulaEnum): string {
@@ -64,6 +65,11 @@ export function getFormulaNameString(fe: PrimarySchoolFormulaEnum): string {
 
     case PrimarySchoolFormulaEnum.DistanceAndSpeed: {
       rst = 'Math.DistanceAndSpeed';
+    }
+    break;
+
+    case PrimarySchoolFormulaEnum.EfficiencyProblem: {
+      rst = 'Math.EfficiencyProblem';
     }
     break;
 
@@ -124,6 +130,11 @@ export function getFormulaUIString(fe: PrimarySchoolFormulaEnum): string {
 
     case PrimarySchoolFormulaEnum.DistanceAndSpeed: {
       rst = '<var>S</var> = <var>v</var> × <var>h</var>';
+    }
+    break;
+
+    case PrimarySchoolFormulaEnum.EfficiencyProblem: {
+      rst = '<var>R</var> = <var>e</var> × <var>h</var>';
     }
     break;
 

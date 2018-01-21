@@ -474,7 +474,7 @@ export class PuzzleGamesComponent implements OnInit {
   }
 
   public CanTypingStart(): boolean {
-    if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted || this.typingQuiz.IsStarted) {
+    if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted || this.typingQuiz.IsStarted || this.mineSweepQuiz.IsStarted) {
       return false;
     }
 
@@ -565,20 +565,37 @@ export class PuzzleGamesComponent implements OnInit {
   /**
    * Minesweeper
    */
-  public onMinesweeperStarted(data: any): void {
+  public CanMineSweepStart(): boolean {
+    if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted || this.typingQuiz.IsStarted || this.mineSweepQuiz.IsStarted) {
+      return false;
+    }
+
+    return true;
+  }
+
+  public OnMineSweepStart(): void {
     this.mineSweepQuiz.BasicInfo = '';
     this.mineSweepQuiz.Start(1, 0); // Single item and no failor
     this.mineSweepQuiz.CurrentRun().SectionStart();
   }
 
+  public onMinesweeperStarted(data: any): void {
+    // Just do nothing for now.
+    // this.mineSweepQuiz.BasicInfo = '';
+    // this.mineSweepQuiz.Start(1, 0); // Single item and no failor
+    // this.mineSweepQuiz.CurrentRun().SectionStart();
+  }
+
   public onMinesweeperFinished(rst: boolean): void {
     if (rst) {
       // Succeed
+      this.mineSweepQuiz.SubmitCurrentRun();
     } else {
       // Failed
+      // Failed item => Need add
+      this.mineSweepQuiz.SubmitCurrentRun();
     }
     
-    this.mineSweepQuiz.SubmitCurrentRun();
     // Save it!
     this._quizService.saveDB(this.mineSweepQuiz).subscribe(x => {
       // Do nothing for now
@@ -593,7 +610,7 @@ export class PuzzleGamesComponent implements OnInit {
 
     const di: PgSummaryDlgInfo = {
       gameWin: true,
-      timeSpent: this.typingQuiz.ElderRuns()[0].TimeSpent,
+      timeSpent: this.mineSweepQuiz.ElderRuns()[0].TimeSpent,
       haveARetry: true
     };
 

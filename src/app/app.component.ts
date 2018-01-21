@@ -191,6 +191,11 @@ export class AppComponent implements OnInit {
     window.open(environment.AppGallery, '_blank');
   }
 
+  public onLanguageChange(langid: string): void {
+    this._selLanguage = langid;
+
+    this.onLanguageChanged();
+  }  
   public onLanguageChanged(): void {
     if (this._translate.currentLang !== this._selLanguage &&
       this._selLanguage !== undefined) {

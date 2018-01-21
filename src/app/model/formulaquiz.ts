@@ -14,6 +14,7 @@ export function isFormulaTypeEnabled(fe: PrimarySchoolFormulaEnum): boolean {
     case PrimarySchoolFormulaEnum.CircumferenceOfRectangle:
     case PrimarySchoolFormulaEnum.CircumferenceOfSquare:
     case PrimarySchoolFormulaEnum.DistanceAndSpeed:
+    case PrimarySchoolFormulaEnum.EfficiencyProblem:
       return true;
 
     default:
@@ -999,6 +1000,178 @@ export class FormulaAreaOfSquareQuizItem extends FormulaQuizItemBase {
       const nnum: number = parseFloat(s.substring(idx + 1));
 
       return new FormulaAreaOfSquareQuizItem(nnum, <FormulaAreaOfSquareCalcDirEum>nbol);
+    }
+    catch (exp) {
+      console.error(exp);
+    }
+
+    return null;
+  }
+}
+
+/**
+ * Calculate direction
+ * The number must be in sequence because the generation using randomizing
+ */
+export enum FormulaEfficiencyProblemCalcDirEum {
+  EfficiencyAndTime = 0,
+  EfficiencyAndResult = 1,
+  TimeAndResult = 2
+}
+
+/**
+ * Quiz item to calculate efficiency problem
+ * R = eh
+ */
+// EfficiencyProblem    = 21
+export class FormulaEfficiencyProblemQuizItem extends FormulaQuizItemBase {
+  private _result: number;
+  private _efficiency: number;
+  private _time: number;
+
+  /**
+   * Result
+   */
+  get Result(): number {
+    return this._result;
+  }
+  /**
+   * E
+   */
+  get Efficiency(): number {
+    return this._efficiency;
+  }
+  /**
+   * Time
+   */
+  get Time(): number {
+    return this._time;
+  }
+
+  private _direct: FormulaEfficiencyProblemCalcDirEum;
+  /**
+   * Calculate direction
+   */
+  get CalcDirection(): FormulaEfficiencyProblemCalcDirEum {
+    return this._direct;
+  }
+
+  constructor(num1: number, num2: number, dir: FormulaEfficiencyProblemCalcDirEum) {
+    super(PrimarySchoolFormulaEnum.EfficiencyProblem);
+
+    if (dir === FormulaEfficiencyProblemCalcDirEum.EfficiencyAndTime) {
+      this._direct = dir;
+      this._efficiency = num1;
+      this._time = num2;
+      this._result = parseFloat((this._efficiency * this._time).toFixed(2));
+    } else if (dir === FormulaEfficiencyProblemCalcDirEum.EfficiencyAndResult) {
+      this._direct = dir;
+      this._efficiency = num1;
+      this._result = num2;
+      this._time = parseFloat((this._result / this._efficiency).toFixed(2));
+    } else if (dir === FormulaEfficiencyProblemCalcDirEum.TimeAndResult) {
+      this._direct = dir;
+      this._time = num1;
+      this._result = num2;
+      this._efficiency = parseFloat((this._result / this._time).toFixed(2));
+    } else {
+      throw new Error('Unsupported direction!');
+    }
+  }
+
+  public IsCorrect(): boolean {
+    const brst = super.IsCorrect();
+    if (!brst) {
+      return false;
+    }
+
+    if (this._direct === FormulaEfficiencyProblemCalcDirEum.EfficiencyAndTime) {
+      if (this._result.toFixed(2) === this.InputtedResult.toFixed(2)) {
+        return true;
+      }
+    } else if (this._direct === FormulaEfficiencyProblemCalcDirEum.EfficiencyAndResult) {
+      if (this._time.toFixed(2) === this.InputtedResult.toFixed(2)) {
+        return true;
+      }
+    } else if (this._direct === FormulaEfficiencyProblemCalcDirEum.TimeAndResult) {
+      if (this._efficiency.toFixed(2) === this.InputtedResult.toFixed(2)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  public getQuizFormat(): string {
+    if (this._direct === FormulaEfficiencyProblemCalcDirEum.EfficiencyAndTime) {
+      return `Home.EfficiencyProblemForRFormat`;
+    } else if (this._direct === FormulaEfficiencyProblemCalcDirEum.EfficiencyAndResult) {
+      return `Home.EfficiencyProblemForTFormat`;
+    } else if (this._direct === FormulaEfficiencyProblemCalcDirEum.TimeAndResult) {
+      return `Home.EfficiencyProblemForEFormat`;
+    }
+  }
+
+  public getQuizFormatParam(): any {
+    if (this._direct === FormulaEfficiencyProblemCalcDirEum.EfficiencyAndTime) {
+      return {
+        efficiency: this._efficiency,
+        time: this._time
+      };
+    } else if (this._direct === FormulaEfficiencyProblemCalcDirEum.EfficiencyAndResult) {
+      return {
+        efficiency: this._efficiency,
+        result: this._result
+      };
+    } else if (this._direct === FormulaEfficiencyProblemCalcDirEum.TimeAndResult) {
+      return {
+        time: this._time,
+        result: this._result
+      };
+    }
+  }
+
+  public getCorrectFormula(): string {
+    const frmstr: string = getFormulaUIString(this.FormulaType);
+
+    return frmstr.replace('R', this._result.toFixed(2)).replace('e', this._efficiency.toFixed(2)).replace('h', this._time.toFixed(2));
+  }
+
+  public getInputtedForumla(): string {
+    const frmstr: string = getFormulaUIString(this.FormulaType);
+
+    if (this._direct === FormulaEfficiencyProblemCalcDirEum.EfficiencyAndTime) {
+      return frmstr.replace('R', this.InputtedResult.toFixed(2)).replace('e', this._efficiency.toFixed(2)).replace('h', this._time.toFixed(2));
+    } else if (this._direct === FormulaEfficiencyProblemCalcDirEum.EfficiencyAndResult) {
+      return frmstr.replace('R', this._result.toFixed(2)).replace('e', this._efficiency.toFixed(2)).replace('h', this.InputtedResult.toFixed(2));
+    } else if (this._direct === FormulaEfficiencyProblemCalcDirEum.TimeAndResult) {
+      return frmstr.replace('R', this._result.toFixed(2)).replace('e', this.InputtedResult.toFixed(2)).replace('h', this._time.toFixed(2));
+    }
+  }
+
+  public storeToString(): string {
+    let rstr = super.storeToString();
+
+    if (this._direct === FormulaEfficiencyProblemCalcDirEum.EfficiencyAndTime) {
+      rstr += QuizSplitter + '0' + QuizSplitter + this._efficiency.toString() + QuizSplitter + this._time.toString();
+    } else if (this._direct === FormulaEfficiencyProblemCalcDirEum.EfficiencyAndResult) {
+      rstr += QuizSplitter + '1' + QuizSplitter + this._efficiency.toString() + QuizSplitter + this._time.toString();
+    } else if (this._direct === FormulaEfficiencyProblemCalcDirEum.TimeAndResult) {
+      rstr += QuizSplitter + '2' + QuizSplitter + this._time.toString() + QuizSplitter + this._result.toString();
+    }
+
+    return rstr;
+  }
+
+  public static restoreFromString(s: string): FormulaEfficiencyProblemQuizItem | null {
+    try {
+      const idx = s.indexOf(QuizSplitter);
+      const idx2 = s.indexOf(QuizSplitter, idx + 1);
+
+      const ndir: number = <FormulaEfficiencyProblemCalcDirEum>parseInt(s.substring(0, idx));
+      const nnum1: number = parseFloat(s.substring(idx + 1, idx2));
+      const nnum2: number = parseFloat(s.substring(idx2 + 1));
+      return new FormulaEfficiencyProblemQuizItem(nnum1, nnum2, ndir);
     }
     catch (exp) {
       console.error(exp);
