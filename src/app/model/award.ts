@@ -178,7 +178,7 @@ export interface UserAwardJson {
   quizType?: number;
   quizID?: number;
   usedReason?: string;
-  publish?: boolean;
+  punish?: boolean;
 }
 
 /**
@@ -255,12 +255,12 @@ export class UserAward {
     this._usdrsn = ur;
   }
 
-  private _publish: boolean;
-  get Publish(): boolean {
-    return this._publish;
+  private _punish: boolean;
+  get Punish(): boolean {
+    return this._punish;
   }
-  set Publish(isp: boolean) {
-    this._publish = isp;
+  set Punish(isp: boolean) {
+    this._punish = isp;
   }
 
   constructor() {
@@ -276,7 +276,7 @@ export class UserAward {
     this._quizid = jdata.quizID;
     this._quiztype = +jdata.quizType;
     this._usdrsn = jdata.usedReason;
-    this._publish = jdata.publish;
+    this._punish = jdata.punish;
   }
 
   public prepareData(): UserAwardJson {
@@ -288,7 +288,7 @@ export class UserAward {
       awardPlanID: this._awdpid,
       quizID: this._quizid,
       usedReason: this._usdrsn,
-      publish: this._publish
+      punish: this._punish
     };
 
     return data;
