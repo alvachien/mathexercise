@@ -93,6 +93,16 @@
           [yAxisLabel]="yAxisLabelItemAmountByType" (select)="onItemAmountByTypeSelect($event)">
         </ngx-charts-bar-vertical-stacked>
       </mat-tab>
+
+      <mat-tab label="{{'Home.SucceedRateTrend' | translate}}">
+        <ngx-charts-line-chart [view]="viewGraph" [scheme]="colorSchemeGeneral" [results]="dataTrendSucceedRate">
+        </ngx-charts-line-chart>
+      </mat-tab>
+
+      <mat-tab label="{{'Home.TimeSpentTrend' | translate}}">
+        <ngx-charts-line-chart [view]="viewGraph" [scheme]="colorSchemeGeneral" [results]="dataTrendTimeSpent">
+        </ngx-charts-line-chart>
+      </mat-tab>
     </mat-tab-group>
   </mat-card-content>
 </mat-card>

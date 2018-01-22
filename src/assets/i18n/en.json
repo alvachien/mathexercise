@@ -57,6 +57,8 @@
     "QuizAmountByType": "Quiz By Type",
     "ItemAmountByDate": "Items By Date",
     "ItemAmountByType": "Items By Type",
+    "SucceedRateTrend": "Trend of Succeed Rate",
+    "TimeSpentTrend": "Trend of Time Spent",
     "CorrectedAmount": "Correct",
     "FailedAmount": "Failed",
     "Amount": "Amount",

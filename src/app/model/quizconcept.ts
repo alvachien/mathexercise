@@ -35,7 +35,7 @@ export function QuizTypeEnum2UIString(qt: QuizTypeEnum): string {
     case QuizTypeEnum.sudou: rst = 'Home.Sudou'; break;
     case QuizTypeEnum.typing: rst = 'Home.TypingTutor'; break;
     case QuizTypeEnum.mixedop: rst = 'Home.MixedOperations'; break;
-    case QuizTypeEnum.minesweep: rst = 'Home.MineSweeper'; break;
+    case QuizTypeEnum.minesweep: rst = 'Home.Minesweeper'; break;
     default: break;
   }
 

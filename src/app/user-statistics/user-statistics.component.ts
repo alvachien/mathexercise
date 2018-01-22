@@ -102,12 +102,6 @@ export class QuizDataSource extends DataSource<APIQuiz> {
   styleUrls: ['./user-statistics.component.scss']
 })
 export class UserStatisticsComponent implements OnInit {
-  // StatisticQuizItemAmountByType
-  // StatisticQuizItemAmountByDate
-  // StatisticQuizAmountByDate
-  // StatisticQuizAmountByType
-  // AttendedUser
-
   listUsers: QuizAttendUser[] = [];
   curUser = '';
   listRanges: daterangeui[] = [];
@@ -162,11 +156,16 @@ export class UserStatisticsComponent implements OnInit {
   yAxisLabelItemAmountByType = 'Amount';
   dataItemAmountByType: any[] = [];
 
+  // Trend of succeed rate
+  dataTrendSucceedRate: any[] = [];
+
+  // Trend of timespent
+  dataTrendTimeSpent: any[] = [];
+
   constructor(private _http: HttpClient,
     private _tranService: TranslateService,
     private _authService: AuthService,
     private _userDetailService: UserDetailService) {
-    // Object.assign(this, {single});
     this.curUser = '';
 
     // Get Quiz type display string
@@ -247,14 +246,14 @@ export class UserStatisticsComponent implements OnInit {
   public onUserChanged(evnt: any) {
     if (this.curUser !== undefined && this.curUser !== null && this.curUser.length > 0) {
       this.fetchQuizData();
-      // this.fetchQuizAmountByDate(this.curUser);
-      // this.fetchQuizAmountByType(this.curUser);
-      // this.fetchQuizItemAmountByDate(this.curUser);
-      // this.fetchQuizItemAmountByType(this.curUser);
+      this.fetchTrendData();
     }
   }
   public onDateRangeChanged(event: any) {
-    this.fetchQuizData();
+    if (this.curUser !== undefined && this.curUser !== null && this.curUser.length > 0) {
+      this.fetchQuizData();
+      this.fetchTrendData();
+    }
   }
 
   public onQuizAmountByDateSelect(evnt: any) {
@@ -270,6 +269,11 @@ export class UserStatisticsComponent implements OnInit {
   }
 
   private fetchQuizData() {
+    this.dataQuizAmountByDate = [];
+    this.dataQuizAmountByType = [];
+    this.dataItemAmountByDate = [];
+    this.dataItemAmountByType = [];
+
     const apiurl = environment.APIBaseUrl + 'quiz';
     const { BeginDate: bgn,  EndDate: end }  = getStatisticsDateRangeDate(this.curRange);
     
@@ -291,10 +295,6 @@ export class UserStatisticsComponent implements OnInit {
       })
       .subscribe(x => {
         const ndata: APIQuiz[] = [];
-        this.dataQuizAmountByDate = [];
-        this.dataQuizAmountByType = [];
-        this.dataItemAmountByDate = [];
-        this.dataItemAmountByType = [];
 
         if (x instanceof Array && x.length > 0) {
           for (const si of x) {
@@ -399,146 +399,105 @@ export class UserStatisticsComponent implements OnInit {
       });
   }
 
-  private fetchQuizAmountByDate(usr: string) {
-    const apiurl = environment.APIBaseUrl + 'StatisticQuizAmountByDate/' + usr;
+  private fetchTrendData() {
+    this.dataTrendSucceedRate = [];
+    this.dataTrendTimeSpent = [];
 
+    const apistattime = environment.APIBaseUrl + 'StatisticQuizTime';
+    const apistatsrate = environment.APIBaseUrl + 'StatisticQuizRate';
+    const { BeginDate: bgn,  EndDate: end }  = getStatisticsDateRangeDate(this.curRange);
+    
     let headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json')
               .append('Accept', 'application/json')
               .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-    this._http.get(apiurl, {
+    let params = new HttpParams();
+    params = params.set('usrid', this.curUser);
+    params = params.set('dtBegin', bgn.format(DateFormat));
+    params = params.set('dtEnd', end.format(DateFormat));
+
+    Observable.forkJoin(
+    this._http.get(apistatsrate, {
         headers: headers,
+        params: params,
         withCredentials: true
-      })
-      .map((response: HttpResponse<any>) => {
-        return <any>response;
-      })
-      .subscribe(x => {
-        if (x instanceof Array && x.length > 0) {
-          this.dataQuizAmountByDate = [];
-
-          for (const si of x) {
-            const ent: any = {
-              name: si.quizDate,
-              value: Number(si.amount)
-            };
-
-            this.dataQuizAmountByDate.push(ent);
-          }
-        }
-      });
-  }
-
-  private fetchQuizAmountByType(usr: string) {
-    const apiurl = environment.APIBaseUrl + 'StatisticQuizAmountByType/' + usr;
-
-    let headers = new HttpHeaders();
-    headers = headers.append('Content-Type', 'application/json')
-              .append('Accept', 'application/json')
-              .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-    this._http.get(apiurl, {
+      }),
+      this._http.get(apistattime, {
         headers: headers,
+        params: params,
         withCredentials: true
-      })
-      .map((response: HttpResponse<any>) => {
-        return <any>response;
-      })
-      .subscribe(x => {
-        if (x instanceof Array && x.length > 0) {
-          this.dataQuizAmountByType = [];
-          for (const si of x) {
-            let name = '';
+      }),
+    ).subscribe(x => {
+      if (x[0]) {
+        // Succeed rate
+        if (x[0] instanceof Array) {
+          let sdata: any[] = <any[]>x[0];
+          for (const si of sdata) {
+            let typename = '';
             for (const qtu of this.listqtype) {
               if (qtu.qtype === Number(si.quizType)) {
-                name = qtu.display;
+                typename = qtu.display;
               }
             }
-            const ent: any = {
-              name: name,
-              value: Number(si.amount)
-            };
 
-            this.dataQuizAmountByType.push(ent);
+            let idx = this.dataTrendSucceedRate.findIndex((val) => {
+              return val.name === typename;
+            });
+            if (idx === -1) {
+              this.dataTrendSucceedRate.push({
+                name: typename,
+                series: [
+                  {
+                    name: si.submitDate.toString(),
+                    value: si.succeedRate,
+                  },
+                ]
+              })
+            } else  {
+              this.dataTrendSucceedRate[idx].series.push({
+                name: si.submitDate.toString(),
+                value: si.succeedRate,
+              });
+            }
           }
         }
-      });
-  }
+      }
 
-  private fetchQuizItemAmountByDate(usr: string) {
-    const apiurl = environment.APIBaseUrl + 'StatisticQuizItemAmountByDate/' + usr;
-
-    let headers = new HttpHeaders();
-    headers = headers.append('Content-Type', 'application/json')
-              .append('Accept', 'application/json')
-              .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-    this._http.get(apiurl, {
-        headers: headers,
-        withCredentials: true
-      })
-      .map((response: HttpResponse<any>) => {
-        return <any>response;
-      })
-      .subscribe(x => {
-        this.dataItemAmountByDate = [];
-        if (x instanceof Array && x.length > 0) {
-          for (const si of x) {
-            const rst = {
-              name: si.quizDate,
-              series: [
-                {
-                  name: 'Success',
-                  value: si.totalAmount - si.failedAmount
-                },
-                {
-                  name: 'Failed',
-                  value: si.failedAmount
-                }
-              ]
-            };
-            this.dataItemAmountByDate.push(rst);
-          }
-        }
-      });
-  }
-
-  private fetchQuizItemAmountByType(usr: string) {
-    const apiurl = environment.APIBaseUrl + 'StatisticQuizItemAmountByType/' + usr;
-
-    let headers = new HttpHeaders();
-    headers = headers.append('Content-Type', 'application/json')
-              .append('Accept', 'application/json')
-              .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
-    this._http.get(apiurl, {
-        headers: headers,
-        withCredentials: true
-      })
-      .map((response: HttpResponse<any>) => {
-        return <any>response;
-      })
-      .subscribe(x => {
-        this.dataItemAmountByType = [];
-        if (x instanceof Array && x.length > 0) {
-          for (const si of x) {
-            let name = '';
+      if (x[1]) {
+        // Timespent
+        if (x[1] instanceof Array) {
+          let sdata: any[] = <any[]>x[1];
+          for (const si of sdata) {
+            let typename = '';
             for (const qtu of this.listqtype) {
               if (qtu.qtype === Number(si.quizType)) {
-                name = qtu.display;
+                typename = qtu.display;
               }
             }
-            const rst = {
-              name: name,
-              series: [{
-                  name: 'Success',
-                  value: si.totalAmount - si.failedAmount
-                }, {
-                  name: 'Failed',
-                  value: si.failedAmount
-                }
-              ]
-            };
-            this.dataItemAmountByType.push(rst);
+
+            let idx = this.dataTrendTimeSpent.findIndex((val) => {
+              return val.name === typename;
+            });
+            if (idx === -1) {
+              this.dataTrendTimeSpent.push({
+                name: typename,
+                series: [
+                  {
+                    name: si.submitDate.toString(),
+                    value: si.timeSpent,
+                  },
+                ]
+              })
+            } else  {
+              this.dataTrendTimeSpent[idx].series.push({
+                name: si.submitDate.toString(),
+                value: si.timeSpent,
+              });
+            }
           }
         }
-      });
+      }
+    });
   }
 }
+ 
