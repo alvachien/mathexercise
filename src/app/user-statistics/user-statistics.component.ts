@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../services/auth.service';
 import {
   QuizTypeEnum, PrimarySchoolMathQuizItem, QuizTypeEnum2UIString, LogLevel, APIQuizSection, APIQuizFailLog, APIQuiz,
-  AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem, DateFormat, 
+  AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem, DateFormat,
   StatisticsDateRange, StatisticsDateRangeEnum, getStatisticsDateRangeEnumString, getStatisticsDateRangeDate
 } from '../model';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -73,7 +73,7 @@ export class QuizDataSource extends DataSource<APIQuiz> {
   /** Returns a sorted copy of the database data. */
   getSortedData(): APIQuiz[] {
     const data = this._parentComponent.Quizs.slice();
-    if (!this._sort.active || this._sort.direction == '') { return data; }
+    if (!this._sort.active || this._sort.direction === '') { return data; }
 
     return data.sort((a, b) => {
       let propertyA: number|string = '';
@@ -90,7 +90,7 @@ export class QuizDataSource extends DataSource<APIQuiz> {
       const valueA = isNaN(+propertyA) ? propertyA : +propertyA;
       const valueB = isNaN(+propertyB) ? propertyB : +propertyB;
 
-      return (valueA < valueB ? -1 : 1) * (this._sort.direction == 'asc' ? 1 : -1);
+      return (valueA < valueB ? -1 : 1) * (this._sort.direction === 'asc' ? 1 : -1);
     });
   }
 }
@@ -197,8 +197,8 @@ export class UserStatisticsComponent implements OnInit {
     });
 
     // Get date range display tring
-    for(const dr in StatisticsDateRangeEnum) {
-      if (isNaN(Number(dr))) {        
+    for (const dr in StatisticsDateRangeEnum) {
+      if (isNaN(Number(dr))) {
       } else {
         const astr = getStatisticsDateRangeEnumString(Number(dr));
 
@@ -276,7 +276,7 @@ export class UserStatisticsComponent implements OnInit {
 
     const apiurl = environment.APIBaseUrl + 'quiz';
     const { BeginDate: bgn,  EndDate: end }  = getStatisticsDateRangeDate(this.curRange);
-    
+
     let headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json')
               .append('Accept', 'application/json')
@@ -406,7 +406,7 @@ export class UserStatisticsComponent implements OnInit {
     const apistattime = environment.APIBaseUrl + 'StatisticQuizTime';
     const apistatsrate = environment.APIBaseUrl + 'StatisticQuizRate';
     const { BeginDate: bgn,  EndDate: end }  = getStatisticsDateRangeDate(this.curRange);
-    
+
     let headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json')
               .append('Accept', 'application/json')
@@ -431,7 +431,7 @@ export class UserStatisticsComponent implements OnInit {
       if (x[0]) {
         // Succeed rate
         if (x[0] instanceof Array) {
-          let sdata: any[] = <any[]>x[0];
+          const sdata: any[] = <any[]>x[0];
           for (const si of sdata) {
             let typename = '';
             for (const qtu of this.listqtype) {
@@ -440,7 +440,7 @@ export class UserStatisticsComponent implements OnInit {
               }
             }
 
-            let idx = this.dataTrendSucceedRate.findIndex((val) => {
+            const idx = this.dataTrendSucceedRate.findIndex((val) => {
               return val.name === typename;
             });
             if (idx === -1) {
@@ -454,10 +454,21 @@ export class UserStatisticsComponent implements OnInit {
                 ]
               })
             } else  {
-              this.dataTrendSucceedRate[idx].series.push({
-                name: si.submitDate.toString(),
-                value: si.succeedRate,
+              // Try to find out the records at the same date
+              const sidx = this.dataTrendTimeSpent[idx].series.findIndex((val) => {
+                return val.name === si.submitDate.toString();
               });
+              if (sidx === -1) {
+                this.dataTrendSucceedRate[idx].series.push({
+                  name: si.submitDate.toString(),
+                  value: si.succeedRate,
+                });
+              } else {
+                this.dataTrendSucceedRate[idx].series.push({
+                  name: si.submitDate.toString() + Math.round(Math.random() * 100000).toString(),
+                  value: si.succeedRate,
+                });
+              }
             }
           }
         }
@@ -466,7 +477,7 @@ export class UserStatisticsComponent implements OnInit {
       if (x[1]) {
         // Timespent
         if (x[1] instanceof Array) {
-          let sdata: any[] = <any[]>x[1];
+          const sdata: any[] = <any[]>x[1];
           for (const si of sdata) {
             let typename = '';
             for (const qtu of this.listqtype) {
@@ -475,7 +486,7 @@ export class UserStatisticsComponent implements OnInit {
               }
             }
 
-            let idx = this.dataTrendTimeSpent.findIndex((val) => {
+            const idx = this.dataTrendTimeSpent.findIndex((val) => {
               return val.name === typename;
             });
             if (idx === -1) {
@@ -489,10 +500,21 @@ export class UserStatisticsComponent implements OnInit {
                 ]
               })
             } else  {
-              this.dataTrendTimeSpent[idx].series.push({
-                name: si.submitDate.toString(),
-                value: si.timeSpent,
+              // Try to find out the records at the same date
+              const sidx = this.dataTrendTimeSpent[idx].series.findIndex((val) => {
+                return val.name === si.submitDate.toString();
               });
+              if (sidx === -1) {
+                this.dataTrendTimeSpent[idx].series.push({
+                  name: si.submitDate.toString(),
+                  value: si.timeSpent,
+                });
+              } else {
+                this.dataTrendTimeSpent[idx].series.push({
+                  name: si.submitDate.toString() + Math.round(Math.random() * 100000).toString(),
+                  value: si.timeSpent,
+                });
+              }
             }
           }
         }
@@ -500,4 +522,3 @@ export class UserStatisticsComponent implements OnInit {
     });
   }
 }
- 
