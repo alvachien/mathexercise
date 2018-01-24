@@ -417,7 +417,7 @@ export class UserStatisticsComponent implements OnInit {
     params = params.set('dtEnd', end.format(DateFormat));
 
     Observable.forkJoin(
-    this._http.get(apistatsrate, {
+      this._http.get(apistatsrate, {
         headers: headers,
         params: params,
         withCredentials: true
@@ -448,27 +448,16 @@ export class UserStatisticsComponent implements OnInit {
                 name: typename,
                 series: [
                   {
-                    name: si.submitDate.toString(),
+                    name: si.quizID.toString(),
                     value: si.succeedRate,
                   },
                 ]
               })
             } else  {
-              // Try to find out the records at the same date
-              const sidx = this.dataTrendTimeSpent[idx].series.findIndex((val) => {
-                return val.name === si.submitDate.toString();
+              this.dataTrendSucceedRate[idx].series.push({
+                name: si.quizID.toString(),
+                value: si.succeedRate,
               });
-              if (sidx === -1) {
-                this.dataTrendSucceedRate[idx].series.push({
-                  name: si.submitDate.toString(),
-                  value: si.succeedRate,
-                });
-              } else {
-                this.dataTrendSucceedRate[idx].series.push({
-                  name: si.submitDate.toString() + Math.round(Math.random() * 100000).toString(),
-                  value: si.succeedRate,
-                });
-              }
             }
           }
         }
@@ -494,31 +483,29 @@ export class UserStatisticsComponent implements OnInit {
                 name: typename,
                 series: [
                   {
-                    name: si.submitDate.toString(),
+                    name: si.quizID.toString(),
                     value: si.timeSpent,
                   },
                 ]
               })
             } else  {
-              // Try to find out the records at the same date
-              const sidx = this.dataTrendTimeSpent[idx].series.findIndex((val) => {
-                return val.name === si.submitDate.toString();
+              this.dataTrendTimeSpent[idx].series.push({
+                name: si.quizID.toString(),
+                value: si.timeSpent,
               });
-              if (sidx === -1) {
-                this.dataTrendTimeSpent[idx].series.push({
-                  name: si.submitDate.toString(),
-                  value: si.timeSpent,
-                });
-              } else {
-                this.dataTrendTimeSpent[idx].series.push({
-                  name: si.submitDate.toString() + Math.round(Math.random() * 100000).toString(),
-                  value: si.timeSpent,
-                });
-              }
             }
           }
         }
       }
+
+      if (this.dataTrendSucceedRate.length > 0) {
+        console.log(this.dataTrendSucceedRate.length);
+        for(const sr of this.dataTrendSucceedRate) {
+          console.log(sr);
+        }
+      }
+      
+      console.log(this.dataTrendTimeSpent.length);
     });
   }
 }

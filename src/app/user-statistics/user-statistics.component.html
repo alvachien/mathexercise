@@ -95,7 +95,19 @@
       </mat-tab>
 
       <mat-tab label="{{'Home.SucceedRateTrend' | translate}}">
-        <ngx-charts-line-chart [view]="viewGraph" [scheme]="colorSchemeGeneral" [results]="dataTrendSucceedRate">
+        <ngx-charts-line-chart
+          [view]="viewGraph"
+          [scheme]="colorSchemeGeneral"
+          [results]="dataTrendSucceedRate"
+          gradient="false"
+          xAxis="true"
+          yAxis="true"
+          legend="true"
+          showXAxisLabel="true"
+          showYAxisLabel="true"
+          xAxisLabel="Quiz"
+          yAxisLabel="Rate"
+          autoScale="true">
         </ngx-charts-line-chart>
       </mat-tab>
 
