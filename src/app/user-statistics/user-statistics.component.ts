@@ -253,6 +253,24 @@ export class UserStatisticsComponent implements OnInit {
     if (this.curUser !== undefined && this.curUser !== null && this.curUser.length > 0) {
       this.fetchQuizData();
       this.fetchTrendData();
+    //   this.dataTrendSucceedRate = [{
+    //     name: "加法练习",
+    //     series: [{
+    //       name: "4", value: 100
+    //     }, {
+    //       name: "5", value: 80
+    //     }, {
+    //       name: "7", value: 100
+    //     }, {
+    //       name: "10", value: 90
+    //     }]
+    //   }, {
+    //     name: "减法练习",
+    //     series: [
+    //       {name: "6", value: 100},
+    //       {name: "8", value: 100}
+    //     ]
+    //   }];
     }
   }
 
@@ -497,15 +515,6 @@ export class UserStatisticsComponent implements OnInit {
           }
         }
       }
-
-      if (this.dataTrendSucceedRate.length > 0) {
-        console.log(this.dataTrendSucceedRate.length);
-        for(const sr of this.dataTrendSucceedRate) {
-          console.log(sr);
-        }
-      }
-      
-      console.log(this.dataTrendTimeSpent.length);
     });
   }
 }
