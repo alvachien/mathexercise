@@ -20,6 +20,12 @@ export enum StatisticsDateRangeEnum {
   All = 5
 }
 
+export interface DateRangeUI {
+  daterange: StatisticsDateRangeEnum,
+  i18term: string;
+  display: string;
+}
+
 export function getStatisticsDateRangeEnumString(dr: StatisticsDateRangeEnum) {
   switch (dr) {
     case StatisticsDateRangeEnum.CurrentMonth:
@@ -33,10 +39,10 @@ export function getStatisticsDateRangeEnumString(dr: StatisticsDateRangeEnum) {
 
     case StatisticsDateRangeEnum.PreviousYear:
       return 'Home.PreviousYear';
-    
+
     case StatisticsDateRangeEnum.All:
       return 'Home.All';
-    
+
     default:
       throw new Error('Unsupported date range');
   }
@@ -56,7 +62,7 @@ export function getStatisticsDateRangeDate(scope: StatisticsDateRangeEnum): Stat
     end.endOf('month');
   } else if (scope === StatisticsDateRangeEnum.CurrentYear) {
     bgn.startOf('year');
-    
+
     end.endOf('year');
   } else if (scope === StatisticsDateRangeEnum.PreviousMonth) {
     bgn.subtract(1, 'M');
@@ -77,3 +83,4 @@ export function getStatisticsDateRangeDate(scope: StatisticsDateRangeEnum): Stat
 
   return { BeginDate: bgn, EndDate: end };
 }
+

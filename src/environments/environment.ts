@@ -10,11 +10,11 @@ export const environment = {
   LoggingLevel: 4, // Debug
   LoginRequired: true,
 
-  IDServerUrl: 'http://localhost:41016/',
+  IDServerUrl: 'http://localhost:41016',
   APIBaseUrl: 'http://localhost:54020/api/',
   AppLoginCallbackUrl: 'http://localhost:20000/logincallback.html',
   AppLoginSlientRevewCallbackUrl: 'http://localhost:20000/silentrenewcallback.html',
-  AppLogoutCallbackUrl: 'http://localhost:20000/index.html',
+  AppLogoutCallbackUrl: 'http://localhost:20000',
   AppHost: 'http://localhost:20000',
 
   AppHIH: 'http://localhost:29512',

@@ -1,0 +1,93 @@
+<div>
+  <mat-toolbar color="primary">
+    <mat-form-field>
+      <mat-select placeholder="{{'Home.User' | translate}}" [(ngModel)]="curUser" name="usr" (change)="onUserChanged($event)">
+        <mat-option *ngFor="let user of listUsers" [value]="user.attenduser">
+          {{ user.displayas }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select placeholder="{{'Home.DateRange' | translate}}" [(ngModel)]="curRange" name="dtrange" (change)="onDateRangeChanged($event)">
+        <mat-option *ngFor="let rge of listRanges" [value]="rge.daterange">
+          {{ rge.i18term | translate }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-toolbar>
+
+  <mat-tab-group>
+    <mat-tab label="{{'Home.Overview' | translate}}">
+      <div class="example-container mat-elevation-z8">
+        <mat-table #table [dataSource]="dataSource" matSort>
+
+          <!-- QuizID Column -->
+          <ng-container matColumnDef="QuizID">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.quizID}} </mat-cell>
+          </ng-container>
+
+          <!-- Date Column -->
+          <ng-container matColumnDef="Date">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{'Home.Date' | translate}} </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.submitDate}} </mat-cell>
+          </ng-container>
+
+          <!-- Type Column -->
+          <ng-container matColumnDef="QuizType">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{'Home.Type' | translate}} </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.quizTypeString | translate}} </mat-cell>
+          </ng-container>
+
+          <!-- Score Column -->
+          <ng-container matColumnDef="Score">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{'Home.Score' | translate}} </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.TotalScore}} </mat-cell>
+          </ng-container>
+
+          <!-- Time Column -->
+          <ng-container matColumnDef="TimeSpent">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{'Home.AvgTimeSpentEachInSeconds' | translate}} </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.TotalAverageTime}} </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+
+        <mat-paginator #paginator [length]="Quizs.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+        </mat-paginator>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="{{'Home.QuizAmountByDate' | translate}}">
+      <ngx-charts-bar-vertical [view]="viewGraph" [scheme]="colorSchemeGeneral" [results]="dataQuizAmountByDate" [gradient]="gradientQuizAmountByDate"
+        [xAxis]="showXAxisQuizAmountByDate" [yAxis]="showYAxisQuizAmountByDate" [legend]="showLegendQuizAmountByDate" [showXAxisLabel]="showXAxisLabelQuizAmountByDate"
+        [showYAxisLabel]="showYAxisLabelQuizAmountByDate" [xAxisLabel]="xAxisLabelQuizAmountByDate" [yAxisLabel]="yAxisLabelQuizAmountByDate"
+        (select)="onQuizAmountByDateSelect($event)">
+      </ngx-charts-bar-vertical>
+    </mat-tab>
+
+    <mat-tab label="{{'Home.QuizAmountByType' | translate}}">
+      <ngx-charts-number-card [view]="viewGraph" [scheme]="colorSchemeGeneral" [results]="dataQuizAmountByType" (select)="onQuizAmountByTypeSelect($event)">
+      </ngx-charts-number-card>
+    </mat-tab>
+
+    <mat-tab label="{{'Home.ItemAmountByDate' | translate}}">
+      <ngx-charts-bar-vertical-stacked [view]="viewGraph" [scheme]="colorSchemeGeneral" [results]="dataItemAmountByDate" [gradient]="gradientItemAmountByDate"
+        [xAxis]="showXAxisItemAmountByDate" [yAxis]="showYAxisItemAmountByDate" [legend]="showLegendItemAmountByDate" [showXAxisLabel]="showXAxisLabelItemAmountByDate"
+        [showYAxisLabel]="showYAxisLabelItemAmountByDate" [xAxisLabel]="xAxisLabelItemAmountByDate" [yAxisLabel]="yAxisLabelItemAmountByDate"
+        (select)="onItemAmountByDateSelect($event)">
+      </ngx-charts-bar-vertical-stacked>
+    </mat-tab>
+
+    <mat-tab label="{{'Home.ItemAmountByType' | translate}}">
+      <ngx-charts-bar-vertical-stacked [view]="viewGraph" [scheme]="colorSchemeGeneral" [results]="dataItemAmountByType" [gradient]="gradientItemAmountByType"
+        [xAxis]="showXAxisItemAmountByType" [yAxis]="showYAxisItemAmountByType" [legend]="showLegendItemAmountByType" [showXAxisLabel]="showXAxisLabelItemAmountByType"
+        [showYAxisLabel]="showYAxisLabelItemAmountByType" [xAxisLabel]="xAxisLabelItemAmountByType" [yAxisLabel]="yAxisLabelItemAmountByType"
+        (select)="onItemAmountByTypeSelect($event)">
+      </ngx-charts-bar-vertical-stacked>
+    </mat-tab>
+  </mat-tab-group>
+</div>

@@ -50,11 +50,11 @@
               </button>
             </mat-menu>
   
-            <button mat-icon-button (click)="toggleFullscreen()" title="Toggle fullscreen">
+            <button mat-icon-button (click)="toggleFullscreen()" title="Toggle fullscreen" matTooltip="{{'Home.FullScreen' | translate }}">
               <mat-icon color="accent" class="mat-24">fullscreen</mat-icon>
             </button>
   
-            <button mat-icon-button (click)="onOpenGithubRepo()">
+            <button mat-icon-button (click)="onOpenGithubRepo()" matTooltip="Github Repo">
               <mat-icon color="accent">code</mat-icon>
             </button>
             

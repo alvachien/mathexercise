@@ -19,6 +19,20 @@ export enum QuizTypeEnum {
   minesweep = 10
 }
 
+export interface QuizTypeUI {
+  qtype: QuizTypeEnum;
+  i18term: string;
+  display: string;
+}
+
+export interface UserQuizInfo {
+  quizid: number;
+  quizdate: moment.Moment;
+  quiztype: QuizTypeEnum;
+  quizscore: number;
+  quiztime: number;
+}
+
 /**
  * Get I18N string for specified quiz type
  * @param qt Quiz type

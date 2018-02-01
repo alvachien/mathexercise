@@ -16,54 +16,16 @@
   padding-left: 24px;
   font-size: 20px;
 }
-  
-.mat-table {
-  overflow: auto;
-  max-height: 500px;
+
+.example-radio-group {
+  display: inline-flex;
+  flex-direction: row;
 }
 
-.mat-cell, .mat-header-cell {
-  overflow: hidden;
-  word-wrap: break-word;
-}
-
-.mat-row:nth-child(even) {
-  background-color: darkolivegreen;
-}
-
-.mat-row:nth-child(odd) {
-  background-color: dimgray;
-}
-
-.example-icon {
-  padding: 0 14px;
-}
-
-.example-spacer {
-  flex: 1 1 auto;
-}
-
-.mat-form-field {
+.example-radio-button {
   margin: 5px;
-  width: 300px;
 }
 
-.mat-column-QuizID {
-  min-width: 60px;
-  max-width: 100px;
-}
-
-.mat-column-Date {
-  min-width: 100px;
-  max-width: 100px;
-}
-
-.mat-column-QuizType {
-  min-width: 100px;
-  max-width: 150px;
-}
-
-.mat-column-Score {
-  min-width: 100px;
-  max-width: 120px;
+.example-selected-value {
+  margin: 15px 0;
 }

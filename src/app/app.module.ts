@@ -53,6 +53,8 @@ import { AwardBalanceComponent } from './award-balance';
 import { AwardBalanceService } from './services/award-balance.service';
 import { QuizService } from './services/quiz.service';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { UsTrendComponent } from './us-trend';
+import { UsNormalComponent } from './us-normal';
 
 @NgModule({
   exports: [
@@ -64,7 +66,7 @@ import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-mo
     MatSlideToggleModule, MatSnackBarModule, MatTableModule, MatTabsModule, MatToolbarModule,
     MatTooltipModule, MatFormFieldModule, MatExpansionModule, MatNativeDateModule,
     CdkTableModule
-  ]
+  ],
 })
 export class DSMaterialModule { }
 
@@ -99,7 +101,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     EnwordReciteExerciseComponent,
     CnwordReciteExerciseComponent,
     AwardPlanComponent,
-    AwardBalanceComponent
+    AwardBalanceComponent,
+    UsTrendComponent,
+    UsNormalComponent
   ],
   entryComponents: [
     QuizFailureDlgComponent,
