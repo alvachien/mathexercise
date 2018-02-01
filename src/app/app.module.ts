@@ -55,6 +55,7 @@ import { QuizService } from './services/quiz.service';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { UsTrendComponent } from './us-trend';
 import { UsNormalComponent } from './us-normal';
+import { PgGobangComponent } from './pg-gobang';
 
 @NgModule({
   exports: [
@@ -96,6 +97,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     PgSudouComponent,
     PgMinesweeperComponent,
     PgTypingtourComponent,
+    PgGobangComponent,
     MixedopExerciseComponent,
     PgSummaryDlgComponent,
     EnwordReciteExerciseComponent,
