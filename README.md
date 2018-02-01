@@ -1,5 +1,5 @@
 # introduction
-This web app which used to generate exercises of Math (actually it is more than Math, including the English), targets for the students in Primary School to do practices. It can store the failure in the exercises, trace the results via statistics figures, plan and integrated for award plans, and it also provided several puzzle games.
+This web app which used to generate exercises of Math (actually it is more than Math, including the puzzle game and English), targets for the students in Primary School to do practices. It can store the failure in the exercises, trace the results via statistics charts, plan and integrated for award plans, and it also provided several puzzle games.
 
 # demo
 A demo was deployed in [github.io](https://alvachien.github.io/mathexercise/).
@@ -16,8 +16,10 @@ The features of web app including:
     - Mixed operation
     - Puzzle game: Calculat 24
     - Puzzle game: Sudou
-    - Puzzle games: typing tour
-2. Record the time spent and trace the results of the exercies;
+    - Puzzle game: Typing tour
+    - Puzzle game: MineSweeper
+    - Puzzle game: Gobang
+2. Record the time spent and trace the failure of the exercies;
 3. Use the failure failor to continue the exercise until it is fully succeed;
 4. Possibility to retest upon failures;
 5. Show the statistics of the quiz to the authorized user;
@@ -40,9 +42,9 @@ This web app depends on the following project
 
 # credits
 This web app credits to the following libraries:
-1. [Angular](https://angular.io/)
-2. [Angular Material](https://material.angular.io/)
-3. [Bootstrap](https://getbootstrap.com/)
+1. [Angular 5/6](https://angular.io/)
+2. [Angular Material2](https://material.angular.io/)
+3. [Bootstrap 4](https://getbootstrap.com/)
 4. [ngx-translate](http://www.ngx-translate.com/)
 5. [oidc-client](https://github.com/IdentityModel/oidc-client-js)
 6. [Angular CLI](https://github.com/angular/angular-cli)
