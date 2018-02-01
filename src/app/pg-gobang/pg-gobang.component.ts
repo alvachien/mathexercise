@@ -14,8 +14,9 @@ import { environment } from '../../environments/environment';
 export class PgGobangComponent implements OnInit, AfterContentInit {
   private _dod: QuizDegreeOfDifficulity;
   private _cellsize: number;
-  private _cellhight: number;
+  private _cellheight: number;
   private _cellwidth: number;
+  private _curStep: boolean; // True for first player, false for second player
 
   // Canvas
   @ViewChild('canvasgobang') canvasGobang: ElementRef;
@@ -52,12 +53,19 @@ export class PgGobangComponent implements OnInit, AfterContentInit {
     if (environment.LoggingLevel >= LogLevel.Debug) {
       console.log('AC Math Exercise [Debug]: Entering onGobangCanvasMouseDown in PgGobangComponent for mousedown event:' + evt);
     }
+
+    const loc = this.getPointOnCanvas(evt.target, evt.clientX, evt.clientY);
+    this.drawChess(loc);
+
+    this._curStep = !this._curStep;
   }
 
   constructor() {
     // Hard coded width and height
-    this._cellhight = 40;
+    this._cellheight = 40;
     this._cellwidth = 40;
+
+    this._curStep = true;
   }
 
   ngOnInit() {
@@ -72,16 +80,40 @@ export class PgGobangComponent implements OnInit, AfterContentInit {
     const ctx2 = this.canvasGobang.nativeElement.getContext('2d');
     for (let i = 0; i <= this._cellsize; i ++) {
       ctx2.beginPath();
-      ctx2.moveTo(0, i * this._cellhight);
-      ctx2.lineTo(this._cellhight * this._cellsize, i * this._cellhight);
+      ctx2.moveTo(0, i * this._cellheight);
+      ctx2.lineTo(this._cellheight * this._cellsize, i * this._cellheight);
       ctx2.closePath();
       ctx2.stroke();
 
       ctx2.beginPath();
       ctx2.moveTo(i * this._cellwidth, 0);
-      ctx2.lineTo(i * this._cellhight, this._cellwidth * this._cellsize);
+      ctx2.lineTo(i * this._cellheight, this._cellwidth * this._cellsize);
       ctx2.closePath();
       ctx2.stroke();
     }
+  }
+
+  private drawChess(loc: any) {
+    const ctx2 = this.canvasGobang.nativeElement.getContext('2d');
+
+    let image = new Image();
+    if (this._curStep) {
+      image.src = '../../assets/image/gobangresource/blackchess.png';
+    } else {
+      image.src = '../../assets/image/gobangresource/whitechess.png';
+    }
+    image.onload = () => {
+      ctx2.drawImage(image, loc.x, loc.y, this._cellwidth, this._cellheight);
+    };
+  }
+
+  private getPointOnCanvas(canvas, x, y) {
+    const bbox = canvas.getBoundingClientRect();
+    const x2 = (x - bbox.left) * (canvas.width / bbox.width);
+    const y2 = (y - bbox.top) * (canvas.height / bbox.height);
+    return {
+      x: x2,
+      y: y2
+    };
   }
 }
