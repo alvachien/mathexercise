@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter, AfterContentInit,
   HostListener } from '@angular/core';
 import {
-  PrimarySchoolMathQuiz, QuizTypeEnum, PrimarySchoolMathQuizItem,
-  Cal24QuizItem, LogLevel, QuizDegreeOfDifficulity
+  PrimarySchoolMathQuiz, QuizTypeEnum, PrimarySchoolMathQuizItem, CanvasCellPositionInf,
+  Cal24QuizItem, LogLevel, QuizDegreeOfDifficulity, Gobang, getCanvasMouseEventPosition, getCanvasCellPosition
 } from '../model';
 import { environment } from '../../environments/environment';
 
@@ -17,6 +17,7 @@ export class PgGobangComponent implements OnInit, AfterContentInit {
   private _cellheight: number;
   private _cellwidth: number;
   private _curStep: boolean; // True for first player, false for second player
+  private _instance: Gobang;
 
   // Canvas
   @ViewChild('canvasgobang') canvasGobang: ElementRef;
@@ -54,10 +55,21 @@ export class PgGobangComponent implements OnInit, AfterContentInit {
       console.log('AC Math Exercise [Debug]: Entering onGobangCanvasMouseDown in PgGobangComponent for mousedown event:' + evt);
     }
 
-    const loc = this.getPointOnCanvas(evt.target, evt.clientX, evt.clientY);
-    this.drawChess(loc);
+    const loc = getCanvasMouseEventPosition(evt.target, evt);
+    const cellloc = getCanvasCellPosition(loc, this._cellwidth, this._cellheight);
 
-    this._curStep = !this._curStep;
+    // Check the object
+    if (this._instance.cells[cellloc.row][cellloc.column].value === undefined) {
+      this._instance.cells[cellloc.row][cellloc.column].value = this._curStep;
+      this.drawChess(cellloc);
+
+      this._curStep = !this._curStep;
+
+      // Check winner
+      // if (this._instance.isWinner) {
+
+      // }
+    }
   }
 
   constructor() {
@@ -66,18 +78,28 @@ export class PgGobangComponent implements OnInit, AfterContentInit {
     this._cellwidth = 40;
 
     this._curStep = true;
+    this._instance = new Gobang();
   }
 
   ngOnInit() {
   }
 
   ngAfterContentInit() {
+    this._instance.Dimension = this._cellsize;
+    this._instance.init();
+
     // Draw the border
     this.drawWholeRect();
   }
 
   private drawWholeRect() {
     const ctx2 = this.canvasGobang.nativeElement.getContext('2d');
+    ctx2.clearRect(0, 0, ctx2.width, ctx2.height);
+    ctx2.save();
+    ctx2.fillStyle = 'rgba(0, 0, 200, 0.5)';
+    ctx2.fillRect(0, 0, ctx2.width, ctx2.height);
+    ctx2.restore();
+
     for (let i = 0; i <= this._cellsize; i ++) {
       ctx2.beginPath();
       ctx2.moveTo(0, i * this._cellheight);
@@ -93,27 +115,17 @@ export class PgGobangComponent implements OnInit, AfterContentInit {
     }
   }
 
-  private drawChess(loc: any) {
+  private drawChess(cellloc: CanvasCellPositionInf) {
     const ctx2 = this.canvasGobang.nativeElement.getContext('2d');
 
-    let image = new Image();
+    const image = new Image();
     if (this._curStep) {
       image.src = '../../assets/image/gobangresource/blackchess.png';
     } else {
       image.src = '../../assets/image/gobangresource/whitechess.png';
     }
     image.onload = () => {
-      ctx2.drawImage(image, loc.x, loc.y, this._cellwidth, this._cellheight);
-    };
-  }
-
-  private getPointOnCanvas(canvas, x, y) {
-    const bbox = canvas.getBoundingClientRect();
-    const x2 = (x - bbox.left) * (canvas.width / bbox.width);
-    const y2 = (y - bbox.top) * (canvas.height / bbox.height);
-    return {
-      x: x2,
-      y: y2
+      ctx2.drawImage(image, cellloc.column * this._cellwidth, cellloc.row * this._cellheight, this._cellwidth, this._cellheight);
     };
   }
 }

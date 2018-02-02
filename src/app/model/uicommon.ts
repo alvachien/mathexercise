@@ -84,3 +84,54 @@ export function getStatisticsDateRangeDate(scope: StatisticsDateRangeEnum): Stat
   return { BeginDate: bgn, EndDate: end };
 }
 
+/**
+ * Position of mouse event in Canvas
+ */
+export interface CanvasMousePositionInf {
+  x: number;
+  y: number;
+}
+
+/**
+ * Get canvas mouse event position
+ * @param canvas Canvas
+ * @param evt Event
+ */
+export function getCanvasMouseEventPosition(canvas: any, evt: MouseEvent): CanvasMousePositionInf {
+  let x = evt.clientX;
+  let y = evt.clientY;
+
+  // const rect = canvas.getBoundingClientRect();
+  // x -= rect.left;
+  // y -= rect.top;
+  // return { x: x, y: y };
+
+  // ?!!!?
+  // TBD: get the difference!!!
+  //
+  const bbox = canvas.getBoundingClientRect();
+  const x2 = (x - bbox.left) * (canvas.width / bbox.width);
+  const y2 = (y - bbox.top) * (canvas.height / bbox.height);
+  return { x: x2, y: y2};
+}
+
+/**
+ * Cell position
+ */
+export interface CanvasCellPositionInf {
+  row: number;
+  column: number;
+}
+
+/**
+ * Get canvas cell position
+ * @param cavpos Position in the canvas
+ * @param cellWidth Width of each cell
+ * @param cellHeight Height of each cell
+ */
+export function getCanvasCellPosition(cavpos: CanvasMousePositionInf, cellWidth: number, cellHeight: number): CanvasCellPositionInf {
+  return {
+    row: Math.floor(cavpos.y / cellHeight),
+    column: Math.floor(cavpos.x / cellWidth),
+  };
+}

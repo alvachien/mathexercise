@@ -5,7 +5,8 @@ import {
 import {
   RPN, SudouUnit, Sudou, generateValidSudou, SudouSize,
   PrimarySchoolMathQuiz, QuizTypeEnum, PrimarySchoolMathQuizItem,
-  Cal24QuizItem, SudouQuizItem, LogLevel, QuizDegreeOfDifficulity
+  Cal24QuizItem, SudouQuizItem, LogLevel, QuizDegreeOfDifficulity,
+  getCanvasMouseEventPosition, getCanvasCellPosition,
 } from '../model';
 import { environment } from '../../environments/environment';
 
@@ -332,23 +333,14 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
       console.log('AC Math Exercise [Debug]: Entering onSudouCanvasMouseUp of PgSudouComponent');
     }
 
-    const loc = this.getPointOnCanvas(evt.target, evt.clientX, evt.clientY);
+    const loc = getCanvasMouseEventPosition(evt.target, evt);
     this.ProcessMouseClick(loc);
-  }
-
-  private getCellIndex(pos: any) {
-    const j = Math.floor(pos.x / this._itemWidth);
-    const i = Math.floor(pos.y / this._itemHeight);
-    return {
-      j: j,
-      i: i
-    };
   }
 
   private ProcessMouseClick(pos: any) {
     if (this._editingCellIndex === null) {
-      const index: any = this.getCellIndex(pos);
-      if (index.i < 0 || index.i > 8 || index.j < 0 || index.j > 8) {
+      const index: any = getCanvasCellPosition(pos, this._itemWidth, this._itemHeight);
+      if (index.row < 0 || index.row > 8 || index.column < 0 || index.column > 8) {
         this._editingCellIndex = null;
         this._editPanel = null;
 
@@ -401,8 +393,9 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
 
     for (let i = 0; i < SudouSize; i++) {
       for (let j = 0; j < SudouSize; j++) {
-        if (this._dataCells[i][j].num === null || this._dataCells[i][j].InConflict)
+        if (this._dataCells[i][j].num === null || this._dataCells[i][j].InConflict) {
           return false;
+        }
       }
     }
 
@@ -447,15 +440,5 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
     }
 
     return false;
-  }
-
-  private getPointOnCanvas(canvas, x, y) {
-    const bbox = canvas.getBoundingClientRect();
-    const x2 = (x - bbox.left) * (canvas.width / bbox.width);
-    const y2 = (y - bbox.top) * (canvas.height / bbox.height);
-    return {
-      x: x2,
-      y: y2
-    };
   }
 }
