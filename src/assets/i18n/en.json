@@ -70,6 +70,7 @@
     "PuzzleGames": "Puzzle Games",
     "Minesweeper": "Minesweeper",
     "TypingTutor": "Typing Tutor",
+    "Gobang": "Gobang",
     "Error": "Error",
     "QuizIsOngoing": "Exercise or game is on going, cannot jump to other page",
     "Cal24Detail": "Input a formula by using the number above and allowed operators (+-*/) to make it equal 24",

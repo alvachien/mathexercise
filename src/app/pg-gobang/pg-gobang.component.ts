@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter, AfterContentInit,
   HostListener } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 import {
   PrimarySchoolMathQuiz, QuizTypeEnum, PrimarySchoolMathQuizItem, CanvasCellPositionInf,
   Cal24QuizItem, LogLevel, QuizDegreeOfDifficulity, Gobang, getCanvasMouseEventPosition, getCanvasCellPosition
@@ -59,20 +60,34 @@ export class PgGobangComponent implements OnInit, AfterContentInit {
     const cellloc = getCanvasCellPosition(loc, this._cellwidth, this._cellheight);
 
     // Check the object
-    if (this._instance.cells[cellloc.row][cellloc.column].value === undefined) {
-      this._instance.cells[cellloc.row][cellloc.column].value = this._curStep;
+    if (!this._instance.isCellHasValue(cellloc.row, cellloc.column)) {
       this.drawChess(cellloc);
 
-      this._curStep = !this._curStep;
+      this._instance.setCellValue(cellloc.row, cellloc.column, this._curStep);
 
-      // Check winner
-      // if (this._instance.isWinner) {
+      if (this._instance.Finished) {
+        // Show the snackbar
+        let snackBarRef = this.snackBar.open('You win', 'RESTART', {
+          duration: 3000
+        });
 
-      // }
+        snackBarRef.onAction().subscribe(() => {
+          console.log('The snack-bar action was triggered!');
+
+          this._instance.init();
+
+          // Draw the border
+          this.drawWholeRect();
+        });
+
+        // snackBarRef.dismiss();
+      } else {
+        this._curStep = !this._curStep;
+      }
     }
   }
 
-  constructor() {
+  constructor(public snackBar: MatSnackBar) {
     // Hard coded width and height
     this._cellheight = 40;
     this._cellwidth = 40;
@@ -94,10 +109,10 @@ export class PgGobangComponent implements OnInit, AfterContentInit {
 
   private drawWholeRect() {
     const ctx2 = this.canvasGobang.nativeElement.getContext('2d');
-    ctx2.clearRect(0, 0, ctx2.width, ctx2.height);
+    ctx2.clearRect(0, 0, this.canvasGobang.nativeElement.width, this.canvasGobang.nativeElement.height);
     ctx2.save();
-    ctx2.fillStyle = 'rgba(0, 0, 200, 0.5)';
-    ctx2.fillRect(0, 0, ctx2.width, ctx2.height);
+    ctx2.fillStyle = 'rgba(0, 0, 100, 0.2)';
+    ctx2.fillRect(0, 0, this.canvasGobang.nativeElement.width, this.canvasGobang.nativeElement.height);
     ctx2.restore();
 
     for (let i = 0; i <= this._cellsize; i ++) {

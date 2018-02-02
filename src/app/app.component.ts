@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, NgZone, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, NgZone, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl, SafeUrl  } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -18,8 +18,16 @@ import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-mo
   templateUrl: './app.home.html',
   styleUrls: ['./app.home.scss'],
 })
-export class Home {
+export class Home implements AfterViewInit {
   public backgroundimage: string;
+  private _sun = new Image();
+  private _moon = new Image();
+  private _earth = new Image();
+
+  // Canvas
+  @ViewChild('canvasSolar') canvasSolar: ElementRef;
+  // Canvas
+  @ViewChild('canvasClock') canvasClock: ElementRef;
 
   constructor(private _sanitizer: DomSanitizer) {
     const photoamt = 7;
@@ -35,10 +43,150 @@ export class Home {
     } else {
       this.backgroundimage = 'assets/image/home-bg' + bgidx.toString() + '.jpg';
     }
+
+    this._sun.src = 'assets/image/Canvas_sun.png';
+    this._moon.src = 'assets/image/Canvas_moon.png';
+    this._earth.src = 'assets/image/Canvas_earth.png';
   }
 
   getBackgroundImage() {
     return this._sanitizer.bypassSecurityTrustStyle('url(' + this.backgroundimage + ')');
+  }
+
+  ngAfterViewInit() {
+    window.requestAnimationFrame(() => {
+      this.drawContent();
+    });
+  }
+
+  drawContent(): void {
+    const ctx: any = this.canvasSolar.nativeElement.getContext('2d');
+
+    ctx.globalCompositeOperation = 'destination-over';
+    ctx.clearRect(0, 0, 300, 300); // clear canvas
+
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+    ctx.strokeStyle = 'rgba(0, 153, 255, 0.4)';
+    ctx.save();
+    ctx.translate(150, 150);
+
+    // Earth
+    const time = new Date();
+    ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds());
+    ctx.translate(105, 0);
+    ctx.fillRect(0, -12, 50, 24); // Shadow
+    ctx.drawImage(this._earth, -12, -12);
+
+    // Moon
+    ctx.save();
+    ctx.rotate(((2 * Math.PI) / 6) * time.getSeconds() + ((2 * Math.PI) / 6000) * time.getMilliseconds());
+    ctx.translate(0, 28.5);
+    ctx.drawImage(this._moon, -3.5, -3.5);
+    ctx.restore();
+
+    ctx.restore();
+
+    ctx.beginPath();
+    ctx.arc(150, 150, 105, 0, Math.PI * 2, false); // Earth orbit
+    ctx.stroke();
+
+    ctx.drawImage(this._sun, 0, 0, 300, 300);
+
+    const now = new Date();
+    const ctx2 = this.canvasClock.nativeElement.getContext('2d');
+
+    ctx2.save();
+    ctx2.clearRect(0, 0, 150, 150);
+    ctx2.translate(75, 75);
+    ctx2.scale(0.4, 0.4);
+    ctx2.rotate(-Math.PI / 2);
+    ctx2.strokeStyle = 'black';
+    ctx2.fillStyle = 'white';
+    ctx2.lineWidth = 8;
+    ctx2.lineCap = 'round';
+
+    // Hour marks
+    ctx2.save();
+    for (let i = 0; i < 12; i++) {
+      ctx2.beginPath();
+      ctx2.rotate(Math.PI / 6);
+      ctx2.moveTo(100, 0);
+      ctx2.lineTo(120, 0);
+      ctx2.stroke();
+    }
+    ctx2.restore();
+
+    // Minute marks
+    ctx2.save();
+    ctx2.lineWidth = 5;
+    for (let i = 0; i < 60; i++) {
+      if (i % 5 !== 0) {
+        ctx2.beginPath();
+        ctx2.moveTo(117, 0);
+        ctx2.lineTo(120, 0);
+        ctx2.stroke();
+      }
+      ctx2.rotate(Math.PI / 30);
+    }
+    ctx2.restore();
+
+    const sec = now.getSeconds();
+    const min = now.getMinutes();
+    let hr  = now.getHours();
+    hr = hr >= 12 ? hr - 12 : hr;
+
+    ctx2.fillStyle = 'black';
+
+    // write Hours
+    ctx2.save();
+    ctx2.rotate(hr * (Math.PI / 6) + (Math.PI / 360) * min + (Math.PI / 21600) *sec);
+    ctx2.lineWidth = 14;
+    ctx2.beginPath();
+    ctx2.moveTo(-20, 0);
+    ctx2.lineTo(80, 0);
+    ctx2.stroke();
+    ctx2.restore();
+
+    // write Minutes
+    ctx2.save();
+    ctx2.rotate((Math.PI / 30) * min + (Math.PI / 1800) * sec);
+    ctx2.lineWidth = 10;
+    ctx2.beginPath();
+    ctx2.moveTo(-28, 0);
+    ctx2.lineTo(112, 0);
+    ctx2.stroke();
+    ctx2.restore();
+
+    // Write seconds
+    ctx2.save();
+    ctx2.rotate(sec * Math.PI / 30);
+    ctx2.strokeStyle = '#D40000';
+    ctx2.fillStyle = '#D40000';
+    ctx2.lineWidth = 6;
+    ctx2.beginPath();
+    ctx2.moveTo(-30, 0);
+    ctx2.lineTo(83, 0);
+    ctx2.stroke();
+    ctx2.beginPath();
+    ctx2.arc(0, 0, 10, 0, Math.PI * 2, true);
+    ctx2.fill();
+    ctx2.beginPath();
+    ctx2.arc(95, 0, 10, 0, Math.PI * 2, true);
+    ctx2.stroke();
+    ctx2.fillStyle = 'rgba(0, 0, 0, 0)';
+    ctx2.arc(0, 0, 3, 0, Math.PI * 2, true);
+    ctx2.fill();
+    ctx2.restore();
+
+    ctx2.beginPath();
+    ctx2.lineWidth = 14;
+    ctx2.strokeStyle = '#325FA2';
+    ctx2.arc(0, 0, 142, 0, Math.PI * 2, true);
+    ctx2.stroke();
+
+    ctx2.restore();
+
+    window.requestAnimationFrame(() => this.drawContent());
   }
 }
 
