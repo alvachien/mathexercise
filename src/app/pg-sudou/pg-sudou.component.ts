@@ -146,6 +146,7 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
   private _dataCells: any = [];
   private _dod: QuizDegreeOfDifficulity;
   private _started = false;
+
   /**
    * Finish event
    */
@@ -164,6 +165,7 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
       this._dod = dod;
     }
   }
+
   /**
    * Sudou object
    */
@@ -175,6 +177,7 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
 
     this._objSudou = obj;
   }
+
   /**
    * Start the game
    */
@@ -348,7 +351,7 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
         return;
       }
 
-      const cell: SudouCell = this._dataCells[index.i][index.j];
+      const cell: SudouCell = this._dataCells[index.row][index.column];
       if (cell.fixed === true) {
         this._editingCellIndex = null;
         this._editPanel = null;
@@ -364,7 +367,7 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
     } else {
       const seleN = this._editPanel.GetHitNumber(pos.x, pos.y);
       if (seleN == null) {
-        this._dataCells[this._editingCellIndex.i][this._editingCellIndex.j].N = null;
+        this._dataCells[this._editingCellIndex.row][this._editingCellIndex.column].N = null;
       } else if (seleN === -1) { // Out of the panel
         this._editingCellIndex = null;
         this._editPanel = null;
@@ -373,7 +376,7 @@ export class PgSudouComponent implements OnInit, AfterContentInit, OnDestroy {
         this.ProcessMouseClick(pos);
         return;
       } else {
-        this._dataCells[this._editingCellIndex.i][this._editingCellIndex.j].num = seleN;
+        this._dataCells[this._editingCellIndex.row][this._editingCellIndex.column].num = seleN;
       }
 
       this._editingCellIndex = null;

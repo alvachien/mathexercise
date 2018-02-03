@@ -619,7 +619,7 @@ export class PuzzleGamesComponent implements OnInit {
       data: di
     }).afterClosed().subscribe(x => {
       if (di.haveARetry) {
-        this.OnTypingStart();
+        this.OnMineSweepStart();
       }
     });
   }

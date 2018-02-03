@@ -1,7 +1,21 @@
+import { CanvasCellPositionInf } from "app/model";
+import { error } from "selenium-webdriver";
+import { containerEnd } from "@angular/core/src/render3/instructions";
 
 // Gobang cell
 export class GobangCell {
-  public value: boolean | undefined;
+  // Playerinput
+  //  true - inputted by the player
+  //  false - inputted by the Algorithm
+  //  undefined - not set yet
+  public playerinput: boolean | undefined;
+}
+
+// Analyis Queue
+export class GobangAIAnalysisQueue {
+  positions: CanvasCellPositionInf[] = [];
+  headsealed: boolean;
+  tailsealed: boolean;
 }
 
 // Gobang
@@ -10,6 +24,7 @@ export class Gobang {
   private _dimension: number;
   private _inited: boolean;
   private _finished: boolean;
+  private _lastPlayerPos: CanvasCellPositionInf; 
   get Dimension(): number {
     return this._dimension;
   }
@@ -26,6 +41,9 @@ export class Gobang {
     this._finished = false;
   }
 
+  /**
+   * Initialize
+   */
   public init(): void {
     // Re-init = reset
     this._finished = false;
@@ -43,6 +61,11 @@ export class Gobang {
     this._inited = true;
   }
 
+  /**
+   * Check the cell has value
+   * @param row Row
+   * @param column Column
+   */
   public isCellHasValue(row: number, column: number): boolean {
     if (!this._inited) {
       throw new Error('Not initialed');
@@ -51,9 +74,16 @@ export class Gobang {
       throw new Error('Invalid row or column');
     }
 
-    return this.cells[row][column].value !== undefined;
+    return this.cells[row][column].playerinput !== undefined;
   }
-  public setCellValue(row: number, column: number, val: boolean) {
+
+  /**
+   * Set the current cell value
+   * @param row Row
+   * @param column Column
+   * @param playerinput Player input
+   */
+  public setCellValue(row: number, column: number, playerinput: boolean) {
     if (!this._inited) {
       throw new Error('Not initialed');
     }
@@ -65,13 +95,100 @@ export class Gobang {
       throw new Error('Already finished');
     }
 
-    this.cells[row][column].value = val;
+    this.cells[row][column].playerinput = playerinput;
 
     // Now check for the winner
+    this.checkWinner(row, column, playerinput);
+
+    // If winner is not yet, and the current step is player, save the context for AI
+    if (!this._finished && playerinput === true) {
+      // Store the last player
+      this._lastPlayerPos = {
+        row: row,
+        column: column
+      };
+    }
+  }
+
+  /**
+   * Workout the next cell position
+   */
+  public workoutNextCellAIPosition(): CanvasCellPositionInf {
+    if (this._finished) {
+      throw new Error('Game is over!');
+    }
+    if (this._lastPlayerPos === undefined) {
+      // AI play first case
+      return {
+        row: Math.round(this._dimension / 2),
+        column: Math.round(this._dimension / 2)
+      };
+    }
+    
+    let attackLevel = 0;
+    let attackPos: CanvasCellPositionInf[][] = [];
+    let defendLevel = 0;
+    let defendPos: CanvasCellPositionInf[][] = [];
+
+    let playInput: GobangAIAnalysisQueue[] = [];
+    let AIInput: GobangAIAnalysisQueue[] = [];
+
+    // Workout the attack level
+    // Rows
+    let rowUsrStart = -1, rowUsrEnd = -1, rowUsrCount = 0;
+    let rowAIStart = -1, rowAIEnd = -1, rowAICount = 0;
+    for (let i = 0; i < this._dimension; i++) {
+      for (let j = 0; j < this._dimension; j++) {
+        if (this.cells[i][j].playerinput === true) {
+          if (rowUsrStart === -1) {
+            rowUsrStart = j; // Row starts with the J!
+            rowUsrEnd = rowUsrEnd;
+            rowUsrCount = 1;
+          } else {
+            rowUsrStart = j; // Row starts with the J!
+            rowUsrEnd = rowUsrEnd;
+          }
+
+          if (rowAIStart !== -1) {
+
+          } else {
+
+          }
+        } else if (this.cells[i][j].playerinput === false) {
+        }
+      }
+    }
+    // Columns
+    for (let i = 0; i < this._dimension; i++) {
+
+    }
+    // 
+    
+    // Workout the defend level
+
+    if (defendLevel > attackLevel) {
+      // Need defend
+    } else {
+      // Go Attack
+    }
+
+    return {
+      row: -1,
+      column: -1
+    };
+  }
+
+  /**
+   * Check there is a Winner
+   * @param row Row
+   * @param column Column
+   * @param val Value of input (player or AI)
+   */
+  private checkWinner(row: number, column: number, val: boolean) {
     // Row
     let rowsucc = 0, colsucc = 0, leftsucc = 0, rightsucc = 0;
     for (let i = 0; i < this._dimension; i++) {
-      if (this.cells[row][i].value === val) {
+      if (this.cells[row][i].playerinput === val) {
         rowsucc ++;
       } else {
         rowsucc = 0;
@@ -84,7 +201,7 @@ export class Gobang {
     if (rowsucc !== 5) {
       // Column
       for (let i = 0; i < this._dimension; i++) {
-        if (this.cells[i][column].value === val) {
+        if (this.cells[i][column].playerinput === val) {
           colsucc ++;
         } else {
           colsucc = 0;
@@ -103,7 +220,7 @@ export class Gobang {
             continue;
           }
 
-          if (this.cells[i][total - i].value === val) {
+          if (this.cells[i][total - i].playerinput === val) {
             leftsucc ++;
           } else {
             leftsucc = 0;
@@ -124,7 +241,7 @@ export class Gobang {
                 continue;
               }
 
-              if (this.cells[i][i + diff].value === val) {
+              if (this.cells[i][i + diff].playerinput === val) {
                 rightsucc ++;
               } else {
                 rightsucc = 0;
@@ -136,7 +253,7 @@ export class Gobang {
             }
           } else {
             for (let i = diff; i < this._dimension; i++) {
-              if (this.cells[i][i - diff].value === val) {
+              if (this.cells[i][i - diff].playerinput === val) {
                 rightsucc ++;
               } else {
                 rightsucc = 0;
@@ -155,8 +272,6 @@ export class Gobang {
     if (rowsucc === 5 || colsucc === 5 || leftsucc === 5 || rightsucc === 5) {
       // Winner
       this._finished = true;
-    } else {
-      // Do nothing!
     }
   }
 }
