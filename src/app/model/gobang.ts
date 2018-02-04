@@ -1,6 +1,5 @@
-import { CanvasCellPositionInf } from "app/model";
-import { error } from "selenium-webdriver";
-import { containerEnd } from "@angular/core/src/render3/instructions";
+import { CanvasCellPositionInf } from './uicommon';
+import { workoutSlash, workoutBackSlash, MatrixPosIntf } from "./utility";
 
 // Gobang cell
 export class GobangCell {
@@ -219,32 +218,38 @@ export class Gobang {
     }
     
     // Slash /
-    for (let i = 0; i < 2 * this._dimension - 1; i++) {
+    let arpos: MatrixPosIntf[][] = workoutSlash(this._dimension);
+    for (let i = 0; i < arpos.length; i++) {
       let arCells = [];
-      for(let j = 0; j <= i; j++) {
-        if (j <= this._dimension - 1 && i <= this._dimension + j - 1 ) {
-          arCells.push(this.cells[j][i - j]);
-        }        
+      for (let pos of arpos[i]) {
+        arCells.push(this.cells[pos.x][pos.y]);
       }
 
-      // let rowCells = this.buildUpAnalysisRow(arCells);
-      // if (rowCells.length > 0) {
-      //   console.log(`Analyzing Slash: ${i}`);
-      // }
-      // for(let cell of rowCells) {
-      //   //arRst.push(cell);
-      //   console.log(`Result of slash ${i}: ${cell.startidx} - ${cell.endidx} with ${cell.userinput? 'Player': 'AI'}, head sealed: ${cell.headsealed}, tail sealed: ${cell.tailsealed}`);
-      // }
+      let rowCells = this.buildUpAnalysisRow(arCells);
+      if (rowCells.length > 0) {
+        console.log(`Analyzing Slash: ${i}`);
+      }
+      for(let cell of rowCells) {
+        //arRst.push(cell);
+        console.log(`Result of slash ${i}: ${cell.startidx} - ${cell.endidx} with ${cell.userinput? 'Player': 'AI'}, head sealed: ${cell.headsealed}, tail sealed: ${cell.tailsealed}`);
+      }
     }
 
     // BackSlash \
-    for(let i =  2 * this._dimension - 1; i >= 0; i--) {
+    let arbspos: MatrixPosIntf[][] = workoutBackSlash(this._dimension);
+    for (let i = 0; i < arbspos.length; i++) {
       let arCells = [];
+      for (let pos of arbspos[i]) {
+        arCells.push(this.cells[pos.x][pos.y]);
+      }
 
-      for(let j = 0; j <= i + 1 - this._dimension; j++) {
-        if (j <= this._dimension - 1 && i <= j + this._dimension - 1) {
-          arCells.push(this.cells[j][i - j]);
-        }
+      let rowCells = this.buildUpAnalysisRow(arCells);
+      if (rowCells.length > 0) {
+        console.log(`Analyzing BackSlash: ${i}`);
+      }
+      for(let cell of rowCells) {
+        //arRst.push(cell);
+        console.log(`Result of backslash ${i}: ${cell.startidx} - ${cell.endidx} with ${cell.userinput? 'Player': 'AI'}, head sealed: ${cell.headsealed}, tail sealed: ${cell.tailsealed}`);
       }
     }
 

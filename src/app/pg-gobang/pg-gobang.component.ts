@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter, 
   HostListener } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import {
-  PrimarySchoolMathQuiz, QuizTypeEnum, PrimarySchoolMathQuizItem, CanvasCellPositionInf, workoutSlash, workoutBackSlash,
+  PrimarySchoolMathQuiz, QuizTypeEnum, PrimarySchoolMathQuizItem, CanvasCellPositionInf, 
   Cal24QuizItem, LogLevel, QuizDegreeOfDifficulity, Gobang, getCanvasMouseEventPosition, getCanvasCellPosition
 } from '../model';
 import { environment } from '../../environments/environment';
@@ -103,10 +103,6 @@ export class PgGobangComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit() {
-    for (let i = 0; i <= 4; i++) {
-      workoutSlash(i);
-      workoutBackSlash(i);
-    }
   }
 
   ngAfterContentInit() {
