@@ -228,7 +228,7 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
       // Therefore generate the mines exclude the current position
       this.generateMines(pos);
 
-      this.timer = setInterval(function () {
+      this.timer = setInterval(() => {
         this.time = this.time + 1;
 
         this.setNumberImage(this.time, false);
@@ -423,7 +423,7 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
     if (pos.row < 0 || pos.column < 0 || pos.row >= this._paneHeigh || pos.column >= this._paneWidth) {
       return false;
     }
-    if (this.arCells.length <= 0 || this.arCells[pos.row].length <= 0) {
+    if (this.arCells.length <= 0 || this.arCells.length <= pos.row || this.arCells[pos.row].length <= 0) {
       return false;
     }
 
@@ -435,17 +435,15 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
    * @param excldpos Pos
    */
   generateMines(excldpos: CanvasCellPositionInf) {
-    let arMines = this.arMines;
     let mineItem: any = {};
-    let arCells = this.arCells;
 
     for (let i = 0; i < this._minenum; i++) {
       do {
         mineItem = { row: this.getRandom(this._paneWidth), column: this.getRandom(this._paneHeigh) };
-      } while (!this.isInArray(mineItem, arMines) && !(excldpos.row === mineItem.row && excldpos.column === mineItem.column));
+      } while (this.isInArray(mineItem, this.arMines) || (excldpos.row === mineItem.row && excldpos.column === mineItem.column));
 
-      arCells[mineItem.row][mineItem.column].isMine = true;
-      arMines.push(mineItem);
+      this.arCells[mineItem.row][mineItem.column].isMine = true;
+      this.arMines.push(mineItem);
     }
   }
 

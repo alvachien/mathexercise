@@ -18,13 +18,24 @@ export class GobangAIAnalysisQueue {
   tailsealed: boolean;
 }
 
+export class GobangAIInternalResult {
+  startidx: number;
+  endidx: number;
+  userinput: boolean;
+  headsealed: boolean;
+  tailsealed: boolean;
+}
+
 // Gobang
 export class Gobang {
   public cells: GobangCell[][];
   private _dimension: number;
   private _inited: boolean;
   private _finished: boolean;
-  private _lastPlayerPos: CanvasCellPositionInf; 
+  private _lastPlayerPos: CanvasCellPositionInf;
+  private _playAnalysis: GobangAIAnalysisQueue[] = [];
+  private _AIAnalysis: GobangAIAnalysisQueue[] = [];
+
   get Dimension(): number {
     return this._dimension;
   }
@@ -57,6 +68,9 @@ export class Gobang {
 
       this.cells.push(row);
     }
+
+    this._AIAnalysis = [];
+    this._playAnalysis = [];
 
     this._inited = true;
   }
@@ -97,17 +111,11 @@ export class Gobang {
 
     this.cells[row][column].playerinput = playerinput;
 
+    // Build up the AI Analysis
+    // this.buildUpAnalyis(row, column, playerinput);
+
     // Now check for the winner
     this.checkWinner(row, column, playerinput);
-
-    // If winner is not yet, and the current step is player, save the context for AI
-    if (!this._finished && playerinput === true) {
-      // Store the last player
-      this._lastPlayerPos = {
-        row: row,
-        column: column
-      };
-    }
   }
 
   /**
@@ -176,6 +184,96 @@ export class Gobang {
       row: -1,
       column: -1
     };
+  }
+
+  private buildUpAnalyis(row: number, column: number, userinput: boolean) {
+    // Row
+    let rowsucc = 0, colsucc = 0, leftsucc = 0, rightsucc = 0;
+    for (let i = 0; i < this._dimension; i++) {
+      this.buildUpAnalysisRow(this.cells[i]);
+
+      // if (this.cells[row][i].playerinput === val) {
+      //   rowsucc ++;
+      // } else {
+      //   rowsucc = 0;
+      // }
+      // if (rowsucc === 5) {
+      //   break;
+      // }
+    }    
+  }
+
+  private buildUpAnalysisRow(arRow: GobangCell[]) {
+    let prvidx = -1;
+    let prvval: boolean;
+    let arRst: GobangAIInternalResult[] = [];
+
+    for(let i = 0; i < arRow.length; i ++) {
+      if (arRow[i].playerinput === true) {
+        if (prvidx === -1) {
+          prvidx = i;
+          prvval = true;
+        } else {
+          if (prvval !== arRow[i].playerinput) {
+            let air: GobangAIInternalResult = new GobangAIInternalResult();
+            air.startidx = prvidx;
+            air.endidx = i;
+            air.userinput = prvval;
+            if (prvidx === 0) {
+              air.headsealed = true;
+            }
+            arRst.push(air);
+
+            prvidx = i;
+            prvval = arRow[i].playerinput;
+          } else {
+            // Do nothing
+          }
+        }
+      } else if (arRow[i].playerinput === false) {
+        if (prvidx === -1) {
+          prvidx = i;
+          prvval = false;
+        } else {
+          if (prvval !== arRow[i].playerinput) {
+            let air: GobangAIInternalResult = new GobangAIInternalResult();
+            air.startidx = prvidx;
+            air.endidx = i;
+            air.userinput = prvval;
+            if (prvidx === 0) {
+              air.headsealed = true;
+            }
+            arRst.push(air);
+
+            prvidx = i;
+            prvval = arRow[i].playerinput;
+          } else {
+            // Do nothing            
+          }
+        }
+      } else if (arRow[i].playerinput === undefined) {
+        if (prvidx === -1) {
+          prvidx = i;
+          prvval = undefined;
+        } else {          
+          if (prvval !== arRow[i].playerinput) {
+            let air: GobangAIInternalResult = new GobangAIInternalResult();
+            air.startidx = prvidx;
+            air.endidx = i;
+            air.userinput = prvval;
+            if (prvidx === 0) {
+              air.headsealed = true;
+            }
+            arRst.push(air);
+
+            prvidx = i;
+            prvval = arRow[i].playerinput;
+          } else {
+            // Do nothing
+          }
+        }
+      }
+    }
   }
 
   /**

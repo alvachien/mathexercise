@@ -67,7 +67,13 @@ export class PgGobangComponent implements OnInit, AfterContentInit {
 
       if (this._instance.Finished) {
         // Show the snackbar
-        let snackBarRef = this.snackBar.open('You win', 'RESTART', {
+        let msg = '';
+        if (this._curStep) {
+          msg = 'Computer win';
+        } else {
+          msg = 'You win';
+        }
+        let snackBarRef = this.snackBar.open(msg, 'RESTART', {
           duration: 3000
         });
 
