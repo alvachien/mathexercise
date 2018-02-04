@@ -113,6 +113,7 @@ export class Gobang {
 
     // Build up the AI Analysis
     // this.buildUpAnalyis(row, column, playerinput);
+    this.buildUpAnalyis();
 
     // Now check for the winner
     this.checkWinner(row, column, playerinput);
@@ -186,26 +187,73 @@ export class Gobang {
     };
   }
 
-  private buildUpAnalyis(row: number, column: number, userinput: boolean) {
-    // Row
-    let rowsucc = 0, colsucc = 0, leftsucc = 0, rightsucc = 0;
-    for (let i = 0; i < this._dimension; i++) {
-      this.buildUpAnalysisRow(this.cells[i]);
+  public buildUpAnalyis() {
+    //let arRst: GobangAIInternalResult[] = [];
 
-      // if (this.cells[row][i].playerinput === val) {
-      //   rowsucc ++;
-      // } else {
-      //   rowsucc = 0;
+    // Row
+    for (let i = 0; i < this._dimension; i++) {
+      let rowCells = this.buildUpAnalysisRow(this.cells[i]);
+      if (rowCells.length > 0) {
+        console.log(`Analyzing row: ${i}`);
+      }
+      for(let cell of rowCells) {
+        //arRst.push(cell);
+        console.log(`Result of row ${i}: ${cell.startidx} - ${cell.endidx} with ${cell.userinput? 'Player': 'AI'}, head sealed: ${cell.headsealed}, tail sealed: ${cell.tailsealed}`);
+      }
+    }
+
+    // Column
+    for (let i = 0; i < this._dimension; i++) {
+      let arCells = [];
+      for(let j = 0; j < this._dimension;j++) {
+        arCells.push(this.cells[j][i]);
+      }
+      let rowCells = this.buildUpAnalysisRow(arCells);
+      if (rowCells.length > 0) {
+        console.log(`Analyzing column: ${i}`);
+      }
+      for(let cell of rowCells) {
+        //arRst.push(cell);
+        console.log(`Result of column ${i}: ${cell.startidx} - ${cell.endidx} with ${cell.userinput? 'Player': 'AI'}, head sealed: ${cell.headsealed}, tail sealed: ${cell.tailsealed}`);
+      }
+    }
+    
+    // Slash /
+    for (let i = 0; i < 2 * this._dimension - 1; i++) {
+      let arCells = [];
+      for(let j = 0; j <= i; j++) {
+        if (j <= this._dimension - 1 && i <= this._dimension + j - 1 ) {
+          arCells.push(this.cells[j][i - j]);
+        }        
+      }
+
+      // let rowCells = this.buildUpAnalysisRow(arCells);
+      // if (rowCells.length > 0) {
+      //   console.log(`Analyzing Slash: ${i}`);
       // }
-      // if (rowsucc === 5) {
-      //   break;
+      // for(let cell of rowCells) {
+      //   //arRst.push(cell);
+      //   console.log(`Result of slash ${i}: ${cell.startidx} - ${cell.endidx} with ${cell.userinput? 'Player': 'AI'}, head sealed: ${cell.headsealed}, tail sealed: ${cell.tailsealed}`);
       // }
-    }    
+    }
+
+    // BackSlash \
+    for(let i =  2 * this._dimension - 1; i >= 0; i--) {
+      let arCells = [];
+
+      for(let j = 0; j <= i + 1 - this._dimension; j++) {
+        if (j <= this._dimension - 1 && i <= j + this._dimension - 1) {
+          arCells.push(this.cells[j][i - j]);
+        }
+      }
+    }
+
+    //return arRst;
   }
 
-  private buildUpAnalysisRow(arRow: GobangCell[]) {
+  private buildUpAnalysisRow(arRow: GobangCell[]): GobangAIInternalResult[] {
     let prvidx = -1;
-    let prvval: boolean;
+    let prvval: boolean = undefined;
     let arRst: GobangAIInternalResult[] = [];
 
     for(let i = 0; i < arRow.length; i ++) {
@@ -215,14 +263,23 @@ export class Gobang {
           prvval = true;
         } else {
           if (prvval !== arRow[i].playerinput) {
-            let air: GobangAIInternalResult = new GobangAIInternalResult();
-            air.startidx = prvidx;
-            air.endidx = i;
-            air.userinput = prvval;
-            if (prvidx === 0) {
-              air.headsealed = true;
+            if (prvval !== undefined) {
+              let air: GobangAIInternalResult = new GobangAIInternalResult();
+              air.startidx = prvidx;
+              air.endidx = i - 1;
+              air.userinput = prvval;
+              if (prvidx === 0) {
+                air.headsealed = true;
+              } else {
+                if (arRow[prvidx - 1].playerinput === undefined) {
+                  air.headsealed = false;
+                } else if (arRow[prvidx - 1].playerinput !== prvval) {
+                  air.headsealed = true;
+                }
+              }
+              air.tailsealed = true;
+              arRst.push(air);
             }
-            arRst.push(air);
 
             prvidx = i;
             prvval = arRow[i].playerinput;
@@ -236,14 +293,23 @@ export class Gobang {
           prvval = false;
         } else {
           if (prvval !== arRow[i].playerinput) {
-            let air: GobangAIInternalResult = new GobangAIInternalResult();
-            air.startidx = prvidx;
-            air.endidx = i;
-            air.userinput = prvval;
-            if (prvidx === 0) {
-              air.headsealed = true;
+            if (prvval !== undefined) {
+              let air: GobangAIInternalResult = new GobangAIInternalResult();
+              air.startidx = prvidx;
+              air.endidx = i - 1;
+              air.userinput = prvval;
+              if (prvidx === 0) {
+                air.headsealed = true;
+              } else {
+                if (arRow[prvidx - 1].playerinput === undefined) {
+                  air.headsealed = false;
+                } else if (arRow[prvidx - 1].playerinput !== prvval) {
+                  air.headsealed = true;
+                }
+              }
+              air.tailsealed = true;
+              arRst.push(air);
             }
-            arRst.push(air);
 
             prvidx = i;
             prvval = arRow[i].playerinput;
@@ -255,25 +321,54 @@ export class Gobang {
         if (prvidx === -1) {
           prvidx = i;
           prvval = undefined;
-        } else {          
-          if (prvval !== arRow[i].playerinput) {
+        } else {
+          if (prvval === undefined) {
+            // Do nothing
+          } else {
             let air: GobangAIInternalResult = new GobangAIInternalResult();
             air.startidx = prvidx;
-            air.endidx = i;
+            air.endidx = i - 1;
             air.userinput = prvval;
             if (prvidx === 0) {
               air.headsealed = true;
+            } else {
+              if (arRow[prvidx - 1].playerinput !== undefined) {
+                air.headsealed = true;
+              } else if (arRow[prvidx - 1].playerinput === undefined) {
+                air.headsealed = false;
+              }
             }
+            air.tailsealed = false;
             arRst.push(air);
 
             prvidx = i;
             prvval = arRow[i].playerinput;
-          } else {
-            // Do nothing
           }
         }
       }
     }
+
+    if (prvval !== undefined) {
+      let air: GobangAIInternalResult = new GobangAIInternalResult();
+      air.startidx = prvidx;
+      air.endidx = arRow.length - 1;
+      air.userinput = prvval;
+      if (prvidx === 0) {
+        air.headsealed = true;
+      } else {
+        if (prvval !== undefined) {
+          if (arRow[prvidx - 1].playerinput === undefined) {
+            air.headsealed = false;
+          } else {
+            air.headsealed = true;
+          }
+        }
+      }
+      air.tailsealed = true;
+      arRst.push(air);
+    }
+
+    return arRst;
   }
 
   /**
