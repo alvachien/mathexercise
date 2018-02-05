@@ -13,26 +13,57 @@ export interface MatrixPosIntf {
  */
 export function workoutSlash(dim: number): MatrixPosIntf[][] {
   if (dim <= 1) {
-    throw new Error("Wrong parameter");
+    throw new Error('Wrong parameter');
   }
 
-  let arrst:MatrixPosIntf[][] = [];
+  const arrst: MatrixPosIntf[][] = [];
   for (let i = 0; i < 2 * dim - 1; i++) {
-    let arpos:MatrixPosIntf[] = [];
+    const arpos: MatrixPosIntf[] = [];
 
-    for (let j = 0; j <= i; j++) {      
+    for (let j = 0; j <= i; j++) {
       if (j <= dim - 1 && i <= dim + j - 1) {
-        arpos.push({x: j, y: i-j});
+        arpos.push({x: j, y: i - j});
       }
     }
 
-    arpos.sort((a,b) => {
+    arpos.sort((a, b) => {
       return a.x - b.x;
     });
-    
+
     if (arpos.length > 0) {
       arrst.push(arpos);
-    }    
+    }
+  }
+
+  return arrst;
+}
+
+/**
+ * Workout the slash - extend version
+ * @param dim Dimension
+ */
+export function workoutSlashEx(width: number, height: number): MatrixPosIntf[][] {
+  if (width <= 1 || height <= 1) {
+    throw new Error('Wrong parameter');
+  }
+
+  const arrst: MatrixPosIntf[][] = [];
+  for (let i = 0; i < width + height - 1; i++) {
+    const arpos: MatrixPosIntf[] = [];
+
+    for (let j = 0; j <= i; j++) {
+      if (j <= width - 1 && i <= height + j - 1) {
+        arpos.push({x: j, y: i - j});
+      }
+    }
+
+    arpos.sort((a, b) => {
+      return a.x - b.x;
+    });
+
+    if (arpos.length > 0) {
+      arrst.push(arpos);
+    }
   }
 
   return arrst;
@@ -44,15 +75,15 @@ export function workoutSlash(dim: number): MatrixPosIntf[][] {
  */
 export function workoutBackSlash(dim: number): MatrixPosIntf[][] {
   if (dim <= 1) {
-    throw new Error("Wrong parameter");
+    throw new Error('Wrong parameter');
   }
 
-  let arrst:MatrixPosIntf[][] = [];
+  const arrst: MatrixPosIntf[][] = [];
 
-  for(let i = 0; i <= dim - 1; i ++) {
-    let arpos: MatrixPosIntf[] = [];
-    for(let j = 0; j <= i; j++) {
-      arpos.push({x: i-j, y:dim - 1 -j});
+  for (let i = 0; i <= dim - 1; i ++) {
+    const arpos: MatrixPosIntf[] = [];
+    for (let j = 0; j <= i; j++) {
+      arpos.push({x: i - j, y: dim - 1 - j});
     }
 
     if (arpos.length > 0) {
@@ -61,9 +92,9 @@ export function workoutBackSlash(dim: number): MatrixPosIntf[][] {
   }
 
   for (let i = 1; i <= dim - 1; i ++) {
-    let arpos: MatrixPosIntf[] = [];
+    const arpos: MatrixPosIntf[] = [];
     for (let j = 0; j <= dim - 1 - i; j++) {
-      arpos.push({x: i+j, y:j});
+      arpos.push({x: i + j, y: j});
     }
 
     if (arpos.length > 0) {

@@ -1,16 +1,7 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, EventEmitter, Output, Input, HostListener } from '@angular/core';
 import { LogLevel, QuizDegreeOfDifficulity, getCanvasMouseEventPosition, getCanvasCellPosition,
-  CanvasCellPositionInf } from '../model';
+  CanvasCellPositionInf, MineSweeper } from '../model';
 import { environment } from '../../environments/environment';
-
-/**
- * Minesweep cell
- */
-export interface MineSweepCell {
-  isMine: boolean;
-  isOpened: boolean;
-  tag: number;
-}
 
 @Component({
   selector: 'app-pg-minesweeper',
@@ -19,10 +10,6 @@ export interface MineSweepCell {
 })
 export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   @ViewChild('canvasmine') canvasMine: ElementRef;
-  @ViewChild('face') face: ElementRef;
-  @ViewChild('gametags') gametags: ElementRef;
-  @ViewChild('gametime') gametime: ElementRef;
-  @ViewChild('mscontainer') mscontainer: ElementRef;
   @Output() startedEvent: EventEmitter<any> = new EventEmitter();
   @Output() finishedEvent: EventEmitter<boolean> = new EventEmitter(false);
 
@@ -42,45 +29,22 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
 
   PANE_SIZE = 16;
 
+  private _instance: MineSweeper;
   private _dod: QuizDegreeOfDifficulity;
-  private _paneHeigh: number;
-  private _paneWidth: number;
-  private _minenum: number;
-  get PaneHeight(): number {
-    return this._paneHeigh;
-  }
-  set PaneHeight(ph: number) {
-    this._paneHeigh = ph;
-  }
-  get PaneWidth(): number {
-    return this._paneWidth;
-  }
-  set PaneWidth(pw: number) {
-    this._paneWidth = pw;
-  }
-  get MineNumber(): number {
-    return this._minenum;
-  }
-  set MineNumber(mn: number) {
-    this._minenum = mn;
-  }
   get ComponentWidth(): number {
-    return this.PaneWidth * this.PANE_SIZE + 42;
+    return this._instance.Width * this.PANE_SIZE + 42;
   }
   get ComponentHeight(): number {
-    return this.PaneHeight * this.PANE_SIZE + 136;
+    return this._instance.Height * this.PANE_SIZE + 136;
   }
 
   oldPos: CanvasCellPositionInf;
-  // Two-dimensional array
-  arCells: MineSweepCell[][] = [];
   // Image arrays
   arImgUrls: string[] = [];
   arMines: CanvasCellPositionInf[] = [];
   time = 0;
   notTaged = 0;
   mousedownArr: any;
-  mineGenerated: boolean = false;
   timer: any;
 
   constructor() {
@@ -88,9 +52,9 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
       console.log('AC Math Exercise [Debug]: Entering constructor in PgMinesweeperComponent');
     }
 
-    // Default values
-    this._paneHeigh = 16;
-    this._paneWidth = 30;
+    this._instance = new MineSweeper();
+    this._instance.Width = 30;
+    this._instance.Height = 16;
 
     // Array of image urls
     this.arImgUrls = ['../../assets/image/mineresource/blank.jpg',
@@ -114,25 +78,17 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
       console.log('AC Math Exercise [Debug]: Entering ngAfterViewInit in PgMinesweeperComponent');
     }
 
-    if (this.mscontainer != null) {
-      this.mscontainer.nativeElement.style.width = this.ComponentWidth + 'px';
-      this.mscontainer.nativeElement.style.height = this.ComponentHeight + 'px';
-    }
-
     if (this.canvasMine !== null) {
       this.canvasMine.nativeElement.width = this.PANE_SIZE * this._paneWidth;
       this.canvasMine.nativeElement.height = this.PANE_SIZE * this._paneHeigh;
     }
-    if (this.face !== null) {
-      this.face.nativeElement.src = '../../assets/image/mineresource/face_normal.jpg';
-    }
 
     switch (this.mineSweepDoD) {
-      case QuizDegreeOfDifficulity.easy: this._minenum = 9; break;
-      case QuizDegreeOfDifficulity.medium: this._minenum = 49; break;
+      case QuizDegreeOfDifficulity.easy: this._instance.TotalMines = 9; break;
+      case QuizDegreeOfDifficulity.medium: this._instance.TotalMines = 49; break;
       case QuizDegreeOfDifficulity.hard:
       default:
-        this._minenum = 99;
+      this._instance.TotalMines = 99;
         break;
     }
 
@@ -142,8 +98,7 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   onReset() {
     // Clean up variables
     this.oldPos = { row: 0, column: 0 };
-    this.arCells = [];
-    this.arMines = [];
+    this._instance.init();
     this.time = 0;
     this.notTaged = this._minenum;
 
@@ -388,14 +343,14 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
    */
   getAroundCells(pos: CanvasCellPositionInf): CanvasCellPositionInf[] {
     return [
-      { row: pos.row - 1, column: pos.column - 1, }, 
-      { row: pos.row - 1, column: pos.column, }, 
-      { row: pos.row - 1, column: pos.column + 1, }, 
-      { row: pos.row, column: pos.column - 1, }, 
+      { row: pos.row - 1, column: pos.column - 1, },
+      { row: pos.row - 1, column: pos.column, },
+      { row: pos.row - 1, column: pos.column + 1, },
+      { row: pos.row, column: pos.column - 1, },
       { row: pos.row, column: pos.column + 1, },
-      { row: pos.row + 1, column: pos.column - 1, }, 
-      { row: pos.row + 1, column: pos.column, }, 
-      { row: pos.row + 1, column: pos.column + 1, }, 
+      { row: pos.row + 1, column: pos.column - 1, },
+      { row: pos.row + 1, column: pos.column, },
+      { row: pos.row + 1, column: pos.column + 1, },
     ];
   }
 
@@ -416,7 +371,7 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
    * Is cell position is valid
    * @param pos Position to check
    */
-  isValidCellPosition(pos: CanvasCellPositionInf): boolean {    
+  isValidCellPosition(pos: CanvasCellPositionInf): boolean {
     if (pos === undefined) {
       return false;
     }
@@ -605,29 +560,6 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
         this.drawCell({row: i, column: j}, 1)
       }
     }
-  }
-
-  /**
-   * Get random number
-   * @param n : inputted number
-   */
-  private getRandom(n: number): number {
-    return Math.floor(Math.random() * n + 1)
-  }
-
-  /**
-   * Is item is in array
-   * @param posToSearch Position to search
-   * @param arrayToSearch Array to search
-   */
-  private isInArray(posToSearch: CanvasCellPositionInf, arrayToSearch: CanvasCellPositionInf[]): boolean {
-    for (let i = 0; i < arrayToSearch.length; i ++) {
-      if (arrayToSearch[i].row === posToSearch.row && arrayToSearch[i].column === posToSearch.column) {
-        return true;
-      }
-    }
-
-    return false;
   }
 
   /**

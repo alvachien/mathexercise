@@ -1,5 +1,5 @@
 import { CanvasCellPositionInf } from './uicommon';
-import { workoutSlash, workoutBackSlash, MatrixPosIntf } from "./utility";
+import { workoutSlash, workoutBackSlash, MatrixPosIntf } from './utility';
 
 // Gobang cell
 export class GobangCell {
@@ -194,6 +194,7 @@ export class Gobang {
       }
     });
 
+    // Stategy:
     // If the player has risk larger than 3 (and AI is smaller or equal), defend!
     // Else attack!
     if (this._AIAnalysis[maxattackindex].risklevel < this._playAnalysis[maxdefendindex].risklevel

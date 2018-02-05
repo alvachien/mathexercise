@@ -56,6 +56,7 @@ import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-mo
 import { UsTrendComponent } from './us-trend';
 import { UsNormalComponent } from './us-normal';
 import { PgGobangComponent } from './pg-gobang';
+import { PgChineseChessComponent } from './pg-chinese-chess';
 
 @NgModule({
   exports: [
@@ -98,6 +99,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     PgMinesweeperComponent,
     PgTypingtourComponent,
     PgGobangComponent,
+    PgChineseChessComponent,
     MixedopExerciseComponent,
     PgSummaryDlgComponent,
     EnwordReciteExerciseComponent,
