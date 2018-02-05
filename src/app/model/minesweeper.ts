@@ -44,6 +44,9 @@ export class MineSweeper {
   set TotalMines(tmine: number) {
     this._totalmine = tmine;
   }
+  get IsMineGenerated(): boolean {
+    return this._mineGenerated;
+  }
 
   constructor() {
     this._inited = false;
@@ -102,6 +105,10 @@ export class MineSweeper {
       this.cells[mineItem.row][mineItem.column].isMine = true;
       arMines.push(mineItem);
     }
+  }
+
+  public isCellOpened(pos: CanvasCellPositionInf): boolean {
+    return this.cells[pos.row][pos.column].isOpened;
   }
 
   /**

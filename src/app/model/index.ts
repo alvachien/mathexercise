@@ -12,6 +12,7 @@ export * from './rpn';
 export * from './sudou';
 export * from './gobang';
 export * from './minesweeper';
+export * from './chinesechess';
 export * from './puzzlegamequiz';
 export * from './award';
 export * from './dictation';
