@@ -1,5 +1,5 @@
 import { MatrixPosIntf, workoutSlashEx } from './utility';
-import { CanvasCellPositionInf } from 'app/model';
+import { CanvasCellPositionInf } from './uicommon';
 
 /**
  * Cell of minesweeper
@@ -95,7 +95,7 @@ export class MineSweeper {
    */
   public generateMines(excludpos: CanvasCellPositionInf) {
     let mineItem: CanvasCellPositionInf;
-    let arMines: any[] = [];
+    const arMines: any[] = [];
 
     for (let i = 0; i < this._totalmine; i++) {
       do {
@@ -107,8 +107,60 @@ export class MineSweeper {
     }
   }
 
+  /**
+   * Check cell is opened or not
+   * @param pos Position
+   */
   public isCellOpened(pos: CanvasCellPositionInf): boolean {
     return this.cells[pos.row][pos.column].isOpened;
+  }
+
+  /**
+   * Check the position is valid for current instnace
+   * @param pos Position
+   */
+  public isValidCellPosition(pos: CanvasCellPositionInf): boolean {
+    if (pos.row <= 0 || pos.column <= 0 || pos.row >= this._width || pos.column >= this._height) {
+      return false;
+    }
+
+    return true;
+  }
+
+  public isAMineCell(pos: CanvasCellPositionInf): boolean {
+    if (this.isValidCellPosition(pos) && this.cells[pos.row][pos.column].isMine) {
+      return true;
+    }
+
+    return false;
+  }
+
+  public calcNumberOfMinesAround(pos: CanvasCellPositionInf): number {
+    const aroundArr = this.getAroundCells(pos);
+    let aroundMineNum = 0;
+
+    for (let i = 0; i < aroundArr.length; i++) {
+      aroundMineNum += this.isAMineCell(aroundArr[i]) ? 1 : 0;
+    }
+
+    return aroundMineNum;
+  }
+
+  /**
+   * Get around cells
+   * @param pos Current position
+   */
+  getAroundCells(pos: CanvasCellPositionInf): CanvasCellPositionInf[] {
+    return [
+      { row: pos.row - 1, column: pos.column - 1, },
+      { row: pos.row - 1, column: pos.column, },
+      { row: pos.row - 1, column: pos.column + 1, },
+      { row: pos.row, column: pos.column - 1, },
+      { row: pos.row, column: pos.column + 1, },
+      { row: pos.row + 1, column: pos.column - 1, },
+      { row: pos.row + 1, column: pos.column, },
+      { row: pos.row + 1, column: pos.column + 1, },
+    ];
   }
 
   /**

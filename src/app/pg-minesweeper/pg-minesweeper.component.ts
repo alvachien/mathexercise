@@ -122,15 +122,15 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
     ctx2.clearRect(0, 0, this.canvasMine.nativeElement.width, this.canvasMine.nativeElement.height);
     ctx2.save();
 
-    let grd = ctx2.createRadialGradient(
+    const grd = ctx2.createRadialGradient(
       Math.round(this.PANE_SIZE * this._instance.Width / 2),
       Math.round(this.PANE_SIZE * this._instance.Height / 2),
       5,
       Math.round(this.PANE_SIZE * this._instance.Width / 2),
       Math.round(this.PANE_SIZE * this._instance.Height / 2),
       Math.round(this.PANE_SIZE * this._instance.Width / 2));
-    grd.addColorStop(0,"red");
-    grd.addColorStop(1,"white");
+    grd.addColorStop(0, 'red');
+    grd.addColorStop(1, 'white');
     ctx2.fillStyle = grd;
     ctx2.fillRect(0, 0, this.canvasMine.nativeElement.width, this.canvasMine.nativeElement.height);
     ctx2.restore();
@@ -143,7 +143,7 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
       ctx2.stroke();
     }
 
-    for (let i = 0; i <= this._instance.Width; i++ ){
+    for (let i = 0; i <= this._instance.Width; i++ ) {
       ctx2.beginPath();
       ctx2.moveTo(i * this.PANE_SIZE, 0);
       ctx2.lineTo(i * this.PANE_SIZE, this._instance.Width * this.PANE_SIZE);
@@ -161,9 +161,24 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   }
 
   private drawCell(i: number, j: number) {
+    if (!this._instance.isValidCellPosition({row: i, column: j})) {
+      return;
+    }
+
     const ctx2 = this.canvasMine.nativeElement.getContext('2d');
 
-    this.roundedRect(ctx2, i * this.PANE_SIZE, j * this.PANE_SIZE, this.PANE_SIZE, this.PANE_SIZE, 3);
+    const cell = this._instance.cells[i][j];
+    if (cell.isOpened) {
+      // Fix it with another color
+      ctx2.save();
+      ctx2.shadowOffsetX = 2;
+      ctx2.shadowOffsetY = 2;
+      ctx2.shadowBlur = 2;
+      ctx2.shadowColor = 'rgba(0, 0, 0, 0.5)';
+      ctx2.fillText(cell.tag, i * this.PANE_SIZE, j * this.PANE_SIZE, this.PANE_SIZE);
+    } else {
+      this.roundedRect(ctx2, i * this.PANE_SIZE, j * this.PANE_SIZE, this.PANE_SIZE, this.PANE_SIZE, 3);
+    }
   }
 
   private roundedRect(ctx, x, y, width, height, radius) {
@@ -172,7 +187,7 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
     ctx.lineTo(x, y + height - radius);
     ctx.arcTo(x, y + height, x + radius, y + height, radius);
     ctx.lineTo(x + width - radius, y + height);
-    ctx.arcTo(x + width, y + height, x + width, y + height-radius, radius);
+    ctx.arcTo(x + width, y + height, x + width, y + height - radius, radius);
     ctx.lineTo(x + width, y + radius);
     ctx.arcTo(x + width, y, x + width - radius, y, radius);
     ctx.lineTo(x + radius, y);
@@ -223,7 +238,8 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   //     console.log(`AC Math Exercise [Debug]: Cell position: ${pos.row} - ${pos.column}`);
   //   }
 
-  //   if (this.isValidCellPosition(pos) && (this.arCells[pos.row][pos.column].isOpened === true || this.arCells[pos.row][pos.column].tag !== 0)) {
+  //   if (this.isValidCellPosition(pos) && (this.arCells[pos.row][pos.column].isOpened === true
+  //      || this.arCells[pos.row][pos.column].tag !== 0)) {
   //     return;
   //   }
 
@@ -234,12 +250,16 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   @HostListener('mouseup', ['$event'])
   public onCanvasMouseUp(evt: MouseEvent) {
     if (environment.LoggingLevel >= LogLevel.Debug) {
-      console.log(`AC Math Exercise [Debug]: Entering onMineSweeperCanvasMouseUp of mouseup event in PgMinesweeperComponent: ${evt.clientX} - ${evt.clientY}`);
+      console.log(`AC Math Exercise [Debug]: Entering onMineSweeperCanvasMouseUp [mouseup]
+        in PgMinesweeperComponent: ${evt.clientX} - ${evt.clientY}`);
     }
 
     const pos = getCanvasCellPosition(getCanvasMouseEventPosition(this.canvasMine.nativeElement, evt), this.PANE_SIZE, this.PANE_SIZE);
     if (environment.LoggingLevel >= LogLevel.Debug) {
       console.log(`AC Math Exercise [Debug]: Cell position: ${pos.row} - ${pos.column}`);
+    }
+    if (!this._instance.isValidCellPosition(pos)) {
+      return;
     }
 
     if (this._instance.IsMineGenerated === false) {
@@ -260,16 +280,19 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   @HostListener('mousedown', ['$event'])
   public onCanvasMouseDown(evt: MouseEvent) {
     if (environment.LoggingLevel >= LogLevel.Debug) {
-      console.log(`AC Math Exercise [Debug]: Entering onMineSweeperCanvasMouseDown of mousedown event in PgMinesweeperComponent: ${evt.clientX} - ${evt.clientY}`);
+      console.log(`AC Math Exercise [Debug]: Entering onMineSweeperCanvasMouseDown [mousedown] event
+        in PgMinesweeperComponent: ${evt.clientX} - ${evt.clientY}`);
     }
 
     const pos = getCanvasCellPosition(getCanvasMouseEventPosition(this.canvasMine.nativeElement, evt), this.PANE_SIZE, this.PANE_SIZE);
     if (environment.LoggingLevel >= LogLevel.Debug) {
       console.log(`AC Math Exercise [Debug]: Cell position: ${pos.row} - ${pos.column}`);
     }
+    if (!this._instance.isValidCellPosition(pos)) {
+      return;
+    }
 
-    
-    let theCell = this._instance.cells[pos.row][pos.column];
+    const theCell = this._instance.cells[pos.row][pos.column];
     if (theCell.isOpened === true) {
       // const aroundMineNum = this.calAround(pos);
       // const unknownArr = this.getAroundUnknown(pos);
@@ -288,10 +311,15 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   }
 
   private onMouseupPostPorcessing(pos: CanvasCellPositionInf, evnt: MouseEvent) {
-    let curCell = this._instance.cells[pos.row][pos.column];
-    if (!this._instance.isCellOpened(pos)) {
+    const curCell = this._instance.cells[pos.row][pos.column];
+    if (!curCell.isOpened) {
       // Try to open the cell
-      
+      if (curCell.isMine) {
+        // Game over!
+      } else {
+        // Workout the around cells
+
+      }
     }
   }
 
@@ -349,18 +377,6 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   //   }
   // }
 
-  // calAround(pos: CanvasCellPositionInf): number {
-  //   let arCells = this.arCells;
-  //   let aroundArr = this.getAroundCells(pos);
-  //   let aroundMineNum = 0;
-
-  //   for (let i = 0; i < aroundArr.length; i++) {
-  //     aroundMineNum += this.checkMine(aroundArr[i]) ? 1 : 0;
-  //   }
-
-  //   return aroundMineNum;
-  // }
-
   // calZeroMine(pos: CanvasCellPositionInf, zeroArr: CanvasCellPositionInf[]): CanvasCellPositionInf[] {
   //   let arCells = this.arCells;
   //   let aroundArr = this.getAroundCells(pos);
@@ -411,23 +427,6 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   //   };
   // }
 
-  // /**
-  //  * Get around cells
-  //  * @param pos Current position
-  //  */
-  // getAroundCells(pos: CanvasCellPositionInf): CanvasCellPositionInf[] {
-  //   return [
-  //     { row: pos.row - 1, column: pos.column - 1, },
-  //     { row: pos.row - 1, column: pos.column, },
-  //     { row: pos.row - 1, column: pos.column + 1, },
-  //     { row: pos.row, column: pos.column - 1, },
-  //     { row: pos.row, column: pos.column + 1, },
-  //     { row: pos.row + 1, column: pos.column - 1, },
-  //     { row: pos.row + 1, column: pos.column, },
-  //     { row: pos.row + 1, column: pos.column + 1, },
-  //   ];
-  // }
-
   // drawNum(pos: CanvasCellPositionInf, num: number) {
   //   if (Number.isInteger(num)) {
   //     let area = this.getCellArea(pos);
@@ -439,46 +438,6 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   //       cxt.drawImage(image, area[0], area[1], 16, 16);
   //     }
   //   }
-  // }
-
-  // /**
-  //  * Is cell position is valid
-  //  * @param pos Position to check
-  //  */
-  // isValidCellPosition(pos: CanvasCellPositionInf): boolean {
-  //   if (pos === undefined) {
-  //     return false;
-  //   }
-  //   if (pos.row < 0 || pos.column < 0 || pos.row >= this._paneHeigh || pos.column >= this._paneWidth) {
-  //     return false;
-  //   }
-  //   if (this.arCells.length <= 0 || this.arCells.length <= pos.row || this.arCells[pos.row].length <= 0) {
-  //     return false;
-  //   }
-
-  //   return true;
-  // }
-
-  // checkMine(pos: CanvasCellPositionInf): boolean {
-  //   if (this.isValidCellPosition(pos) && this.arCells[pos.row][pos.column].isMine === true) {
-  //     return true;
-  //   }
-
-  //   return false;
-  // }
-
-  // getCellArea(pos: CanvasCellPositionInf) {
-  //   return [pos.row * this.PANE_SIZE + 1, pos.column * this.PANE_SIZE + 1];
-  // }
-
-  // preRightMenu() {
-  //   this.canvasMine.nativeElement.oncontextmenu = event => {
-  //     if (document.all) {
-  //       window.event.returnValue = false; // for IE
-  //     } else {
-  //       event.preventDefault();
-  //     }
-  //   };
   // }
 
   // /**
