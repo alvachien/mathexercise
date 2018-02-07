@@ -91,6 +91,7 @@ export class ChineseChessUI {
   keys;
   value;
   args;
+  pieces: any[];
 
   imageBackground;
   imageDot;
@@ -270,23 +271,23 @@ export class ChineseChessUI {
     this.value.Z = arr2Clone(this.value.z).reverse();
 
     this.args = {
-      //红子 中文/图片地址/阵营/权重
-      'c':{text:'车', img:'r_c', my:1 ,bl:'c', value:this.value.c},
-      'm':{text:'马', img:'r_m', my:1 ,bl:'m', value:this.value.m},
-      'x':{text:'相', img:'r_x', my:1 ,bl:'x', value:this.value.x},
-      's':{text:'仕', img:'r_s', my:1 ,bl:'s', value:this.value.s},
-      'j':{text:'将', img:'r_j', my:1 ,bl:'j', value:this.value.j},
-      'p':{text:'炮', img:'r_p', my:1 ,bl:'p', value:this.value.p},
-      'z':{text:'兵', img:'r_z', my:1 ,bl:'z', value:this.value.z},
+      // 红子 中文/图片地址/阵营/权重
+      'c': {text:'车', img:'r_c', my:1 ,bl:'c', value:this.value.c},
+      'm': {text:'马', img:'r_m', my:1 ,bl:'m', value:this.value.m},
+      'x': {text:'相', img:'r_x', my:1 ,bl:'x', value:this.value.x},
+      's': {text:'仕', img:'r_s', my:1 ,bl:'s', value:this.value.s},
+      'j': {text:'将', img:'r_j', my:1 ,bl:'j', value:this.value.j},
+      'p': {text:'炮', img:'r_p', my:1 ,bl:'p', value:this.value.p},
+      'z': {text:'兵', img:'r_z', my:1 ,bl:'z', value:this.value.z},
       
-      //蓝子
-      'C':{text:'車', img:'b_c', my:-1 ,bl:'c', value:this.value.C},
-      'M':{text:'馬', img:'b_m', my:-1 ,bl:'m', value:this.value.M},
-      'X':{text:'象', img:'b_x', my:-1 ,bl:'x', value:this.value.X},
-      'S':{text:'士', img:'b_s', my:-1 ,bl:'s', value:this.value.S},
-      'J':{text:'帅', img:'b_j', my:-1 ,bl:'j', value:this.value.J},
-      'P':{text:'炮', img:'b_p', my:-1 ,bl:'p', value:this.value.P},
-      'Z':{text:'卒', img:'b_z', my:-1 ,bl:'z', value:this.value.Z}
+      // 蓝子
+      'C': {text:'車', img:'b_c', my:-1 ,bl:'c', value:this.value.C},
+      'M': {text:'馬', img:'b_m', my:-1 ,bl:'m', value:this.value.M},
+      'X': {text:'象', img:'b_x', my:-1 ,bl:'x', value:this.value.X},
+      'S': {text:'士', img:'b_s', my:-1 ,bl:'s', value:this.value.S},
+      'J': {text:'帅', img:'b_j', my:-1 ,bl:'j', value:this.value.J},
+      'P': {text:'炮', img:'b_p', my:-1 ,bl:'p', value:this.value.P},
+      'Z': {text:'卒', img:'b_z', my:-1 ,bl:'z', value:this.value.Z}
     };
   }
 
@@ -300,7 +301,7 @@ export class ChineseChessUI {
 
     //左侧检索
     for (var i=x-1; i>= 0; i--){
-      if (map[y][i]) {
+      if (this.map[y][i]) {
         if (this.mans[map[y][i]].my!=my) d.push([i,y]);
         break
       }else{
