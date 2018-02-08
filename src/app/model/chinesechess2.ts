@@ -10,6 +10,321 @@ function arr2Clone(arr){
 	return newArr;
 }
 
+// Base class for piece
+class ChineseChessPieceBase {
+  x: any;
+  y: any;
+  text: any;
+  value: any[];
+  isShow: boolean;
+  my: any;
+  key: string;
+
+  img: string; // Short name
+  bl: any;
+  
+  get imageFullPath(): string {
+    return '../../assets/image/chinesechess/' + this.img + '.png';
+  }
+
+  constructor(key: string, x: number, y: number) {
+    this.key = key;
+    this.x = x;
+    this.y = y;
+  }
+}
+
+// Rook 
+class ChineseChessRook extends ChineseChessPieceBase {
+  constructor(isAI: boolean, key: string, x: number, y: number) {
+    super(key, x, y);
+
+    let pvalue = [
+      [206, 208, 207, 213, 214, 213, 207, 208, 206],
+      [206, 212, 209, 216, 233, 216, 209, 212, 206],
+      [206, 208, 207, 214, 216, 214, 207, 208, 206],
+      [206, 213, 213, 216, 216, 216, 213, 213, 206],
+      [208, 211, 211, 214, 215, 214, 211, 211, 208],
+      
+      [208, 212, 212, 214, 215, 214, 212, 212, 208],
+      [204, 209, 204, 212, 214, 212, 204, 209, 204],
+      [198, 208, 204, 212, 212, 212, 204, 208, 198],
+      [200, 208, 206, 212, 200, 212, 206, 208, 200],
+      [194, 206, 204, 212, 200, 212, 204, 206, 194]
+    ];
+
+    if (isAI) {
+      this.my = false;
+      this.text = '車';
+      this.img = 'b_c';
+      this.my = -1;
+      this.bl = 'c';
+      this.value = arr2Clone(pvalue).reverse();
+    } else {
+      this.my = 1;
+      this.text = '车';
+      this.img = 'r_c';
+      this.bl = 'c';
+      this.value = arr2Clone(pvalue);
+    }
+  }
+
+  bylaw(x, y, map: any[], my: boolean) {
+    let d = [];
+
+    // 左侧检索
+    for (var i = x - 1; i >= 0; i--){
+      if (map[y][i]) {
+        if (this.mans[map[y][i]].my !== my) {
+          d.push([i,y]);
+        }
+
+        break;
+      } else {
+        d.push([i,y])	
+      }
+    }
+
+    //右侧检索
+    for (let i= x + 1; i <= 8; i++){
+      if (map[y][i]) {
+        if (this.mans[map[y][i]].my !== my) d.push([i,y]);
+        break
+      }else{
+        d.push([i,y])	
+      }
+    }
+
+    //上检索
+    for (let i = y-1 ; i >= 0; i--){
+      if (map[i][x]) {
+        if (this.mans[map[i][x]].my!=my) d.push([x,i]);
+        break
+      }else{
+        d.push([x,i])	
+      }
+    }
+
+    //下检索
+    for (let i = y+1 ; i<= 9; i++){
+      if (map[i][x]) {
+        if (this.mans[map[i][x]].my!=my) d.push([x,i]);
+        break
+      }else{
+        d.push([x,i])	
+      }
+    }
+
+    return d;
+  }  
+}
+
+// Horse
+class ChineseChessHorse extends ChineseChessPieceBase {
+  constructor(isAI: boolean, key: string, x: number, y: number) {
+    super(key, x, y);
+
+    let pvalue = [
+      [90, 90, 90, 96, 90, 96, 90, 90, 90],
+      [90, 96,103, 97, 94, 97,103, 96, 90],
+      [92, 98, 99,103, 99,103, 99, 98, 92],
+      [93,108,100,107,100,107,100,108, 93],
+      [90,100, 99,103,104,103, 99,100, 90],
+      
+      [90, 98,101,102,103,102,101, 98, 90],
+      [92, 94, 98, 95, 98, 95, 98, 94, 92],
+      [93, 92, 94, 95, 92, 95, 94, 92, 93],
+      [85, 90, 92, 93, 78, 93, 92, 90, 85],
+      [88, 85, 90, 88, 90, 88, 90, 85, 88]
+    ];
+
+    if (isAI) {
+      this.text = '馬'; 
+      this.img = 'b_m';
+      this.my = -1;
+      this.bl = 'm';
+      this.value = arr2Clone(pvalue).reverse();
+
+    } else {
+      this.text = '马';
+      this.img = 'r_m';
+      this.my = 1;
+      this.bl = 'm';
+      this.value = arr2Clone(pvalue);
+    }
+  }
+}
+
+class ChineseChessElephant extends ChineseChessPieceBase {
+  constructor(isAI: boolean, key: string, x: number, y: number) {
+    super(key, x, y);
+
+    let pvalue = [
+      [0, 0,20, 0, 0, 0,20, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0,23, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0,20, 0, 0, 0,20, 0, 0],
+      
+      [0, 0,20, 0, 0, 0,20, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [18,0, 0, 0,23, 0, 0, 0,18],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0], 
+      [0, 0,20, 0, 0, 0,20, 0, 0]
+    ];
+
+    if (isAI) {
+      this.text = '象';
+      this.img = 'b_x';
+      this.my = -1;
+      this.bl = 'x';
+      this.value = arr2Clone(pvalue);
+    } else {
+      this.text = '相';
+      this.img = 'r_x';
+      this.my = 1;
+      this.bl = 'x';
+      this.value = arr2Clone(pvalue);
+    }
+  }
+}
+
+class ChineseChessGuard extends ChineseChessPieceBase {
+  constructor(isAI: boolean, key: string, x: number, y: number) {
+    super(key, x, y);
+
+    let pvalue = [
+      [0, 0, 0,20, 0,20, 0, 0, 0],
+      [0, 0, 0, 0,23, 0, 0, 0, 0],
+      [0, 0, 0,20, 0,20, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0,20, 0,20, 0, 0, 0],
+      [0, 0, 0, 0,23, 0, 0, 0, 0], 
+      [0, 0, 0,20, 0,20, 0, 0, 0]
+    ];
+
+    if (isAI) {
+      this.text = '士';
+      this.img = 'b_s';
+      this.my = -1;
+      this.bl = 's';
+      this.value = arr2Clone(pvalue);
+    } else {
+      this.text = '仕';
+      this.img = 'r_s';
+      this.my = 1;
+      this.bl = 's';
+      this.value = arr2Clone(pvalue);
+    }
+  }
+}
+
+class ChineseChessGeneral extends ChineseChessPieceBase {
+  constructor(isAI: boolean, key: string, x: number, y: number) {
+    super(key, x, y);
+
+    let pvalue = [
+      [0, 0, 0, 8888, 8888, 8888, 0, 0, 0],
+      [0, 0, 0, 8888, 8888, 8888, 0, 0, 0], 
+      [0, 0, 0, 8888, 8888, 8888, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 8888, 8888, 8888, 0, 0, 0],
+      [0, 0, 0, 8888, 8888, 8888, 0, 0, 0], 
+      [0, 0, 0, 8888, 8888, 8888, 0, 0, 0]
+    ];
+
+    if (isAI) {
+      this.text = '帅';
+      this.img = 'b_j';
+      this.my = -1;
+      this.bl = 'j';
+      this.value = arr2Clone(pvalue);
+    } else {
+      this.text = '将';
+      this.img = 'r_j';
+      this.my = 1;
+      this.bl = 'j';
+      this.value = arr2Clone(pvalue);
+    }
+  }
+}
+
+class ChineseChessCannon extends ChineseChessPieceBase {
+  constructor(isAI: boolean, key: string, x: number, y: number) {
+    super(key, x, y);
+
+    let pvalue = [
+        
+      [100, 100,  96, 91,  90, 91,  96, 100, 100],
+      [ 98,  98,  96, 92,  89, 92,  96,  98,  98],
+      [ 97,  97,  96, 91,  92, 91,  96,  97,  97],
+      [ 96,  99,  99, 98, 100, 98,  99,  99,  96],
+      [ 96,  96,  96, 96, 100, 96,  96,  96,  96], 
+      
+      [ 95,  96,  99, 96, 100, 96,  99,  96,  95],
+      [ 96,  96,  96, 96,  96, 96,  96,  96,  96],
+      [ 97,  96, 100, 99, 101, 99, 100,  96,  97],
+      [ 96,  97,  98, 98,  98, 98,  98,  97,  96],
+      [ 96,  96,  97, 99,  99, 99,  97,  96,  96]
+    ];
+
+    if (isAI) {
+      this.text = '炮';
+      this.img = 'b_p'; 
+      this.my = -1;
+      this.bl = 'p';
+      this.value = arr2Clone(pvalue).reverse();
+    } else {
+      this.text = '炮';
+      this.img = 'r_p';
+      this.my  = 1;
+      this.bl = 'p';
+      this.value = arr2Clone(pvalue);
+    }
+  }
+}
+
+class ChineseChessPawn extends ChineseChessPieceBase {
+  constructor(isAI: boolean, key: string, x: number, y: number) {
+    super(key, x, y);
+
+    let pvalue = [
+      [ 9,  9,  9, 11, 13, 11,  9,  9,  9],
+      [19, 24, 34, 42, 44, 42, 34, 24, 19],
+      [19, 24, 32, 37, 37, 37, 32, 24, 19],
+      [19, 23, 27, 29, 30, 29, 27, 23, 19],
+      [14, 18, 20, 27, 29, 27, 20, 18, 14],
+      
+      [ 7,  0, 13,  0, 16,  0, 13,  0,  7],
+      [ 7,  0,  7,  0, 15,  0,  7,  0,  7], 
+      [ 0,  0,  0,  0,  0,  0,  0,  0,  0],
+      [ 0,  0,  0,  0,  0,  0,  0,  0,  0],
+      [ 0,  0,  0,  0,  0,  0,  0,  0,  0]
+    ];
+    if (isAI) {
+      this.text = '卒';
+      this.img = 'b_z';
+      this.my = -1;
+      this.bl = 'z';
+      this.value = arr2Clone(pvalue).reverse();
+    } else {
+      this.text = '兵';
+      this.img = 'r_z';
+      this.my = 1;
+      this.bl = 'z';
+      this.value = arr2Clone(pvalue);
+    }
+  }
+}
+
 class ChineseChessMan {
   com: any;
   pater: any;
@@ -54,7 +369,7 @@ class ChineseChessMan {
   // }
 }
 
-class ChineseChessPane{
+class ChineseChessPane {
   x;
   y;
   newX;
@@ -79,27 +394,12 @@ class ChineseChessPane{
 	}
 }	
 
-class ChineseChessBackground {
-  x;
-  y;
-  isShow;
-
-  constructor(img, x, y){
-    this.x = x||0; 
-    this.y = y||0;
-    this.isShow = true;
-  }
-  
-  show(com, ctx){
-    if (this.isShow) ctx.drawImage(com.bgImg, com.spaceX * this.x,com.spaceY *  this.y);
-  }
-}
-
 class ChineseChessDot {
   x;
   y;
   isShow;
   dots= [];
+
   show(com, ctx) {
     for (var i=0; i<this.dots.length;i++){
 			if (this.isShow) ctx.drawImage(com.dotImg, com.spaceX * this.dots[i][0]+10  + com.pointStartX ,com.spaceY *  this.dots[i][1]+10 + com.pointStartY)
@@ -117,13 +417,12 @@ export class ChineseChessUI {
   initMap;
   initMap1;
   keys;
-  value;
-  args;
-  mans: any;
+  pieces: Map<string, ChineseChessPieceBase>;
 
-  imageBackground;
-  imageDot;
-  imagePane;
+  // Images
+  imageBackground: any;
+  imageDot: any;
+  imagePane: any;
 
   get width(): number {
     return this.styleSetting.width;
@@ -196,7 +495,7 @@ export class ChineseChessUI {
       'p0':'p','p1':'p',
       'z0':'z','z1':'z','z2':'z','z3':'z','z4':'z','z5':'z',
       
-      'C0':'c','C1':'C',
+      'C0':'C','C1':'C',
       'M0':'M','M1':'M',
       'X0':'X','X1':'X',
       'S0':'S','S1':'S',
@@ -205,154 +504,14 @@ export class ChineseChessUI {
       'Z0':'Z','Z1':'Z','Z2':'Z','Z3':'Z','Z4':'Z','Z5':'Z',
     };
 
-    this.value = {	
-      // 车价值
-      c:[
-        [206, 208, 207, 213, 214, 213, 207, 208, 206],
-        [206, 212, 209, 216, 233, 216, 209, 212, 206],
-        [206, 208, 207, 214, 216, 214, 207, 208, 206],
-        [206, 213, 213, 216, 216, 216, 213, 213, 206],
-        [208, 211, 211, 214, 215, 214, 211, 211, 208],
-        
-        [208, 212, 212, 214, 215, 214, 212, 212, 208],
-        [204, 209, 204, 212, 214, 212, 204, 209, 204],
-        [198, 208, 204, 212, 212, 212, 204, 208, 198],
-        [200, 208, 206, 212, 200, 212, 206, 208, 200],
-        [194, 206, 204, 212, 200, 212, 204, 206, 194]
-      ],    
-      //马价值
-      m:[
-        [90, 90, 90, 96, 90, 96, 90, 90, 90],
-        [90, 96,103, 97, 94, 97,103, 96, 90],
-        [92, 98, 99,103, 99,103, 99, 98, 92],
-        [93,108,100,107,100,107,100,108, 93],
-        [90,100, 99,103,104,103, 99,100, 90],
-        
-        [90, 98,101,102,103,102,101, 98, 90],
-        [92, 94, 98, 95, 98, 95, 98, 94, 92],
-        [93, 92, 94, 95, 92, 95, 94, 92, 93],
-        [85, 90, 92, 93, 78, 93, 92, 90, 85],
-        [88, 85, 90, 88, 90, 88, 90, 85, 88]
-      ],
-      
-      // 相价值
-      x:[
-        [0, 0,20, 0, 0, 0,20, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0,23, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0,20, 0, 0, 0,20, 0, 0],
-        
-        [0, 0,20, 0, 0, 0,20, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [18,0, 0, 0,23, 0, 0, 0,18],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0], 
-        [0, 0,20, 0, 0, 0,20, 0, 0]
-      ],
-      
-      // 士价值
-      s:[
-        [0, 0, 0,20, 0,20, 0, 0, 0],
-        [0, 0, 0, 0,23, 0, 0, 0, 0],
-        [0, 0, 0,20, 0,20, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0,20, 0,20, 0, 0, 0],
-        [0, 0, 0, 0,23, 0, 0, 0, 0], 
-        [0, 0, 0,20, 0,20, 0, 0, 0]
-      ],
-      
-      // 奖价值
-      j:[
-        [0, 0, 0, 8888, 8888, 8888, 0, 0, 0],
-        [0, 0, 0, 8888, 8888, 8888, 0, 0, 0], 
-        [0, 0, 0, 8888, 8888, 8888, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 8888, 8888, 8888, 0, 0, 0],
-        [0, 0, 0, 8888, 8888, 8888, 0, 0, 0], 
-        [0, 0, 0, 8888, 8888, 8888, 0, 0, 0]
-      ],
-      
-      // 炮价值
-      p:[
-        
-        [100, 100,  96, 91,  90, 91,  96, 100, 100],
-        [ 98,  98,  96, 92,  89, 92,  96,  98,  98],
-        [ 97,  97,  96, 91,  92, 91,  96,  97,  97],
-        [ 96,  99,  99, 98, 100, 98,  99,  99,  96],
-        [ 96,  96,  96, 96, 100, 96,  96,  96,  96], 
-        
-        [ 95,  96,  99, 96, 100, 96,  99,  96,  95],
-        [ 96,  96,  96, 96,  96, 96,  96,  96,  96],
-        [ 97,  96, 100, 99, 101, 99, 100,  96,  97],
-        [ 96,  97,  98, 98,  98, 98,  98,  97,  96],
-        [ 96,  96,  97, 99,  99, 99,  97,  96,  96]
-      ],
-      
-      // 卒价值
-      z:[
-        [ 9,  9,  9, 11, 13, 11,  9,  9,  9],
-        [19, 24, 34, 42, 44, 42, 34, 24, 19],
-        [19, 24, 32, 37, 37, 37, 32, 24, 19],
-        [19, 23, 27, 29, 30, 29, 27, 23, 19],
-        [14, 18, 20, 27, 29, 27, 20, 18, 14],
-        
-        [ 7,  0, 13,  0, 16,  0, 13,  0,  7],
-        [ 7,  0,  7,  0, 15,  0,  7,  0,  7], 
-        [ 0,  0,  0,  0,  0,  0,  0,  0,  0],
-        [ 0,  0,  0,  0,  0,  0,  0,  0,  0],
-        [ 0,  0,  0,  0,  0,  0,  0,  0,  0]
-      ]
-    };
-    this.value.C = arr2Clone(this.value.c).reverse();
-    this.value.M = arr2Clone(this.value.m).reverse();
-    this.value.X = this.value.x;
-    this.value.S = this.value.s;
-    this.value.J = this.value.j;
-    this.value.P = arr2Clone(this.value.p).reverse();
-    this.value.Z = arr2Clone(this.value.z).reverse();
-
-    this.args = {
-      // 红子 中文/图片地址/阵营/权重
-      'c': {text:'车', img:'r_c', my:1 ,bl:'c', value:this.value.c},
-      'm': {text:'马', img:'r_m', my:1 ,bl:'m', value:this.value.m},
-      'x': {text:'相', img:'r_x', my:1 ,bl:'x', value:this.value.x},
-      's': {text:'仕', img:'r_s', my:1 ,bl:'s', value:this.value.s},
-      'j': {text:'将', img:'r_j', my:1 ,bl:'j', value:this.value.j},
-      'p': {text:'炮', img:'r_p', my:1 ,bl:'p', value:this.value.p},
-      'z': {text:'兵', img:'r_z', my:1 ,bl:'z', value:this.value.z},
-      
-      // 蓝子
-      'C': {text:'車', img:'b_c', my:-1 ,bl:'c', value:this.value.C},
-      'M': {text:'馬', img:'b_m', my:-1 ,bl:'m', value:this.value.M},
-      'X': {text:'象', img:'b_x', my:-1 ,bl:'x', value:this.value.X},
-      'S': {text:'士', img:'b_s', my:-1 ,bl:'s', value:this.value.S},
-      'J': {text:'帅', img:'b_j', my:-1 ,bl:'j', value:this.value.J},
-      'P': {text:'炮', img:'b_p', my:-1 ,bl:'p', value:this.value.P},
-      'Z': {text:'卒', img:'b_z', my:-1 ,bl:'z', value:this.value.Z}
-    };
-
-    this.mans = {};
+    this.pieces = new Map<string, ChineseChessPieceBase>();
     this.childList = [];
-    this.createMans(this.initMap);
-
-    for (var i in this.args){
-      this[i] = {};
-      this[i].img = new Image();
-      this[i].img.src = '../../assets/image/chinesechess/' + this.args[i].img + '.png';
-    }      
+    this.createPieces();
   }
 
-  init(canvas: any) {
+  public init(canvas: any) {
     this.canvasMain = canvas;
-    this.contextMain = this.canvasMain.getContext('2d');
+    this.contextMain = this.canvasMain.getContext('2d');    
   }
 
   // bylaw_c(x,y,map,my){
@@ -590,16 +749,101 @@ export class ChineseChessUI {
   //   return d;
   // }
 
-  createMans(map) {
-    for (let i=0; i < map.length; i++){
-      for (let n=0; n < map[i].length; n++){
-        let key = map[i][n];
-        if (key){
-          //this.mans[key] = new ChineseChessMan(this, key, undefined, undefined);
-          this.mans.key = new ChineseChessMan(this, key, undefined, undefined);
-          this.mans.key.x = n;
-          this.mans.key.y = i;
-          this.childList.push(this.mans.key)
+  createPieces() {
+    for (let i = 0; i < this.initMap.length; i++){
+      for (let j = 0; j < this.initMap[i].length; j++){
+        let key = this.initMap[i][j];
+        if (key !== undefined) {
+          let piecekey = this.keys[key];
+          switch(piecekey) {
+            case 'c': {
+              let piece = new ChineseChessRook(false, key, j, i);
+              this.pieces.set(piece.key, piece);
+            }
+            break;
+
+            case 'C': {
+              let piece = new ChineseChessRook(true, key, j, i);
+              this.pieces.set(piece.key, piece);
+            }
+            break;
+
+            case 'm': {
+              let piece = new ChineseChessHorse(false, key, j, i);
+              this.pieces.set(piece.key, piece);
+            }
+            break;
+
+            case 'M': {
+              let piece = new ChineseChessHorse(true, key, j, i);
+              this.pieces.set(piece.key, piece);
+            }
+            break;
+
+            case 'x': {
+              let piece = new ChineseChessElephant(false, key, j, i);
+              this.pieces.set(piece.key, piece);
+            }
+            break;
+
+            case 'X': {
+              let piece = new ChineseChessElephant(true, key, j, i);
+              this.pieces.set(piece.key, piece);
+            }
+            break;
+
+            case 's': {
+              let piece = new ChineseChessGuard(false, key, j, i);
+              this.pieces.set(piece.key, piece);
+            }
+            break;
+
+            case 'S': {
+              let piece = new ChineseChessGuard(true, key, j, i);
+              this.pieces.set(piece.key, piece);
+            }
+            break;
+
+            case 'j': {
+              let piece = new ChineseChessGeneral(false, key, j, i);
+              this.pieces.set(piece.key, piece);
+            }
+            break;
+
+            case 'J': {
+              let piece = new ChineseChessGeneral(true, key, j, i);
+              this.pieces.set(piece.key, piece);
+            }
+            break;
+
+            case 'p': {
+              let piece = new ChineseChessCannon(false, key, j, i);
+              this.pieces.set(piece.key, piece);
+            }
+            break;
+
+            case 'P': {
+              let piece = new ChineseChessCannon(true, key, j, i);
+              this.pieces.set(piece.key, piece);
+            }
+            break;
+
+            case 'z': {
+              let piece = new ChineseChessPawn(false, key, j, i);
+              this.pieces.set(piece.key, piece);
+            }
+            break;
+
+            case 'Z': {
+              let piece = new ChineseChessPawn(true, key, j, i);
+              this.pieces.set(piece.key, piece);
+            }
+            break;
+
+            default: {
+              throw new Error('Unknow key inputted:' + key);
+            }            
+          }
         }
       }
     }      
@@ -613,15 +857,18 @@ export class ChineseChessUI {
   show() {
     this.contextMain.clearRect(0, 0, this.width, this.height);
 
+    // Show background first
+
     for(let i = 0; i < this.childList.length; i++) {
       this.childList[i].show(this.contextMain);
     }
   }
   
   getDomXY (dom){
-    var left = dom.offsetLeft;
-    var top = dom.offsetTop;
-    var current = dom.offsetParent;
+    let left = dom.offsetLeft;
+    let top = dom.offsetTop;
+    let current = dom.offsetParent;
+
     while (current !== undefined){
       left += current.offsetLeft;
       top += current.offsetTop;
@@ -632,18 +879,30 @@ export class ChineseChessUI {
   }  
 }
 
-// export class ChineseChess2Play {
-//   my = 1;
-//   map = [];
-//   nowManKey = false;
-//   pace =[];
-//   isPlay = true;
-//   mans = [];
-//   bylaw: any;
-//   show: any;
-//   showPane: any;
-//   isOffensive = true;
-//   depth =  3;
+export class ChineseChess2Play {
+  my = 1;
+  map = [];
+  nowManKey = false;
+  pace =[];
+  isPlay = true;
+  mans = [];
+  bylaw: any;
+  show: any;
+  showPane: any;
+  isOffensive = true;
+  depth =  3;
+
+  constructor(com: ChineseChessUI) {
+    this.map 			  =	arr2Clone (com.initMap);
+    // this.mans 			=	com.mans;
+    //this.bylaw 			= com.bylaw;
+    this.show 			= com.show;
+    //this.showPane 	= com.showPane;  
+  }
+
+  public init() {
+
+  }
 
 //   regret (){
 //     var map  = arr2Clone(com.initMap);
@@ -863,4 +1122,4 @@ export class ChineseChessUI {
 //     return (play.map[y][x] && play.map[y][x]!="0") ? play.map[y][x] : false;
 //   }
 
-// }
+}
