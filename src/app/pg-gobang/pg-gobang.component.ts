@@ -146,7 +146,8 @@ export class PgGobangComponent implements OnInit, AfterContentInit {
         snackBarRef.onAction().subscribe(() => {
           console.log('The snack-bar action was triggered!');
 
-          this._instance.init();
+          this._userStep = true; // By default, it's user step!
+          this._instance.init();          
 
           // Draw the border
           this.drawWholeRect();

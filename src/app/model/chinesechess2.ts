@@ -1,3 +1,5 @@
+import { getCanvasMouseEventPosition } from "./uicommon";
+
 // Refer to http://www.html5tricks.com/html5-zgxq.html
 // /*! 一叶孤舟 | qq:28701884 | 欢迎指教 */
 
@@ -24,6 +26,7 @@ class ChineseChessPieceBase {
   img: string; // Short name
   image: any;
   bl: any;
+  ps = [];
 
   get imageFullPath(): string {
     return '../../assets/image/chinesechess/' + this.img + '.png';
@@ -51,6 +54,9 @@ class ChineseChessPieceBase {
       ctx.drawImage(this.image, spaceX * this.x + pointStartX, spaceY * this.y + pointStartY);
       ctx.restore();
     }
+  }
+
+  bylaw(x, y, map: any[], my, arPieces: any) {
   }
 }
 
@@ -790,6 +796,14 @@ export class ChineseChessUI {
     this.contextMain = this.canvasMain.getContext('2d');
   }
 
+  public getPiece(key: string): ChineseChessPieceBase {
+    if (!this.pieces.has(key)) {
+      return undefined;
+    }
+
+    return this.pieces.get(key);
+  }
+
   createPieces() {
     for (let i = 0; i < this.initMap.length; i++) {
       for (let j = 0; j < this.initMap[i].length; j++) {
@@ -910,6 +924,10 @@ export class ChineseChessUI {
     this.contextMain.drawImage(this.imageBackground, 0, 0);
   }
 
+  showPane(x, y, newX, newY) {
+
+  }
+
   show() {
     this.contextMain.clearRect(0, 0, this.width, this.height);
 
@@ -922,25 +940,25 @@ export class ChineseChessUI {
     }
   }
 
-  getDomXY(dom) {
-    let left = dom.offsetLeft;
-    let top = dom.offsetTop;
-    let current = dom.offsetParent;
+  // getDomXY(dom) {
+  //   let left = dom.offsetLeft;
+  //   let top = dom.offsetTop;
+  //   let current = dom.offsetParent;
 
-    while (current !== undefined && current !== null) {
-      left += current.offsetLeft;
-      top += current.offsetTop;
-      current = current.offsetParent;
-    }
+  //   while (current !== undefined && current !== null) {
+  //     left += current.offsetLeft;
+  //     top += current.offsetTop;
+  //     current = current.offsetParent;
+  //   }
 
-    return { x: left, y: top };
-  }
+  //   return { x: left, y: top };
+  // }
 }
 
 export class ChineseChess2Play {
   my = 1;
   map = [];
-  nowManKey = false;
+  nowManKey: string;
   pace = [];
   isPlay = true;
   pieces = [];
@@ -949,12 +967,19 @@ export class ChineseChess2Play {
   showPane: any;
   isOffensive = true;
   depth = 3;
+  private _instanceUI: ChineseChessUI;
 
   constructor() {
   }
 
+  /**
+   * Initialize
+   * @param com Instance of UI 
+   */
   public init(com: ChineseChessUI) {
-    this.map = arr2Clone(com.initMap);
+    this._instanceUI = com;
+
+    this.map = arr2Clone(this._instanceUI.initMap);
 
     for (let i = 0; i < com.childList.length; i++) {
       com.childList[i].isShow = true;
@@ -1009,6 +1034,35 @@ export class ChineseChess2Play {
   //   }
 
   clickPiece(key, x, y) {
+    let piece = this._instanceUI.getPiece(key);
+
+    if (this.nowManKey && this.nowManKey != key && piece.my != this._instanceUI.getPiece(this.nowManKey).my) {
+      // 吃子
+      if (this.indexOfPs(this._instanceUI.getPiece(this.nowManKey).ps, [x,y])){
+        piece.isShow = false;
+
+        let pace = this._instanceUI.getPiece(this.nowManKey).x + '' + this._instanceUI.getPiece(this.nowManKey).y;
+
+        delete this.map[this._instanceUI.getPiece(this.nowManKey).y][this._instanceUI.getPiece(this.nowManKey).x];
+
+        this.map[y][x] = this.nowManKey;
+        this._instanceUI.showPane(this._instanceUI.getPiece(this.nowManKey).x, this._instanceUI.getPiece(this.nowManKey).y, x, y);
+      }
+    } else {
+      if (piece.my === 1){
+        if (this._instanceUI.getPiece(this.nowManKey)) {
+          this._instanceUI.getPiece(this.nowManKey).alpha = 1;
+        } 
+
+        piece.alpha = 0.6;
+        this.nowManKey = key;
+
+        //piece.ps = piece.bylaw(x, y, map, my, ; //获得所有能着点
+        //com.dot.dots = com.mans[key].ps
+        this._instanceUI.show();
+      }
+    }
+
     //     var man = com.mans[key];
     //     //吃子
     //     if (this.nowManKey&&play.nowManKey != key && man.my != com.mans[play.nowManKey ].my){
@@ -1152,15 +1206,17 @@ export class ChineseChess2Play {
     return false;
   }
 
-  getClickPoint(e, com: ChineseChessUI) {
-    var domXY = com.getDomXY(com.canvasMain);
-    var x = Math.round((e.pageX - domXY.x - com.pointStartX - 20) / com.spaceX)
-    var y = Math.round((e.pageY - domXY.y - com.pointStartY - 20) / com.spaceY)
-    return { 'x': x, 'y': y }
+  getClickPoint(evt: MouseEvent, com: ChineseChessUI) {
+    const domXY = getCanvasMouseEventPosition(com.canvasMain, evt);    
+
+    var x = Math.round((domXY.x - com.pointStartX) / com.spaceX)
+    var y = Math.round((domXY.y - com.pointStartY) / com.spaceY)
+    return { x: x, y: y }
   }
 
   getClickPiece(e, com: ChineseChessUI) {
     let clickXY = this.getClickPoint(e, com);
+
     let x = clickXY.x;
     let y = clickXY.y;
     if (x < 0 || x > 8 || y < 0 || y > 9) {
