@@ -1,4 +1,5 @@
 import { getCanvasMouseEventPosition } from "./uicommon";
+import { ChineseChess } from ".";
 
 // Refer to http://www.html5tricks.com/html5-zgxq.html
 // /*! 一叶孤舟 | qq:28701884 | 欢迎指教 */
@@ -56,7 +57,8 @@ class ChineseChessPieceBase {
     }
   }
 
-  bylaw(x, y, map: any[], my, arPieces: any) {
+  bylaw(x: number, y: number, map: any, my, arPieces: any, play: any): any[] {
+    return [];
   }
 }
 
@@ -95,13 +97,13 @@ class ChineseChessRook extends ChineseChessPieceBase {
     }
   }
 
-  bylaw(x, y, map: any[], my, arPieces: any) {
+  bylaw(x: number, y: number, map: any, my, arPieces: any, play: any) {
     const d = [];
 
     // 左侧检索
     for (let i = x - 1; i >= 0; i--) {
       if (map[y][i]) {
-        if (arPieces[map[y][i]].my !== my) {
+        if (arPieces.get(map[y][i]).my !== my) {
           d.push([i, y]);
         }
 
@@ -114,7 +116,7 @@ class ChineseChessRook extends ChineseChessPieceBase {
     // 右侧检索
     for (let i = x + 1; i <= 8; i++) {
       if (map[y][i]) {
-        if (arPieces[map[y][i]].my !== my) { d.push([i, y]); }
+        if (arPieces.get(map[y][i]).my !== my) { d.push([i, y]); }
         break;
       } else {
         d.push([i, y]);
@@ -124,7 +126,7 @@ class ChineseChessRook extends ChineseChessPieceBase {
     // 上检索
     for (let i = y - 1; i >= 0; i--) {
       if (map[i][x]) {
-        if (arPieces[map[i][x]].my !== my) { d.push([x, i]); }
+        if (arPieces.get(map[i][x]).my !== my) { d.push([x, i]); }
         break;
       } else {
         d.push([x, i]);
@@ -134,7 +136,7 @@ class ChineseChessRook extends ChineseChessPieceBase {
     // 下检索
     for (let i = y + 1; i <= 9; i++) {
       if (map[i][x]) {
-        if (arPieces[map[i][x]].my !== my) { d.push([x, i]); }
+        if (arPieces.get(map[i][x]).my !== my) { d.push([x, i]); }
         break;
       } else {
         d.push([x, i]);
@@ -183,42 +185,42 @@ class ChineseChessHorse extends ChineseChessPieceBase {
     const d = [];
 
     // 1点
-    if (y - 2 >= 0 && x + 1 <= 8 && !play.map[y - 1][x] && (!arPieces[map[y - 2][x + 1]] || arPieces[map[y - 2][x + 1]].my !== my)) {
+    if (y - 2 >= 0 && x + 1 <= 8 && !play.map[y - 1][x] && (!arPieces.get(map[y - 2][x + 1]) || arPieces.get(map[y - 2][x + 1]).my !== my)) {
       d.push([x + 1, y - 2]);
     }
 
     // 2点
-    if (y - 1 >= 0 && x + 2 <= 8 && !play.map[y][x + 1] && (!arPieces[map[y - 1][x + 2]] || arPieces[map[y - 1][x + 2]].my !== my)) {
+    if (y - 1 >= 0 && x + 2 <= 8 && !play.map[y][x + 1] && (!arPieces.get(map[y - 1][x + 2]) || arPieces.get(map[y - 1][x + 2]).my !== my)) {
       d.push([x + 2, y - 1]);
     }
 
     // 4点
-    if (y + 1 <= 9 && x + 2 <= 8 && !play.map[y][x + 1] && (!arPieces[map[y + 1][x + 2]] || arPieces[map[y + 1][x + 2]].my !== my)) {
+    if (y + 1 <= 9 && x + 2 <= 8 && !play.map[y][x + 1] && (!arPieces.get(map[y + 1][x + 2]) || arPieces.get(map[y + 1][x + 2]).my !== my)) {
       d.push([x + 2, y + 1]);
     }
 
     // 5点
-    if (y + 2 <= 9 && x + 1 <= 8 && !play.map[y + 1][x] && (!arPieces[map[y + 2][x + 1]] || arPieces[map[y + 2][x + 1]].my !== my)) {
+    if (y + 2 <= 9 && x + 1 <= 8 && !play.map[y + 1][x] && (!arPieces.get(map[y + 2][x + 1]) || arPieces.get(map[y + 2][x + 1]).my !== my)) {
       d.push([x + 1, y + 2]);
     }
 
     // 7点
-    if (y + 2 <= 9 && x - 1 >= 0 && !play.map[y + 1][x] && (!arPieces[map[y + 2][x - 1]] || arPieces[map[y + 2][x - 1]].my !== my)) {
+    if (y + 2 <= 9 && x - 1 >= 0 && !play.map[y + 1][x] && (!arPieces.get(map[y + 2][x - 1]) || arPieces.get(map[y + 2][x - 1]).my !== my)) {
       d.push([x - 1, y + 2]);
     }
 
     // 8点
-    if (y + 1 <= 9 && x - 2 >= 0 && !play.map[y][x - 1] && (!arPieces[map[y + 1][x - 2]] || arPieces[map[y + 1][x - 2]].my !== my)) {
+    if (y + 1 <= 9 && x - 2 >= 0 && !play.map[y][x - 1] && (!arPieces.get(map[y + 1][x - 2]) || arPieces.get(map[y + 1][x - 2]).my !== my)) {
       d.push([x - 2, y + 1]);
     }
 
     // 10点
-    if (y - 1 >= 0 && x - 2 >= 0 && !play.map[y][x - 1] && (!arPieces[map[y - 1][x - 2]] || arPieces[map[y - 1][x - 2]].my !== my)) {
+    if (y - 1 >= 0 && x - 2 >= 0 && !play.map[y][x - 1] && (!arPieces.get(map[y - 1][x - 2]) || arPieces.get(map[y - 1][x - 2]).my !== my)) {
       d.push([x - 2, y - 1]);
     }
 
     // 11点
-    if (y - 2 >= 0 && x - 1 >= 0 && !play.map[y - 1][x] && (!arPieces[map[y - 2][x - 1]] || arPieces[map[y - 2][x - 1]].my !== my)) {
+    if (y - 2 >= 0 && x - 1 >= 0 && !play.map[y - 1][x] && (!arPieces.get(map[y - 2][x - 1]) || arPieces.get(map[y - 2][x - 1]).my !== my)) {
       d.push([x - 1, y - 2]);
     }
 
@@ -263,36 +265,36 @@ class ChineseChessElephant extends ChineseChessPieceBase {
     const d = [];
     if (my === 1) { // 红方
       // 4点半
-      if (y + 2 <= 9 && x + 2 <= 8 && !play.map[y + 1][x + 1] && (!arPieces[map[y + 2][x + 2]] || arPieces[map[y + 2][x + 2]].my !== my)) {
+      if (y + 2 <= 9 && x + 2 <= 8 && !play.map[y + 1][x + 1] && (!arPieces.get(map[y + 2][x + 2]) || arPieces.get(map[y + 2][x + 2]).my !== my)) {
         d.push([x + 2, y + 2]);
       }
       // 7点半
-      if (y + 2 <= 9 && x - 2 >= 0 && !play.map[y + 1][x - 1] && (!arPieces[map[y + 2][x - 2]] || arPieces[map[y + 2][x - 2]].my !== my)) {
+      if (y + 2 <= 9 && x - 2 >= 0 && !play.map[y + 1][x - 1] && (!arPieces.get(map[y + 2][x - 2]) || arPieces.get(map[y + 2][x - 2]).my !== my)) {
         d.push([x - 2, y + 2]);
       }
       // 1点半
-      if (y - 2 >= 5 && x + 2 <= 8 && !play.map[y - 1][x + 1] && (!arPieces[map[y - 2][x + 2]] || arPieces[map[y - 2][x + 2]].my !== my)) {
+      if (y - 2 >= 5 && x + 2 <= 8 && !play.map[y - 1][x + 1] && (!arPieces.get(map[y - 2][x + 2]) || arPieces.get(map[y - 2][x + 2]).my !== my)) {
         d.push([x + 2, y - 2]);
       }
       // 10点半
-      if (y - 2 >= 5 && x - 2 >= 0 && !play.map[y - 1][x - 1] && (!arPieces[map[y - 2][x - 2]] || arPieces[map[y - 2][x - 2]].my !== my)) {
+      if (y - 2 >= 5 && x - 2 >= 0 && !play.map[y - 1][x - 1] && (!arPieces.get(map[y - 2][x - 2]) || arPieces.get(map[y - 2][x - 2]).my !== my)) {
         d.push([x - 2, y - 2]);
       }
     } else {
       // 4点半
-      if (y + 2 <= 4 && x + 2 <= 8 && !play.map[y + 1][x + 1] && (!arPieces[map[y + 2][x + 2]] || arPieces[map[y + 2][x + 2]].my !== my)) {
+      if (y + 2 <= 4 && x + 2 <= 8 && !play.map[y + 1][x + 1] && (!arPieces.get(map[y + 2][x + 2]) || arPieces.get(map[y + 2][x + 2]).my !== my)) {
         d.push([x + 2, y + 2]);
       }
       // 7点半
-      if (y + 2 <= 4 && x - 2 >= 0 && !play.map[y + 1][x - 1] && (!arPieces[map[y + 2][x - 2]] || arPieces[map[y + 2][x - 2]].my !== my)) {
+      if (y + 2 <= 4 && x - 2 >= 0 && !play.map[y + 1][x - 1] && (!arPieces.get(map[y + 2][x - 2]) || arPieces.get(map[y + 2][x - 2]).my !== my)) {
         d.push([x - 2, y + 2]);
       }
       // 1点半
-      if (y - 2 >= 0 && x + 2 <= 8 && !play.map[y - 1][x + 1] && (!arPieces[map[y - 2][x + 2]] || arPieces[map[y - 2][x + 2]].my !== my)) {
+      if (y - 2 >= 0 && x + 2 <= 8 && !play.map[y - 1][x + 1] && (!arPieces.get(map[y - 2][x + 2]) || arPieces.get(map[y - 2][x + 2]).my !== my)) {
         d.push([x + 2, y - 2]);
       }
       // 10点半
-      if (y - 2 >= 0 && x - 2 >= 0 && !play.map[y - 1][x - 1] && (!arPieces[map[y - 2][x - 2]] || arPieces[map[y - 2][x - 2]].my !== my)) {
+      if (y - 2 >= 0 && x - 2 >= 0 && !play.map[y - 1][x - 1] && (!arPieces.get(map[y - 2][x - 2]) || arPieces.get(map[y - 2][x - 2]).my !== my)) {
         d.push([x - 2, y - 2]);
       }
     }
@@ -333,40 +335,40 @@ class ChineseChessGuard extends ChineseChessPieceBase {
     }
   }
 
-  bylaw(x, y, map, my, arPieces) {
+  bylaw(x: number, y: number, map: any, my, arPieces: any, play: any) {
     const d = [];
     if (my === 1) { // 红方
       // 4点半
-      if (y + 1 <= 9 && x + 1 <= 5 && (!arPieces[map[y + 1][x + 1]] || arPieces[map[y + 1][x + 1]].my !== my)) {
+      if (y + 1 <= 9 && x + 1 <= 5 && (!arPieces.get(map[y + 1][x + 1]) || arPieces.get(map[y + 1][x + 1]).my !== my)) {
         d.push([x + 1, y + 1]);
       }
       // 7点半
-      if (y + 1 <= 9 && x - 1 >= 3 && (!arPieces[map[y + 1][x - 1]] || arPieces[map[y + 1][x - 1]].my !== my)) {
+      if (y + 1 <= 9 && x - 1 >= 3 && (!arPieces.get(map[y + 1][x - 1]) || arPieces.get(map[y + 1][x - 1]).my !== my)) {
         d.push([x - 1, y + 1]);
       }
       // 1点半
-      if (y - 1 >= 7 && x + 1 <= 5 && (!arPieces[map[y - 1][x + 1]] || arPieces[map[y - 1][x + 1]].my !== my)) {
+      if (y - 1 >= 7 && x + 1 <= 5 && (!arPieces.get(map[y - 1][x + 1]) || arPieces.get(map[y - 1][x + 1]).my !== my)) {
         d.push([x + 1, y - 1]);
       }
       // 10点半
-      if (y - 1 >= 7 && x - 1 >= 3 && (!arPieces[map[y - 1][x - 1]] || arPieces[map[y - 1][x - 1]].my !== my)) {
+      if (y - 1 >= 7 && x - 1 >= 3 && (!arPieces.get(map[y - 1][x - 1]) || arPieces.get(map[y - 1][x - 1]).my !== my)) {
         d.push([x - 1, y - 1]);
       }
     } else {
       // 4点半
-      if (y + 1 <= 2 && x + 1 <= 5 && (!arPieces[map[y + 1][x + 1]] || arPieces[map[y + 1][x + 1]].my !== my)) {
+      if (y + 1 <= 2 && x + 1 <= 5 && (!arPieces.get(map[y + 1][x + 1]) || arPieces.get(map[y + 1][x + 1]).my !== my)) {
         d.push([x + 1, y + 1]);
       }
       // 7点半
-      if (y + 1 <= 2 && x - 1 >= 3 && (!arPieces[map[y + 1][x - 1]] || arPieces[map[y + 1][x - 1]].my !== my)) {
+      if (y + 1 <= 2 && x - 1 >= 3 && (!arPieces.get(map[y + 1][x - 1]) || arPieces.get(map[y + 1][x - 1]).my !== my)) {
         d.push([x - 1, y + 1]);
       }
       // 1点半
-      if (y - 1 >= 0 && x + 1 <= 5 && (!arPieces[map[y - 1][x + 1]] || arPieces[map[y - 1][x + 1]].my !== my)) {
+      if (y - 1 >= 0 && x + 1 <= 5 && (!arPieces.get(map[y - 1][x + 1]) || arPieces.get(map[y - 1][x + 1]).my !== my)) {
         d.push([x + 1, y - 1]);
       }
       // 10点半
-      if (y - 1 >= 0 && x - 1 >= 3 && (!arPieces[map[y - 1][x - 1]] || arPieces[map[y - 1][x - 1]].my !== my)) {
+      if (y - 1 >= 0 && x - 1 >= 3 && (!arPieces.get(map[y - 1][x - 1]) || arPieces.get(map[y - 1][x - 1]).my !== my)) {
         d.push([x - 1, y - 1]);
       }
     }
@@ -408,53 +410,54 @@ class ChineseChessGeneral extends ChineseChessPieceBase {
   }
 
   private isRelNull(x, y, map, arPieces) {
-    const y1 = arPieces['j0'].y;
-    const x1 = arPieces['J0'].x;
-    const y2 = arPieces['J0'].y;
+    const y1 = arPieces.get('j0').y;
+    const x1 = arPieces.get('J0').x;
+    const y2 = arPieces.get('J0').y;
     for (let i = y1 - 1; i > y2; i--) {
       if (map[i][x1]) {
         return false;
       }
     }
+
     return true;
   }
 
-  bylaw(x, y, map, my, arPieces) {
+  bylaw(x: number, y: number, map: any, my, arPieces: any, play: any) {
     const d = [];
 
     if (my === 1) { // 红方
       // 下
-      if (y + 1 <= 9 && (!arPieces[map[y + 1][x]] || arPieces[map[y + 1][x]].my !== my)) {
+      if (y + 1 <= 9 && (!arPieces.get(map[y + 1][x]) || arPieces.get(map[y + 1][x]).my !== my)) {
         d.push([x, y + 1]);
       }
       // 上
-      if (y - 1 >= 7 && (!arPieces[map[y - 1][x]] || arPieces[map[y - 1][x]].my !== my)) {
+      if (y - 1 >= 7 && (!arPieces.get(map[y - 1][x]) || arPieces.get(map[y - 1][x]).my !== my)) {
         d.push([x, y - 1]);
       }
       // 老将对老将的情况
-      if (arPieces['j0'].x === arPieces['J0'].x && this.isRelNull(x, y, map, arPieces)) {
-        d.push([arPieces['J0'].x, arPieces['J0'].y]);
+      if (arPieces.get('j0').x === arPieces.get('J0').x && this.isRelNull(x, y, map, arPieces)) {
+        d.push([arPieces.get('J0').x, arPieces.get('J0').y]);
       }
     } else {
       // 下
-      if (y + 1 <= 2 && (!arPieces[map[y + 1][x]] || arPieces[map[y + 1][x]].my !== my)) {
+      if (y + 1 <= 2 && (!arPieces.get(map[y + 1][x]) || arPieces.get(map[y + 1][x]).my !== my)) {
         d.push([x, y + 1]);
       }
       // 上
-      if (y - 1 >= 0 && (!arPieces[map[y - 1][x]] || arPieces[map[y - 1][x]].my !== my)) {
+      if (y - 1 >= 0 && (!arPieces.get(map[y - 1][x]) || arPieces.get(map[y - 1][x]).my !== my)) {
         d.push([x, y - 1]);
       }
       // 老将对老将的情况
-      if (arPieces['j0'].x === arPieces['J0'].x && this.isRelNull(x, y, map, arPieces)) {
-        d.push([arPieces['j0'].x, arPieces['j0'].y]);
+      if (arPieces.get('j0').x === arPieces.get('J0').x && this.isRelNull(x, y, map, arPieces)) {
+        d.push([arPieces.get('j0').x, arPieces.get('j0').y]);
       }
     }
     // 右
-    if (x + 1 <= 5 && (!arPieces[map[y][x + 1]] || arPieces[map[y][x + 1]].my !== my)) {
+    if (x + 1 <= 5 && (!arPieces.get(map[y][x + 1]) || arPieces.get(map[y][x + 1]).my !== my)) {
       d.push([x + 1, y]);
     }
     // 左
-    if (x - 1 >= 3 && (!arPieces[map[y][x - 1]] || arPieces[map[y][x - 1]].my !== my)) {
+    if (x - 1 >= 3 && (!arPieces.get(map[y][x - 1]) || arPieces.get(map[y][x - 1]).my !== my)) {
       d.push([x - 1, y]);
     }
 
@@ -506,7 +509,7 @@ class ChineseChessCannon extends ChineseChessPieceBase {
           n++;
           continue;
         } else {
-          if (arPieces[map[y][i]].my !== my) {
+          if (arPieces.get(map[y][i]).my !== my) {
             d.push([i, y]);
           }
           break;
@@ -526,7 +529,7 @@ class ChineseChessCannon extends ChineseChessPieceBase {
           n++;
           continue;
         } else {
-          if (arPieces[map[y][i]].my !== my) {
+          if (arPieces.get(map[y][i]).my !== my) {
             d.push([i, y]);
           }
           break;
@@ -545,7 +548,7 @@ class ChineseChessCannon extends ChineseChessPieceBase {
           n++;
           continue;
         } else {
-          if (arPieces[map[i][x]].my !== my) {
+          if (arPieces.get(map[i][x]).my !== my) {
             d.push([x, i]);
           }
           break;
@@ -564,7 +567,7 @@ class ChineseChessCannon extends ChineseChessPieceBase {
           n++;
           continue;
         } else {
-          if (arPieces[map[i][x]].my !== my) {
+          if (arPieces.get(map[i][x]).my !== my) {
             d.push([x, i]);
           }
           break;
@@ -613,33 +616,33 @@ class ChineseChessPawn extends ChineseChessPieceBase {
     }
   }
 
-  bylaw(x, y, map, my, arPieces) {
+  bylaw(x: number, y: number, map: any, my, arPieces: any, play: any) {
     const d = [];
 
     if (my === 1) { // 红方
       // 上
-      if (y - 1 >= 0 && (!arPieces[map[y - 1][x]] || arPieces[map[y - 1][x]].my !== my)) {
+      if (y - 1 >= 0 && (!arPieces.get(map[y - 1][x]) || arPieces.get(map[y - 1][x]).my !== my)) {
         d.push([x, y - 1]);
       }
       // 右
-      if (x + 1 <= 8 && y <= 4 && (!arPieces[map[y][x + 1]] || arPieces[map[y][x + 1]].my !== my)) {
+      if (x + 1 <= 8 && y <= 4 && (!arPieces.get(map[y][x + 1]) || arPieces.get(map[y][x + 1]).my !== my)) {
         d.push([x + 1, y]);
       }
       // 左
-      if (x - 1 >= 0 && y <= 4 && (!arPieces[map[y][x - 1]] || arPieces[map[y][x - 1]].my !== my)) {
+      if (x - 1 >= 0 && y <= 4 && (!arPieces.get(map[y][x - 1]) || arPieces.get(map[y][x - 1]).my !== my)) {
         d.push([x - 1, y]);
       }
     } else {
       // 下
-      if (y + 1 <= 9 && (!arPieces[map[y + 1][x]] || arPieces[map[y + 1][x]].my !== my)) {
+      if (y + 1 <= 9 && (!arPieces.get(map[y + 1][x]) || arPieces.get(map[y + 1][x]).my !== my)) {
         d.push([x, y + 1]);
       }
       // 右
-      if (x + 1 <= 8 && y >= 6 && (!arPieces[map[y][x + 1]] || arPieces[map[y][x + 1]].my !== my)) {
+      if (x + 1 <= 8 && y >= 6 && (!arPieces.get(map[y][x + 1]) || arPieces.get(map[y][x + 1]).my !== my)) {
         d.push([x + 1, y]);
       }
       // 左
-      if (x - 1 >= 0 && y >= 6 && (!arPieces[map[y][x - 1]] || arPieces[map[y][x - 1]].my !== my)) {
+      if (x - 1 >= 0 && y >= 6 && (!arPieces.get(map[y][x - 1]) || arPieces.get(map[y][x - 1]).my !== my)) {
         d.push([x - 1, y]);
       }
     }
@@ -654,21 +657,23 @@ class ChineseChessPane {
   newX;
   newY;
   isShow;
-  com;
+  imagePane: any;
 
-  constructor(com, img, x, y) {
-    this.com = com;
-    this.x = x || 0;
-    this.y = y || 0;
-    this.newX = x || 0;
-    this.newY = y || 0;
-    this.isShow = true;
+  constructor() {
+    this.x = 0;
+    this.y = 0;
+    this.newX = 0;
+    this.newY = 0;
+    this.isShow = false;
+
+    this.imagePane = new Image();
+    this.imagePane.src = '../../assets/image/chinesechess/r_box.png';
   }
 
-  show() {
+  show(ctx, spaceX, spaceY, pointStartX, pointStartY) {
     if (this.isShow) {
-      this.com.ct.drawImage(this.com.paneImg, this.com.spaceX * this.x + this.com.pointStartX, this.com.spaceY * this.y + this.com.pointStartY)
-      this.com.ct.drawImage(this.com.paneImg, this.com.spaceX * this.newX + this.com.pointStartX, this.com.spaceY * this.newY + this.com.pointStartY)
+      ctx.drawImage(this.imagePane, spaceX * this.x + pointStartX, spaceY * this.y + pointStartY)
+      ctx.drawImage(this.imagePane, spaceX * this.newX + pointStartX, spaceY * this.newY + pointStartY)
     }
   }
 }
@@ -678,11 +683,17 @@ class ChineseChessDot {
   y;
   isShow;
   dots = [];
+  imageDot: any;
 
-  show(com, ctx) {
-    for (let i = 0; i < this.dots.length; i++) {
-      if (this.isShow) {
-        ctx.drawImage(com.dotImg, com.spaceX * this.dots[i][0] + 10 + com.pointStartX, com.spaceY * this.dots[i][1] + 10 + com.pointStartY);
+  constructor() {
+    this.imageDot = new Image();
+    this.imageDot.src = '../../assets/image/chinesechess/dot.png';
+  }
+
+  show(ctx, spaceX, spaceY, pointStartX, pointStartY) {
+    if (this.isShow) {
+      for (let i = 0; i < this.dots.length; i++) {
+        ctx.drawImage(this.imageDot, spaceX * this.dots[i][0] + 10 + pointStartX, spaceY * this.dots[i][1] + 10 + pointStartY);
       }
     }
   }
@@ -702,8 +713,8 @@ export class ChineseChessUI {
 
   // Images
   imageBackground: any;
-  imageDot: any;
-  imagePane: any;
+  objPane: ChineseChessPane;
+  objDot: ChineseChessDot;
 
   get width(): number {
     return this.styleSetting.width;
@@ -723,14 +734,18 @@ export class ChineseChessUI {
   get pointStartY(): number {
     return this.styleSetting.pointStartY;
   }
+  set isDotShow(isshow: boolean) {
+    this.objDot.isShow = isshow;
+  }
+  set isPaneShow(isshow: boolean) {
+    this.objPane.isShow = isshow;
+  }
 
   constructor() {
     this.imageBackground = new Image();
     this.imageBackground.src = '../../assets/image/chinesechess/bg.png';
-    this.imageDot = new Image();
-    this.imageDot.src = '../../assets/image/chinesechess/dot.png';
-    this.imagePane = new Image();
-    this.imagePane.src = '../../assets/image/chinesechess/r_box.png';
+    this.objPane = new ChineseChessPane();
+    this.objDot = new ChineseChessDot();
 
     this.styleSetting = {
       width: 530,
@@ -924,15 +939,28 @@ export class ChineseChessUI {
     this.contextMain.drawImage(this.imageBackground, 0, 0);
   }
 
-  showPane(x, y, newX, newY) {
-
+  public setPaneDetail(x, y, newX, newY) {
+    this.objPane.x = x;
+    this.objPane.y = y;
+    this.objPane.newX = newX;
+    this.objPane.newY = newY;
   }
 
-  show() {
+  public setDots(dots: any[]) {
+    this.objDot.dots = dots;
+  }
+
+  public show() {
     this.contextMain.clearRect(0, 0, this.width, this.height);
 
     // Show background first
     this.showBackground();
+
+    // Show the Pane
+    this.objPane.show(this.contextMain, this.spaceX, this.spaceY, this.pointStartX, this.pointStartY);
+
+    // Show the Dots
+    this.objDot.show(this.contextMain, this.spaceX, this.spaceY, this.pointStartX, this.pointStartY);
 
     // Pieces
     for (let i = 0; i < this.childList.length; i++) {
@@ -953,6 +981,234 @@ export class ChineseChessUI {
 
   //   return { x: left, y: top };
   // }
+}
+
+
+export class ChineseChessAI {
+  historyTable = {};
+  gambit: any[];
+  historyBill: any;
+  treeDepth: any;
+  number: any;
+
+  public init(pace, depth) {
+    let bill = this.historyBill || this.gambit; //开局库
+    if (bill.length) {
+      var len = pace.length;
+      var arr = [];
+      // 先搜索棋谱
+      for (let i = 0; i < bill.length; i++) {
+        if (bill[i].slice(0, len) == pace) {
+          arr.push(bill[i]);
+        }
+      }
+      if (arr.length) {
+        let inx = Math.floor(Math.random() * arr.length);
+        this.historyBill = arr;
+        return arr[inx].slice(len, len + 4).split("");
+      } else {
+        this.historyBill = [];
+      }
+
+    }
+
+    //如果棋谱里面没有，人工智能开始运作
+    var initTime = new Date().getTime();
+    this.treeDepth = depth;
+
+    this.number = 0;
+    this.setHistoryTable.lenght = 0
+
+    let val = this.getAlphaBeta(-99999, 99999, this.treeDepth, arr2Clone(play.map), play.my);
+
+    if (!val || val.value === -8888) {
+      this.treeDepth = 2;
+      val = this.getAlphaBeta(-99999, 99999, this.treeDepth, arr2Clone(play.map), play.my);
+    }
+
+    if (val && val.value != -8888) {
+      var man = play.mans[val.key];
+      var nowTime = new Date().getTime();
+
+      // com.get("moveInfo").innerHTML='<h3>AI搜索结果：</h3>最佳着法：'+
+      //                 com.createMove(com.arr2Clone(play.map),man.x,man.y,val.x,val.y)+
+      //                 '<br />搜索深度：'+AI.treeDepth+'<br />搜索分支：'+
+      //                 AI.number+'个 <br />最佳着法评估：'+
+      //                 val.value+'分'+
+      //                 ' <br />搜索用时：'+
+      //                 (nowTime-initTime)+'毫秒'
+      return [man.x, man.y, val.x, val.y]
+    } else {
+      return false;
+    }
+  }
+
+  iterativeSearch(map, my){
+    var timeOut=100;
+    var initDepth = 1;
+    var maxDepth = 8;
+    this.treeDepth=0;
+    var initTime = new Date().getTime();
+    var val = {};
+    for (let i=initDepth; i<=maxDepth; i++){
+      var nowTime= new Date().getTime();
+      this.treeDepth=i;
+      this.aotuDepth=i;
+      var val = this.getAlphaBeta(-99999, 99999, this.treeDepth , map ,my)
+      if (nowTime-initTime > timeOut){
+        return val;
+      }
+    }
+    return false;
+  }
+
+  getMapAllMan(map, my){
+    var mans=[];
+    for (var i=0; i<map.length; i++){
+      for (var n=0; n<map[i].length; n++){
+        var key = map[i][n];
+        if (key && play.mans[key].my == my){
+          play.mans[key].x = n;
+          play.mans[key].y = i;
+          mans.push(play.mans[key])
+        }
+      }
+    }
+    return mans;
+  }
+  getMoves(map, my){
+    var manArr = this.getMapAllMan (map, my);
+    var moves = [];
+    var foul=play.isFoul;
+    for (var i=0; i<manArr.length; i++){
+      var man = manArr[i];
+      var val=man.bl(map);
+      
+      for (var n=0; n<val.length; n++){
+        var x=man.x;
+        var y=man.y;
+        var newX=val[n][0];
+        var newY=val[n][1];
+         //如果不是长将着法
+        if (foul[0]!=x || foul[1]!=y || foul[2]!=newX || foul[3]!=newY ){
+          moves.push([x,y,newX,newY,man.key])
+        }
+      }
+    }
+    return moves;
+  }
+  getAlphaBeta(A, B, depth, map ,my) { 
+    if (depth === 0) {
+      return {"value": this.evaluate(map , my)}; //局面评价函数; 
+  　	}
+
+  　	var moves = this.getMoves(map , my ); //生成全部走法; 
+  　	//这里排序以后会增加效率
+  
+    for (var i=0; i < moves.length; i++) {
+      
+  　　	//走这个走法;
+      var move= moves[i];
+      var key = move[4];
+      var oldX= move[0];
+      var oldY= move[1];
+      var newX= move[2];
+      var newY= move[3];
+      var clearKey = map[ newY ][ newX ]||"";
+  
+      map[ newY ][ newX ] = key;
+      delete map[ oldY ][ oldX ];
+      play.mans[key].x = newX;
+      play.mans[key].y = newY;
+      
+    　　if (clearKey=="j0"||clearKey=="J0") {//被吃老将,撤消这个走法; 
+        play.mans[key]	.x = oldX;
+        play.mans[key]	.y = oldY;
+        map[ oldY ][ oldX ] = key;
+        delete map[ newY ][ newX ];
+
+        if (clearKey){
+           map[ newY ][ newX ] = clearKey;
+          // play.mans[ clearKey ].isShow = false;
+        }
+  
+        return {"key":key,"x":newX,"y":newY,"value":8888};
+        //return rootKey; 
+    　　}else { 
+    　　	var val = -this.getAlphaBeta(-B, -A, depth - 1, map , -my).value; 
+        //val = val || val.value;
+    
+    　　	//撤消这个走法;　 
+        play.mans[key]	.x = oldX;
+        play.mans[key]	.y = oldY;
+        map[ oldY ][ oldX ] = key;
+        delete map[ newY ][ newX ];
+        if (clearKey){
+           map[ newY ][ newX ] = clearKey;
+           //play.mans[ clearKey ].isShow = true;
+        }
+    　　	if (val >= B) { 
+          //将这个走法记录到历史表中; 
+          //AI.setHistoryTable(txtMap,AI.treeDepth-depth+1,B,my);
+          return {"key":key,"x":newX,"y":newY,"value":B}; 
+        } 
+        if (val > A) { 
+    　　　　	A = val; //设置最佳走法; 
+          if (this.treeDepth == depth) var rootKey={"key":key,"x":newX,"y":newY,"value":A};
+        } 
+      } 
+  　	} 
+
+    if (this.treeDepth == depth) {//已经递归回根了
+      if (!rootKey){
+        //AI没有最佳走法，说明AI被将死了，返回false
+        return false;
+      }else{
+        //这个就是最佳走法;
+        return rootKey;
+      }
+    }
+
+  　return {"key":key,"x":newX,"y":newY,"value":A}; 
+  }
+  
+  //奖着法记录到历史表
+  setHistoryTable(txtMap,depth,value,my){
+    this.setHistoryTable.lenght ++;
+    this.historyTable[txtMap] = {depth:depth,value:value} 
+  }
+  
+  //评估棋局 取得棋盘双方棋子价值差
+  evaluate(map,my){
+    var val=0;
+    for (var i=0; i<map.length; i++){
+      for (var n=0; n<map[i].length; n++){
+        var key = map[i][n];
+        if (key){
+          val += play.mans[key].value[i][n] * play.mans[key].my;
+        }
+      }
+    }
+
+    this.number++;
+    return val*my;
+  }
+  
+  //评估棋局 取得棋盘双方棋子价值差
+  evaluate1(map,my){
+    var val=0;
+    for (var i in play.mans){
+      var man=play.mans[i];
+      if (man.isShow){
+        val += man.value[man.y][man.x] * man.my;
+      }
+    }
+    //val+=Math.floor( Math.random() * 10);  //让AI走棋增加随机元素
+    //com.show()
+    //z(val*my)
+    this.number++;
+    return val*my;
+  }
 }
 
 export class ChineseChess2Play {
@@ -1038,7 +1294,7 @@ export class ChineseChess2Play {
 
     if (this.nowManKey && this.nowManKey != key && piece.my != this._instanceUI.getPiece(this.nowManKey).my) {
       // 吃子
-      if (this.indexOfPs(this._instanceUI.getPiece(this.nowManKey).ps, [x,y])){
+      if (this.indexOfPs(this._instanceUI.getPiece(this.nowManKey).ps, [x, y])) {
         piece.isShow = false;
 
         let pace = this._instanceUI.getPiece(this.nowManKey).x + '' + this._instanceUI.getPiece(this.nowManKey).y;
@@ -1046,19 +1302,26 @@ export class ChineseChess2Play {
         delete this.map[this._instanceUI.getPiece(this.nowManKey).y][this._instanceUI.getPiece(this.nowManKey).x];
 
         this.map[y][x] = this.nowManKey;
-        this._instanceUI.showPane(this._instanceUI.getPiece(this.nowManKey).x, this._instanceUI.getPiece(this.nowManKey).y, x, y);
+        this._instanceUI.setPaneDetail(this._instanceUI.getPiece(this.nowManKey).x, this._instanceUI.getPiece(this.nowManKey).y, x, y);
+
+        this._instanceUI.isPaneShow = false;
+        this._instanceUI.isDotShow = false;
+
+        this._instanceUI.show();
       }
     } else {
-      if (piece.my === 1){
+      if (piece.my === 1) {
         if (this._instanceUI.getPiece(this.nowManKey)) {
           this._instanceUI.getPiece(this.nowManKey).alpha = 1;
-        } 
+        }
 
         piece.alpha = 0.6;
         this.nowManKey = key;
 
-        //piece.ps = piece.bylaw(x, y, map, my, ; //获得所有能着点
-        //com.dot.dots = com.mans[key].ps
+        piece.ps = piece.bylaw(x, y, this.map, this.my, this._instanceUI.pieces, this); //获得所有能着点
+        this._instanceUI.setDots(piece.ps);
+        this._instanceUI.isDotShow = true;
+
         this._instanceUI.show();
       }
     }
@@ -1105,34 +1368,39 @@ export class ChineseChess2Play {
   }
 
   clickPoint(x, y) {
-    // let key = this.nowManKey;
-    // var man = this.pieces[key];
+    if (this.nowManKey) {
+      let curpiece = this._instanceUI.pieces.get(this.nowManKey);
+      if (this.indexOfPs(curpiece.ps, [x, y])) {
+        let pace = curpiece.x + '' + curpiece.y;
 
-    // if (this.nowManKey) {
-    //   if (this.indexOfPs(com.mans[key].ps, [x, y])) {
-    //     var pace = man.x + "" + man.y
-    //     //z(bill.createMove(play.map,man.x,man.y,x,y))
-    //     delete this.map[man.y][man.x];
-    //     play.map[y][x] = key;
-    //     com.showPane(man.x, man.y, x, y)
-    //     man.x = x;
-    //     man.y = y;
-    //     man.alpha = 1;
-    //     this.pace.push(pace + x + y);
-    //     this.nowManKey = false;
-    //     com.dot.dots = [];
-    //     com.show();
-    //     com.get("clickAudio").play();
-    //     setTimeout("play.AIPlay()", 500);
-    //   } else {
-    //     //alert("不能这么走哦！")	
-    //   }
-    // }
+        delete this.map[curpiece.y][curpiece.x];
+        this.map[y][x] = this.nowManKey;
+
+        this._instanceUI.setPaneDetail(curpiece.x, curpiece.y, x, y)
+        curpiece.x = x;
+        curpiece.y = y;
+        curpiece.alpha = 1;
+        this.pace.push(pace + x + y);
+
+        this.nowManKey = undefined;
+
+        this._instanceUI.setDots([]);
+        this._instanceUI.isDotShow = false;
+        this._instanceUI.show();
+
+        // setTimeout("play.AIPlay()", 500);
+      } else {
+        //alert("不能这么走哦！")	
+      }
+    }
   }
 
+  AIPlay() {
+    this.my = -1;
+    //var pace=AI.init(this.pace.join(''))
+  }
   //   AIPlay = function (){
-  //     //return
-  //     this.my = -1 ;
+
   //     var pace=AI.init(this.pace.join(''))
   //     if (!pace) {
   //       this.showWin (1);
@@ -1150,15 +1418,13 @@ export class ChineseChess2Play {
   //       this.AIclickPoint(pace[2],pace[3]);	
   //     }
   //     com.get("clickAudio").play();
-
-
   //   }
 
   checkFoul = function () {
     let p = this.pace;
     let len = parseInt(p.length, 10);
     if (len > 11 && p[len - 1] == p[len - 5] && p[len - 5] == p[len - 9]) {
-      return p[len - 4].split("");
+      return p[len - 4].split('');
     }
 
     return false;
@@ -1206,15 +1472,15 @@ export class ChineseChess2Play {
     return false;
   }
 
-  getClickPoint(evt: MouseEvent, com: ChineseChessUI) {
-    const domXY = getCanvasMouseEventPosition(com.canvasMain, evt);    
+  public getClickPoint(evt: MouseEvent, com: ChineseChessUI) {
+    const domXY = getCanvasMouseEventPosition(com.canvasMain, evt);
 
     var x = Math.round((domXY.x - com.pointStartX) / com.spaceX)
     var y = Math.round((domXY.y - com.pointStartY) / com.spaceY)
     return { x: x, y: y }
   }
 
-  getClickPiece(e, com: ChineseChessUI) {
+  public getClickPiece(e, com: ChineseChessUI) {
     let clickXY = this.getClickPoint(e, com);
 
     let x = clickXY.x;

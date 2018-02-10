@@ -39,16 +39,17 @@ export class PgChineseChessComponent implements OnInit, AfterViewInit {
   @HostListener('click', ['$event'])
   public onCanvasClicked(evt: MouseEvent) {
     if (!this._play.isPlay) return false;
+    
     var key = this._play.getClickPiece(evt, this._instance);
     var point = this._play.getClickPoint(evt, this._instance);
-    
+
     var x = point.x;
     var y = point.y;
-    
-    if (key){
-      this._play.clickPiece(key,x,y);	
-    }else {
-      this._play.clickPoint(x,y);	
+
+    if (key) {
+      this._play.clickPiece(key, x, y);
+    } else {
+      this._play.clickPoint(x, y);
     }
 
     // this._play.isFoul = this._play.checkFoul();//检测是不是长将  
