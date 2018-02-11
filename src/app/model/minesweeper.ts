@@ -94,6 +94,10 @@ export class MineSweeper {
    * @param excludpos Exclude position
    */
   public generateMines(excludpos: CanvasCellPositionInf) {
+    if (this._mineGenerated === true) {
+      return;
+    }
+
     let mineItem: CanvasCellPositionInf;
     const arMines: any[] = [];
 
@@ -105,6 +109,8 @@ export class MineSweeper {
       this.cells[mineItem.row][mineItem.column].isMine = true;
       arMines.push(mineItem);
     }
+
+    this._mineGenerated = true;
   }
 
   /**
@@ -144,6 +150,33 @@ export class MineSweeper {
     }
 
     return aroundMineNum;
+  }
+
+  public calcUnknownCellAround(pos: CanvasCellPositionInf): CanvasCellPositionInf[] {
+    let unknowArr = [];
+    let aroundArr = this.getAroundCells(pos);
+
+    for (let i = 0; i < aroundArr.length; i++) {
+      if (this.isValidCellPosition(aroundArr[i]) && this.cells[aroundArr[i].row][aroundArr[i].column].tag === 0
+        && this.cells[aroundArr[i].row][aroundArr[i].column].isOpened === false) {
+        unknowArr.push(aroundArr[i]);
+      }
+    }
+
+    return unknowArr;
+  }
+
+  public calcCellTag(pos: CanvasCellPositionInf) {
+    let aroundArr = this.getAroundCells(pos);
+    let tagNum = 0;
+
+    for (let i = 0; i < aroundArr.length; i++) {
+      if (this.isValidCellPosition(aroundArr[i]) && this.cells[aroundArr[i].row][aroundArr[i].column].tag === 1) {
+        tagNum++;
+      }
+    }
+
+    return tagNum;
   }
 
   /**
