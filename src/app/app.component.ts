@@ -39,14 +39,14 @@ export class Home implements AfterViewInit {
     }
 
     if (bgidx === 1) {
-      this.backgroundimage = 'assets/image/home-bg.jpg';
+      this.backgroundimage = environment.AppHost + '/assets/image/home-bg.jpg';
     } else {
-      this.backgroundimage = 'assets/image/home-bg' + bgidx.toString() + '.jpg';
+      this.backgroundimage = environment.AppHost + '/assets/image/home-bg' + bgidx.toString() + '.jpg';
     }
 
-    this._sun.src = 'assets/image/Canvas_sun.png';
-    this._moon.src = 'assets/image/Canvas_moon.png';
-    this._earth.src = 'assets/image/Canvas_earth.png';
+    this._sun.src = environment.AppHost + '/assets/image/Canvas_sun.png';
+    this._moon.src = environment.AppHost + '/assets/image/Canvas_moon.png';
+    this._earth.src = environment.AppHost + '/assets/image/Canvas_earth.png';
   }
 
   getBackgroundImage() {

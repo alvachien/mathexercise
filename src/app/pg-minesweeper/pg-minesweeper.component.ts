@@ -60,13 +60,14 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
     this._instance.Height = 16;
 
     // Array of image urls
-    this.arImgUrls = ['../../assets/image/mineresource/blank.jpg',
-      '../../assets/image/mineresource/0.jpg',
-      '../../assets/image/mineresource/flag.jpg',
-      '../../assets/image/mineresource/ask.jpg',
-      '../../assets/image/mineresource/mine.png',
-      '../../assets/image/mineresource/blood.jpg',
-      '../../assets/image/mineresource/error.jpg',
+    this.arImgUrls = [
+      environment.AppHost + '/assets/image/mineresource/blank.jpg',
+      environment.AppHost + '/assets/image/mineresource/0.jpg',
+      environment.AppHost + '/assets/image/mineresource/flag.jpg',
+      environment.AppHost + '/assets/image/mineresource/ask.jpg',
+      environment.AppHost + '/assets/image/mineresource/mine.png',
+      environment.AppHost + '/assets/image/mineresource/blood.jpg',
+      environment.AppHost + '/assets/image/mineresource/error.jpg',
     ];
   }
 
@@ -115,6 +116,16 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
     this.drawWholeRect();
     // Draw the initial cells
     this.drawInitCells();
+
+    // Prevent right menu
+    this.preRightMenu();
+  }
+
+  private preRightMenu() {
+    this.canvasMine.nativeElement.oncontextmenu = event => {
+      if (document.all) window.event.returnValue = false; // for IE
+      else event.preventDefault();
+    };
   }
 
   private drawWholeRect(): void {
@@ -153,33 +164,35 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   }
 
   private drawInitCells(): void {
-    for (let i = 0; i < this._instance.cells.length; i ++) {
-      for (let j = 0; j < this._instance.cells[i].length; j ++) {
-        this.drawCell(i, j);
-      }
-    }
+    // for (let i = 0; i < this._instance.cells.length; i ++) {
+    //   for (let j = 0; j < this._instance.cells[i].length; j ++) {
+    //     this.drawCell({row: i, column:j}, 1);
+    //   }
+    // }
   }
 
-  private drawCell(i: number, j: number) {
-    if (!this._instance.isValidCellPosition({row: i, column: j})) {
-      return;
-    }
+  // private drawCell(i: number, j: number) {
+  //   if (!this._instance.isValidCellPosition({row: i, column: j})) {
+  //     return;
+  //   }
 
-    const ctx2 = this.canvasMine.nativeElement.getContext('2d');
+  //   const ctx2 = this.canvasMine.nativeElement.getContext('2d');
 
-    const cell = this._instance.cells[i][j];
-    this.roundedRect(ctx2, i * this.PANE_SIZE, j * this.PANE_SIZE, this.PANE_SIZE, this.PANE_SIZE, 3);
+  //   const cell = this._instance.cells[i][j];
+  //   this.roundedRect(ctx2, i * this.PANE_SIZE, j * this.PANE_SIZE, this.PANE_SIZE, this.PANE_SIZE, 3);
 
-    if (cell.isOpened) {
-      // Fix it with another color
-      ctx2.save();
-      ctx2.shadowOffsetX = 2;
-      ctx2.shadowOffsetY = 2;
-      ctx2.shadowBlur = 2;
-      ctx2.shadowColor = 'rgba(0, 0, 0, 0.5)';
-      ctx2.fillStyle(cell.tag.toString(), i * this.PANE_SIZE, j * this.PANE_SIZE, this.PANE_SIZE);
-    }
-  }
+  //   if (cell.isOpened) {
+  //     // Fix it with another color
+  //     ctx2.save();
+  //     ctx2.shadowOffsetX = 2;
+  //     ctx2.shadowOffsetY = 2;
+  //     ctx2.shadowBlur = 2;
+  //     ctx2.shadowColor = 'rgba(0, 0, 0, 0.5)';
+  //     ctx2.textAlign = 'center';
+  //     ctx2.fillText(cell.tag.toString(), j * this.PANE_SIZE, i * this.PANE_SIZE);
+  //     ctx2.restore();
+  //   }
+  // }
 
   private roundedRect(ctx, x, y, width, height, radius) {
     ctx.beginPath();
@@ -297,17 +310,15 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
     if (theCell.isOpened === true) {
       const aroundMineNum = this._instance.calcNumberOfMinesAround(pos);
       const unknownArr = this._instance.calcUnknownCellAround(pos);
-      const tagNum = this._instance.calcCellTag(pos);
+      const tagNum = this._instance.calcTaggedCellsAround(pos);
 
       if (aroundMineNum !== tagNum) {
         for (let t = 0; t < unknownArr.length; t++) {
-          this.drawCell(unknownArr[t].row, unknownArr[t].column);
+          this.drawCellNum(unknownArr[t], 0);
         }
 
         this.mousedownArr = unknownArr;
       }
-    } else {
-
     }
   }
 
@@ -319,7 +330,7 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
         // Workout the around cells
         let aroundMineNum = this._instance.calcNumberOfMinesAround(pos);
         let unknownArr = this._instance.calcUnknownCellAround(pos);
-        let tagNum = this._instance.calcCellTag(pos);
+        let tagNum = this._instance.calcTaggedCellsAround(pos);
 
         if (aroundMineNum === tagNum) {
           for (let t = 0, uLen = unknownArr.length; t < uLen; t++) {
@@ -343,47 +354,46 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
     let tag = curCell.tag;
     if (evnt && evnt.button === 2) {
       if (tag === 0) {
-        this.drawCell(pos.row, pos.column);
+        this.drawCell(pos, 3);
         curCell.tag = 1;
         this.notTaged--;
         this.setNumberImage(this.notTaged, true);
       } else if (tag === 1) {
-        this.drawCell(pos.row, pos.column);
+        this.drawCell(pos, 4);
         curCell.tag = 2;
         this.notTaged++;
         this.setNumberImage(this.notTaged, true);
       } else if (tag === 2) {
-        this.drawCell(pos.row, pos.column);
+        this.drawCell(pos, 1);
         curCell.tag = 0;
       }
       return;
     }
 
-    // if (tag !== 0) {
-    //   return;
-    // }
+    if (tag !== 0) {
+      return;
+    }
 
     if (curCell.isMine) {
       // Failed!
       this.showAllMines();
-      this.drawCell(pos.row, pos.column);
-      //this.showWrongTag();
+      this.drawCell(pos, 6);
+      this.showWrongTag();
 
       this.onFinishedWithFailed();
     } else {
-      //this.drawCell(pos.row, pos.column);
+      this.drawCellNum(pos, 0);
 
       const aroundMineNum = this._instance.calcNumberOfMinesAround(pos);
-      curCell.tag = aroundMineNum;
       curCell.isOpened = true;
 
       if (aroundMineNum !== 0) {
-        this.drawCell(pos.row, pos.column);
+        this.drawCellNum(pos, aroundMineNum);
       } else {
         let zeroArr = [];
         zeroArr.push(pos);
-        // zeroArr = this.calZeroMine(pos, zeroArr);
-        // this.openZeroArr(zeroArr);
+        zeroArr = this._instance.fetchZeroMinesAround(pos, zeroArr);
+        this.openZeroCellArr(zeroArr);
       }
     }
 
@@ -414,7 +424,7 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   //   }
   }
 
-  // showWrongTag() {
+  showWrongTag() {
   //   let paneheight = this._paneHeigh;
   //   let panewidth = this._paneWidth;
 
@@ -425,161 +435,66 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   //       }
   //     };
   //   }
-  // }
+  }
 
-  // calZeroMine(pos: CanvasCellPositionInf, zeroArr: CanvasCellPositionInf[]): CanvasCellPositionInf[] {
-  //   let arCells = this.arCells;
-  //   let aroundArr = this.getAroundCells(pos);
-  //   let aroundMineNum = 0;
+  openZeroCellArr(zeroArr: CanvasCellPositionInf[]) {
+    for (let i = 0; i < zeroArr.length; i++) {
+      if (!this._instance.isAMineCell(zeroArr[i])) {
+        this.openZeroCell(zeroArr[i]);
+      }
+    };
+  }
 
-  //   for (let i = 0; i < aroundArr.length; i++) {
-  //     aroundMineNum = this.calAround(aroundArr[i]);
-  //     if (aroundMineNum === 0 && this.isValidCellPosition(aroundArr[i]) && arCells[aroundArr[i].row][aroundArr[i].column].isMine === false
-  //       && !this.isInArray(aroundArr[i], zeroArr)) {
-  //       zeroArr.push(aroundArr[i]);
-  //       this.calZeroMine(aroundArr[i], zeroArr);
-  //     }
-  //   }
+  openZeroCell(pos: CanvasCellPositionInf) {
+    let aroundArr = this._instance.getAroundCells(pos);
+    let aroundMineNum = 0;
 
-  //   return zeroArr;
-  // }
+    for (let i = 0; i < aroundArr.length; i++) {
+      if (this._instance.isValidCellPosition(aroundArr[i])) {
+        this._instance.cells[aroundArr[i].row][aroundArr[i].column].isOpened = true;
+        aroundMineNum = this._instance.calcNumberOfMinesAround(aroundArr[i]);
+        this.drawCellNum(aroundArr[i], aroundMineNum);
+      }
+    }
+  }
 
-  // openZeroArr(zeroArr: CanvasCellPositionInf[]) {
-  //   for (let i = 0; i < zeroArr.length; i++) {
-  //     if (!this.checkMine(zeroArr[i])) {
-  //       this.openZero(zeroArr[i]);
-  //     }
-  //   };
-  // }
+  drawCell(pos: CanvasCellPositionInf, type) {
+    let area = this.getCellArea(pos);
+    let cxt = this.canvasMine.nativeElement.getContext('2d');
 
-  // openZero(pos: CanvasCellPositionInf) {
-  //   let arCells = this.arCells;
-  //   let aroundArr = this.getAroundCells(pos);
-  //   let aroundMineNum = 0;
+    let image = new Image();
+    image.src = this.arImgUrls[type - 1];
+    image.onload = () => {
+      cxt.drawImage(image, area[0], area[1], 16, 16);
+    };
+  }
 
-  //   for (let i = 0; i < aroundArr.length; i++) {
-  //     if (this.isValidCellPosition(aroundArr[i])) {
-  //       arCells[aroundArr[i][0]][aroundArr[i][1]].isOpened = true;
-  //       aroundMineNum = this.calAround(aroundArr[i]);
-  //       this.drawNum(aroundArr[i], aroundMineNum);
-  //     }
-  //   }
-  // }
+  drawCellNum(pos: CanvasCellPositionInf, num: number) {
+    if (Number.isInteger(num)) {      
+      let ctx2 = this.canvasMine.nativeElement.getContext('2d');
+      let area = this.getCellArea(pos);
+      // let image = new Image();
+      // image.src = environment.AppHost + '/assets/image/mineresource/' + num + '.jpg';
+      // image.onload = () => {
+      //   cxt.drawImage(image, area[0], area[1], this.PANE_SIZE, this.PANE_SIZE);
+      // };
 
-  // drawCell(pos: CanvasCellPositionInf, type) {
-  //   let area = this.getCellArea(pos);
-  //   let cxt = this.canvasMine.nativeElement.getContext('2d');
+      ctx2.save();
+      ctx2.fillStyle = 'rgba(0, 0, 49, 0.7)';
+      ctx2.clearRect(area[0], area[1], this.PANE_SIZE, this.PANE_SIZE);
+      ctx2.fillRect(area[0], area[1], this.PANE_SIZE, this.PANE_SIZE);
+      ctx2.fillStyle = 'white';
+      ctx2.font = '24px Roboto';
+      ctx2.fillText(num.toString(), area[0] + Math.round(this.PANE_SIZE / 4), area[1] + Math.round(this.PANE_SIZE * 4 / 5), this.PANE_SIZE);
+      ctx2.restore();
+    }
+  }
 
-  //   let image = new Image();
-  //   image.src = this.arImgUrls[type - 1];
-  //   image.onload = () => {
-  //     cxt.drawImage(image, area[0], area[1], 16, 16);
-  //   };
-  // }
+  private getCellArea(pos: CanvasCellPositionInf) {
+    return [pos.column * this.PANE_SIZE, pos.row * this.PANE_SIZE];
+  }
 
-  // drawNum(pos: CanvasCellPositionInf, num: number) {
-  //   if (Number.isInteger(num)) {
-  //     let area = this.getCellArea(pos);
-  //     let cxt = this.canvasMine.nativeElement.getContext('2d');
-  //     let image = new Image();
-  //     image.src = '../../assets/image/mineresource/' + num + '.jpg';
-
-  //     image.onload = function () {
-  //       cxt.drawImage(image, area[0], area[1], 16, 16);
-  //     }
-  //   }
-  // }
-
-  // /**
-  //  * Handler of Click
-  //  */
-  // onClick(pos: CanvasCellPositionInf, e) {
-  //   let currentCell: MineSweepCell = this.arCells[pos.row][pos.column];
-
-  //   if (currentCell.isOpened) {
-  //     if (e) {
-  //       let aroundMineNum = this.calAround(pos);
-  //       let unknownArr = this.getAroundUnknown(pos);
-  //       let tagNum = this.getAroundTag(pos);
-
-  //       if (aroundMineNum === tagNum) {
-  //         for (let t = 0, uLen = unknownArr.length; t < uLen; t++) {
-  //           this.onClick(unknownArr[t], undefined);
-  //         }
-  //       } else {
-  //         let mousedownArr = this.mousedownArr;
-  //         if (mousedownArr !== '') {
-  //           for (let m = 0; m < mousedownArr.length; m++) {
-  //             this.drawCell(mousedownArr[m], 1);
-  //           }
-  //         }
-
-  //         this.mousedownArr = '';
-  //       }
-  //     }
-
-  //     return;
-  //   }
-
-  //   let tag = currentCell.tag;
-  //   if (e && e.button === 2) {
-  //     if (tag === 0) {
-  //       this.drawCell(pos, 3);
-  //       currentCell.tag = 1;
-  //       this.notTaged--;
-  //       this.setNumberImage(this.notTaged, true);
-  //     } else if (tag === 1) {
-  //       this.drawCell(pos, 4);
-  //       currentCell.tag = 2;
-  //       this.notTaged++;
-  //       this.setNumberImage(this.notTaged, true);
-  //     } else if (tag === 2) {
-  //       this.drawCell(pos, 1);
-  //       currentCell.tag = 0;
-  //     }
-  //     return;
-  //   }
-  //   if (tag !== 0) {
-  //     return;
-  //   }
-
-  //   if (currentCell.isMine) {
-  //     this.showMine();
-  //     this.drawCell(pos, 6);
-  //     this.showWrongTag();
-
-  //     this.onFinishedWithFailed();
-  //   } else {
-  //     this.drawNum(pos, 0);
-  //     const aroundMineNum = this.calAround(pos);
-  //     if (aroundMineNum !== 0) {
-  //       this.drawNum(pos, aroundMineNum);
-  //     } else {
-  //       let zeroArr = [];
-  //       zeroArr.push(pos);
-  //       zeroArr = this.calZeroMine(pos, zeroArr);
-  //       this.openZeroArr(zeroArr);
-  //     }
-  //   }
-  //   currentCell.isOpened = true;
-
-  //   const okNum = this._paneWidth * this._paneHeigh - this._minenum;
-  //   let openNum = 0;
-  //   for (let i = 1; i <= this._paneWidth; i++) {
-
-  //     for (let j = 1; j <= this._paneHeigh; j++) {
-  //       if (this.arCells[i][j].isOpened === true) {
-  //         openNum++;
-  //       }
-  //     };
-  //   }
-
-  //   if (openNum === okNum) {
-  //     this.onFinishedWithSuccess();
-  //   }
-  // }
-
-   private onFinishedWithSuccess() {
+  private onFinishedWithSuccess() {
   //   this.face.nativeElement.src = '../assets/image/mineresource/face_success.jpg';
      if (this.timer) {
        clearInterval(this.timer);
@@ -633,12 +548,12 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
     if (bTag) {
       const childelem = this.gametags.nativeElement.getElementsByTagName('img');
       for (let i = 0; i < childelem.length; i++) {
-        childelem[i].src = '../../assets/image/mineresource/d' + snum.charAt(i) + '.jpg';
+        childelem[i].src = environment.AppHost + '/assets/image/mineresource/d' + snum.charAt(i) + '.jpg';
       }
     } else {
       const childelem = this.gametime.nativeElement.getElementsByTagName('img');
       for (let i = 0; i < childelem.length; i++) {
-        childelem[i].src = '../../assets/image/mineresource/d' + snum.charAt(i) + '.jpg';
+        childelem[i].src = environment.AppHost + '/assets/image/mineresource/d' + snum.charAt(i) + '.jpg';
       }
     }
   }

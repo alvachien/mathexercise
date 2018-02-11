@@ -1,6 +1,8 @@
 import { MatrixPosIntf, workoutSlashEx } from './utility';
 import { CanvasCellPositionInf } from './uicommon';
 
+// Refer to https://github.com/liusaint/games/tree/master/mine
+
 /**
  * Cell of minesweeper
  */
@@ -8,6 +10,11 @@ export class MineSweeperCell {
   isMine: boolean;
   isOpened: boolean;
   tag: number;
+
+  constructor() {
+    this.isOpened = false;
+    this.tag = 0;
+  }
 }
 
 /**
@@ -77,10 +84,10 @@ export class MineSweeper {
     this._finished = false;
     this._mineGenerated = false;
     this.cells = new Array<Array<MineSweeperCell>>();
-    for (let y = 0; y <= this._width; y++) {
+    for (let y = 0; y < this._height; y++) {
       const row: MineSweeperCell[]  = new Array<MineSweeperCell>();
 
-      for (let x = 0; x <= this._height; x++) {
+      for (let x = 0; x < this._width; x++) {
         row.push(new MineSweeperCell());
       }
 
@@ -99,11 +106,11 @@ export class MineSweeper {
     }
 
     let mineItem: CanvasCellPositionInf;
-    const arMines: any[] = [];
+    const arMines: CanvasCellPositionInf[] = [];
 
     for (let i = 0; i < this._totalmine; i++) {
       do {
-        mineItem = { row: Math.floor(Math.random() * this._width + 1), column: Math.floor(Math.random() * this._height + 1) };
+        mineItem = { row: Math.floor(Math.random() * this._height), column: Math.floor(Math.random() * this._width) };
       } while (this.isInArray(mineItem, arMines) || (excludpos.row === mineItem.row && excludpos.column === mineItem.column));
 
       this.cells[mineItem.row][mineItem.column].isMine = true;
@@ -126,7 +133,7 @@ export class MineSweeper {
    * @param pos Position
    */
   public isValidCellPosition(pos: CanvasCellPositionInf): boolean {
-    if (pos.row <= 0 || pos.column <= 0 || pos.row >= this._width || pos.column >= this._height) {
+    if (pos.row <= 0 || pos.column <= 0 || pos.row >= this._height || pos.column >= this._width) {
       return false;
     }
 
@@ -141,6 +148,10 @@ export class MineSweeper {
     return false;
   }
 
+  /**
+   * Calculate the number of mines around
+   * @param pos 
+   */
   public calcNumberOfMinesAround(pos: CanvasCellPositionInf): number {
     const aroundArr = this.getAroundCells(pos);
     let aroundMineNum = 0;
@@ -152,6 +163,10 @@ export class MineSweeper {
     return aroundMineNum;
   }
 
+  /**
+   * Calcuate the unknow cells
+   * @param pos Position
+   */
   public calcUnknownCellAround(pos: CanvasCellPositionInf): CanvasCellPositionInf[] {
     let unknowArr = [];
     let aroundArr = this.getAroundCells(pos);
@@ -166,7 +181,11 @@ export class MineSweeper {
     return unknowArr;
   }
 
-  public calcCellTag(pos: CanvasCellPositionInf) {
+  /**
+   * Get tagged cells' number around
+   * @param pos position of the cell
+   */
+  public calcTaggedCellsAround(pos: CanvasCellPositionInf) {
     let aroundArr = this.getAroundCells(pos);
     let tagNum = 0;
 
@@ -177,6 +196,22 @@ export class MineSweeper {
     }
 
     return tagNum;
+  }
+
+  public fetchZeroMinesAround(pos: CanvasCellPositionInf, zeroArr: CanvasCellPositionInf[]) {
+    let aroundArr = this.getAroundCells(pos);
+    let aroundMineNum = 0;
+
+    for (let i = 0; i < aroundArr.length; i++) {
+      aroundMineNum = this.calcNumberOfMinesAround(aroundArr[i]);
+      if (aroundMineNum === 0 && this.isValidCellPosition(aroundArr[i]) && this.cells[aroundArr[i].row][aroundArr[i].column].isMine === false
+        && !this.isInArray(aroundArr[i], zeroArr)) {
+        zeroArr.push(aroundArr[i]);
+        this.fetchZeroMinesAround(aroundArr[i], zeroArr);
+      }
+    }
+
+    return zeroArr;    
   }
 
   /**
