@@ -704,6 +704,7 @@ export class ChineseChessUI {
   styleSetting: any;
   canvasMain: any;
   contextMain: any;
+  aidata: any;
 
   childList: any[];
   initMap;
@@ -987,47 +988,49 @@ export class ChineseChessUI {
 export class ChineseChessAI {
   historyTable = {};
   gambit: any[];
-  historyBill: any;
+  historyBill: any[];
   treeDepth: any;
   number: any;
 
-  public init(pace, depth) {
-    let bill = this.historyBill || this.gambit; //开局库
-    if (bill.length) {
-      var len = pace.length;
-      var arr = [];
+  public init(com: ChineseChessUI, play: ChineseChess2Play, pace, depth) {
+    let bill = this.historyBill || com.aidata; // 开局库
+
+    if (bill.length > 0) {
+      let len = pace.length;
+      let arr = [];
+
       // 先搜索棋谱
       for (let i = 0; i < bill.length; i++) {
-        if (bill[i].slice(0, len) == pace) {
+        if (bill[i].slice(0, len) === pace) {
           arr.push(bill[i]);
         }
       }
-      if (arr.length) {
+
+      if (arr.length > 0) {
         let inx = Math.floor(Math.random() * arr.length);
         this.historyBill = arr;
-        return arr[inx].slice(len, len + 4).split("");
+        return arr[inx].slice(len, len + 4).split('');
       } else {
         this.historyBill = [];
       }
-
     }
 
-    //如果棋谱里面没有，人工智能开始运作
-    var initTime = new Date().getTime();
+    // 如果棋谱里面没有，人工智能开始运作
+    let initTime = new Date().getTime();
     this.treeDepth = depth;
 
     this.number = 0;
-    this.setHistoryTable.lenght = 0
+    this.historyTable = [];
 
-    let val = this.getAlphaBeta(-99999, 99999, this.treeDepth, arr2Clone(play.map), play.my);
+    let val = this.getAlphaBeta(-99999, 99999, this.treeDepth, arr2Clone(play.map), play.my, play);
 
     if (!val || val.value === -8888) {
       this.treeDepth = 2;
-      val = this.getAlphaBeta(-99999, 99999, this.treeDepth, arr2Clone(play.map), play.my);
+      val = this.getAlphaBeta(-99999, 99999, this.treeDepth, arr2Clone(play.map), play.my, play);
     }
 
-    if (val && val.value != -8888) {
-      var man = play.mans[val.key];
+    if (val && val.value !== -8888) {
+      var man = play.pieces[val.key];
       var nowTime = new Date().getTime();
 
       // com.get("moveInfo").innerHTML='<h3>AI搜索结果：</h3>最佳着法：'+
@@ -1037,177 +1040,174 @@ export class ChineseChessAI {
       //                 val.value+'分'+
       //                 ' <br />搜索用时：'+
       //                 (nowTime-initTime)+'毫秒'
+
       return [man.x, man.y, val.x, val.y]
     } else {
       return false;
     }
   }
 
-  iterativeSearch(map, my){
-    var timeOut=100;
-    var initDepth = 1;
-    var maxDepth = 8;
-    this.treeDepth=0;
-    var initTime = new Date().getTime();
-    var val = {};
-    for (let i=initDepth; i<=maxDepth; i++){
-      var nowTime= new Date().getTime();
-      this.treeDepth=i;
-      this.aotuDepth=i;
-      var val = this.getAlphaBeta(-99999, 99999, this.treeDepth , map ,my)
-      if (nowTime-initTime > timeOut){
+  iterativeSearch(map, my, play) {
+    let timeOut = 100;
+    let initDepth = 1;
+    let maxDepth = 8;
+
+    this.treeDepth = 0;
+    let initTime = new Date().getTime();
+
+    for (let i = initDepth; i <= maxDepth; i++) {
+      let nowTime = new Date().getTime();
+      this.treeDepth = i;
+      //this.aotuDepth=i;
+      let val = this.getAlphaBeta(-99999, 99999, this.treeDepth, map, my, play)
+      if (nowTime - initTime > timeOut) {
         return val;
       }
     }
+
     return false;
   }
 
-  getMapAllMan(map, my){
-    var mans=[];
-    for (var i=0; i<map.length; i++){
-      for (var n=0; n<map[i].length; n++){
+  getMapAllMan(map, my, play) {
+    let mans = [];
+    for (let i = 0; i < map.length; i++) {
+      for (let n = 0; n < map[i].length; n++) {
         var key = map[i][n];
-        if (key && play.mans[key].my == my){
-          play.mans[key].x = n;
-          play.mans[key].y = i;
-          mans.push(play.mans[key])
+        if (key && play.pieces[key].my == my) {
+          play.pieces[key].x = n;
+          play.pieces[key].y = i;
+          mans.push(play.pieces[key])
         }
       }
     }
+
     return mans;
   }
-  getMoves(map, my){
-    var manArr = this.getMapAllMan (map, my);
-    var moves = [];
-    var foul=play.isFoul;
-    for (var i=0; i<manArr.length; i++){
-      var man = manArr[i];
-      var val=man.bl(map);
-      
-      for (var n=0; n<val.length; n++){
-        var x=man.x;
-        var y=man.y;
-        var newX=val[n][0];
-        var newY=val[n][1];
-         //如果不是长将着法
-        if (foul[0]!=x || foul[1]!=y || foul[2]!=newX || foul[3]!=newY ){
-          moves.push([x,y,newX,newY,man.key])
+
+  getMoves(map, my, play) {
+    let manArr = this.getMapAllMan(map, my, play);
+    let moves = [];
+    let foul = play.isFoul;
+
+    for (let i = 0; i < manArr.length; i++) {
+      let man = manArr[i];
+      let val = man.bl(map);
+
+      for (let n = 0; n < val.length; n++) {
+        let x = man.x;
+        let y = man.y;
+        let newX = val[n][0];
+        let newY = val[n][1];
+
+        // 如果不是长将着法
+        if (foul[0] !== x || foul[1] !== y || foul[2] !== newX || foul[3] !== newY) {
+          moves.push([x, y, newX, newY, man.key])
         }
       }
     }
+
     return moves;
   }
-  getAlphaBeta(A, B, depth, map ,my) { 
-    if (depth === 0) {
-      return {"value": this.evaluate(map , my)}; //局面评价函数; 
-  　	}
 
-  　	var moves = this.getMoves(map , my ); //生成全部走法; 
-  　	//这里排序以后会增加效率
-  
-    for (var i=0; i < moves.length; i++) {
-      
-  　　	//走这个走法;
-      var move= moves[i];
-      var key = move[4];
-      var oldX= move[0];
-      var oldY= move[1];
-      var newX= move[2];
-      var newY= move[3];
-      var clearKey = map[ newY ][ newX ]||"";
-  
-      map[ newY ][ newX ] = key;
-      delete map[ oldY ][ oldX ];
+  getAlphaBeta(A, B, depth, map, my, play) {
+    if (depth === 0) {
+      return { value: this.evaluate(map, my, play) }; //局面评价函数; 
+    }
+
+    let moves = this.getMoves(map, my, play); //生成全部走法; 
+    let rootKey;
+    let key;
+    let newX;
+    let newY;
+
+    //这里排序以后会增加效率
+
+    for (let i = 0; i < moves.length; i++) {
+      //走这个走法;
+      let move = moves[i];
+      key = move[4];
+      let oldX = move[0];
+      let oldY = move[1];
+      newX = move[2];
+      newY = move[3];
+      let clearKey = map[newY][newX] || '';
+
+      map[newY][newX] = key;
+      delete map[oldY][oldX];
       play.mans[key].x = newX;
       play.mans[key].y = newY;
-      
-    　　if (clearKey=="j0"||clearKey=="J0") {//被吃老将,撤消这个走法; 
-        play.mans[key]	.x = oldX;
-        play.mans[key]	.y = oldY;
-        map[ oldY ][ oldX ] = key;
-        delete map[ newY ][ newX ];
 
-        if (clearKey){
-           map[ newY ][ newX ] = clearKey;
+      if (clearKey === 'j0' || clearKey === 'J0') { //被吃老将,撤消这个走法; 
+        play.mans[key].x = oldX;
+        play.mans[key].y = oldY;
+        map[oldY][oldX] = key;
+        delete map[newY][newX];
+
+        if (clearKey) {
+          map[newY][newX] = clearKey;
           // play.mans[ clearKey ].isShow = false;
         }
-  
-        return {"key":key,"x":newX,"y":newY,"value":8888};
-        //return rootKey; 
-    　　}else { 
-    　　	var val = -this.getAlphaBeta(-B, -A, depth - 1, map , -my).value; 
-        //val = val || val.value;
-    
-    　　	//撤消这个走法;　 
-        play.mans[key]	.x = oldX;
-        play.mans[key]	.y = oldY;
-        map[ oldY ][ oldX ] = key;
-        delete map[ newY ][ newX ];
-        if (clearKey){
-           map[ newY ][ newX ] = clearKey;
-           //play.mans[ clearKey ].isShow = true;
+
+        return { 'key': key, 'x': newX, 'y': newY, 'value': 8888 };
+      } else {
+        let val = -this.getAlphaBeta(-B, -A, depth - 1, map, -my, play).value;
+
+        //撤消这个走法;　 
+        play.mans[key].x = oldX;
+        play.mans[key].y = oldY;
+        map[oldY][oldX] = key;
+        delete map[newY][newX];
+        if (clearKey) {
+          map[newY][newX] = clearKey;
+          //play.mans[ clearKey ].isShow = true;
         }
-    　　	if (val >= B) { 
+        if (val >= B) {
           //将这个走法记录到历史表中; 
           //AI.setHistoryTable(txtMap,AI.treeDepth-depth+1,B,my);
-          return {"key":key,"x":newX,"y":newY,"value":B}; 
-        } 
-        if (val > A) { 
-    　　　　	A = val; //设置最佳走法; 
-          if (this.treeDepth == depth) var rootKey={"key":key,"x":newX,"y":newY,"value":A};
-        } 
-      } 
-  　	} 
+          return { 'key': key, 'x': newX, 'y': newY, 'value': B };
+        }
+        if (val > A) {
+          A = val; //设置最佳走法; 
+          if (this.treeDepth == depth) {
+            rootKey = {'key': key, 'x': newX, 'y': newY, 'value': A };
+          }
+        }
+      }
+    }
 
-    if (this.treeDepth == depth) {//已经递归回根了
-      if (!rootKey){
-        //AI没有最佳走法，说明AI被将死了，返回false
+    if (this.treeDepth === depth) {//已经递归回根了
+      if (!rootKey) {
+        // AI没有最佳走法，说明AI被将死了，返回false
         return false;
-      }else{
+      } else {
         //这个就是最佳走法;
         return rootKey;
       }
     }
 
-  　return {"key":key,"x":newX,"y":newY,"value":A}; 
+    return { 'key': key, 'x': newX, 'y': newY, 'value': A };
   }
-  
-  //奖着法记录到历史表
-  setHistoryTable(txtMap,depth,value,my){
-    this.setHistoryTable.lenght ++;
-    this.historyTable[txtMap] = {depth:depth,value:value} 
+
+  // 奖着法记录到历史表
+  setHistoryTable(txtMap, depth, value, my) {
+    //this.historyTable.length ++;
+    this.historyTable[txtMap] = { depth: depth, value: value }
   }
-  
-  //评估棋局 取得棋盘双方棋子价值差
-  evaluate(map,my){
-    var val=0;
-    for (var i=0; i<map.length; i++){
-      for (var n=0; n<map[i].length; n++){
+
+  // 评估棋局 取得棋盘双方棋子价值差
+  evaluate(map, my, play) {
+    var val = 0;
+    for (var i = 0; i < map.length; i++) {
+      for (var n = 0; n < map[i].length; n++) {
         var key = map[i][n];
-        if (key){
+        if (key) {
           val += play.mans[key].value[i][n] * play.mans[key].my;
         }
       }
     }
 
     this.number++;
-    return val*my;
-  }
-  
-  //评估棋局 取得棋盘双方棋子价值差
-  evaluate1(map,my){
-    var val=0;
-    for (var i in play.mans){
-      var man=play.mans[i];
-      if (man.isShow){
-        val += man.value[man.y][man.x] * man.my;
-      }
-    }
-    //val+=Math.floor( Math.random() * 10);  //让AI走棋增加随机元素
-    //com.show()
-    //z(val*my)
-    this.number++;
-    return val*my;
+    return val * my;
   }
 }
 

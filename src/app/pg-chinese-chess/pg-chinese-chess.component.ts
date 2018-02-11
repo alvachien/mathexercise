@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, HostListener } from '@angular/core';
+import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
 import { ChineseChessUI, ChineseChess2Play } from '../model/chinesechess2';
 import { environment } from '../../environments/environment';
+import { Observable } from 'rxjs/Observable';
 import {
   PrimarySchoolMathQuiz, QuizTypeEnum, PrimarySchoolMathQuizItem,
   Cal24QuizItem, SudouQuizItem, LogLevel, QuizDegreeOfDifficulity,
@@ -17,21 +19,25 @@ export class PgChineseChessComponent implements OnInit, AfterViewInit {
   private _instance: ChineseChessUI;
   private _play: ChineseChess2Play;
 
-  constructor() { }
+  constructor(private _http: HttpClient) { }
 
   ngOnInit() {
+    this._instance = new ChineseChessUI();
+    this._instance.init(this.canvasChess.nativeElement);
+
+    this._play = new ChineseChess2Play();
+    this._play.init(this._instance);
+
+
+    this._http.get(environment.APIBaseUrl + '/assets/data/data.txt').subscribe(x => {
+      this._instance.aidata = x;
+    });
   }
 
   ngAfterViewInit() {
     if (environment.LoggingLevel >= LogLevel.Debug) {
       console.log('AC Math Exercise [Debug]: Entering ngAfterViewInit in PgChineseChessComponent');
     }
-
-    this._instance = new ChineseChessUI();
-    this._instance.init(this.canvasChess.nativeElement);
-
-    this._play = new ChineseChess2Play();
-    this._play.init(this._instance);
 
     this._instance.show();
   }
