@@ -137,7 +137,7 @@ export class MineSweeper {
    * @param pos Position
    */
   public isValidCellPosition(pos: CanvasCellPositionInf): boolean {
-    if (pos.row <= 0 || pos.column <= 0 || pos.row >= this._height || pos.column >= this._width) {
+    if (pos.row < 0 || pos.column < 0 || pos.row >= this._height || pos.column >= this._width) {
       return false;
     }
 

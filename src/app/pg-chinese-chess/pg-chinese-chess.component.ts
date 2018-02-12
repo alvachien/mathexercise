@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, HostListener,
+  EventEmitter, Output, Input } from '@angular/core';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
 import { ChineseChessUI, ChineseChess2Play } from '../model/chinesechess2';
 import { environment } from '../../environments/environment';
@@ -18,15 +19,49 @@ export class PgChineseChessComponent implements OnInit, AfterViewInit {
   @ViewChild('canvaschess') canvasChess: ElementRef;
   private _instance: ChineseChessUI;
   private _play: ChineseChess2Play;
+  private _dod: QuizDegreeOfDifficulity;
+
+  /**
+   * Started event
+   */
+  @Output() startedEvent: EventEmitter<any> = new EventEmitter();
+
+  /**
+   * Finish event
+   */
+  @Output() finishedEvent: EventEmitter<boolean> = new EventEmitter();
+
+  /**
+   * Degree of difficulity
+   */
+  @Input()
+  set chineseChessDoD(dod: QuizDegreeOfDifficulity) {
+    if (environment.LoggingLevel >= LogLevel.Debug) {
+      console.log('AC Math Exercise [Debug]: Entering setter of chineseChessDoD in PgChineseChessComponent' + dod.toString());
+    }
+
+    if (this._dod !== dod) {
+      this._dod = dod;
+
+      switch (dod) {
+        case QuizDegreeOfDifficulity.easy: this._play.depth = 2; break;
+        case QuizDegreeOfDifficulity.medium: this._play.depth = 3; break;
+        case QuizDegreeOfDifficulity.hard:
+        default:
+          this._play.depth = 5;
+          break;
+      }
+    }
+  }
 
   constructor(private _http: HttpClient) {
+    this._instance = new ChineseChessUI();
+    this._play = new ChineseChess2Play();
   }
 
   ngOnInit() {
-    this._instance = new ChineseChessUI();
     this._instance.init(this.canvasChess.nativeElement);
 
-    this._play = new ChineseChess2Play();
     this._play.init(this._instance);
 
     let headers = new HttpHeaders();

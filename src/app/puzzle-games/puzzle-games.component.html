@@ -156,15 +156,15 @@
         <mat-card-title>{{'Home.Gobang' | translate}}</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <app-pg-gobang gobangDoD="2"></app-pg-gobang>
+        <app-pg-gobang [gobangDoD]="gobangDoD" (startedEvent)="onGobangStarted($event)" (finishedEvent)="onGobangFinished($event)"></app-pg-gobang>
       </mat-card-content>
     </mat-card>
   </mat-tab>
 
   <!-- Tab: Chinese Chess -->
-  <mat-tab label="Chinese Chess">
+  <mat-tab label="{{'Home.ChineseChess' | translate}}">
     <div style="margin:10px">
-      <app-pg-chinese-chess></app-pg-chinese-chess>
+      <app-pg-chinese-chess (startedEvent)="onChineseChessStarted($event)" (finishedEvent)="onChineseChessFinished($event)"></app-pg-chinese-chess>
     </div>
   </mat-tab>
 </mat-tab-group>

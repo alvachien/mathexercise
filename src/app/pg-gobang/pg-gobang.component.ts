@@ -24,9 +24,15 @@ export class PgGobangComponent implements OnInit, AfterContentInit {
   @ViewChild('canvasgobang') canvasGobang: ElementRef;
 
   /**
+   * Started event
+   */
+  @Output() startedEvent: EventEmitter<any> = new EventEmitter();
+
+  /**
    * Finish event
    */
-  @Output() finishEvent: EventEmitter<any> = new EventEmitter();
+  @Output() finishedEvent: EventEmitter<boolean> = new EventEmitter();
+
   /**
    * Degree of difficulity
    */
@@ -83,6 +89,7 @@ export class PgGobangComponent implements OnInit, AfterContentInit {
   ngAfterContentInit() {
     this._instance.Dimension = this._cellsize;
     this._instance.init();
+    this.startedEvent.emit();
 
     // Draw the border
     this.drawWholeRect();
@@ -132,6 +139,8 @@ export class PgGobangComponent implements OnInit, AfterContentInit {
       this._instance.setCellValue(cellloc.row, cellloc.column, this._userStep);
 
       if (this._instance.Finished) {
+        this.finishedEvent.emit(this._userStep ? true : false);
+
         // Show the snackbar
         let msg = '';
         if (this._userStep) {
@@ -139,21 +148,18 @@ export class PgGobangComponent implements OnInit, AfterContentInit {
         } else {
           msg = 'Computer win';
         }
-        const snackBarRef = this.snackBar.open(msg, 'RESTART', {
-          duration: 3000
-        });
+        const snackBarRef = this.snackBar.open(msg, 'RESTART');
 
         snackBarRef.onAction().subscribe(() => {
           console.log('The snack-bar action was triggered!');
 
           this._userStep = true; // By default, it's user step!
-          this._instance.init();          
+          this._instance.init();
+          this.startedEvent.emit();
 
           // Draw the border
           this.drawWholeRect();
         });
-
-        // snackBarRef.dismiss();
       } else {
         this._userStep = !this._userStep;
       }

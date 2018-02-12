@@ -71,6 +71,17 @@ export class PuzzleGamesComponent implements OnInit {
   mineSweepQuiz: PrimarySchoolMathQuiz;
   mineSweepDoD: QuizDegreeOfDifficulity;
 
+  /**
+   * Gobang - row of five
+   */
+  gobangQuiz: PrimarySchoolMathQuiz;
+  gobangDoD: QuizDegreeOfDifficulity;
+
+  /**
+   * Chinese Chess
+   */
+  chnchessQuiz: PrimarySchoolMathQuiz;
+
   constructor(private _dlgsvc: DialogService,
     private _dialog: MatDialog,
     private _zone: NgZone,
@@ -107,13 +118,19 @@ export class PuzzleGamesComponent implements OnInit {
     this.mineSweepQuiz = new PrimarySchoolMathQuiz();
     this.mineSweepQuiz.QuizType = QuizTypeEnum.minesweep;
     this.mineSweepDoD = QuizDegreeOfDifficulity.hard;
+
+    this.gobangQuiz = new PrimarySchoolMathQuiz();
+    this.gobangQuiz.QuizType = QuizTypeEnum.gobang;
+    this.gobangDoD = QuizDegreeOfDifficulity.hard;
+
+    this.chnchessQuiz = new PrimarySchoolMathQuiz();
+    this.chnchessQuiz.QuizType = QuizTypeEnum.chinesechess;
   }
 
   ngOnInit() {
   }
 
   public onTabSelectChanged(event: MatTabChangeEvent) {
-    //console.log(event);
     this.indexTab = event.index;
   }
 
@@ -198,7 +215,7 @@ export class PuzzleGamesComponent implements OnInit {
     // Enable the buttons
     if (this.cal24BtnToolbar) {
       let btnidx = 0;
-      for(let btn of this.cal24BtnToolbar.nativeElement.children) {
+      for (const btn of this.cal24BtnToolbar.nativeElement.children) {
         if (!this.Cal24items.includes(btnidx + 1)) {
           btn.disabled = true;
         } else {
@@ -240,14 +257,14 @@ export class PuzzleGamesComponent implements OnInit {
   }
 
   public OnCal24Submit(): void {
-    let rst: number = 0;
-    let errmsg: string = '';
+    let rst = 0;
+    let errmsg = '';
 
     try {
       let realstring = this.Cal24Input.replace('×', '*');
       realstring = realstring.replace('÷', '/');
       rst = <number>eval(realstring);
-    } catch(exp) {
+    } catch (exp) {
       errmsg = exp.toString();
     }
 
@@ -358,7 +375,7 @@ export class PuzzleGamesComponent implements OnInit {
       this._dialog.open(PgSummaryDlgComponent, {
         width: '500px',
         data: di
-      }).afterClosed().subscribe(x => {
+      }).afterClosed().subscribe((x) => {
         if (di.haveARetry) {
           this.OnCal24Start();
         }
@@ -523,8 +540,6 @@ export class PuzzleGamesComponent implements OnInit {
       width: '500px',
       data: di
     }).afterClosed().subscribe(x => {
-      //console.log(`Dialog result: ${x}, ${di.haveARetry}`);
-
       if (di.haveARetry) {
         this.OnTypingStart();
       }
@@ -595,7 +610,7 @@ export class PuzzleGamesComponent implements OnInit {
       // Failed item => Need add
       this.mineSweepQuiz.SubmitCurrentRun();
     }
-    
+
     // Save it!
     this._quizService.saveDB(this.mineSweepQuiz).subscribe(x => {
       // Do nothing for now
@@ -609,7 +624,7 @@ export class PuzzleGamesComponent implements OnInit {
     });
 
     const di: PgSummaryDlgInfo = {
-      gameWin: true,
+      gameWin: rst,
       timeSpent: this.mineSweepQuiz.ElderRuns()[0].TimeSpent,
       haveARetry: true
     };
@@ -622,5 +637,101 @@ export class PuzzleGamesComponent implements OnInit {
         this.OnMineSweepStart();
       }
     });
+  }
+
+  /**
+   * Gobang
+   */
+  public onGobangStarted(data: any): void {
+    this.gobangQuiz.BasicInfo = '';
+    this.gobangQuiz.Start(1, 0); // Single item and no failor
+    this.gobangQuiz.CurrentRun().SectionStart();
+  }
+
+  public onGobangFinished(rst: boolean): void {
+    if (rst) {
+      // Succeed
+      this.gobangQuiz.SubmitCurrentRun();
+    } else {
+      // Failed
+      // Failed item => Need add
+      this.gobangQuiz.SubmitCurrentRun();
+    }
+
+    // Save it!
+    this._quizService.saveDB(this.gobangQuiz).subscribe(x => {
+      // Do nothing for now
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.log(`AC Math Exericse [Debug]: Save quiz: ${x}`);
+      }
+    }, error => {
+      if (environment.LoggingLevel >= LogLevel.Error) {
+        console.log(`AC Math Exericse [Debug]: Error in save quiz ${error}`);
+      }
+    });
+
+    // Gobang won't show the dialog
+    // const di: PgSummaryDlgInfo = {
+    //   gameWin: rst,
+    //   timeSpent: this.mineSweepQuiz.ElderRuns()[0].TimeSpent,
+    //   haveARetry: true
+    // };
+
+    // this._dialog.open(PgSummaryDlgComponent, {
+    //   width: '500px',
+    //   data: di
+    // }).afterClosed().subscribe(x => {
+    //   if (di.haveARetry) {
+    //     this.OnMineSweepStart();
+    //   }
+    // });
+  }
+
+  /**
+   * Chinese Chess
+   */
+  public onChineseChessStarted(data: any): void {
+    this.chnchessQuiz.BasicInfo = '';
+    this.chnchessQuiz.Start(1, 0); // Single item and no failor
+    this.chnchessQuiz.CurrentRun().SectionStart();
+  }
+
+  public onChineseChessFinished(rst: boolean): void {
+    if (rst) {
+      // Succeed
+      this.chnchessQuiz.SubmitCurrentRun();
+    } else {
+      // Failed
+      // Failed item => Need add
+      this.chnchessQuiz.SubmitCurrentRun();
+    }
+
+    // Save it!
+    this._quizService.saveDB(this.chnchessQuiz).subscribe(x => {
+      // Do nothing for now
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.log(`AC Math Exericse [Debug]: Save quiz: ${x}`);
+      }
+    }, error => {
+      if (environment.LoggingLevel >= LogLevel.Error) {
+        console.log(`AC Math Exericse [Debug]: Error in save quiz ${error}`);
+      }
+    });
+
+    // Chinese Chess won't show a dialog
+    // const di: PgSummaryDlgInfo = {
+    //   gameWin: rst,
+    //   timeSpent: this.chnchessQuiz.ElderRuns()[0].TimeSpent,
+    //   haveARetry: true
+    // };
+
+    // this._dialog.open(PgSummaryDlgComponent, {
+    //   width: '500px',
+    //   data: di
+    // }).afterClosed().subscribe(x => {
+    //   if (di.haveARetry) {
+    //     this.onChineseChessStarted(undefined);
+    //   }
+    // });
   }
 }

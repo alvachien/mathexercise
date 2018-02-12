@@ -515,30 +515,19 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   }
 
   private onFinishedWithSuccess() {
-  //   this.face.nativeElement.src = '../assets/image/mineresource/face_success.jpg';
      if (this.timer) {
        clearInterval(this.timer);
      }
-
-  //   // Cleanup the events
-  //   this.canvasMine.nativeElement.onmouseup = '';
-  //   this.canvasMine.nativeElement.onmousedown = '';
-  //   this.canvasMine.nativeElement.onmousemove = '';
 
     // It is finished!
      this.finishedEvent.emit(true);
    }
 
    private onFinishedWithFailed() {
-  //   this.face.nativeElement.src = '../assets/image/mineresource/face_fail.jpg';
-  //   this.canvasMine.nativeElement.onmouseup = '';
-  //   this.canvasMine.nativeElement.onmousedown = '';
-  //   this.canvasMine.nativeElement.onmousemove = '';
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
 
-     clearInterval(this.timer);
-
-     // Failed case
-  //   alert('Failed');
      this.finishedEvent.emit(false);
    }
 

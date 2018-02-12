@@ -12,11 +12,13 @@ export enum QuizTypeEnum {
   multi = 3,
   div = 4,
   formula = 5,
-  cal24 = 6,
-  sudou = 7,
-  typing = 8,
-  mixedop = 9,
-  minesweep = 10
+  cal24 = 6,        // Calculate
+  sudou = 7,        // Sudou
+  typing = 8,       // Typing
+  mixedop = 9,      // Mixed Operation
+  minesweep = 10,   // Mine Sweeper
+  gobang = 11,      // Gobang, also known as 'row of five'
+  chinesechess = 12 // Chinese Chess
 }
 
 export interface QuizTypeUI {
@@ -50,6 +52,8 @@ export function QuizTypeEnum2UIString(qt: QuizTypeEnum): string {
     case QuizTypeEnum.typing: rst = 'Home.TypingTutor'; break;
     case QuizTypeEnum.mixedop: rst = 'Home.MixedOperations'; break;
     case QuizTypeEnum.minesweep: rst = 'Home.Minesweeper'; break;
+    case QuizTypeEnum.gobang: rst = 'Home.Gobang'; break;
+    case QuizTypeEnum.chinesechess: rst = 'Home.ChineseChess'; break;
     default: break;
   }
 
@@ -102,7 +106,7 @@ export class QuizItem {
   }
 
   public getQuizFormat(): string {
-    //return '#' + this.QuizIndex.toString() + QuizSplitter;
+    // return '#' + this.QuizIndex.toString() + QuizSplitter;
     return '';
   }
 
@@ -115,6 +119,10 @@ export class QuizItem {
  * Math quiz item for Primary School
  */
 export class PrimarySchoolMathQuizItem extends QuizItem {
+  public static restoreFromString(s: string): PrimarySchoolMathQuizItem | null {
+    return null;
+  }
+
   public IsCorrect(): boolean {
     const brst = super.IsCorrect();
     if (!brst) {
@@ -140,10 +148,6 @@ export class PrimarySchoolMathQuizItem extends QuizItem {
     const rstr = super.storeToString();
     return rstr;
   }
-
-  public static restoreFromString(s: string): PrimarySchoolMathQuizItem | null {
-    return null;
-  }
 }
 
 /**
@@ -153,6 +157,17 @@ export class PrimarySchoolMathQuizItem extends QuizItem {
 export class PrimarySchoolMathFAOQuizItem extends PrimarySchoolMathQuizItem {
   private _leftNumber: number;
   private _rightNumber: number;
+  
+  public static restoreFromString(s: string): PrimarySchoolMathFAOQuizItem {
+    // Now parse it!
+    const idx = s.indexOf(QuizSplitter);
+    const idx2 = s.indexOf(QuizSplitter, idx + 1);
+
+    const leftNumber = parseInt(s.substring(0, idx));
+    const rightNumber = parseInt(s.substring(idx + 1, idx2));
+
+    return new PrimarySchoolMathFAOQuizItem(leftNumber, rightNumber);
+  }
 
   get LeftNumber(): number {
     return this._leftNumber;
@@ -195,17 +210,6 @@ export class PrimarySchoolMathFAOQuizItem extends PrimarySchoolMathQuizItem {
     let rstr = super.storeToString();
     rstr = rstr + this._leftNumber.toString() + QuizSplitter + this._rightNumber.toString() + QuizSplitter;
     return rstr;
-  }
-
-  public static restoreFromString(s: string): PrimarySchoolMathFAOQuizItem {
-    // Now parse it!
-    const idx = s.indexOf(QuizSplitter);
-    const idx2 = s.indexOf(QuizSplitter, idx + 1);
-
-    const leftNumber = parseInt(s.substring(0, idx));
-    const rightNumber = parseInt(s.substring(idx + 1, idx2));
-
-    return new PrimarySchoolMathFAOQuizItem(leftNumber, rightNumber);
   }
 }
 

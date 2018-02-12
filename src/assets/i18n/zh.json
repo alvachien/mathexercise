@@ -71,6 +71,7 @@
     "Minesweeper": "扫雷游戏",
     "TypingTutor": "打字游戏",
     "Gobang": "五子棋游戏",
+    "ChineseChess": "中国象棋",
     "Error": "错误",
     "QuizIsOngoing": "当前练习（游戏）尚未结束，不能跳转其他页面",
     "Cal24Detail": "使用上面的数字和操作符(+-*/)使其等于24。注意，乘号用*表示，除法用/表示",
