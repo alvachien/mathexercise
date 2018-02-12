@@ -1,5 +1,6 @@
 import { getCanvasMouseEventPosition } from './uicommon';
 import { environment } from '../../environments/environment';
+import { LogLevel} from './log';
 
 // Refer to https://github.com/itlwei/chess
 
@@ -1236,6 +1237,10 @@ export class ChineseChess2Play {
     this.pieces = this._instanceUI.createPieces();
   }
 
+  public complete(winner) {
+    // Set the winner and complete current set
+  }
+
   /**
    * Get piece
    * @param key Key of the piece
@@ -1310,7 +1315,10 @@ export class ChineseChess2Play {
   //   }
 
   clickPiece(key, x, y) {
-    console.log('Entering ChineseChess2Play.clickPiece');
+    if (environment.LoggingLevel >= LogLevel.Debug) {
+      console.log('Entering ChineseChess2Play.clickPiece');
+    }
+
     this.my = 1;
     const piece = this.getPiece(key);
 
@@ -1350,7 +1358,10 @@ export class ChineseChess2Play {
   }
 
   clickPoint(x, y) {
-    console.log('Entering ChineseChess2Play.clickPoint');
+    if (environment.LoggingLevel >= LogLevel.Debug) {
+      console.log('Entering ChineseChess2Play.clickPoint');
+    }
+
     this.my = 1;
 
     if (this.nowManKey) {
@@ -1381,7 +1392,10 @@ export class ChineseChess2Play {
   }
 
   AIPlay() {
-    console.log('Entering ChineseChess2Play.AIPlay');
+    if (environment.LoggingLevel >= LogLevel.Debug) {
+      console.log('Entering ChineseChess2Play.AIPlay');
+    }
+
     this.my = -1;
 
     const objAI = new ChineseChessAI();
@@ -1414,7 +1428,10 @@ export class ChineseChess2Play {
   }
 
   AIClickPiece(key, x, y) {
-    console.log('Entering ChineseChess2Play.AIClickPiece');
+    if (environment.LoggingLevel >= LogLevel.Debug) {
+      console.log('Entering ChineseChess2Play.AIClickPiece');
+    }
+
     const piece = this.getPiece(key);
 
     // 吃子
@@ -1429,12 +1446,17 @@ export class ChineseChess2Play {
     this.nowManKey = undefined;
 
     this.show();
-    //     if (key == "j0") play.showWin (-1);
-    //     if (key == "J0") play.showWin (1);
+    if (key === 'j0') {
+      this.complete(-1);
+    } else if (key === 'J0') {
+      this.complete(1);
+    }
   }
 
   AIclickPoint(x, y) {
-    console.log('Entering ChineseChess2Play.AIClickPiece');
+    if (environment.LoggingLevel >= LogLevel.Debug) {
+      console.log('Entering ChineseChess2Play.AIClickPiece');
+    }
 
     const key = this.nowManKey;
     const piece = this.getPiece(key);

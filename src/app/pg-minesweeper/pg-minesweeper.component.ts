@@ -3,6 +3,16 @@ import { LogLevel, QuizDegreeOfDifficulity, getCanvasMouseEventPosition, getCanv
   CanvasCellPositionInf, MineSweeper, MatrixPosIntf } from '../model';
 import { environment } from '../../environments/environment';
 
+enum MineSweeperCellType {
+  // Blank = 0
+  // 0 = 1
+  Flag = 2,
+  Question = 3,
+  Mine = 4,
+  Explosion = 5,
+  Error = 6
+}
+
 @Component({
   selector: 'app-pg-minesweeper',
   templateUrl: './pg-minesweeper.component.html',
@@ -42,8 +52,6 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   }
 
   oldPos: CanvasCellPositionInf;
-  // Image arrays
-  arImgUrls: string[] = [];
   arMines: CanvasCellPositionInf[] = [];
   time = 0;
   notTaged = 0;
@@ -58,17 +66,6 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
     this._instance = new MineSweeper();
     this._instance.Width = 30;
     this._instance.Height = 16;
-
-    // Array of image urls
-    this.arImgUrls = [
-      environment.AppHost + '/assets/image/mineresource/blank.jpg',
-      environment.AppHost + '/assets/image/mineresource/0.jpg',
-      environment.AppHost + '/assets/image/mineresource/flag.jpg',
-      environment.AppHost + '/assets/image/mineresource/ask.jpg',
-      environment.AppHost + '/assets/image/mineresource/mine.png',
-      environment.AppHost + '/assets/image/mineresource/blood.jpg',
-      environment.AppHost + '/assets/image/mineresource/error.jpg',
-    ];
   }
 
   ngOnInit() {
@@ -123,8 +120,11 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
 
   private preRightMenu() {
     this.canvasMine.nativeElement.oncontextmenu = event => {
-      if (document.all) window.event.returnValue = false; // for IE
-      else event.preventDefault();
+      if (document.all) {
+        window.event.returnValue = false; // for IE
+      } else {
+        event.preventDefault();
+      }
     };
   }
 
@@ -171,29 +171,6 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
     // }
   }
 
-  // private drawCell(i: number, j: number) {
-  //   if (!this._instance.isValidCellPosition({row: i, column: j})) {
-  //     return;
-  //   }
-
-  //   const ctx2 = this.canvasMine.nativeElement.getContext('2d');
-
-  //   const cell = this._instance.cells[i][j];
-  //   this.roundedRect(ctx2, i * this.PANE_SIZE, j * this.PANE_SIZE, this.PANE_SIZE, this.PANE_SIZE, 3);
-
-  //   if (cell.isOpened) {
-  //     // Fix it with another color
-  //     ctx2.save();
-  //     ctx2.shadowOffsetX = 2;
-  //     ctx2.shadowOffsetY = 2;
-  //     ctx2.shadowBlur = 2;
-  //     ctx2.shadowColor = 'rgba(0, 0, 0, 0.5)';
-  //     ctx2.textAlign = 'center';
-  //     ctx2.fillText(cell.tag.toString(), j * this.PANE_SIZE, i * this.PANE_SIZE);
-  //     ctx2.restore();
-  //   }
-  // }
-
   private roundedRect(ctx, x, y, width, height, radius) {
     ctx.beginPath();
     ctx.moveTo(x, y + radius);
@@ -211,7 +188,8 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   // @HostListener('mousemove', ['$event'])
   // public onMineSweeperCanvasMouseMove(evt: MouseEvent) {
   //   if (environment.LoggingLevel >= LogLevel.Debug) {
-  //     console.log(`AC Math Exercise [Debug]: Entering onMineSweeperCanvasMouseMove of mousemove event in PgMinesweeperComponent: ${evt.clientX} - ${evt.clientY}`);
+  //     console.log(`AC Math Exercise [Debug]: Entering onMineSweeperCanvasMouseMove of mousemove event`
+  //      + `in PgMinesweeperComponent: ${evt.clientX} - ${evt.clientY}`);
   //   }
 
   //   const pos = getCanvasCellPosition(getCanvasMouseEventPosition(this.canvasMine.nativeElement, evt), this.PANE_SIZE, this.PANE_SIZE);
@@ -243,7 +221,8 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   // @HostListener('mouseout', ['$event'])
   // public onMineSweeperCanvasMouseOut(evt: MouseEvent) {
   //   if (environment.LoggingLevel >= LogLevel.Debug) {
-  //     console.log(`AC Math Exercise [Debug]: Entering onMineSweeperCanvasMouseOut of mouseout event in PgMinesweeperComponent: ${evt.clientX} - ${evt.clientY}`);
+  //     console.log(`AC Math Exercise [Debug]: Entering onMineSweeperCanvasMouseOut of mouseout event`
+  //      + `in PgMinesweeperComponent: ${evt.clientX} - ${evt.clientY}`);
   //   }
 
   //   let pos = this.oldPos;
@@ -328,16 +307,16 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
     if (curCell.isOpened) {
       if (evnt !== undefined) {
         // Workout the around cells
-        let aroundMineNum = this._instance.calcNumberOfMinesAround(pos);
-        let unknownArr = this._instance.calcUnknownCellAround(pos);
-        let tagNum = this._instance.calcTaggedCellsAround(pos);
+        const aroundMineNum = this._instance.calcNumberOfMinesAround(pos);
+        const unknownArr = this._instance.calcUnknownCellAround(pos);
+        const tagNum = this._instance.calcTaggedCellsAround(pos);
 
         if (aroundMineNum === tagNum) {
           for (let t = 0, uLen = unknownArr.length; t < uLen; t++) {
             this.onMouseupPostPorcessing(unknownArr[t], undefined);
           }
         } else {
-          let mousedownArr = this.mousedownArr;
+          const mousedownArr = this.mousedownArr;
           if (mousedownArr !== '') {
             for (let m = 0; m < mousedownArr.length; m++) {
               this.drawCell(mousedownArr[m], 1);
@@ -351,15 +330,15 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    let tag = curCell.tag;
+    const tag = curCell.tag;
     if (evnt && evnt.button === 2) {
       if (tag === 0) {
-        this.drawCell(pos, 3);
+        this.drawCellFlag(pos);
         curCell.tag = 1;
         this.notTaged--;
         this.setNumberImage(this.notTaged, true);
       } else if (tag === 1) {
-        this.drawCell(pos, 4);
+        this.drawCellQuestion(pos);
         curCell.tag = 2;
         this.notTaged++;
         this.setNumberImage(this.notTaged, true);
@@ -377,7 +356,7 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
     if (curCell.isMine) {
       // Failed!
       this.showAllMines();
-      this.drawCell(pos, 6);
+      this.drawCellExplosion(pos);
       this.showWrongTag();
 
       this.onFinishedWithFailed();
@@ -409,7 +388,7 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
 
     if (openNum === okNum) {
       this.onFinishedWithSuccess();
-    }    
+    }
   }
 
   showAllMines() {
@@ -446,7 +425,7 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   }
 
   openZeroCell(pos: CanvasCellPositionInf) {
-    let aroundArr = this._instance.getAroundCells(pos);
+    const aroundArr = this._instance.getAroundCells(pos);
     let aroundMineNum = 0;
 
     for (let i = 0; i < aroundArr.length; i++) {
@@ -459,20 +438,61 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   }
 
   drawCell(pos: CanvasCellPositionInf, type) {
-    let area = this.getCellArea(pos);
-    let cxt = this.canvasMine.nativeElement.getContext('2d');
+    const area = this.getCellArea(pos);
+    const cxt = this.canvasMine.nativeElement.getContext('2d');
 
-    let image = new Image();
-    image.src = this.arImgUrls[type - 1];
+    const image = new Image();
+    switch (type) {
+      case 1:
+      image.src = '';
+      break;
+
+      default:
+      break;
+    }
+    // image.src = this.arImgUrls[type - 1];
     image.onload = () => {
       cxt.drawImage(image, area[0], area[1], 16, 16);
     };
   }
 
+  drawCellFlag(pos: CanvasCellPositionInf): void {
+    const area = this.getCellArea(pos);
+    const ctx = this.canvasMine.nativeElement.getContext('2d');
+
+    const image = new Image();
+    image.src = environment.AppHost + '/assets/image/mineresource/flag.png';
+    image.onload = () => {
+      ctx.drawImage(image, area[0], area[1], this.PANE_SIZE, this.PANE_SIZE);
+    };
+  }
+
+  drawCellQuestion(pos: CanvasCellPositionInf): void {
+    const area = this.getCellArea(pos);
+    const ctx = this.canvasMine.nativeElement.getContext('2d');
+
+    const image = new Image();
+    image.src = environment.AppHost + '/assets/image/mineresource/questionmark.png';
+    image.onload = () => {
+      ctx.drawImage(image, area[0], area[1], this.PANE_SIZE, this.PANE_SIZE);
+    };
+  }
+
+  drawCellExplosion(pos: CanvasCellPositionInf): void {
+    const area = this.getCellArea(pos);
+    const ctx = this.canvasMine.nativeElement.getContext('2d');
+
+    const image = new Image();
+    image.src = environment.AppHost + '/assets/image/mineresource/explosion.png';
+    image.onload = () => {
+      ctx.drawImage(image, area[0], area[1], this.PANE_SIZE, this.PANE_SIZE);
+    };
+  }
+
   drawCellNum(pos: CanvasCellPositionInf, num: number) {
-    if (Number.isInteger(num)) {      
-      let ctx2 = this.canvasMine.nativeElement.getContext('2d');
-      let area = this.getCellArea(pos);
+    if (Number.isInteger(num)) {
+      const ctx2 = this.canvasMine.nativeElement.getContext('2d');
+      const area = this.getCellArea(pos);
       // let image = new Image();
       // image.src = environment.AppHost + '/assets/image/mineresource/' + num + '.jpg';
       // image.onload = () => {

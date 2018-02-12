@@ -19,7 +19,7 @@ export class PgChineseChessComponent implements OnInit, AfterViewInit {
   private _instance: ChineseChessUI;
   private _play: ChineseChess2Play;
 
-  constructor(private _http: HttpClient) { 
+  constructor(private _http: HttpClient) {
   }
 
   ngOnInit() {
@@ -32,7 +32,7 @@ export class PgChineseChessComponent implements OnInit, AfterViewInit {
     let headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'text/plain')
       .append('Accept', 'text/plain');
-    
+
     this._http.get(environment.AppHost + '/assets/data/data.txt', { headers: headers, responseType: 'text' }).map(x => {
       return <string>x;
     }).subscribe(x => {
@@ -50,13 +50,15 @@ export class PgChineseChessComponent implements OnInit, AfterViewInit {
 
   @HostListener('click', ['$event'])
   public onCanvasClicked(evt: MouseEvent) {
-    if (!this._play.isPlay) return false;
-    
-    var key = this._play.getClickPiece(evt, this._instance);
-    var point = this._play.getClickPoint(evt, this._instance);
+    if (!this._play.isPlay) {
+      return false;
+    }
 
-    var x = point.x;
-    var y = point.y;
+    const key = this._play.getClickPiece(evt, this._instance);
+    const point = this._play.getClickPoint(evt, this._instance);
+
+    const x = point.x;
+    const y = point.y;
 
     if (key) {
       this._play.clickPiece(key, x, y);
@@ -64,6 +66,6 @@ export class PgChineseChessComponent implements OnInit, AfterViewInit {
       this._play.clickPoint(x, y);
     }
 
-    this._play.isFoul = this._play.checkFoul();//检测是不是长将  
+    this._play.isFoul = this._play.checkFoul(); // 检测是不是长将
   }
 }

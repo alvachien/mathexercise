@@ -125,6 +125,10 @@ export class MineSweeper {
    * @param pos Position
    */
   public isCellOpened(pos: CanvasCellPositionInf): boolean {
+    if (pos === undefined || !this.isValidCellPosition) {
+      throw new Error(`Invalid poisition: ${pos.row}, ${pos.column}`);
+    }
+
     return this.cells[pos.row][pos.column].isOpened;
   }
 
