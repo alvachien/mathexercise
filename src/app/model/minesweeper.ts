@@ -150,7 +150,7 @@ export class MineSweeper {
 
   /**
    * Calculate the number of mines around
-   * @param pos 
+   * @param pos Position
    */
   public calcNumberOfMinesAround(pos: CanvasCellPositionInf): number {
     const aroundArr = this.getAroundCells(pos);
@@ -168,8 +168,8 @@ export class MineSweeper {
    * @param pos Position
    */
   public calcUnknownCellAround(pos: CanvasCellPositionInf): CanvasCellPositionInf[] {
-    let unknowArr = [];
-    let aroundArr = this.getAroundCells(pos);
+    const unknowArr = [];
+    const aroundArr = this.getAroundCells(pos);
 
     for (let i = 0; i < aroundArr.length; i++) {
       if (this.isValidCellPosition(aroundArr[i]) && this.cells[aroundArr[i].row][aroundArr[i].column].tag === 0
@@ -186,7 +186,7 @@ export class MineSweeper {
    * @param pos position of the cell
    */
   public calcTaggedCellsAround(pos: CanvasCellPositionInf) {
-    let aroundArr = this.getAroundCells(pos);
+    const aroundArr = this.getAroundCells(pos);
     let tagNum = 0;
 
     for (let i = 0; i < aroundArr.length; i++) {
@@ -199,19 +199,20 @@ export class MineSweeper {
   }
 
   public fetchZeroMinesAround(pos: CanvasCellPositionInf, zeroArr: CanvasCellPositionInf[]) {
-    let aroundArr = this.getAroundCells(pos);
+    const aroundArr = this.getAroundCells(pos);
     let aroundMineNum = 0;
 
     for (let i = 0; i < aroundArr.length; i++) {
       aroundMineNum = this.calcNumberOfMinesAround(aroundArr[i]);
-      if (aroundMineNum === 0 && this.isValidCellPosition(aroundArr[i]) && this.cells[aroundArr[i].row][aroundArr[i].column].isMine === false
+      if (aroundMineNum === 0 && this.isValidCellPosition(aroundArr[i])
+        && this.cells[aroundArr[i].row][aroundArr[i].column].isMine === false
         && !this.isInArray(aroundArr[i], zeroArr)) {
         zeroArr.push(aroundArr[i]);
         this.fetchZeroMinesAround(aroundArr[i], zeroArr);
       }
     }
 
-    return zeroArr;    
+    return zeroArr;
   }
 
   /**

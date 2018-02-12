@@ -1,6 +1,5 @@
-import { getCanvasMouseEventPosition } from "./uicommon";
-import { ChineseChess } from ".";
-import { environment } from "environments/environment.github";
+import { getCanvasMouseEventPosition } from './uicommon';
+import { environment } from '../../environments/environment';
 
 // Refer to https://github.com/itlwei/chess
 
@@ -82,7 +81,7 @@ class ChineseChessRook extends ChineseChessPieceBase {
       [194, 206, 204, 212, 200, 212, 204, 206, 194]
     ];
 
-    this.my = isAI? -1:1;
+    this.my = isAI ? -1 : 1;
     if (isAI) {
       this.text = '車';
       this.img = 'b_c';
@@ -165,7 +164,7 @@ class ChineseChessHorse extends ChineseChessPieceBase {
       [88, 85, 90, 88, 90, 88, 90, 85, 88]
     ];
 
-    this.my = isAI? -1:1;
+    this.my = isAI ? -1 : 1;
     if (isAI) {
       this.text = '馬';
       this.img = 'b_m';
@@ -183,42 +182,50 @@ class ChineseChessHorse extends ChineseChessPieceBase {
     const d = [];
 
     // 1点
-    if (y - 2 >= 0 && x + 1 <= 8 && !play.map[y - 1][x] && (!play.getPiece(play.map[y - 2][x + 1]) || play.getPiece(play.map[y - 2][x + 1]).my !== my)) {
+    if (y - 2 >= 0 && x + 1 <= 8 && !play.map[y - 1][x]
+      && (!play.getPiece(play.map[y - 2][x + 1]) || play.getPiece(play.map[y - 2][x + 1]).my !== my)) {
       d.push([x + 1, y - 2]);
     }
 
     // 2点
-    if (y - 1 >= 0 && x + 2 <= 8 && !play.map[y][x + 1] && (!play.getPiece(play.map[y - 1][x + 2]) || play.getPiece(play.map[y - 1][x + 2]).my !== my)) {
+    if (y - 1 >= 0 && x + 2 <= 8 && !play.map[y][x + 1]
+      && (!play.getPiece(play.map[y - 1][x + 2]) || play.getPiece(play.map[y - 1][x + 2]).my !== my)) {
       d.push([x + 2, y - 1]);
     }
 
     // 4点
-    if (y + 1 <= 9 && x + 2 <= 8 && !play.map[y][x + 1] && (!play.getPiece(play.map[y + 1][x + 2]) || play.getPiece(play.map[y + 1][x + 2]).my !== my)) {
+    if (y + 1 <= 9 && x + 2 <= 8 && !play.map[y][x + 1]
+      && (!play.getPiece(play.map[y + 1][x + 2]) || play.getPiece(play.map[y + 1][x + 2]).my !== my)) {
       d.push([x + 2, y + 1]);
     }
 
     // 5点
-    if (y + 2 <= 9 && x + 1 <= 8 && !play.map[y + 1][x] && (!play.getPiece(play.map[y + 2][x + 1]) || play.getPiece(play.map[y + 2][x + 1]).my !== my)) {
+    if (y + 2 <= 9 && x + 1 <= 8 && !play.map[y + 1][x]
+      && (!play.getPiece(play.map[y + 2][x + 1]) || play.getPiece(play.map[y + 2][x + 1]).my !== my)) {
       d.push([x + 1, y + 2]);
     }
 
     // 7点
-    if (y + 2 <= 9 && x - 1 >= 0 && !play.map[y + 1][x] && (!play.getPiece(play.map[y + 2][x - 1]) || play.getPiece(play.map[y + 2][x - 1]).my !== my)) {
+    if (y + 2 <= 9 && x - 1 >= 0 && !play.map[y + 1][x]
+      && (!play.getPiece(play.map[y + 2][x - 1]) || play.getPiece(play.map[y + 2][x - 1]).my !== my)) {
       d.push([x - 1, y + 2]);
     }
 
     // 8点
-    if (y + 1 <= 9 && x - 2 >= 0 && !play.map[y][x - 1] && (!play.getPiece(play.map[y + 1][x - 2]) || play.getPiece(play.map[y + 1][x - 2]).my !== my)) {
+    if (y + 1 <= 9 && x - 2 >= 0 && !play.map[y][x - 1]
+      && (!play.getPiece(play.map[y + 1][x - 2]) || play.getPiece(play.map[y + 1][x - 2]).my !== my)) {
       d.push([x - 2, y + 1]);
     }
 
     // 10点
-    if (y - 1 >= 0 && x - 2 >= 0 && !play.map[y][x - 1] && (!play.getPiece(play.map[y - 1][x - 2]) || play.getPiece(play.map[y - 1][x - 2]).my !== my)) {
+    if (y - 1 >= 0 && x - 2 >= 0 && !play.map[y][x - 1]
+      && (!play.getPiece(play.map[y - 1][x - 2]) || play.getPiece(play.map[y - 1][x - 2]).my !== my)) {
       d.push([x - 2, y - 1]);
     }
 
     // 11点
-    if (y - 2 >= 0 && x - 1 >= 0 && !play.map[y - 1][x] && (!play.getPiece(play.map[y - 2][x - 1]) || play.getPiece(play.map[y - 2][x - 1]).my !== my)) {
+    if (y - 2 >= 0 && x - 1 >= 0 && !play.map[y - 1][x]
+      && (!play.getPiece(play.map[y - 2][x - 1]) || play.getPiece(play.map[y - 2][x - 1]).my !== my)) {
       d.push([x - 1, y - 2]);
     }
 
@@ -244,7 +251,7 @@ class ChineseChessElephant extends ChineseChessPieceBase {
       [0, 0, 20, 0, 0, 0, 20, 0, 0]
     ];
 
-    this.my = isAI? -1:1;
+    this.my = isAI ? -1 : 1;
     if (isAI) {
       this.text = '象';
       this.img = 'b_x';
@@ -262,36 +269,44 @@ class ChineseChessElephant extends ChineseChessPieceBase {
     const d = [];
     if (my === 1) { // 红方
       // 4点半
-      if (y + 2 <= 9 && x + 2 <= 8 && !play.map[y + 1][x + 1] && (!play.getPiece(play.map[y + 2][x + 2]) || play.getPiece(play.map[y + 2][x + 2]).my !== my)) {
+      if (y + 2 <= 9 && x + 2 <= 8 && !play.map[y + 1][x + 1]
+        && (!play.getPiece(play.map[y + 2][x + 2]) || play.getPiece(play.map[y + 2][x + 2]).my !== my)) {
         d.push([x + 2, y + 2]);
       }
       // 7点半
-      if (y + 2 <= 9 && x - 2 >= 0 && !play.map[y + 1][x - 1] && (!play.getPiece(play.map[y + 2][x - 2]) || play.getPiece(play.map[y + 2][x - 2]).my !== my)) {
+      if (y + 2 <= 9 && x - 2 >= 0 && !play.map[y + 1][x - 1]
+        && (!play.getPiece(play.map[y + 2][x - 2]) || play.getPiece(play.map[y + 2][x - 2]).my !== my)) {
         d.push([x - 2, y + 2]);
       }
       // 1点半
-      if (y - 2 >= 5 && x + 2 <= 8 && !play.map[y - 1][x + 1] && (!play.getPiece(play.map[y - 2][x + 2]) || play.getPiece(play.map[y - 2][x + 2]).my !== my)) {
+      if (y - 2 >= 5 && x + 2 <= 8 && !play.map[y - 1][x + 1]
+        && (!play.getPiece(play.map[y - 2][x + 2]) || play.getPiece(play.map[y - 2][x + 2]).my !== my)) {
         d.push([x + 2, y - 2]);
       }
       // 10点半
-      if (y - 2 >= 5 && x - 2 >= 0 && !play.map[y - 1][x - 1] && (!play.getPiece(play.map[y - 2][x - 2]) || play.getPiece(play.map[y - 2][x - 2]).my !== my)) {
+      if (y - 2 >= 5 && x - 2 >= 0 && !play.map[y - 1][x - 1]
+        && (!play.getPiece(play.map[y - 2][x - 2]) || play.getPiece(play.map[y - 2][x - 2]).my !== my)) {
         d.push([x - 2, y - 2]);
       }
     } else {
       // 4点半
-      if (y + 2 <= 4 && x + 2 <= 8 && !play.map[y + 1][x + 1] && (!play.getPiece(play.map[y + 2][x + 2]) || play.getPiece(play.map[y + 2][x + 2]).my !== my)) {
+      if (y + 2 <= 4 && x + 2 <= 8 && !play.map[y + 1][x + 1]
+        && (!play.getPiece(play.map[y + 2][x + 2]) || play.getPiece(play.map[y + 2][x + 2]).my !== my)) {
         d.push([x + 2, y + 2]);
       }
       // 7点半
-      if (y + 2 <= 4 && x - 2 >= 0 && !play.map[y + 1][x - 1] && (!play.getPiece(play.map[y + 2][x - 2]) || play.getPiece(play.map[y + 2][x - 2]).my !== my)) {
+      if (y + 2 <= 4 && x - 2 >= 0 && !play.map[y + 1][x - 1]
+        && (!play.getPiece(play.map[y + 2][x - 2]) || play.getPiece(play.map[y + 2][x - 2]).my !== my)) {
         d.push([x - 2, y + 2]);
       }
       // 1点半
-      if (y - 2 >= 0 && x + 2 <= 8 && !play.map[y - 1][x + 1] && (!play.getPiece(play.map[y - 2][x + 2]) || play.getPiece(play.map[y - 2][x + 2]).my !== my)) {
+      if (y - 2 >= 0 && x + 2 <= 8 && !play.map[y - 1][x + 1]
+        && (!play.getPiece(play.map[y - 2][x + 2]) || play.getPiece(play.map[y - 2][x + 2]).my !== my)) {
         d.push([x + 2, y - 2]);
       }
       // 10点半
-      if (y - 2 >= 0 && x - 2 >= 0 && !play.map[y - 1][x - 1] && (!play.getPiece(play.map[y - 2][x - 2]) || play.getPiece(play.map[y - 2][x - 2]).my !== my)) {
+      if (y - 2 >= 0 && x - 2 >= 0 && !play.map[y - 1][x - 1]
+        && (!play.getPiece(play.map[y - 2][x - 2]) || play.getPiece(play.map[y - 2][x - 2]).my !== my)) {
         d.push([x - 2, y - 2]);
       }
     }
@@ -317,7 +332,7 @@ class ChineseChessGuard extends ChineseChessPieceBase {
       [0, 0, 0, 20, 0, 20, 0, 0, 0]
     ];
 
-    this.my = isAI? -1:1;
+    this.my = isAI ? -1 : 1;
     if (isAI) {
       this.text = '士';
       this.img = 'b_s';
@@ -390,7 +405,7 @@ class ChineseChessGeneral extends ChineseChessPieceBase {
       [0, 0, 0, 8888, 8888, 8888, 0, 0, 0]
     ];
 
-    this.my = isAI? -1:1;
+    this.my = isAI ? -1 : 1;
     if (isAI) {
       this.text = '帅';
       this.img = 'b_j';
@@ -478,7 +493,7 @@ class ChineseChessCannon extends ChineseChessPieceBase {
       [96, 96, 97, 99, 99, 99, 97, 96, 96]
     ];
 
-    this.my = isAI? -1:1;
+    this.my = isAI ? -1 : 1;
     if (isAI) {
       this.text = '炮';
       this.img = 'b_p';
@@ -595,7 +610,7 @@ class ChineseChessPawn extends ChineseChessPieceBase {
       [0, 0, 0, 0, 0, 0, 0, 0, 0]
     ];
 
-    this.my = isAI? -1:1;
+    this.my = isAI ? -1 : 1;
     if (isAI === true) {
       this.text = '卒';
       this.img = 'b_z';
@@ -663,7 +678,7 @@ class ChineseChessBackground {
       ctx.drawImage(this.imageBackground, 0, 0);
     // } else {
     //  console.error('ChineseChessBackground: Picture not loaded yet');
-    // }    
+    // }
   }
 }
 
@@ -793,14 +808,14 @@ export class ChineseChessUI {
 
     this.initMap = [
       ['C0', 'M0', 'X0', 'S0', 'J0', 'S1', 'X1', 'M1', 'C1'],
-      [, , , , , , , ,],
-      [, 'P0', , , , , , 'P1',],
+      [, , , , , , , , ],
+      [, 'P0', , , , , , 'P1', ],
       ['Z0', , 'Z1', , 'Z2', , 'Z3', , 'Z4'],
-      [, , , , , , , ,],
-      [, , , , , , , ,],
+      [, , , , , , , , ],
+      [, , , , , , , , ],
       ['z0', , 'z1', , 'z2', , 'z3', , 'z4'],
-      [, 'p0', , , , , , 'p1',],
-      [, , , , , , , ,],
+      [, 'p0', , , , , , 'p1', ],
+      [, , , , , , , , ],
       ['c0', 'm0', 'x0', 's0', 'j0', 's1', 'x1', 'm1', 'c1']
     ];
 
@@ -828,11 +843,11 @@ export class ChineseChessUI {
     this.contextMain = this.canvasMain.getContext('2d');
   }
 
-  /** 
+  /**
    * Create the peices
   */
   createPieces(): Map<string, ChineseChessPieceBase> {
-    let pieces: Map<string, ChineseChessPieceBase> = new Map<string, ChineseChessPieceBase>();
+    const pieces: Map<string, ChineseChessPieceBase> = new Map<string, ChineseChessPieceBase>();
 
     for (let i = 0; i < this.initMap.length; i++) {
       for (let j = 0; j < this.initMap[i].length; j++) {
@@ -969,11 +984,11 @@ export class ChineseChessAI {
   number: any;
 
   public init(com: ChineseChessUI, play: ChineseChess2Play, pace, depth) {
-    let bill = this.historyBill || com.aidata; // 开局库
+    const bill = this.historyBill || com.aidata; // 开局库
 
     if (bill.length > 0) {
-      let len = pace.length;
-      let arr = [];
+      const len = pace.length;
+      const arr = [];
 
       // 先搜索棋谱
       for (let i = 0; i < bill.length; i++) {
@@ -983,7 +998,7 @@ export class ChineseChessAI {
       }
 
       if (arr.length > 0) {
-        let inx = Math.floor(Math.random() * arr.length);
+        const inx = Math.floor(Math.random() * arr.length);
         this.historyBill = arr;
         return arr[inx].slice(len, len + 4).split('');
       } else {
@@ -992,7 +1007,7 @@ export class ChineseChessAI {
     }
 
     // 如果棋谱里面没有，人工智能开始运作
-    let initTime = new Date().getTime();
+    const initTime = new Date().getTime();
     this.treeDepth = depth;
 
     this.number = 0;
@@ -1006,8 +1021,8 @@ export class ChineseChessAI {
     }
 
     if (val && val.value !== -8888) {
-      var man = play.getPiece(val.key);
-      var nowTime = new Date().getTime();
+      const man = play.getPiece(val.key);
+      const nowTime = new Date().getTime();
 
       // com.get("moveInfo").innerHTML='<h3>AI搜索结果：</h3>最佳着法：'+
       //                 com.createMove(com.arr2Clone(play.map),man.x,man.y,val.x,val.y)+
@@ -1024,18 +1039,18 @@ export class ChineseChessAI {
   }
 
   iterativeSearch(map, my, play) {
-    let timeOut = 100;
-    let initDepth = 1;
-    let maxDepth = 8;
+    const timeOut = 100;
+    const initDepth = 1;
+    const maxDepth = 8;
 
     this.treeDepth = 0;
-    let initTime = new Date().getTime();
+    const initTime = new Date().getTime();
 
     for (let i = initDepth; i <= maxDepth; i++) {
-      let nowTime = new Date().getTime();
+      const nowTime = new Date().getTime();
       this.treeDepth = i;
-      //this.aotuDepth=i;
-      let val = this.getAlphaBeta(-99999, 99999, this.treeDepth, map, my, play)
+      // this.aotuDepth=i;
+      const val = this.getAlphaBeta(-99999, 99999, this.treeDepth, map, my, play)
       if (nowTime - initTime > timeOut) {
         return val;
       }
@@ -1045,11 +1060,11 @@ export class ChineseChessAI {
   }
 
   getMapAllMan(map, my, play) {
-    let piece = [];
+    const piece = [];
 
     for (let i = 0; i < map.length; i++) {
       for (let n = 0; n < map[i].length; n++) {
-        var key = map[i][n];
+        const key = map[i][n];
 
         if (key && play.getPiece(key).my === my) {
           play.getPiece(key).x = n;
@@ -1064,19 +1079,19 @@ export class ChineseChessAI {
   }
 
   getMoves(map, my, play) {
-    let manArr = this.getMapAllMan(map, my, play);
-    let moves = [];
-    let foul = play.isFoul;
+    const manArr = this.getMapAllMan(map, my, play);
+    const moves = [];
+    const foul = play.isFoul;
 
     for (let i = 0; i < manArr.length; i++) {
-      let man = manArr[i];
-      let val = man.bylaw(man.x, man.y, man.my, play);
+      const man = manArr[i];
+      const val = man.bylaw(man.x, man.y, man.my, play);
 
       for (let n = 0; n < val.length; n++) {
-        let x = man.x;
-        let y = man.y;
-        let newX = val[n][0];
-        let newY = val[n][1];
+        const x = man.x;
+        const y = man.y;
+        const newX = val[n][0];
+        const newY = val[n][1];
 
         // 如果不是长将着法
         if (foul[0] !== x || foul[1] !== y || foul[2] !== newX || foul[3] !== newY) {
@@ -1090,10 +1105,10 @@ export class ChineseChessAI {
 
   getAlphaBeta(A, B, depth, map, my, play) {
     if (depth === 0) {
-      return { value: this.evaluate(map, my, play) }; //局面评价函数; 
+      return { value: this.evaluate(map, my, play) }; // 局面评价函数;
     }
 
-    let moves = this.getMoves(map, my, play); // 生成全部走法; 
+    const moves = this.getMoves(map, my, play); // 生成全部走法;
     let rootKey;
     let key;
     let newX;
@@ -1102,21 +1117,21 @@ export class ChineseChessAI {
     // 这里排序以后会增加效率
 
     for (let i = 0; i < moves.length; i++) {
-      //走这个走法;
-      let move = moves[i];
+      // 走这个走法;
+      const move = moves[i];
       key = move[4];
-      let oldX = move[0];
-      let oldY = move[1];
+      const oldX = move[0];
+      const oldY = move[1];
       newX = move[2];
       newY = move[3];
-      let clearKey = map[newY][newX] || '';
+      const clearKey = map[newY][newX] || '';
 
       map[newY][newX] = key;
       delete map[oldY][oldX];
       play.getPiece(key).x = newX;
       play.getPiece(key).y = newY;
 
-      if (clearKey === 'j0' || clearKey === 'J0') { //被吃老将,撤消这个走法; 
+      if (clearKey === 'j0' || clearKey === 'J0') { // 被吃老将,撤消这个走法;
         play.getPiece(key).x = oldX;
         play.getPiece(key).y = oldY;
         map[oldY][oldX] = key;
@@ -1129,25 +1144,25 @@ export class ChineseChessAI {
 
         return { 'key': key, 'x': newX, 'y': newY, 'value': 8888 };
       } else {
-        let val = -this.getAlphaBeta(-B, -A, depth - 1, map, -1 * my, play).value;
+        const val = -this.getAlphaBeta(-B, -A, depth - 1, map, -1 * my, play).value;
 
-        // 撤消这个走法;　 
+        // 撤消这个走法
         play.getPiece(key).x = oldX;
         play.getPiece(key).y = oldY;
         map[oldY][oldX] = key;
         delete map[newY][newX];
         if (clearKey) {
           map[newY][newX] = clearKey;
-          //play.mans[ clearKey ].isShow = true;
+          // play.mans[ clearKey ].isShow = true;
         }
         if (val >= B) {
-          //将这个走法记录到历史表中; 
+          // 将这个走法记录到历史表中;
           // AI.setHistoryTable(txtMap,AI.treeDepth-depth+1,B,my);
           return { 'key': key, 'x': newX, 'y': newY, 'value': B };
         }
         if (val > A) {
-          A = val; // 设置最佳走法; 
-          if (this.treeDepth == depth) {
+          A = val; // 设置最佳走法;
+          if (this.treeDepth === depth) {
             rootKey = { 'key': key, 'x': newX, 'y': newY, 'value': A };
           }
         }
@@ -1159,7 +1174,7 @@ export class ChineseChessAI {
         // AI没有最佳走法，说明AI被将死了，返回false
         return false;
       } else {
-        //这个就是最佳走法;
+        // 这个就是最佳走法;
         return rootKey;
       }
     }
@@ -1169,16 +1184,16 @@ export class ChineseChessAI {
 
   // 奖着法记录到历史表
   setHistoryTable(txtMap, depth, value, my) {
-    //this.historyTable.length ++;
+    // this.historyTable.length ++;
     this.historyTable[txtMap] = { depth: depth, value: value }
   }
 
   // 评估棋局 取得棋盘双方棋子价值差
   evaluate(map, my, play) {
-    var val = 0;
-    for (var i = 0; i < map.length; i++) {
-      for (var n = 0; n < map[i].length; n++) {
-        var key = map[i][n];
+    let val = 0;
+    for (let i = 0; i < map.length; i++) {
+      for (let n = 0; n < map[i].length; n++) {
+        const key = map[i][n];
         if (key) {
           val += play.getPiece(key).value[i][n] * play.getPiece(key).my;
         }
@@ -1190,7 +1205,7 @@ export class ChineseChessAI {
   }
 }
 
-/** 
+/**
  * Kernel Play upon chinese chess
 */
 export class ChineseChess2Play {
@@ -1212,7 +1227,7 @@ export class ChineseChess2Play {
 
   /**
    * Initialize
-   * @param ui Instance of UI 
+   * @param ui Instance of UI
    */
   public init(ui: ChineseChessUI) {
     this._instanceUI = ui;
@@ -1223,7 +1238,7 @@ export class ChineseChess2Play {
 
   /**
    * Get piece
-   * @param key 
+   * @param key Key of the piece
    */
   public getPiece(key: string): ChineseChessPieceBase {
     if (!this.pieces.has(key)) {
@@ -1280,7 +1295,7 @@ export class ChineseChess2Play {
   //       map[newY][newX] = key;
   //       delete map[y][x];
   //       if (i==pace.length-1){
-  //         com.showPane(newX ,newY,x,y)	
+  //         com.showPane(newX ,newY,x,y)
   //       }
   //       //} catch (e){
   //       //	com.show()
@@ -1297,14 +1312,14 @@ export class ChineseChess2Play {
   clickPiece(key, x, y) {
     console.log('Entering ChineseChess2Play.clickPiece');
     this.my = 1;
-    let piece = this.getPiece(key);
+    const piece = this.getPiece(key);
 
-    if (this.nowManKey && this.nowManKey != key && piece.my != this.getPiece(this.nowManKey).my) {
+    if (this.nowManKey && this.nowManKey !== key && piece.my !== this.getPiece(this.nowManKey).my) {
       // 吃子
       if (this.indexOfPs(this.getPiece(this.nowManKey).ps, [x, y])) {
         piece.isShow = false;
 
-        let pace = this.getPiece(this.nowManKey).x + '' + this.getPiece(this.nowManKey).y;
+        const pace = this.getPiece(this.nowManKey).x + '' + this.getPiece(this.nowManKey).y;
 
         delete this.map[this.getPiece(this.nowManKey).y][this.getPiece(this.nowManKey).x];
 
@@ -1325,7 +1340,7 @@ export class ChineseChess2Play {
         piece.alpha = 0.6;
         this.nowManKey = key;
 
-        piece.ps = piece.bylaw(x, y, piece.my, this); //获得所有能着点
+        piece.ps = piece.bylaw(x, y, piece.my, this); // 获得所有能着点
         this._instanceUI.setDots(piece.ps);
         this._instanceUI.isDotShow = true;
 
@@ -1339,9 +1354,9 @@ export class ChineseChess2Play {
     this.my = 1;
 
     if (this.nowManKey) {
-      let curpiece = this.getPiece(this.nowManKey);
+      const curpiece = this.getPiece(this.nowManKey);
       if (this.indexOfPs(curpiece.ps, [x, y])) {
-        let pace = curpiece.x + '' + curpiece.y;
+        const pace = curpiece.x + '' + curpiece.y;
 
         delete this.map[curpiece.y][curpiece.x];
         this.map[y][x] = this.nowManKey;
@@ -1360,7 +1375,7 @@ export class ChineseChess2Play {
 
         setTimeout(this.AIPlay(), 500);
       } else {
-        //alert("不能这么走哦！")	
+        // alert("不能这么走哦！")
       }
     }
   }
@@ -1369,8 +1384,8 @@ export class ChineseChess2Play {
     console.log('Entering ChineseChess2Play.AIPlay');
     this.my = -1;
 
-    let objAI = new ChineseChessAI();
-    let pace = objAI.init(this._instanceUI, this, this.pace.join(''), 4);
+    const objAI = new ChineseChessAI();
+    const pace = objAI.init(this._instanceUI, this, this.pace.join(''), 4);
     if (!pace) {
       // this.showWin (1);
       return;
@@ -1389,9 +1404,9 @@ export class ChineseChess2Play {
   }
 
   checkFoul = function () {
-    let p = this.pace;
-    let len = parseInt(p.length, 10);
-    if (len > 11 && p[len - 1] == p[len - 5] && p[len - 5] == p[len - 9]) {
+    const p = this.pace;
+    const len = parseInt(p.length, 10);
+    if (len > 11 && p[len - 1] === p[len - 5] && p[len - 5] === p[len - 9]) {
       return p[len - 4].split('');
     }
 
@@ -1400,14 +1415,14 @@ export class ChineseChess2Play {
 
   AIClickPiece(key, x, y) {
     console.log('Entering ChineseChess2Play.AIClickPiece');
-    let piece = this.getPiece(key);
+    const piece = this.getPiece(key);
 
     // 吃子
     piece.isShow = false;
     delete this.map[this.getPiece(this.nowManKey).y][this.getPiece(this.nowManKey).x];
 
     this.map[y][x] = this.nowManKey;
-    //this.showPane();
+    // this.showPane();
     this._instanceUI.setPaneDetail(this.getPiece(this.nowManKey).x, this.getPiece(this.nowManKey).y, x, y)
     this.getPiece(this.nowManKey).x = x;
     this.getPiece(this.nowManKey).y = y;
@@ -1421,8 +1436,8 @@ export class ChineseChess2Play {
   AIclickPoint(x, y) {
     console.log('Entering ChineseChess2Play.AIClickPiece');
 
-    let key = this.nowManKey;
-    let piece = this.getPiece(key);
+    const key = this.nowManKey;
+    const piece = this.getPiece(key);
 
     if (this.nowManKey) {
       delete this.map[this.getPiece(this.nowManKey).y][this.getPiece(this.nowManKey).x];
@@ -1437,8 +1452,10 @@ export class ChineseChess2Play {
   }
 
   indexOfPs(ps, xy) {
-    for (var i = 0; i < ps.length; i++) {
-      if (ps[i][0] == xy[0] && ps[i][1] == xy[1]) return true;
+    for (let i = 0; i < ps.length; i++) {
+      if (ps[i][0] === xy[0] && ps[i][1] === xy[1]) {
+        return true;
+      }
     }
 
     return false;
@@ -1447,20 +1464,20 @@ export class ChineseChess2Play {
   public getClickPoint(evt: MouseEvent, com: ChineseChessUI) {
     const domXY = getCanvasMouseEventPosition(com.canvasMain, evt);
 
-    var x = Math.round((domXY.x - com.pointStartX) / com.spaceX)
-    var y = Math.round((domXY.y - com.pointStartY) / com.spaceY)
+    const x = Math.round((domXY.x - com.pointStartX) / com.spaceX)
+    const y = Math.round((domXY.y - com.pointStartY) / com.spaceY)
     return { x: x, y: y }
   }
 
   public getClickPiece(e, com: ChineseChessUI) {
-    let clickXY = this.getClickPoint(e, com);
+    const clickXY = this.getClickPoint(e, com);
 
-    let x = clickXY.x;
-    let y = clickXY.y;
+    const x = clickXY.x;
+    const y = clickXY.y;
     if (x < 0 || x > 8 || y < 0 || y > 9) {
       return false;
     }
 
-    return (this.map[y][x] && this.map[y][x] !== "0") ? this.map[y][x] : false;
+    return (this.map[y][x] && this.map[y][x] !== '0') ? this.map[y][x] : false;
   }
 }
