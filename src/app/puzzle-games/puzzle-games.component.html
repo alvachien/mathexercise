@@ -156,15 +156,48 @@
         <mat-card-title>{{'Home.Gobang' | translate}}</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <app-pg-gobang [gobangDoD]="gobangDoD" (startedEvent)="onGobangStarted($event)" (finishedEvent)="onGobangFinished($event)"></app-pg-gobang>
+        <div class="demo-full-width" *ngIf="!gobangQuiz.IsStarted">
+          <mat-select placeholder="{{'Home.DegreeOfDifficulty' | translate}}" [(ngModel)]="gobangDoD" name="gobangdod">
+            <mat-option *ngFor="let dod of listDod" [value]="dod.value">
+              {{ dod.displayas | translate }}
+            </mat-option>
+          </mat-select>
+        </div>
+
+        <div class="demo-full-width" *ngIf="gobangQuiz.IsStarted">
+          <app-pg-gobang [gobangDoD]="gobangDoD" (startedEvent)="onGobangStarted($event)" (finishedEvent)="onGobangFinished($event)"></app-pg-gobang>
+        </div>
       </mat-card-content>
+      <mat-card-actions>
+        <button mat-button [disabled]="!CanGobangStart()" (click)="OnGobangStart()">{{'Home.StartButton' | translate}}</button>
+        <button mat-raised-button *ngIf="gobangQuiz.IsStarted" (click)="OnGobangSurrender()">{{'Home.SurrenderButton' | translate}}</button>
+      </mat-card-actions>
     </mat-card>
   </mat-tab>
 
   <!-- Tab: Chinese Chess -->
   <mat-tab label="{{'Home.ChineseChess' | translate}}">
-    <div style="margin:10px">
-      <app-pg-chinese-chess (startedEvent)="onChineseChessStarted($event)" (finishedEvent)="onChineseChessFinished($event)"></app-pg-chinese-chess>
-    </div>
+    <mat-card class="example-card">
+      <mat-card-header>
+        <mat-card-title>{{'Home.ChineseChess' | translate}}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="demo-full-width" *ngIf="!chnchessQuiz.IsStarted">
+          <mat-select placeholder="{{'Home.DegreeOfDifficulty' | translate}}" [(ngModel)]="chnchessDoD" name="chnchessdod">
+            <mat-option *ngFor="let dod of listDod" [value]="dod.value">
+              {{ dod.displayas | translate }}
+            </mat-option>
+          </mat-select>
+        </div>
+
+        <div class="demo-full-width" *ngIf="chnchessQuiz.IsStarted">
+          <app-pg-chinese-chess (startedEvent)="onChineseChessStarted($event)" (finishedEvent)="onChineseChessFinished($event)"></app-pg-chinese-chess>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button [disabled]="!CanChineseChessStart()" (click)="OnChineseChessStart()">{{'Home.StartButton' | translate}}</button>
+        <button mat-raised-button *ngIf="chnchessQuiz.IsStarted" (click)="OnChineseChessSurrender()">{{'Home.SurrenderButton' | translate}}</button>
+      </mat-card-actions>
+    </mat-card>
   </mat-tab>
 </mat-tab-group>

@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, HostListener,
   EventEmitter, Output, Input } from '@angular/core';
-import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
 import { ChineseChessUI, ChineseChess2Play } from '../model/chinesechess2';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs/Observable';
@@ -9,6 +8,7 @@ import {
   Cal24QuizItem, SudouQuizItem, LogLevel, QuizDegreeOfDifficulity,
   getCanvasMouseEventPosition, getCanvasCellPosition,
 } from '../model';
+import { PgService } from '../services';
 
 @Component({
   selector: 'app-pg-chinese-chess',
@@ -54,25 +54,17 @@ export class PgChineseChessComponent implements OnInit, AfterViewInit {
     }
   }
 
-  constructor(private _http: HttpClient) {
+  constructor(private _pgService: PgService) {
     this._instance = new ChineseChessUI();
-    this._play = new ChineseChess2Play();
+    this._play = new ChineseChess2Play(this.finishedEvent);
+
+    // Fetch AI data
+    this._pgService.fetchChineseChessAIData().subscribe(x => {
+      this._instance.aidata = x;
+    });
   }
 
   ngOnInit() {
-    this._instance.init(this.canvasChess.nativeElement);
-
-    this._play.init(this._instance);
-
-    let headers = new HttpHeaders();
-    headers = headers.append('Content-Type', 'text/plain')
-      .append('Accept', 'text/plain');
-
-    this._http.get(environment.AppHost + '/assets/data/data.txt', { headers: headers, responseType: 'text' }).map(x => {
-      return <string>x;
-    }).subscribe(x => {
-      this._instance.aidata = x.split(' ');
-    });
   }
 
   ngAfterViewInit() {
@@ -80,7 +72,15 @@ export class PgChineseChessComponent implements OnInit, AfterViewInit {
       console.log('AC Math Exercise [Debug]: Entering ngAfterViewInit in PgChineseChessComponent');
     }
 
-    this._play.show();
+    this._play.init(this._instance);
+        
+    // Preload images
+    const img = new Image();
+    img.src = environment.AppHost + '/assets/image/chinesechess/bg.png';
+    img.onload = () => {
+      let ctx = this.canvasChess.nativeElement.getContext('2d');
+      this._play.show(ctx);
+    };
   }
 
   @HostListener('click', ['$event'])
@@ -101,6 +101,6 @@ export class PgChineseChessComponent implements OnInit, AfterViewInit {
       this._play.clickPoint(x, y);
     }
 
-    this._play.isFoul = this._play.checkFoul(); // 检测是不是长将
+    this._play.isFoul = this._play.checkFoul();
   }
 }

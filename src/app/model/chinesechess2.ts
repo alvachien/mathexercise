@@ -1,6 +1,6 @@
 import { getCanvasMouseEventPosition } from './uicommon';
 import { environment } from '../../environments/environment';
-import { LogLevel} from './log';
+import { LogLevel } from './log';
 
 // Refer to https://github.com/itlwei/chess
 
@@ -25,7 +25,6 @@ class ChineseChessPieceBase {
   alpha = 1;
 
   img: string; // Short name
-  image: any;
   bl: any;
   ps = [];
 
@@ -40,21 +39,17 @@ class ChineseChessPieceBase {
     this.isShow = true; // Defaul is show!
   }
 
-  loadImage() {
-    if (this.image === undefined) {
-      this.image = new Image();
-      this.image.src = this.imageFullPath;
-    }
-  }
-
   show(ctx, spaceX, pointStartX, spaceY, pointStartY) {
     if (this.isShow) {
-      this.loadImage();
 
-      ctx.save();
-      ctx.globalAlpha = this.alpha;
-      ctx.drawImage(this.image, spaceX * this.x + pointStartX, spaceY * this.y + pointStartY);
-      ctx.restore();
+      const img = new Image();
+      img.src = this.imageFullPath;
+      img.onload = () => {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.drawImage(img, spaceX * this.x + pointStartX, spaceY * this.y + pointStartY);
+        ctx.restore();
+      };
     }
   }
 
@@ -660,37 +655,12 @@ class ChineseChessPawn extends ChineseChessPieceBase {
   }
 }
 
-class ChineseChessBackground {
-  imageBackground: any;
-  isLoaded: boolean;
-
-  constructor() {
-    this.isLoaded = false;
-
-    this.imageBackground = new Image();
-    this.imageBackground.src = environment.AppHost + '/assets/image/chinesechess/bg.png';
-    this.imageBackground.onload = () => {
-      this.isLoaded = true;
-    };
-  }
-
-  show(ctx) {
-    // if (this.isLoaded) {
-      ctx.drawImage(this.imageBackground, 0, 0);
-    // } else {
-    //  console.error('ChineseChessBackground: Picture not loaded yet');
-    // }
-  }
-}
-
 class ChineseChessPane {
   x;
   y;
   newX;
   newY;
   isShow;
-  imagePane: any;
-  isLoaded: boolean;
 
   constructor() {
     this.x = 0;
@@ -698,75 +668,30 @@ class ChineseChessPane {
     this.newX = 0;
     this.newY = 0;
     this.isShow = false;
-    this.isLoaded = false;
-
-    this.imagePane = new Image();
-    this.imagePane.src = environment.AppHost + '/assets/image/chinesechess/r_box.png';
-    this.imagePane.onload = () => {
-      this.isLoaded = true;
-    };
   }
 
   show(ctx, spaceX, spaceY, pointStartX, pointStartY) {
     if (this.isShow) {
-      // if (this.isLoaded) {
-
-      // } else {
-      //   console.error('ChineseChessPane: Picture not loaded yet');
-      // }
-
-      ctx.drawImage(this.imagePane, spaceX * this.x + pointStartX, spaceY * this.y + pointStartY)
-      ctx.drawImage(this.imagePane, spaceX * this.newX + pointStartX, spaceY * this.newY + pointStartY)
+      const imagePane = new Image();
+      imagePane.src = environment.AppHost + '/assets/image/chinesechess/r_box.png';
+      imagePane.onload = () => {
+        ctx.drawImage(imagePane, spaceX * this.x + pointStartX, spaceY * this.y + pointStartY)
+        ctx.drawImage(imagePane, spaceX * this.newX + pointStartX, spaceY * this.newY + pointStartY)
+      };
     }
   }
 }
 
-class ChineseChessDot {
-  x;
-  y;
-  isShow;
-  dots = [];
-  imageDot: any;
-  isLoaded: boolean;
-
-  constructor() {
-    this.isLoaded = false;
-
-    this.imageDot = new Image();
-    this.imageDot.src = environment.AppHost + '/assets/image/chinesechess/dot.png';
-    this.imageDot.onload = () => {
-      this.isLoaded = true;
-    };
-  }
-
-  show(ctx, spaceX, spaceY, pointStartX, pointStartY) {
-    if (this.isShow) {
-      // if (this.isLoaded) {
-        for (let i = 0; i < this.dots.length; i++) {
-          ctx.drawImage(this.imageDot, spaceX * this.dots[i][0] + 10 + pointStartX, spaceY * this.dots[i][1] + 10 + pointStartY);
-        }
-      // } else {
-      //   console.error('ChineseChessDot: Picture not loaded yet');
-      // }
-    }
-  }
-}
-
-// Map to comm
+// UI part
 export class ChineseChessUI {
   styleSetting: any;
-  canvasMain: any;
-  contextMain: any;
   aidata: any;
 
   childList: any[];
   initMap;
   keys;
-
-  // Images
-  objBackground: ChineseChessBackground;
-  objPane: ChineseChessPane;
-  objDot: ChineseChessDot;
+  private paneDetail: any;
+  private dotDetail: any;
 
   get width(): number {
     return this.styleSetting.width;
@@ -787,17 +712,13 @@ export class ChineseChessUI {
     return this.styleSetting.pointStartY;
   }
   set isDotShow(isshow: boolean) {
-    this.objDot.isShow = isshow;
+    this.dotDetail.isShow = isshow;
   }
   set isPaneShow(isshow: boolean) {
-    this.objPane.isShow = isshow;
+    this.paneDetail.isShow = isshow;
   }
 
   constructor() {
-    this.objBackground = new ChineseChessBackground();
-    this.objPane = new ChineseChessPane();
-    this.objDot = new ChineseChessDot();
-
     this.styleSetting = {
       width: 530,
       height: 567,
@@ -806,17 +727,28 @@ export class ChineseChessUI {
       pointStartX: -2,
       pointStartY: 0
     };
+    this.paneDetail = {
+      isShow: false,
+      x: 0,
+      y: 0,
+      newX: 0,
+      newY: 0
+    };
+    this.dotDetail = {
+      isShow: false,
+      dots: []
+    };
 
     this.initMap = [
       ['C0', 'M0', 'X0', 'S0', 'J0', 'S1', 'X1', 'M1', 'C1'],
-      [, , , , , , , , ],
-      [, 'P0', , , , , , 'P1', ],
+      [, , , , , , , ,],
+      [, 'P0', , , , , , 'P1',],
       ['Z0', , 'Z1', , 'Z2', , 'Z3', , 'Z4'],
-      [, , , , , , , , ],
-      [, , , , , , , , ],
+      [, , , , , , , ,],
+      [, , , , , , , ,],
       ['z0', , 'z1', , 'z2', , 'z3', , 'z4'],
-      [, 'p0', , , , , , 'p1', ],
-      [, , , , , , , , ],
+      [, 'p0', , , , , , 'p1',],
+      [, , , , , , , ,],
       ['c0', 'm0', 'x0', 's0', 'j0', 's1', 'x1', 'm1', 'c1']
     ];
 
@@ -839,11 +771,6 @@ export class ChineseChessUI {
     };
   }
 
-  public init(canvas: any) {
-    this.canvasMain = canvas;
-    this.contextMain = this.canvasMain.getContext('2d');
-  }
-
   /**
    * Create the peices
   */
@@ -861,61 +788,61 @@ export class ChineseChessUI {
               const piece = new ChineseChessRook(false, key, j, i);
               pieces.set(piece.key, piece);
             }
-            break;
+              break;
 
             case 'C': {
               const piece = new ChineseChessRook(true, key, j, i);
               pieces.set(piece.key, piece);
             }
-            break;
+              break;
 
             case 'm': {
               const piece = new ChineseChessHorse(false, key, j, i);
               pieces.set(piece.key, piece);
             }
-            break;
+              break;
 
             case 'M': {
               const piece = new ChineseChessHorse(true, key, j, i);
               pieces.set(piece.key, piece);
             }
-            break;
+              break;
 
             case 'x': {
               const piece = new ChineseChessElephant(false, key, j, i);
               pieces.set(piece.key, piece);
             }
-            break;
+              break;
 
             case 'X': {
               const piece = new ChineseChessElephant(true, key, j, i);
               pieces.set(piece.key, piece);
             }
-            break;
+              break;
 
             case 's': {
               const piece = new ChineseChessGuard(false, key, j, i);
               pieces.set(piece.key, piece);
             }
-            break;
+              break;
 
             case 'S': {
               const piece = new ChineseChessGuard(true, key, j, i);
               pieces.set(piece.key, piece);
             }
-            break;
+              break;
 
             case 'j': {
               const piece = new ChineseChessGeneral(false, key, j, i);
               pieces.set(piece.key, piece);
             }
-            break;
+              break;
 
             case 'J': {
               const piece = new ChineseChessGeneral(true, key, j, i);
               pieces.set(piece.key, piece);
             }
-            break;
+              break;
 
             case 'p': {
               const piece = new ChineseChessCannon(false, key, j, i);
@@ -927,19 +854,19 @@ export class ChineseChessUI {
               const piece = new ChineseChessCannon(true, key, j, i);
               pieces.set(piece.key, piece);
             }
-            break;
+              break;
 
             case 'z': {
               const piece = new ChineseChessPawn(false, key, j, i);
               pieces.set(piece.key, piece);
             }
-            break;
+              break;
 
             case 'Z': {
               const piece = new ChineseChessPawn(true, key, j, i);
               pieces.set(piece.key, piece);
             }
-            break;
+              break;
 
             default: {
               throw new Error('Unknow key inputted:' + key);
@@ -953,30 +880,52 @@ export class ChineseChessUI {
   }
 
   public setPaneDetail(x, y, newX, newY) {
-    this.objPane.x = x;
-    this.objPane.y = y;
-    this.objPane.newX = newX;
-    this.objPane.newY = newY;
+    this.paneDetail.x = x;
+    this.paneDetail.y = y;
+    this.paneDetail.newX = newX;
+    this.paneDetail.newY = newY;
   }
 
   public setDots(dots: any[]) {
-    this.objDot.dots = dots;
+    this.dotDetail.dots = dots;
   }
 
-  public show() {
-    this.contextMain.clearRect(0, 0, this.width, this.height);
+  public show(ctx, fnPiece) {
+    ctx.clearRect(0, 0, this.width, this.height);
 
-    // Show background first
-    this.objBackground.show(this.contextMain);
+    const imageBackground = new Image();
+    imageBackground.src = environment.AppHost + '/assets/image/chinesechess/bg.png';
+    imageBackground.onload = () => {
+      ctx.drawImage(imageBackground, 0, 0);
 
-    // Show the Pane
-    this.objPane.show(this.contextMain, this.spaceX, this.spaceY, this.pointStartX, this.pointStartY);
+      if (this.paneDetail.isShow) {
+        const imagePane = new Image();
+        imagePane.src = environment.AppHost + '/assets/image/chinesechess/r_box.png';
+        imagePane.onload = () => {
+          ctx.drawImage(imagePane, this.spaceX * this.paneDetail.x + this.pointStartX, this.spaceY * this.paneDetail.y + this.pointStartY)
+          ctx.drawImage(imagePane, this.spaceX * this.paneDetail.newX + this.pointStartX, this.spaceY * this.paneDetail.newY + this.pointStartY)
+        };
+      }
 
-    // Show the Dots
-    this.objDot.show(this.contextMain, this.spaceX, this.spaceY, this.pointStartX, this.pointStartY);
+      if (this.dotDetail.isShow) {
+        const imageDot = new Image();
+        imageDot.src = environment.AppHost + '/assets/image/chinesechess/dot.png';
+        imageDot.onload = () => {
+          for (let i = 0; i < this.dotDetail.dots.length; i++) {
+            ctx.drawImage(imageDot, this.spaceX * this.dotDetail.dots[i][0] + 10 + this.pointStartX,
+              this.spaceY * this.dotDetail.dots[i][1] + 10 + this.pointStartY);
+          }
+        };
+      }
+
+      fnPiece();
+    };
   }
 }
 
+/** 
+ * AI class
+*/
 export class ChineseChessAI {
   historyTable = {};
   gambit: any[];
@@ -991,7 +940,6 @@ export class ChineseChessAI {
       const len = pace.length;
       const arr = [];
 
-      // 先搜索棋谱
       for (let i = 0; i < bill.length; i++) {
         if (bill[i].slice(0, len) === pace) {
           arr.push(bill[i]);
@@ -1007,7 +955,6 @@ export class ChineseChessAI {
       }
     }
 
-    // 如果棋谱里面没有，人工智能开始运作
     const initTime = new Date().getTime();
     this.treeDepth = depth;
 
@@ -1024,14 +971,6 @@ export class ChineseChessAI {
     if (val && val.value !== -8888) {
       const man = play.getPiece(val.key);
       const nowTime = new Date().getTime();
-
-      // com.get("moveInfo").innerHTML='<h3>AI搜索结果：</h3>最佳着法：'+
-      //                 com.createMove(com.arr2Clone(play.map),man.x,man.y,val.x,val.y)+
-      //                 '<br />搜索深度：'+AI.treeDepth+'<br />搜索分支：'+
-      //                 AI.number+'个 <br />最佳着法评估：'+
-      //                 val.value+'分'+
-      //                 ' <br />搜索用时：'+
-      //                 (nowTime-initTime)+'毫秒'
 
       return [man.x, man.y, val.x, val.y]
     } else {
@@ -1050,7 +989,7 @@ export class ChineseChessAI {
     for (let i = initDepth; i <= maxDepth; i++) {
       const nowTime = new Date().getTime();
       this.treeDepth = i;
-      // this.aotuDepth=i;
+
       const val = this.getAlphaBeta(-99999, 99999, this.treeDepth, map, my, play)
       if (nowTime - initTime > timeOut) {
         return val;
@@ -1094,7 +1033,6 @@ export class ChineseChessAI {
         const newX = val[n][0];
         const newY = val[n][1];
 
-        // 如果不是长将着法
         if (foul[0] !== x || foul[1] !== y || foul[2] !== newX || foul[3] !== newY) {
           moves.push([x, y, newX, newY, man.key])
         }
@@ -1106,19 +1044,16 @@ export class ChineseChessAI {
 
   getAlphaBeta(A, B, depth, map, my, play) {
     if (depth === 0) {
-      return { value: this.evaluate(map, my, play) }; // 局面评价函数;
+      return { value: this.evaluate(map, my, play) };
     }
 
-    const moves = this.getMoves(map, my, play); // 生成全部走法;
+    const moves = this.getMoves(map, my, play);
     let rootKey;
     let key;
     let newX;
     let newY;
 
-    // 这里排序以后会增加效率
-
     for (let i = 0; i < moves.length; i++) {
-      // 走这个走法;
       const move = moves[i];
       key = move[4];
       const oldX = move[0];
@@ -1132,7 +1067,7 @@ export class ChineseChessAI {
       play.getPiece(key).x = newX;
       play.getPiece(key).y = newY;
 
-      if (clearKey === 'j0' || clearKey === 'J0') { // 被吃老将,撤消这个走法;
+      if (clearKey === 'j0' || clearKey === 'J0') {
         play.getPiece(key).x = oldX;
         play.getPiece(key).y = oldY;
         map[oldY][oldX] = key;
@@ -1140,29 +1075,24 @@ export class ChineseChessAI {
 
         if (clearKey) {
           map[newY][newX] = clearKey;
-          // play.mans[ clearKey ].isShow = false;
         }
 
         return { 'key': key, 'x': newX, 'y': newY, 'value': 8888 };
       } else {
         const val = -this.getAlphaBeta(-B, -A, depth - 1, map, -1 * my, play).value;
 
-        // 撤消这个走法
         play.getPiece(key).x = oldX;
         play.getPiece(key).y = oldY;
         map[oldY][oldX] = key;
         delete map[newY][newX];
         if (clearKey) {
           map[newY][newX] = clearKey;
-          // play.mans[ clearKey ].isShow = true;
         }
         if (val >= B) {
-          // 将这个走法记录到历史表中;
-          // AI.setHistoryTable(txtMap,AI.treeDepth-depth+1,B,my);
           return { 'key': key, 'x': newX, 'y': newY, 'value': B };
         }
         if (val > A) {
-          A = val; // 设置最佳走法;
+          A = val;
           if (this.treeDepth === depth) {
             rootKey = { 'key': key, 'x': newX, 'y': newY, 'value': A };
           }
@@ -1170,12 +1100,10 @@ export class ChineseChessAI {
       }
     }
 
-    if (this.treeDepth === depth) { // 已经递归回根了
+    if (this.treeDepth === depth) {
       if (!rootKey) {
-        // AI没有最佳走法，说明AI被将死了，返回false
         return false;
       } else {
-        // 这个就是最佳走法;
         return rootKey;
       }
     }
@@ -1183,13 +1111,10 @@ export class ChineseChessAI {
     return { 'key': key, 'x': newX, 'y': newY, 'value': A };
   }
 
-  // 奖着法记录到历史表
   setHistoryTable(txtMap, depth, value, my) {
-    // this.historyTable.length ++;
     this.historyTable[txtMap] = { depth: depth, value: value }
   }
 
-  // 评估棋局 取得棋盘双方棋子价值差
   evaluate(map, my, play) {
     let val = 0;
     for (let i = 0; i < map.length; i++) {
@@ -1222,8 +1147,15 @@ export class ChineseChess2Play {
   public pieces: Map<string, ChineseChessPieceBase>;
   private _childList: any[];
   private _instanceUI: ChineseChessUI;
+  private _ctx: any;
+  private _evtComplete: any;
 
-  constructor() {
+  /**
+   * Constructor
+   * @param fnComplete Complete function
+   */
+  constructor(eventComplete?: any) {
+    this._evtComplete = eventComplete;
   }
 
   /**
@@ -1239,6 +1171,11 @@ export class ChineseChess2Play {
 
   public complete(winner) {
     // Set the winner and complete current set
+    this.isPlay = false;
+
+    if (this._evtComplete !== undefined) {
+      this._evtComplete.emit(winner === 1 ? true : false);
+    }
   }
 
   /**
@@ -1254,16 +1191,19 @@ export class ChineseChess2Play {
   }
 
   // Show
-  public show() {
-    // Background
-    this._instanceUI.show();
+  public show(ctx: any) {
+    if (this._ctx === undefined) {
+      this._ctx = ctx;
+    }
 
-    // Show the pieces
-    this.pieces.forEach((value) => {
-      if (value.isShow) {
-        value.show(this._instanceUI.contextMain, this._instanceUI.spaceX, this._instanceUI.pointStartX,
-          this._instanceUI.spaceY, this._instanceUI.pointStartY);
-      }
+    // Background
+    this._instanceUI.show(ctx, () => {
+      this.pieces.forEach((value) => {
+        if (value.isShow) {
+          value.show(this._ctx, this._instanceUI.spaceX, this._instanceUI.pointStartX,
+            this._instanceUI.spaceY, this._instanceUI.pointStartY);
+        }
+      });
     });
   }
 
@@ -1323,7 +1263,7 @@ export class ChineseChess2Play {
     const piece = this.getPiece(key);
 
     if (this.nowManKey && this.nowManKey !== key && piece.my !== this.getPiece(this.nowManKey).my) {
-      // 吃子
+      // Eat the enemy
       if (this.indexOfPs(this.getPiece(this.nowManKey).ps, [x, y])) {
         piece.isShow = false;
 
@@ -1333,11 +1273,27 @@ export class ChineseChess2Play {
 
         this.map[y][x] = this.nowManKey;
         this._instanceUI.setPaneDetail(this.getPiece(this.nowManKey).x, this.getPiece(this.nowManKey).y, x, y);
+        this.getPiece(this.nowManKey).x = x;
+        this.getPiece(this.nowManKey).y = y;
+        this.getPiece(this.nowManKey).alpha = 1;
+        this.pace.push(pace + x + y);
+
+        this.nowManKey = undefined;
 
         this._instanceUI.isPaneShow = false;
+        this._instanceUI.setDots([]);
         this._instanceUI.isDotShow = false;
 
-        this.show();
+        this.show(this._ctx);
+
+        setTimeout(() => {
+          this.AIPlay();
+        }, 500);
+        if (key === 'j0') {
+          this.complete(-1);
+        } else if (key === 'J0') {
+          this.complete(1);
+        }
       }
     } else {
       if (piece.my === 1) {
@@ -1347,12 +1303,13 @@ export class ChineseChess2Play {
 
         piece.alpha = 0.6;
         this.nowManKey = key;
+        this._instanceUI.isPaneShow = true;
 
         piece.ps = piece.bylaw(x, y, piece.my, this); // 获得所有能着点
         this._instanceUI.setDots(piece.ps);
         this._instanceUI.isDotShow = true;
 
-        this.show();
+        this.show(this._ctx);
       }
     }
   }
@@ -1382,9 +1339,11 @@ export class ChineseChess2Play {
 
         this._instanceUI.setDots([]);
         this._instanceUI.isDotShow = false;
-        this.show();
+        this.show(this._ctx);
 
-        setTimeout(this.AIPlay(), 500);
+        setTimeout(() => {
+          this.AIPlay(); 
+        }, 500);
       } else {
         // alert("不能这么走哦！")
       }
@@ -1399,9 +1358,9 @@ export class ChineseChess2Play {
     this.my = -1;
 
     const objAI = new ChineseChessAI();
-    const pace = objAI.init(this._instanceUI, this, this.pace.join(''), 4);
+    const pace = objAI.init(this._instanceUI, this, this.pace.join(''), this.depth);
     if (!pace) {
-      // this.showWin (1);
+      this.complete(1);
       return;
     }
 
@@ -1417,11 +1376,10 @@ export class ChineseChess2Play {
     }
   }
 
-  checkFoul = function () {
-    const p = this.pace;
-    const len = parseInt(p.length, 10);
-    if (len > 11 && p[len - 1] === p[len - 5] && p[len - 5] === p[len - 9]) {
-      return p[len - 4].split('');
+  checkFoul() {
+    const len = this.pace.length;
+    if (len > 11 && this.pace[len - 1] === this.pace[len - 5] && this.pace[len - 5] === this.pace[len - 9]) {
+      return this.pace[len - 4].split('');
     }
 
     return false;
@@ -1434,18 +1392,17 @@ export class ChineseChess2Play {
 
     const piece = this.getPiece(key);
 
-    // 吃子
+    // Eat
     piece.isShow = false;
     delete this.map[this.getPiece(this.nowManKey).y][this.getPiece(this.nowManKey).x];
 
     this.map[y][x] = this.nowManKey;
-    // this.showPane();
     this._instanceUI.setPaneDetail(this.getPiece(this.nowManKey).x, this.getPiece(this.nowManKey).y, x, y)
     this.getPiece(this.nowManKey).x = x;
     this.getPiece(this.nowManKey).y = y;
     this.nowManKey = undefined;
 
-    this.show();
+    this.show(this._ctx);
     if (key === 'j0') {
       this.complete(-1);
     } else if (key === 'J0') {
@@ -1470,9 +1427,65 @@ export class ChineseChess2Play {
       piece.y = y;
       this.nowManKey = undefined;
     }
-    this.show();
+
+    this.show(this._ctx);
   }
 
+  createMove(map, x, y, newX, newY) {
+    let h = '';
+    var man = this.getPiece[map[y][x]];
+    h += man.text;
+    map[newY][newX] = map[y][x];
+
+    delete map[y][x];
+    if (this.my === 1) {
+      const mumTo = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十"];
+      newX = 8 - newX;
+      h += mumTo[8 - x];
+      if (newY > y) {
+        h += "退";
+        if (man.pater === "m" || man.pater === "s" || man.pater === "x") {
+          h += mumTo[newX];
+        } else {
+          h += mumTo[newY - y - 1];
+        }
+      } else if (newY < y) {
+        h += "进";
+        if (man.pater === "m" || man.pater === "s" || man.pater === "x") {
+          h += mumTo[newX];
+        } else {
+          h += mumTo[y - newY - 1];
+        }
+      } else {
+        h += "平";
+        h += mumTo[newX];
+      }
+    } else {
+      const mumTo = ["１", "２", "３", "４", "５", "６", "７", "８", "９", "10"];
+      h += mumTo[x];
+      if (newY > y) {
+        h += "进";
+        if (man.pater === "M" || man.pater === "S" || man.pater === "X") {
+          h += mumTo[newX];
+        } else {
+          h += mumTo[newY - y - 1];
+        }
+      } else if (newY < y) {
+        h += "退";
+        if (man.pater === "M" || man.pater === "S" || man.pater === "X") {
+          h += mumTo[newX];
+        } else {
+          h += mumTo[y - newY - 1];
+        }
+      } else {
+        h += "平";
+        h += mumTo[newX];
+      }
+    }
+
+    return h;
+  }
+  
   indexOfPs(ps, xy) {
     for (let i = 0; i < ps.length; i++) {
       if (ps[i][0] === xy[0] && ps[i][1] === xy[1]) {
@@ -1484,7 +1497,7 @@ export class ChineseChess2Play {
   }
 
   public getClickPoint(evt: MouseEvent, com: ChineseChessUI) {
-    const domXY = getCanvasMouseEventPosition(com.canvasMain, evt);
+    const domXY = getCanvasMouseEventPosition(evt.target, evt);
 
     const x = Math.round((domXY.x - com.pointStartX) / com.spaceX)
     const y = Math.round((domXY.y - com.pointStartY) / com.spaceY)

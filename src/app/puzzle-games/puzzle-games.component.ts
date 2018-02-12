@@ -81,6 +81,7 @@ export class PuzzleGamesComponent implements OnInit {
    * Chinese Chess
    */
   chnchessQuiz: PrimarySchoolMathQuiz;
+  chnchessDoD: QuizDegreeOfDifficulity;
 
   constructor(private _dlgsvc: DialogService,
     private _dialog: MatDialog,
@@ -125,6 +126,7 @@ export class PuzzleGamesComponent implements OnInit {
 
     this.chnchessQuiz = new PrimarySchoolMathQuiz();
     this.chnchessQuiz.QuizType = QuizTypeEnum.chinesechess;
+    this.chnchessDoD = QuizDegreeOfDifficulity.hard;
   }
 
   ngOnInit() {
@@ -135,7 +137,8 @@ export class PuzzleGamesComponent implements OnInit {
   }
 
   public canDeactivate(): boolean {
-    if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted || this.typingQuiz.IsStarted || this.mineSweepQuiz.IsStarted) {
+    if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted || this.typingQuiz.IsStarted || this.mineSweepQuiz.IsStarted
+      || this.gobangQuiz.IsStarted || this.chnchessQuiz.IsStarted) {
       const dlginfo: MessageDialogInfo = {
         Header: 'Home.Error',
         Content: 'Home.QuizIsOngoing',
@@ -192,7 +195,8 @@ export class PuzzleGamesComponent implements OnInit {
   }
 
   public CanCal24Start(): boolean {
-    if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted || this.typingQuiz.IsStarted || this.mineSweepQuiz.IsStarted) {
+    if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted || this.typingQuiz.IsStarted || this.mineSweepQuiz.IsStarted
+      || this.gobangQuiz.IsStarted || this.chnchessQuiz.IsStarted) {
       return false;
     }
 
@@ -387,7 +391,8 @@ export class PuzzleGamesComponent implements OnInit {
    * Sudou part
    */
   public CanSudouStart(): boolean {
-    if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted || this.typingQuiz.IsStarted) {
+    if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted || this.typingQuiz.IsStarted || this.mineSweepQuiz.IsStarted
+      || this.gobangQuiz.IsStarted || this.chnchessQuiz.IsStarted) {
       return false;
     }
 
@@ -491,7 +496,8 @@ export class PuzzleGamesComponent implements OnInit {
   }
 
   public CanTypingStart(): boolean {
-    if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted || this.typingQuiz.IsStarted || this.mineSweepQuiz.IsStarted) {
+    if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted || this.typingQuiz.IsStarted || this.mineSweepQuiz.IsStarted
+      || this.gobangQuiz.IsStarted || this.chnchessQuiz.IsStarted) {
       return false;
     }
 
@@ -547,7 +553,6 @@ export class PuzzleGamesComponent implements OnInit {
   }
 
   public OnTypingComplete(): void {
-
     this.typingQuiz.SubmitCurrentRun();
     // Save it!
     this._quizService.saveDB(this.typingQuiz).subscribe(x => {
@@ -581,7 +586,8 @@ export class PuzzleGamesComponent implements OnInit {
    * Minesweeper
    */
   public CanMineSweepStart(): boolean {
-    if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted || this.typingQuiz.IsStarted || this.mineSweepQuiz.IsStarted) {
+    if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted || this.typingQuiz.IsStarted || this.mineSweepQuiz.IsStarted
+      || this.gobangQuiz.IsStarted || this.chnchessQuiz.IsStarted) {
       return false;
     }
 
@@ -639,13 +645,56 @@ export class PuzzleGamesComponent implements OnInit {
     });
   }
 
+  public OnMineSweepSurrender(): void {
+    this.mineSweepQuiz.SubmitCurrentRun();
+    // Save it!
+    this._quizService.saveDB(this.mineSweepQuiz).subscribe(x => {
+      // Do nothing for now
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.log(`AC Math Exericse [Debug]: Save quiz: ${x}`);
+      }
+    }, error => {
+      if (environment.LoggingLevel >= LogLevel.Error) {
+        console.log(`AC Math Exericse [Debug]: Error in save quiz ${error}`);
+      }
+    });
+
+    const di: PgSummaryDlgInfo = {
+      gameWin: false,
+      timeSpent: this.mineSweepQuiz.ElderRuns()[0].TimeSpent,
+      haveARetry: true
+    };
+
+    this._dialog.open(PgSummaryDlgComponent, {
+      width: '500px',
+      data: di
+    }).afterClosed().subscribe(x => {
+      if (di.haveARetry) {
+        this.OnMineSweepStart();
+      }
+    });
+  }
+
   /**
    * Gobang
    */
-  public onGobangStarted(data: any): void {
+  public CanGobangStart(): boolean  {
+    if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted || this.typingQuiz.IsStarted || this.mineSweepQuiz.IsStarted
+      || this.gobangQuiz.IsStarted || this.chnchessQuiz.IsStarted) {
+      return false;
+    }
+
+    return true;
+  }
+
+  public OnGobangStart(): void {
     this.gobangQuiz.BasicInfo = '';
     this.gobangQuiz.Start(1, 0); // Single item and no failor
     this.gobangQuiz.CurrentRun().SectionStart();
+  }
+
+  public onGobangStarted(data: any): void {
+    // Do nothing so far
   }
 
   public onGobangFinished(rst: boolean): void {
@@ -687,13 +736,87 @@ export class PuzzleGamesComponent implements OnInit {
     // });
   }
 
+  public OnGobangSurrender(): void {
+    this.gobangQuiz.SubmitCurrentRun();
+
+    // Save it!
+    this._quizService.saveDB(this.gobangQuiz).subscribe(x => {
+      // Do nothing for now
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.log(`AC Math Exericse [Debug]: Save quiz: ${x}`);
+      }
+    }, error => {
+      if (environment.LoggingLevel >= LogLevel.Error) {
+        console.log(`AC Math Exericse [Debug]: Error in save quiz ${error}`);
+      }
+    });
+
+    const di: PgSummaryDlgInfo = {
+      gameWin: false,
+      timeSpent: this.gobangQuiz.ElderRuns()[0].TimeSpent,
+      haveARetry: true
+    };
+
+    this._dialog.open(PgSummaryDlgComponent, {
+      width: '500px',
+      data: di
+    }).afterClosed().subscribe(x => {
+      if (di.haveARetry) {
+        this.OnGobangStart();
+      }
+    });
+  }
+
   /**
    * Chinese Chess
    */
-  public onChineseChessStarted(data: any): void {
+  public OnChineseChessStart(): void {
     this.chnchessQuiz.BasicInfo = '';
     this.chnchessQuiz.Start(1, 0); // Single item and no failor
     this.chnchessQuiz.CurrentRun().SectionStart();
+  }
+
+  public onChineseChessStarted(data: any): void {
+    // Do nothing
+  }
+
+  public CanChineseChessStart(): boolean {
+    if (this.Cal24Quiz.IsStarted || this.sudouQuiz.IsStarted || this.typingQuiz.IsStarted || this.mineSweepQuiz.IsStarted
+      || this.gobangQuiz.IsStarted || this.chnchessQuiz.IsStarted) {
+      return false;
+    }
+
+    return true;
+  }
+
+  public OnChineseChessSurrender(): void {
+    this.chnchessQuiz.SubmitCurrentRun();
+    // Save it!
+    this._quizService.saveDB(this.chnchessQuiz).subscribe(x => {
+      // Do nothing for now
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.log(`AC Math Exericse [Debug]: Save quiz: ${x}`);
+      }
+    }, error => {
+      if (environment.LoggingLevel >= LogLevel.Error) {
+        console.log(`AC Math Exericse [Debug]: Error in save quiz ${error}`);
+      }
+    });
+
+    const di: PgSummaryDlgInfo = {
+      gameWin: false,
+      timeSpent: this.chnchessQuiz.ElderRuns()[0].TimeSpent,
+      haveARetry: true
+    };
+
+    this._dialog.open(PgSummaryDlgComponent, {
+      width: '500px',
+      data: di
+    }).afterClosed().subscribe(x => {
+      if (di.haveARetry) {
+        this.OnChineseChessStart();
+      }
+    });
   }
 
   public onChineseChessFinished(rst: boolean): void {
@@ -718,20 +841,19 @@ export class PuzzleGamesComponent implements OnInit {
       }
     });
 
-    // Chinese Chess won't show a dialog
-    // const di: PgSummaryDlgInfo = {
-    //   gameWin: rst,
-    //   timeSpent: this.chnchessQuiz.ElderRuns()[0].TimeSpent,
-    //   haveARetry: true
-    // };
+    const di: PgSummaryDlgInfo = {
+      gameWin: rst,
+      timeSpent: this.chnchessQuiz.ElderRuns()[0].TimeSpent,
+      haveARetry: true
+    };
 
-    // this._dialog.open(PgSummaryDlgComponent, {
-    //   width: '500px',
-    //   data: di
-    // }).afterClosed().subscribe(x => {
-    //   if (di.haveARetry) {
-    //     this.onChineseChessStarted(undefined);
-    //   }
-    // });
+    this._dialog.open(PgSummaryDlgComponent, {
+      width: '500px',
+      data: di
+    }).afterClosed().subscribe(x => {
+      if (di.haveARetry) {
+        this.OnChineseChessStart();
+      }
+    });
   }
 }

@@ -7,3 +7,4 @@ export * from './userdetail.service';
 export * from './award-plan.service';
 export * from './award-balance.service';
 export * from './quiz.service';
+export * from './pg.service';

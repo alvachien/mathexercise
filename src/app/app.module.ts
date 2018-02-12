@@ -37,6 +37,7 @@ import { UserStatisticsComponent } from './user-statistics';
 import { UserDetailComponent } from './user-detail';
 import { PuzzleGamesComponent } from './puzzle-games';
 import { AuthGuard } from './services/auth-guard.service';
+import { PgService } from './services/pg.service';
 import { CanDeactivateGuard } from './services/can-deactive-guard.service';
 import { DigitClockComponent } from './digit-clock/digit-clock.component';
 import { MessageDialogComponent } from './message-dialog';
@@ -142,7 +143,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     CanDeactivateGuard,
     AwardPlanService,
     AwardBalanceService,
-    QuizService
+    QuizService,
+    PgService,
   ],
   bootstrap: [AppComponent]
 })
