@@ -1,6 +1,5 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import {
-  PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, AdditionQuizItem,
+import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, AdditionQuizItem,
   DefaultQuizAmount, DefaultFailedQuizFactor, QuizTypeEnum
 } from '../model';
 import { MatDialog } from '@angular/material';

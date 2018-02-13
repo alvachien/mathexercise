@@ -48,7 +48,7 @@ export class Gobang {
   private _AIAnalysis: GobangAIInternalResultEx[] = [];
   private _arSlashPos: MatrixPosIntf[][] = [];
   private _arBackSlashPos: MatrixPosIntf[][] = [];
-  private _queuePositions: Array<MatrixPosIntf>;
+  private _queuePositions: MatrixPosIntf[] = [];
 
   get Dimension(): number {
     return this._dimension;
@@ -77,10 +77,10 @@ export class Gobang {
     // Re-init = reset
     this._finished = false;
     this.cells = new Array<Array<GobangCell>>();
-    for (let y = 0; y <= this._dimension; y++) {
+    for (let y = 0; y < this._dimension; y++) {
       const row: GobangCell[]  = new Array<GobangCell>();
 
-      for (let x = 0; x <= this._dimension; x++) {
+      for (let x = 0; x < this._dimension; x++) {
         row.push(new GobangCell());
       }
 
@@ -96,7 +96,7 @@ export class Gobang {
     this._playAnalysis = [];
 
     // Positions
-    this._queuePositions = new Array<MatrixPosIntf>();
+    this._queuePositions = [];
 
     this._inited = true;
   }

@@ -140,26 +140,25 @@ export class PgGobangComponent implements OnInit, AfterContentInit {
 
       if (this._instance.Finished) {
         this.finishedEvent.emit(this._userStep ? true : false);
+        // // Show the snackbar
+        // let msg = '';
+        // if (this._userStep) {
+        //   msg = 'You win';
+        // } else {
+        //   msg = 'Computer win';
+        // }
+        // const snackBarRef = this.snackBar.open(msg, 'RESTART');
 
-        // Show the snackbar
-        let msg = '';
-        if (this._userStep) {
-          msg = 'You win';
-        } else {
-          msg = 'Computer win';
-        }
-        const snackBarRef = this.snackBar.open(msg, 'RESTART');
+        // snackBarRef.onAction().subscribe(() => {
+        //   console.log('The snack-bar action was triggered!');
 
-        snackBarRef.onAction().subscribe(() => {
-          console.log('The snack-bar action was triggered!');
+        //   this._userStep = true; // By default, it's user step!
+        //   this._instance.init();
+        //   this.startedEvent.emit();
 
-          this._userStep = true; // By default, it's user step!
-          this._instance.init();
-          this.startedEvent.emit();
-
-          // Draw the border
-          this.drawWholeRect();
-        });
+        //   // Draw the border
+        //   this.drawWholeRect();
+        // });
       } else {
         this._userStep = !this._userStep;
       }

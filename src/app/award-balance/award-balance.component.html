@@ -5,14 +5,14 @@
   <mat-card-content>
     <div>
       <mat-toolbar color="primary">
-        <mat-select placeholder="{{'Home.User' | translate}}" [disabled]="!IsListView"
-          [(ngModel)]="SelectedUser" name="usr" (change)="onUserChanged($event)">
+        <mat-select placeholder="{{'Home.User' | translate}}" [disabled]="!IsListView" [(ngModel)]="SelectedUser" name="usr" (change)="onUserChanged($event)">
           <mat-option *ngFor="let user of listUsers" [value]="user">
             {{ user.displayas }}
           </mat-option>
         </mat-select>
 
-        <button mat-icon-button [disabled]="!SelectedUser || !IsListView || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardCreate)" (click)="onCreateNewExpense()">
+        <button mat-icon-button [disabled]="!SelectedUser || !IsListView || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardCreate)"
+          (click)="onCreateNewExpense()">
           <mat-icon class="md-24" aria-label="Create">create_new_folder</mat-icon>
         </button>
 
@@ -27,11 +27,11 @@
           <mat-header-cell *matHeaderCellDef> # </mat-header-cell>
           <mat-cell *matCellDef="let element">
             <button mat-mini-fab (click)="onEditAward(element)" [disabled]="!IsListView || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardUpdate)">
-            <mat-icon class="md-18" aria-label="Edit">edit</mat-icon>
-          </button>
+              <mat-icon class="md-18" aria-label="Edit">edit</mat-icon>
+            </button>
             <button mat-mini-fab (click)="onDeleteAward(element)" [disabled]="!IsListView || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardDelete)">
-            <mat-icon class="md-18" aria-label="Delete">delete</mat-icon>
-          </button> {{element.ID}}
+              <mat-icon class="md-18" aria-label="Delete">delete</mat-icon>
+            </button> {{element.ID}}
           </mat-cell>
         </ng-container>
         <ng-container matColumnDef="AwardDate">
@@ -52,7 +52,9 @@
         </ng-container>
         <ng-container matColumnDef="Publish">
           <mat-header-cell *matHeaderCellDef> {{'Home.IsPunishment' | translate }} </mat-header-cell>
-          <mat-cell *matCellDef="let element"> <mat-checkbox [(ngModel)]="element.Publish" disabled></mat-checkbox> </mat-cell>
+          <mat-cell *matCellDef="let element">
+            <mat-checkbox [(ngModel)]="element.Publish" disabled></mat-checkbox>
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="UsedReason">
@@ -87,17 +89,17 @@
       </mat-form-field>
 
       <div class="demo-full-width">
-        <mat-checkbox [(ngModel)]="curAward.Punish" >{{'Home.IsPunishment' | translate }}</mat-checkbox>
-      </div>      
+        <mat-checkbox [(ngModel)]="curAward.Punish">{{'Home.IsPunishment' | translate }}</mat-checkbox>
+      </div>
 
       <mat-form-field class="demo-full-width">
         <input matInput type="text" placeholder="{{'Home.ExpenseReason' | translate}}" [(ngModel)]="curAward.UsedReason">
-      </mat-form-field>        
+      </mat-form-field>
 
     </div>
   </mat-card-content>
   <mat-card-actions>
-      <button mat-button *ngIf="IsViewChangable" (click)="onDetailAwardSubmit()" [disabled]="!CanDetailAwardSubmit()">{{'Home.SubmitButton' | translate }}</button>
-      <button mat-button *ngIf="IsViewChangable" (click)="onDetailAwardCancel()">{{'Home.CancelButton' | translate }}</button>
+    <button mat-button *ngIf="IsViewChangable" (click)="onDetailAwardSubmit()" [disabled]="!CanDetailAwardSubmit()">{{'Home.SubmitButton' | translate }}</button>
+    <button mat-button *ngIf="IsViewChangable" (click)="onDetailAwardCancel()">{{'Home.CancelButton' | translate }}</button>
   </mat-card-actions>
 </mat-card>
