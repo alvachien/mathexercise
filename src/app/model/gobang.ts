@@ -59,6 +59,15 @@ export class Gobang {
   get Finished(): boolean {
     return this._finished;
   }
+  get AIAnalysisResult(): GobangAIInternalResultEx[] {
+    return this._AIAnalysis;
+  }
+  get PlayerAnalysisResult(): GobangAIInternalResultEx[] {
+    return this._playAnalysis;
+  }
+  get QueuePositions(): MatrixPosIntf[] {
+    return this._queuePositions;
+  }
 
   constructor() {
     this._dimension = 20; // Default.

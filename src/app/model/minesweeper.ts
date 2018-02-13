@@ -84,10 +84,10 @@ export class MineSweeper {
     this._finished = false;
     this._mineGenerated = false;
     this.cells = new Array<Array<MineSweeperCell>>();
-    for (let y = 0; y < this._height; y++) {
+    for (let y = 0; y < this._width; y++) {
       const row: MineSweeperCell[]  = new Array<MineSweeperCell>();
 
-      for (let x = 0; x < this._width; x++) {
+      for (let x = 0; x < this._height; x++) {
         row.push(new MineSweeperCell());
       }
 
@@ -110,7 +110,7 @@ export class MineSweeper {
 
     for (let i = 0; i < this._totalmine; i++) {
       do {
-        mineItem = { row: Math.floor(Math.random() * this._height), column: Math.floor(Math.random() * this._width) };
+        mineItem = { row: Math.floor(Math.random() * this._width), column: Math.floor(Math.random() * this._height) };
       } while (this.isInArray(mineItem, arMines) || (excludpos.row === mineItem.row && excludpos.column === mineItem.column));
 
       this.cells[mineItem.row][mineItem.column].isMine = true;
