@@ -741,14 +741,14 @@ export class ChineseChessUI {
 
     this.initMap = [
       ['C0', 'M0', 'X0', 'S0', 'J0', 'S1', 'X1', 'M1', 'C1'],
-      [, , , , , , , ,],
-      [, 'P0', , , , , , 'P1',],
+      [, , , , , , , , ],
+      [, 'P0', , , , , , 'P1', ],
       ['Z0', , 'Z1', , 'Z2', , 'Z3', , 'Z4'],
-      [, , , , , , , ,],
-      [, , , , , , , ,],
+      [, , , , , , , , ],
+      [, , , , , , , , ],
       ['z0', , 'z1', , 'z2', , 'z3', , 'z4'],
-      [, 'p0', , , , , , 'p1',],
-      [, , , , , , , ,],
+      [, 'p0', , , , , , 'p1', ],
+      [, , , , , , , , ],
       ['c0', 'm0', 'x0', 's0', 'j0', 's1', 'x1', 'm1', 'c1']
     ];
 
@@ -903,7 +903,8 @@ export class ChineseChessUI {
         imagePane.src = environment.AppHost + '/assets/image/chinesechess/r_box.png';
         imagePane.onload = () => {
           ctx.drawImage(imagePane, this.spaceX * this.paneDetail.x + this.pointStartX, this.spaceY * this.paneDetail.y + this.pointStartY)
-          ctx.drawImage(imagePane, this.spaceX * this.paneDetail.newX + this.pointStartX, this.spaceY * this.paneDetail.newY + this.pointStartY)
+          ctx.drawImage(imagePane, this.spaceX * this.paneDetail.newX + this.pointStartX,
+            this.spaceY * this.paneDetail.newY + this.pointStartY)
         };
       }
 
@@ -923,7 +924,7 @@ export class ChineseChessUI {
   }
 }
 
-/** 
+/**
  * AI class
 */
 export class ChineseChessAI {
@@ -1342,7 +1343,7 @@ export class ChineseChess2Play {
         this.show(this._ctx);
 
         setTimeout(() => {
-          this.AIPlay(); 
+          this.AIPlay();
         }, 500);
       } else {
         // alert("不能这么走哦！")
@@ -1433,59 +1434,59 @@ export class ChineseChess2Play {
 
   createMove(map, x, y, newX, newY) {
     let h = '';
-    var man = this.getPiece[map[y][x]];
+    const man = this.getPiece[map[y][x]];
     h += man.text;
     map[newY][newX] = map[y][x];
 
     delete map[y][x];
     if (this.my === 1) {
-      const mumTo = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十"];
+      const mumTo = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
       newX = 8 - newX;
       h += mumTo[8 - x];
       if (newY > y) {
-        h += "退";
-        if (man.pater === "m" || man.pater === "s" || man.pater === "x") {
+        h += '退';
+        if (man.pater === 'm' || man.pater === 's' || man.pater === 'x') {
           h += mumTo[newX];
         } else {
           h += mumTo[newY - y - 1];
         }
       } else if (newY < y) {
-        h += "进";
-        if (man.pater === "m" || man.pater === "s" || man.pater === "x") {
+        h += '进';
+        if (man.pater === 'm' || man.pater === 's' || man.pater === 'x') {
           h += mumTo[newX];
         } else {
           h += mumTo[y - newY - 1];
         }
       } else {
-        h += "平";
+        h += '平';
         h += mumTo[newX];
       }
     } else {
-      const mumTo = ["１", "２", "３", "４", "５", "６", "７", "８", "９", "10"];
+      const mumTo = ['１', '２', '３', '４', '５', '６', '７', '８', '９', '10'];
       h += mumTo[x];
       if (newY > y) {
-        h += "进";
-        if (man.pater === "M" || man.pater === "S" || man.pater === "X") {
+        h += '进';
+        if (man.pater === 'M' || man.pater === 'S' || man.pater === 'X') {
           h += mumTo[newX];
         } else {
           h += mumTo[newY - y - 1];
         }
       } else if (newY < y) {
-        h += "退";
-        if (man.pater === "M" || man.pater === "S" || man.pater === "X") {
+        h += '退';
+        if (man.pater === 'M' || man.pater === 'S' || man.pater === 'X') {
           h += mumTo[newX];
         } else {
           h += mumTo[y - newY - 1];
         }
       } else {
-        h += "平";
+        h += '平';
         h += mumTo[newX];
       }
     }
 
     return h;
   }
-  
+
   indexOfPs(ps, xy) {
     for (let i = 0; i < ps.length; i++) {
       if (ps[i][0] === xy[0] && ps[i][1] === xy[1]) {
