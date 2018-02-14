@@ -1,4 +1,5 @@
 import { Gobang } from './gobang';
+import { MatrixPosIntf } from 'app/model';
 
 describe('Gobang without TestBed', () => {
   let gobang: Gobang;
@@ -27,14 +28,34 @@ describe('Gobang without TestBed', () => {
     expect(gobang.QueuePositions[0].y).toBe(Math.round(gobang.Dimension / 2));
   });
 
-  it('#3. Queue position for multiple inputs', () => {
+  it('#3. Queue position for 5 inputs', () => {
     gobang.Dimension = 20;
     gobang.init();
 
-    gobang.setCellValue(Math.round(gobang.Dimension / 2), Math.round(gobang.Dimension / 2), true);
+    const arPos: MatrixPosIntf[] = [];
+    let pos: MatrixPosIntf;
+    for (let i = 0; i < 5; i ++) {
+      do {
+        pos = { x: Math.floor(Math.random() * gobang.Dimension), y: Math.floor(Math.random() * gobang.Dimension), };
 
-    expect(gobang.QueuePositions.length).toBe(1);
-    expect(gobang.QueuePositions[0].x).toBe(Math.round(gobang.Dimension / 2));
-    expect(gobang.QueuePositions[0].y).toBe(Math.round(gobang.Dimension / 2));
+        const idx: number = arPos.findIndex((value: MatrixPosIntf) => {
+          if (value.x === pos.x && value.y === pos.y) {
+            return true;
+          }
+          return false;
+        });
+
+        if (idx === -1) {
+          arPos.push(pos);
+          break;
+        }
+      } while (true);
+    }
+
+    for (let i = 0; i < 5; i ++) {
+      gobang.setCellValue(arPos[i].x, arPos[i].y, (i % 2) === 0 ? true : false);
+    }
+
+    expect(gobang.QueuePositions.length).toBe(5);
   });
 });

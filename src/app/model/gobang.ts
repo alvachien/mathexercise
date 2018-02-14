@@ -8,6 +8,10 @@ export class GobangCell {
   //  false - inputted by the Algorithm
   //  undefined - not set yet
   public playerinput: boolean | undefined;
+
+  constructor() {
+    this.playerinput = undefined;
+  }
 }
 
 // Analyis Queue
@@ -136,12 +140,12 @@ export class Gobang {
     if (!this._inited) {
       throw new Error('Not initialed');
     }
-    if (row < 0 || row >= this._dimension || column < 0 || column >= this._dimension) {
-      throw new Error('Invalid row or column');
-    }
-
     if (this._finished) {
       throw new Error('Already finished');
+    }
+
+    if (row < 0 || row >= this._dimension || column < 0 || column >= this._dimension) {
+      throw new Error('Invalid row or column');
     }
 
     this.cells[row][column].playerinput = playerinput;

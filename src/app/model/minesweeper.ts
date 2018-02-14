@@ -107,17 +107,48 @@ export class MineSweeper {
 
     let mineItem: CanvasCellPositionInf;
     const arMines: CanvasCellPositionInf[] = [];
+    arMines.push(excludpos);
 
     for (let i = 0; i < this._totalmine; i++) {
       do {
         mineItem = { row: Math.floor(Math.random() * this._width), column: Math.floor(Math.random() * this._height) };
-      } while (this.isInArray(mineItem, arMines) || (excludpos.row === mineItem.row && excludpos.column === mineItem.column));
-
-      this.cells[mineItem.row][mineItem.column].isMine = true;
-      arMines.push(mineItem);
+        if (this.isValidCellPosition(mineItem) && !this.isInArray(mineItem, arMines)) {
+          this.cells[mineItem.row][mineItem.column].isMine = true;
+          arMines.push(mineItem);
+          break;
+        }
+      } while (true);
     }
 
     this._mineGenerated = true;
+  }
+
+  /**
+   * Open a cell
+   * @param pos Position
+   * Return an array contains the impacted cells
+   */
+  public openCell(pos: CanvasCellPositionInf): CanvasCellPositionInf[] {
+    if (!this.isValidCellPosition(pos)) {
+      throw Error('Invalid position');
+    }
+
+    // Now do the openning.
+    const curcell: MineSweeperCell = this.cells[pos.row][pos.column];
+    if (curcell.isOpened) {
+      return [];
+    }
+
+    // If current cell is a mine, game over
+    if (curcell.isMine) {
+      this._finished = true;
+      return [];
+    }
+
+    // Calculate the relevant mines around
+    const aroundpos: CanvasCellPositionInf[] = this.getAroundCells(pos);
+
+    return aroundpos;
   }
 
   /**
@@ -137,13 +168,17 @@ export class MineSweeper {
    * @param pos Position
    */
   public isValidCellPosition(pos: CanvasCellPositionInf): boolean {
-    if (pos.row < 0 || pos.column < 0 || pos.row >= this._height || pos.column >= this._width) {
+    if (pos.row < 0 || pos.column < 0 || pos.row >= this._width || pos.column >= this._height) {
       return false;
     }
 
     return true;
   }
 
+  /**
+   * Is current cell has mine
+   * @param pos Position of current cell
+   */
   public isAMineCell(pos: CanvasCellPositionInf): boolean {
     if (this.isValidCellPosition(pos) && this.cells[pos.row][pos.column].isMine) {
       return true;
@@ -241,7 +276,7 @@ export class MineSweeper {
    * @param posToSearch Position to search
    * @param arrayToSearch Array to search
    */
-  private isInArray(posToSearch: CanvasCellPositionInf, arrayToSearch: CanvasCellPositionInf[]): boolean {
+  public isInArray(posToSearch: CanvasCellPositionInf, arrayToSearch: CanvasCellPositionInf[]): boolean {
     for (let i = 0; i < arrayToSearch.length; i ++) {
       if (arrayToSearch[i].row === posToSearch.row && arrayToSearch[i].column === posToSearch.column) {
         return true;

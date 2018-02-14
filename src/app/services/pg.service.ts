@@ -28,14 +28,14 @@ export class PgService {
       return this._http.get(environment.AppHost + '/assets/data/data.txt', { headers: headers, responseType: 'text' })
         .map(x => {
           this._isChineseChessAIDataLoaded = true;
-          let listRst = x.split(' ');
+          const listRst = x.split(' ');
           this.listChineseChessAIData.next(listRst);
           return listRst;
         }).catch((error: HttpErrorResponse) => {
           this._isChineseChessAIDataLoaded = false;
           this.listChineseChessAIData.next([]);
 
-          return Observable.throw(error.statusText + "; " + error.error + "; " + error.message);
+          return Observable.throw(error.statusText + '; ' + error.error + '; ' + error.message);
         });
     }
   }

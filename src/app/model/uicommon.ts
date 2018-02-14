@@ -98,8 +98,8 @@ export interface CanvasMousePositionInf {
  * @param evt Event
  */
 export function getCanvasMouseEventPosition(canvas: any, evt: MouseEvent): CanvasMousePositionInf {
-  let x = evt.clientX;
-  let y = evt.clientY;
+  const x: any = evt.clientX;
+  const y: any = evt.clientY;
 
   // const rect = canvas.getBoundingClientRect();
   // x -= rect.left;

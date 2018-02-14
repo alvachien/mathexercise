@@ -142,7 +142,7 @@ export class AwardBalanceService {
 
     this._http.put(apiurl, jdata, {
         headers: headers,
-        //params: params,
+        // params: params,
         withCredentials: true
       })
       .map((response: HttpResponse<any>) => {
@@ -188,7 +188,7 @@ export class AwardBalanceService {
 
     this._http.delete(apiurl, {
         headers: headers,
-        //params: params,
+        // params: params,
         withCredentials: true
       })
       .map((response: HttpResponse<any>) => {

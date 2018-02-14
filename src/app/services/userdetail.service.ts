@@ -135,7 +135,7 @@ export class UserDetailService {
           }
           return <any>response;
         })
-        .subscribe((data) => {
+        .subscribe((data: any) => {
           if (environment.LoggingLevel >= LogLevel.Debug) {
             console.log(`AC Math Exercise [Debug]: User Detail Post Subscribe: ${data}`);
           }
@@ -161,7 +161,7 @@ export class UserDetailService {
           }
           return <any>response;
         })
-        .subscribe((data) => {
+        .subscribe((data: any) => {
           if (environment.LoggingLevel >= LogLevel.Debug) {
             console.log(`AC Math Exercise [Debug]: User Detail Change Subscribe: ${data}`);
           }

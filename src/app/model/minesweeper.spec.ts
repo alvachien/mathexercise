@@ -49,7 +49,7 @@ describe('MineSweeper without TestBed', () => {
     mineService.TotalMines = 99;
     mineService.init();
 
-    const firstpos: CanvasCellPositionInf = { row: Math.round(mineService.Width / 2), column: Math.round(mineService.Height / 2) };
+    const firstpos: CanvasCellPositionInf = { row: Math.floor(mineService.Width / 2), column: Math.floor(mineService.Height / 2) };
     mineService.generateMines(firstpos);
 
     expect(mineService.IsMineGenerated).toBe(true);
@@ -64,5 +64,46 @@ describe('MineSweeper without TestBed', () => {
     }
 
     expect(minecnt).toBe(mineService.TotalMines);
+
+    expect(mineService.isAMineCell(firstpos)).toBe(false);
+  });
+
+  it('#4. check getAroundCells() and isInArray()', () => {
+    mineService.Width = 30;
+    mineService.Height = 16;
+    mineService.TotalMines = 99;
+    mineService.init();
+
+    const firstpos: CanvasCellPositionInf = { row: 15, column: 8 };
+    const aroundposes: CanvasCellPositionInf[] = mineService.getAroundCells(firstpos);
+
+    expect(mineService.isInArray({row: 14, column: 7}, aroundposes)).toBe(true);
+    expect(mineService.isInArray({row: 14, column: 8}, aroundposes)).toBe(true);
+    expect(mineService.isInArray({row: 14, column: 9}, aroundposes)).toBe(true);
+    expect(mineService.isInArray({row: 15, column: 7}, aroundposes)).toBe(true);
+    expect(mineService.isInArray({row: 15, column: 9}, aroundposes)).toBe(true);
+    expect(mineService.isInArray({row: 16, column: 7}, aroundposes)).toBe(true);
+    expect(mineService.isInArray({row: 16, column: 8}, aroundposes)).toBe(true);
+    expect(mineService.isInArray({row: 16, column: 9}, aroundposes)).toBe(true);
+  });
+
+  it('#5. check calcNumberOfMinesAround()', () => {
+    mineService.Width = 30;
+    mineService.Height = 16;
+    mineService.TotalMines = 99;
+    mineService.init();
+
+    const firstpos: CanvasCellPositionInf = { row: 15, column: 8 };
+    const aroundposes: CanvasCellPositionInf[] = mineService.getAroundCells(firstpos);
+    mineService.generateMines(firstpos);
+
+    let minecnt = 0;
+    aroundposes.forEach((value: CanvasCellPositionInf) => {
+      if (mineService.isAMineCell(value) === true) {
+        minecnt ++;
+      }
+    });
+
+    expect(mineService.calcNumberOfMinesAround(firstpos)).toBe(minecnt);
   });
 });
