@@ -719,21 +719,20 @@ export class PuzzleGamesComponent implements OnInit {
       }
     });
 
-    // Gobang won't show the dialog
-    // const di: PgSummaryDlgInfo = {
-    //   gameWin: rst,
-    //   timeSpent: this.mineSweepQuiz.ElderRuns()[0].TimeSpent,
-    //   haveARetry: true
-    // };
+    const di: PgSummaryDlgInfo = {
+      gameWin: rst,
+      timeSpent: this.gobangQuiz.ElderRuns()[0].TimeSpent,
+      haveARetry: true
+    };
 
-    // this._dialog.open(PgSummaryDlgComponent, {
-    //   width: '500px',
-    //   data: di
-    // }).afterClosed().subscribe(x => {
-    //   if (di.haveARetry) {
-    //     this.OnMineSweepStart();
-    //   }
-    // });
+    this._dialog.open(PgSummaryDlgComponent, {
+      width: '500px',
+      data: di
+    }).afterClosed().subscribe(x => {
+      if (di.haveARetry) {
+        this.OnGobangStart();
+      }
+    });
   }
 
   public OnGobangSurrender(): void {

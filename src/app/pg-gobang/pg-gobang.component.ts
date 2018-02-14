@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter, AfterContentInit,
   HostListener } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
-import {
-  PrimarySchoolMathQuiz, QuizTypeEnum, PrimarySchoolMathQuizItem, CanvasCellPositionInf, 
+import { PrimarySchoolMathQuiz, QuizTypeEnum, PrimarySchoolMathQuizItem, CanvasCellPositionInf, 
   Cal24QuizItem, LogLevel, QuizDegreeOfDifficulity, Gobang, getCanvasMouseEventPosition, getCanvasCellPosition
 } from '../model';
 import { environment } from '../../environments/environment';
@@ -68,9 +67,11 @@ export class PgGobangComponent implements OnInit, AfterContentInit {
     // Process step
     this.onProcessStep(cellloc);
     if (this._userStep === false) {
-      // AI step
-      const nextPos = this._instance.workoutNextCellAIPosition();
-      this.onProcessStep(nextPos);
+      // AI step - set 0.5secons interval here.
+      setTimeout(() => {
+        const nextPos = this._instance.workoutNextCellAIPosition();
+        this.onProcessStep(nextPos);
+      }, (500));
     }
   }
 
@@ -83,13 +84,17 @@ export class PgGobangComponent implements OnInit, AfterContentInit {
     this._instance = new Gobang();
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
-  ngAfterContentInit() {
+  ngAfterContentInit(): void {
     this._instance.Dimension = this._cellsize;
     this._instance.init();
     this.startedEvent.emit();
+
+    // Resize the canvas size
+    this.canvasGobang.nativeElement.width = this._cellwidth * this._cellsize;
+    this.canvasGobang.nativeElement.height = this._cellheight * this._cellsize;
 
     // Draw the border
     this.drawWholeRect();
@@ -123,10 +128,11 @@ export class PgGobangComponent implements OnInit, AfterContentInit {
 
     const image = new Image();
     if (this._userStep) {
-      image.src = '../../assets/image/gobangresource/blackchess.png';
+      image.src = environment.AppHost + '/assets/image/gobangresource/blackchess.png';
     } else {
-      image.src = '../../assets/image/gobangresource/whitechess.png';
+      image.src = environment.AppHost + '/assets/image/gobangresource/whitechess.png';
     }
+
     image.onload = () => {
       ctx2.drawImage(image, cellloc.column * this._cellwidth, cellloc.row * this._cellheight, this._cellwidth, this._cellheight);
     };
@@ -139,26 +145,15 @@ export class PgGobangComponent implements OnInit, AfterContentInit {
       this._instance.setCellValue(cellloc.row, cellloc.column, this._userStep);
 
       if (this._instance.Finished) {
-        this.finishedEvent.emit(this._userStep ? true : false);
-        // // Show the snackbar
-        // let msg = '';
-        // if (this._userStep) {
-        //   msg = 'You win';
-        // } else {
-        //   msg = 'Computer win';
-        // }
-        // const snackBarRef = this.snackBar.open(msg, 'RESTART');
-
-        // snackBarRef.onAction().subscribe(() => {
-        //   console.log('The snack-bar action was triggered!');
-
-        //   this._userStep = true; // By default, it's user step!
-        //   this._instance.init();
-        //   this.startedEvent.emit();
-
-        //   // Draw the border
-        //   this.drawWholeRect();
-        // });
+        let snackBarRef: any = this.snackBar.open(this._userStep ? 'You Win' : 'Computer Win', 'CLOSE', {
+          duration: 2000
+        });
+        snackBarRef.onAction().subscribe(() => {
+          snackBarRef.dismiss();
+        });
+        snackBarRef.afterDismissed().subscribe(() => {
+          this.finishedEvent.emit(this._userStep ? true : false);
+        });
       } else {
         this._userStep = !this._userStep;
       }

@@ -13,10 +13,10 @@ describe('MineSweeper without TestBed', () => {
 
     expect(mineService.IsMineGenerated).toBe(false);
 
-    expect(mineService.cells.length).toBe(mineService.Width);
+    expect(mineService.cells.length).toBe(mineService.Height);
 
-    for (let i = 0; i < mineService.Width; i ++) {
-      expect(mineService.cells[i].length).toBe(mineService.Height);
+    for (let i = 0; i < mineService.Height; i ++) {
+      expect(mineService.cells[i].length).toBe(mineService.Width);
     }
   });
 
@@ -26,15 +26,15 @@ describe('MineSweeper without TestBed', () => {
     mineService.TotalMines = 9;
     mineService.init();
 
-    const firstpos: CanvasCellPositionInf = { row: Math.round(mineService.Width / 2), column: Math.round(mineService.Height / 2) };
+    const firstpos: CanvasCellPositionInf = { row: Math.round(mineService.Height / 2), column: Math.round(mineService.Width / 2) };
     mineService.generateMines(firstpos);
 
     expect(mineService.IsMineGenerated).toBe(true);
 
     let minecnt = 0;
-    for (let i = 0; i < mineService.Width; i++) {
-      for (let j = 0; j < mineService.Height; j++) {
-        if (mineService.isAMineCell({row: i, column: j})) {
+    for (let i = 0; i < mineService.Height; i++) {
+      for (let j = 0; j < mineService.Width; j++) {
+        if (mineService.isAMineCell({row: i, column: j,})) {
           minecnt ++;
         }
       }
@@ -49,14 +49,14 @@ describe('MineSweeper without TestBed', () => {
     mineService.TotalMines = 99;
     mineService.init();
 
-    const firstpos: CanvasCellPositionInf = { row: Math.floor(mineService.Width / 2), column: Math.floor(mineService.Height / 2) };
+    const firstpos: CanvasCellPositionInf = { row: Math.floor(mineService.Height / 2), column: Math.floor(mineService.Width / 2) };
     mineService.generateMines(firstpos);
 
     expect(mineService.IsMineGenerated).toBe(true);
 
     let minecnt = 0;
-    for (let i = 0; i < mineService.Width; i++) {
-      for (let j = 0; j < mineService.Height; j++) {
+    for (let i = 0; i < mineService.Height; i++) {
+      for (let j = 0; j < mineService.Width; j++) {
         if (mineService.isAMineCell({row: i, column: j})) {
           minecnt ++;
         }
@@ -74,17 +74,17 @@ describe('MineSweeper without TestBed', () => {
     mineService.TotalMines = 99;
     mineService.init();
 
-    const firstpos: CanvasCellPositionInf = { row: 15, column: 8 };
+    const firstpos: CanvasCellPositionInf = { row: 8, column: 15, };
     const aroundposes: CanvasCellPositionInf[] = mineService.getAroundCells(firstpos);
 
-    expect(mineService.isInArray({row: 14, column: 7}, aroundposes)).toBe(true);
-    expect(mineService.isInArray({row: 14, column: 8}, aroundposes)).toBe(true);
-    expect(mineService.isInArray({row: 14, column: 9}, aroundposes)).toBe(true);
-    expect(mineService.isInArray({row: 15, column: 7}, aroundposes)).toBe(true);
-    expect(mineService.isInArray({row: 15, column: 9}, aroundposes)).toBe(true);
-    expect(mineService.isInArray({row: 16, column: 7}, aroundposes)).toBe(true);
-    expect(mineService.isInArray({row: 16, column: 8}, aroundposes)).toBe(true);
-    expect(mineService.isInArray({row: 16, column: 9}, aroundposes)).toBe(true);
+    expect(mineService.isInArray({row: 7, column: 14}, aroundposes)).toBe(true);
+    expect(mineService.isInArray({row: 7, column: 15}, aroundposes)).toBe(true);
+    expect(mineService.isInArray({row: 7, column: 16}, aroundposes)).toBe(true);
+    expect(mineService.isInArray({row: 8, column: 14}, aroundposes)).toBe(true);
+    expect(mineService.isInArray({row: 8, column: 16}, aroundposes)).toBe(true);
+    expect(mineService.isInArray({row: 9, column: 14}, aroundposes)).toBe(true);
+    expect(mineService.isInArray({row: 9, column: 15}, aroundposes)).toBe(true);
+    expect(mineService.isInArray({row: 9, column: 16}, aroundposes)).toBe(true);
   });
 
   it('#5. check calcNumberOfMinesAround()', () => {
@@ -93,7 +93,7 @@ describe('MineSweeper without TestBed', () => {
     mineService.TotalMines = 99;
     mineService.init();
 
-    const firstpos: CanvasCellPositionInf = { row: 15, column: 8 };
+    const firstpos: CanvasCellPositionInf = { row: 8, column: 15, };
     const aroundposes: CanvasCellPositionInf[] = mineService.getAroundCells(firstpos);
     mineService.generateMines(firstpos);
 

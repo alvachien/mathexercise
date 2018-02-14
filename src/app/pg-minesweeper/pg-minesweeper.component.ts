@@ -1,7 +1,10 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, EventEmitter, Output, Input, HostListener } from '@angular/core';
-import { LogLevel, QuizDegreeOfDifficulity, getCanvasMouseEventPosition, getCanvasCellPosition,
-  CanvasCellPositionInf, MineSweeper, MatrixPosIntf } from '../model';
+import {
+  LogLevel, QuizDegreeOfDifficulity, getCanvasMouseEventPosition, getCanvasCellPosition,
+  CanvasCellPositionInf, MineSweeper, MatrixPosIntf
+} from '../model';
 import { environment } from '../../environments/environment';
+import { MatSnackBar } from '@angular/material';
 
 enum MineSweeperCellType {
   // Blank = 0
@@ -52,13 +55,12 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   }
 
   oldPos: CanvasCellPositionInf;
-  arMines: CanvasCellPositionInf[] = [];
   time = 0;
   notTaged = 0;
   mousedownArr: any;
   timer: any;
 
-  constructor() {
+  constructor(private snackBar: MatSnackBar) {
     if (environment.LoggingLevel >= LogLevel.Debug) {
       console.log('AC Math Exercise [Debug]: Entering constructor in PgMinesweeperComponent');
     }
@@ -68,13 +70,13 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
     this._instance.Height = 16;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (environment.LoggingLevel >= LogLevel.Debug) {
       console.log('AC Math Exercise [Debug]: Entering ngOnInit in PgMinesweeperComponent');
     }
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     if (environment.LoggingLevel >= LogLevel.Debug) {
       console.log('AC Math Exercise [Debug]: Entering ngAfterViewInit in PgMinesweeperComponent');
     }
@@ -84,12 +86,12 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
       this.canvasMine.nativeElement.height = this.PANE_SIZE * this._instance.Height;
     }
 
-    switch (this.mineSweepDoD) {
+    switch (this._dod) {
       case QuizDegreeOfDifficulity.easy: this._instance.TotalMines = 9; break;
       case QuizDegreeOfDifficulity.medium: this._instance.TotalMines = 49; break;
       case QuizDegreeOfDifficulity.hard:
       default:
-      this._instance.TotalMines = 99;
+        this._instance.TotalMines = 99;
         break;
     }
 
@@ -146,7 +148,7 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
     ctx2.fillRect(0, 0, this.canvasMine.nativeElement.width, this.canvasMine.nativeElement.height);
     ctx2.restore();
 
-    for (let i = 0; i <= this._instance.Height; i ++) {
+    for (let i = 0; i <= this._instance.Height; i++) {
       ctx2.beginPath();
       ctx2.moveTo(0, i * this.PANE_SIZE);
       ctx2.lineTo(this._instance.Width * this.PANE_SIZE, i * this.PANE_SIZE);
@@ -154,7 +156,7 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
       ctx2.stroke();
     }
 
-    for (let i = 0; i <= this._instance.Width; i++ ) {
+    for (let i = 0; i <= this._instance.Width; i++) {
       ctx2.beginPath();
       ctx2.moveTo(i * this.PANE_SIZE, 0);
       ctx2.lineTo(i * this.PANE_SIZE, this._instance.Width * this.PANE_SIZE);
@@ -319,7 +321,7 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
           const mousedownArr = this.mousedownArr;
           if (mousedownArr !== '') {
             for (let m = 0; m < mousedownArr.length; m++) {
-              this.drawCell(mousedownArr[m], 1);
+              this.drawCellNum(mousedownArr[m], 0);
             }
           }
 
@@ -343,7 +345,7 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
         this.notTaged++;
         this.setNumberImage(this.notTaged, true);
       } else if (tag === 2) {
-        this.drawCell(pos, 1);
+        this.drawCellNum(pos, 0);
         curCell.tag = 0;
       }
       return;
@@ -355,9 +357,8 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
 
     if (curCell.isMine) {
       // Failed!
-      this.showAllMines();
+      this.discoverAllMines();
       this.drawCellExplosion(pos);
-      this.showWrongTag();
 
       this.onFinishedWithFailed();
     } else {
@@ -378,10 +379,10 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
 
     const okNum = this._instance.Width * this._instance.Height - this._instance.TotalMines;
     let openNum = 0;
-    for (let i = 0; i < this._instance.Width; i++) {
-      for (let j = 0; j < this._instance.Height; j++) {
-        if (this._instance.isCellOpened({row: i, column: j}) === true) {
-          openNum ++;
+    for (let i = 0; i < this._instance.cells.length; i++) {
+      for (let j = 0; j < this._instance.cells[i].length; j++) {
+        if (this._instance.isCellOpened({ row: i, column: j }) === true) {
+          openNum++;
         }
       };
     }
@@ -391,29 +392,17 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
     }
   }
 
-  showAllMines() {
-  //   let arMines = this.arMines;
-  //   let pos: CanvasCellPositionInf = undefined;
-  //   let area;
-
-  //   for (let i = 0; i < arMines.length; i++) {
-  //     pos = arMines[i];
-  //     this.drawCell(pos, 5);
-  //     this.arCells[pos.row][pos.column].isOpened = true;
-  //   }
-  }
-
-  showWrongTag() {
-  //   let paneheight = this._paneHeigh;
-  //   let panewidth = this._paneWidth;
-
-  //   for (let i = 1; i <= panewidth; i++) {
-  //     for (let j = 1; j <= paneheight; j++) {
-  //       if (this.arCells[i][j].isMine === false && this.arCells[i][j].tag === 1) {
-  //         this.drawCell({row: i, column: j}, 7);
-  //       }
-  //     };
-  //   }
+  discoverAllMines() {
+    let pos: CanvasCellPositionInf = undefined;
+    for (let i = 0; i < this._instance.cells.length; i++) {
+      for (let j = 0; j < this._instance.cells[i].length; j++) {
+        if (this._instance.cells[i][j].isMine === true) {
+          this.drawCellMine({row: i, column: j});
+        } if (this._instance.cells[i][j].isMine === false && this._instance.cells[i][j].tag === 1) {
+          this.drawCellError({row: i, column: j});
+        }
+      }
+    }
   }
 
   openZeroCellArr(zeroArr: CanvasCellPositionInf[]) {
@@ -435,25 +424,6 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
         this.drawCellNum(aroundArr[i], aroundMineNum);
       }
     }
-  }
-
-  drawCell(pos: CanvasCellPositionInf, type) {
-    const area = this.getCellArea(pos);
-    const cxt = this.canvasMine.nativeElement.getContext('2d');
-
-    const image = new Image();
-    switch (type) {
-      case 1:
-      image.src = '';
-      break;
-
-      default:
-      break;
-    }
-    // image.src = this.arImgUrls[type - 1];
-    image.onload = () => {
-      cxt.drawImage(image, area[0], area[1], 16, 16);
-    };
   }
 
   drawCellFlag(pos: CanvasCellPositionInf): void {
@@ -489,25 +459,43 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
     };
   }
 
-  drawCellNum(pos: CanvasCellPositionInf, num: number) {
-    if (Number.isInteger(num)) {
-      const ctx2 = this.canvasMine.nativeElement.getContext('2d');
-      const area = this.getCellArea(pos);
-      // let image = new Image();
-      // image.src = environment.AppHost + '/assets/image/mineresource/' + num + '.jpg';
-      // image.onload = () => {
-      //   cxt.drawImage(image, area[0], area[1], this.PANE_SIZE, this.PANE_SIZE);
-      // };
+  drawCellMine(pos: CanvasCellPositionInf): void {
+    const area = this.getCellArea(pos);
+    const ctx = this.canvasMine.nativeElement.getContext('2d');
 
-      ctx2.save();
-      ctx2.fillStyle = 'rgba(0, 0, 49, 0.7)';
-      ctx2.clearRect(area[0], area[1], this.PANE_SIZE, this.PANE_SIZE);
-      ctx2.fillRect(area[0], area[1], this.PANE_SIZE, this.PANE_SIZE);
-      ctx2.fillStyle = 'white';
-      ctx2.font = '24px Roboto';
+    const image = new Image();
+    image.src = environment.AppHost + '/assets/image/mineresource/mine.png';
+    image.onload = () => {
+      ctx.drawImage(image, area[0], area[1], this.PANE_SIZE, this.PANE_SIZE);
+    };
+  }
+
+  drawCellError(pos: CanvasCellPositionInf): void {
+    const area = this.getCellArea(pos);
+    const ctx = this.canvasMine.nativeElement.getContext('2d');
+
+    ctx.fillText(' X ', area[0], area[1]);
+  }
+
+  drawCellNum(pos: CanvasCellPositionInf, num: number) {
+    const ctx2 = this.canvasMine.nativeElement.getContext('2d');
+    const area = this.getCellArea(pos);
+    // let image = new Image();
+    // image.src = environment.AppHost + '/assets/image/mineresource/' + num + '.jpg';
+    // image.onload = () => {
+    //   cxt.drawImage(image, area[0], area[1], this.PANE_SIZE, this.PANE_SIZE);
+    // };
+
+    ctx2.save();
+    ctx2.fillStyle = 'rgba(0, 0, 49, 0.7)';
+    ctx2.clearRect(area[0], area[1], this.PANE_SIZE, this.PANE_SIZE);
+    ctx2.fillRect(area[0], area[1], this.PANE_SIZE, this.PANE_SIZE);
+    ctx2.fillStyle = 'white';
+    ctx2.font = '24px Roboto';
+    if (num > 0) {
       ctx2.fillText(num.toString(), area[0] + Math.round(this.PANE_SIZE / 4), area[1] + Math.round(this.PANE_SIZE * 4 / 5), this.PANE_SIZE);
-      ctx2.restore();
-    }
+    }    
+    ctx2.restore();
   }
 
   private getCellArea(pos: CanvasCellPositionInf) {
@@ -515,21 +503,31 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   }
 
   private onFinishedWithSuccess() {
-     if (this.timer) {
-       clearInterval(this.timer);
-     }
+    this.onFinishedImpl(true);
+  }
 
-    // It is finished!
-     this.finishedEvent.emit(true);
-   }
+  private onFinishedWithFailed() {
+    this.onFinishedImpl(false);
+  }
 
-   private onFinishedWithFailed() {
+  private onFinishedImpl(rst: boolean) {
     if (this.timer) {
       clearInterval(this.timer);
     }
 
-     this.finishedEvent.emit(false);
-   }
+    // It is finished!
+    let snackBarRef: any = this.snackBar.open(rst ? 'You Win' : 'You Lose', 'CLOSE', {
+      duration: 2000
+    });
+
+    snackBarRef.onAction().subscribe(() => {
+      snackBarRef.dismiss();
+    });
+
+    snackBarRef.afterDismissed().subscribe(() => {
+      this.finishedEvent.emit(rst);
+    });
+  }
 
   /**
    * Get prefix interger

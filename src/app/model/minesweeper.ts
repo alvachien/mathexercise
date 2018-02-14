@@ -84,10 +84,10 @@ export class MineSweeper {
     this._finished = false;
     this._mineGenerated = false;
     this.cells = new Array<Array<MineSweeperCell>>();
-    for (let y = 0; y < this._width; y++) {
+    for (let y = 0; y < this._height; y++) {
       const row: MineSweeperCell[]  = new Array<MineSweeperCell>();
 
-      for (let x = 0; x < this._height; x++) {
+      for (let x = 0; x < this._width; x++) {
         row.push(new MineSweeperCell());
       }
 
@@ -111,7 +111,7 @@ export class MineSweeper {
 
     for (let i = 0; i < this._totalmine; i++) {
       do {
-        mineItem = { row: Math.floor(Math.random() * this._width), column: Math.floor(Math.random() * this._height) };
+        mineItem = { row: Math.floor(Math.random() * this._height), column: Math.floor(Math.random() * this._width) };
         if (this.isValidCellPosition(mineItem) && !this.isInArray(mineItem, arMines)) {
           this.cells[mineItem.row][mineItem.column].isMine = true;
           arMines.push(mineItem);
@@ -168,7 +168,7 @@ export class MineSweeper {
    * @param pos Position
    */
   public isValidCellPosition(pos: CanvasCellPositionInf): boolean {
-    if (pos.row < 0 || pos.column < 0 || pos.row >= this._width || pos.column >= this._height) {
+    if (pos.row < 0 || pos.column < 0 || pos.row >= this._height || pos.column >= this._width) {
       return false;
     }
 

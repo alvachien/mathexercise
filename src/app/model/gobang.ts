@@ -188,20 +188,23 @@ export class Gobang {
 
     let maxdefendindex = -1;
     this._playAnalysis.forEach((value, index) => {
-      if (maxdefendindex === -1) {
+      if (maxdefendindex === -1 && (value.headsealed !== true || value.tailsealed !== true)) {
         maxdefendindex = index;
       } else {
-        if (this._playAnalysis[maxdefendindex].risklevel < value.risklevel) {
+        if (this._playAnalysis[maxdefendindex].risklevel < value.risklevel 
+          && (value.headsealed !== true || value.tailsealed !== true)) {
           maxdefendindex = index;
         }
       }
     });
+    
     let maxattackindex = -1;
     this._AIAnalysis.forEach((value, index) => {
-      if (maxattackindex === -1) {
+      if (maxattackindex === -1 && (value.headsealed !== true || value.tailsealed !== true)) {
         maxattackindex = index;
       } else {
-        if (this._playAnalysis[maxattackindex].risklevel < value.risklevel) {
+        if (this._playAnalysis[maxattackindex].risklevel < value.risklevel
+          && (value.headsealed !== true || value.tailsealed !== true)) {
           maxattackindex = index;
         }
       }
@@ -232,13 +235,13 @@ export class Gobang {
 
           case GobangDirectionEnum.slash: {
             rtnPos.row = this._arSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].endidx + 1].x;
-            rtnPos.row = this._arSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].endidx + 1].y;
+            rtnPos.column = this._arSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].endidx + 1].y;
           }
           break;
 
           case GobangDirectionEnum.backslash: {
             rtnPos.row = this._arBackSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].endidx + 1].x;
-            rtnPos.row = this._arBackSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].endidx + 1].y;
+            rtnPos.column = this._arBackSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].endidx + 1].y;
           }
           break;
 
@@ -261,13 +264,13 @@ export class Gobang {
 
           case GobangDirectionEnum.slash: {
             rtnPos.row = this._arSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].startidx - 1].x;
-            rtnPos.row = this._arSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].startidx - 1].y;
+            rtnPos.column = this._arSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].startidx - 1].y;
           }
           break;
 
           case GobangDirectionEnum.backslash: {
             rtnPos.row = this._arBackSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].startidx - 1].x;
-            rtnPos.row = this._arBackSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].startidx - 1].y;
+            rtnPos.column = this._arBackSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].startidx - 1].y;
           }
           break;
 

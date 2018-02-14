@@ -191,7 +191,7 @@
         </div>
 
         <div class="demo-full-width" *ngIf="chnchessQuiz.IsStarted">
-          <app-pg-chinese-chess (startedEvent)="onChineseChessStarted($event)" (finishedEvent)="onChineseChessFinished($event)"></app-pg-chinese-chess>
+          <app-pg-chinese-chess [chineseChessDoD]="chnchessDoD" (startedEvent)="onChineseChessStarted($event)" (finishedEvent)="onChineseChessFinished($event)"></app-pg-chinese-chess>
         </div>
       </mat-card-content>
       <mat-card-actions>
