@@ -58,4 +58,30 @@ describe('Gobang without TestBed', () => {
 
     expect(gobang.QueuePositions.length).toBe(5);
   });
+
+  it('#4. check PlayerAnalysisResult for 1 player input', () => {
+    gobang.Dimension = 20;
+    gobang.init();
+
+    const pos: MatrixPosIntf = {
+      x: 4, y: 6,
+    };
+    gobang.setCellValue(pos.x, pos.y, true);
+    gobang['buildUpAIAnalyis']();
+
+    expect(gobang.PlayerAnalysisResult.length).toBe(4);
+  });
+
+  it('#5. check AIAnalysisResult for 1 AI input', () => {
+    gobang.Dimension = 20;
+    gobang.init();
+
+    const pos: MatrixPosIntf = {
+      x: 4, y: 6,
+    };
+    gobang.setCellValue(pos.x, pos.y, false);
+    gobang['buildUpAIAnalyis']();
+
+    expect(gobang.AIAnalysisResult.length).toBe(4);
+  });
 });
