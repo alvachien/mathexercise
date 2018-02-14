@@ -379,8 +379,6 @@ export class Gobang {
           anay.userinput = cell.userinput;
           this._AIAnalysis.push(anay);
         }
-
-        // console.log(`Result of row ${i}: ${cell.startidx} - ${cell.endidx} with ${cell.userinput? 'Player': 'AI'}, head sealed: ${cell.headsealed}, tail sealed: ${cell.tailsealed}`);
       }
     }
 
@@ -423,8 +421,6 @@ export class Gobang {
           anay.userinput = cell.userinput;
           this._AIAnalysis.push(anay);
         }
-
-        // console.log(`Result of column ${i}: ${cell.startidx} - ${cell.endidx} with ${cell.userinput? 'Player': 'AI'}, head sealed: ${cell.headsealed}, tail sealed: ${cell.tailsealed}`);
       }
     }
 
@@ -468,8 +464,6 @@ export class Gobang {
           anay.userinput = cell.userinput;
           this._AIAnalysis.push(anay);
         }
-
-        // console.log(`Result of slash ${i}: ${cell.startidx} - ${cell.endidx} with ${cell.userinput? 'Player': 'AI'}, head sealed: ${cell.headsealed}, tail sealed: ${cell.tailsealed}`);
       }
     }
 
@@ -509,8 +503,6 @@ export class Gobang {
           anay.userinput = cell.userinput;
           this._AIAnalysis.push(anay);
         }
-
-        // console.log(`Result of backslash ${i}: ${cell.startidx} - ${cell.endidx} with ${cell.userinput? 'Player': 'AI'}, head sealed: ${cell.headsealed}, tail sealed: ${cell.tailsealed}`);
       }
     }
   }

@@ -10,8 +10,8 @@ describe('Gobang without TestBed', () => {
     gobang.init();
 
     expect(gobang.cells.length).toBe(gobang.Dimension);
-    
-    for(let i = 0; i < gobang.Dimension; i++) {
+
+    for (let i = 0; i < gobang.Dimension; i++) {
       expect(gobang.cells[i].length).toBe(gobang.Dimension);
     }
   });

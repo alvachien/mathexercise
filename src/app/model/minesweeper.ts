@@ -65,7 +65,7 @@ export class MineSweeper {
     this._totalmine = 99;
   }
 
-  public init() {
+  public init(): void {
     if (this._inited === true) {
       throw new Error('Alreay inited');
     }

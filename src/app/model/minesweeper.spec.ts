@@ -26,7 +26,7 @@ describe('MineSweeper without TestBed', () => {
     mineService.TotalMines = 9;
     mineService.init();
 
-    let firstpos: CanvasCellPositionInf = { row: Math.round(mineService.Width / 2), column: Math.round(mineService.Height / 2) };
+    const firstpos: CanvasCellPositionInf = { row: Math.round(mineService.Width / 2), column: Math.round(mineService.Height / 2) };
     mineService.generateMines(firstpos);
 
     expect(mineService.IsMineGenerated).toBe(true);
@@ -40,7 +40,7 @@ describe('MineSweeper without TestBed', () => {
       }
     }
 
-    expect(minecnt).toBe(mineService.TotalMines);    
+    expect(minecnt).toBe(mineService.TotalMines);
   });
 
   it('#3. ensure generateMines() with hard mode run succeed', () => {
@@ -48,8 +48,8 @@ describe('MineSweeper without TestBed', () => {
     mineService.Height = 16;
     mineService.TotalMines = 99;
     mineService.init();
-    
-    let firstpos: CanvasCellPositionInf = { row: Math.round(mineService.Width / 2), column: Math.round(mineService.Height / 2) };
+
+    const firstpos: CanvasCellPositionInf = { row: Math.round(mineService.Width / 2), column: Math.round(mineService.Height / 2) };
     mineService.generateMines(firstpos);
 
     expect(mineService.IsMineGenerated).toBe(true);
@@ -63,6 +63,6 @@ describe('MineSweeper without TestBed', () => {
       }
     }
 
-    expect(minecnt).toBe(mineService.TotalMines);    
+    expect(minecnt).toBe(mineService.TotalMines);
   });
 });
