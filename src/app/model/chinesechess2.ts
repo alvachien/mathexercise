@@ -91,7 +91,7 @@ class ChineseChessRook extends ChineseChessPieceBase {
     }
   }
 
-  bylaw(x: number, y: number, my, play: ChineseChess2Play) {
+  bylaw(x: number, y: number, my: number, play: ChineseChess2Play) {
     const d = [];
 
     // 左侧检索
@@ -110,7 +110,9 @@ class ChineseChessRook extends ChineseChessPieceBase {
     // 右侧检索
     for (let i = x + 1; i <= 8; i++) {
       if (play.map[y][i]) {
-        if (play.getPiece(play.map[y][i]).my !== my) { d.push([i, y]); }
+        if (play.getPiece(play.map[y][i]).my !== my) {
+          d.push([i, y]);
+        }
         break;
       } else {
         d.push([i, y]);
@@ -120,7 +122,9 @@ class ChineseChessRook extends ChineseChessPieceBase {
     // 上检索
     for (let i = y - 1; i >= 0; i--) {
       if (play.map[i][x]) {
-        if (play.getPiece(play.map[i][x]).my !== my) { d.push([x, i]); }
+        if (play.getPiece(play.map[i][x]).my !== my) {
+          d.push([x, i]);
+        }
         break;
       } else {
         d.push([x, i]);
@@ -130,7 +134,9 @@ class ChineseChessRook extends ChineseChessPieceBase {
     // 下检索
     for (let i = y + 1; i <= 9; i++) {
       if (play.map[i][x]) {
-        if (play.getPiece(play.map[i][x]).my !== my) { d.push([x, i]); }
+        if (play.getPiece(play.map[i][x]).my !== my) {
+          d.push([x, i]);
+        }
         break;
       } else {
         d.push([x, i]);
@@ -956,6 +962,7 @@ export class ChineseChessAI {
       const len = pace.length;
       const arr = [];
 
+      // Search for suitable library
       for (let i = 0; i < bill.length; i++) {
         if (bill[i].slice(0, len) === pace) {
           arr.push(bill[i]);
@@ -963,6 +970,7 @@ export class ChineseChessAI {
       }
 
       if (arr.length > 0) {
+        // Found it!
         const inx = Math.floor(Math.random() * arr.length);
         this.historyBill = arr;
         return arr[inx].slice(len, len + 4).split('');
@@ -971,12 +979,14 @@ export class ChineseChessAI {
       }
     }
 
+    // No suitable library, go for AI
     const initTime = new Date().getTime();
     this.treeDepth = depth;
 
     this.number = 0;
     this.historyTable = [];
 
+    // AlphaBeta algorithm
     let val = this.getAlphaBeta(-99999, 99999, this.treeDepth, arr2Clone(play.map), play.my, play);
 
     if (!val || val.value === -8888) {
@@ -1015,60 +1025,18 @@ export class ChineseChessAI {
     return false;
   }
 
-  getMapAllMan(map, my, play) {
-    const piece = [];
-
-    for (let i = 0; i < map.length; i++) {
-      for (let n = 0; n < map[i].length; n++) {
-        const key = map[i][n];
-
-        if (key && play.getPiece(key).my === my) {
-          play.getPiece(key).x = n;
-          play.getPiece(key).y = i;
-
-          piece.push(play.getPiece(key));
-        }
-      }
-    }
-
-    return piece;
-  }
-
-  getMoves(map, my, play) {
-    const manArr = this.getMapAllMan(map, my, play);
-    const moves = [];
-    const foul = play.isFoul;
-
-    for (let i = 0; i < manArr.length; i++) {
-      const man = manArr[i];
-      const val = man.bylaw(man.x, man.y, man.my, play);
-
-      for (let n = 0; n < val.length; n++) {
-        const x = man.x;
-        const y = man.y;
-        const newX = val[n][0];
-        const newY = val[n][1];
-
-        if (foul[0] !== x || foul[1] !== y || foul[2] !== newX || foul[3] !== newY) {
-          moves.push([x, y, newX, newY, man.key])
-        }
-      }
-    }
-
-    return moves;
-  }
-
   getAlphaBeta(A, B, depth, map, my, play) {
     if (depth === 0) {
       return { value: this.evaluate(map, my, play) };
     }
 
-    const moves = this.getMoves(map, my, play);
+    const moves = play.getAllPossibleMoves(my);
     let rootKey;
     let key;
     let newX;
     let newY;
 
+    // Simulate the movements
     for (let i = 0; i < moves.length; i++) {
       const move = moves[i];
       key = move[4];
@@ -1084,6 +1052,7 @@ export class ChineseChessAI {
       play.getPiece(key).y = newY;
 
       if (clearKey === 'j0' || clearKey === 'J0') {
+        // Winner step
         play.getPiece(key).x = oldX;
         play.getPiece(key).y = oldY;
         map[oldY][oldX] = key;
@@ -1093,9 +1062,9 @@ export class ChineseChessAI {
           map[newY][newX] = clearKey;
         }
 
-        return { 'key': key, 'x': newX, 'y': newY, 'value': 8888 };
+        return { key: key, x: newX, y: newY, value: 8888 };
       } else {
-        const val = -this.getAlphaBeta(-B, -A, depth - 1, map, -1 * my, play).value;
+        const val = -1 * this.getAlphaBeta(-1 * B, -1 * A, depth - 1, map, -1 * my, play).value;
 
         play.getPiece(key).x = oldX;
         play.getPiece(key).y = oldY;
@@ -1104,13 +1073,15 @@ export class ChineseChessAI {
         if (clearKey) {
           map[newY][newX] = clearKey;
         }
+
         if (val >= B) {
-          return { 'key': key, 'x': newX, 'y': newY, 'value': B };
+          return { key: key, x: newX, y: newY, value: B };
         }
+
         if (val > A) {
           A = val;
           if (this.treeDepth === depth) {
-            rootKey = { 'key': key, 'x': newX, 'y': newY, 'value': A };
+            rootKey = { key: key, x: newX, y: newY, value: A };
           }
         }
       }
@@ -1124,7 +1095,7 @@ export class ChineseChessAI {
       }
     }
 
-    return { 'key': key, 'x': newX, 'y': newY, 'value': A };
+    return { key: key, x: newX, y: newY, value: A };
   }
 
   setHistoryTable(txtMap, depth, value, my) {
@@ -1529,5 +1500,48 @@ export class ChineseChess2Play {
     }
 
     return (this.map[y][x] && this.map[y][x] !== '0') ? this.map[y][x] : false;
+  }
+
+  // Get all pieces in current map
+  private getAllPieces(my): ChineseChessPieceBase[] {
+    const pieces: ChineseChessPieceBase[] = [];
+
+    for (let i = 0; i < this.map.length; i++) {
+      for (let j = 0; j < this.map[i].length; j++) {
+        if (this.map[i][j]) {
+          const piece = this.getPiece(this.map[i][j]);
+          if (piece.my === my) {
+            pieces.push(piece);
+          }
+        }
+      }
+    }
+
+    return pieces;
+  }
+
+  // Get all possible moves
+  public getAllPossibleMoves(my: number): any[] {
+    const pieces = this.getAllPieces(my);
+    const moves = [];
+    const foul = this.isFoul;
+
+    for (let i = 0; i < pieces.length; i++) {
+      const piece = pieces[i];
+      const val = piece.bylaw(piece.x, piece.y, my, this);
+
+      for (let n = 0; n < val.length; n++) {
+        const x = piece.x;
+        const y = piece.y;
+        const newX = val[n][0];
+        const newY = val[n][1];
+
+        if (foul[0] !== x || foul[1] !== y || foul[2] !== newX || foul[3] !== newY) {
+          moves.push([x, y, newX, newY, piece.key])
+        }
+      }
+    }
+
+    return moves;
   }
 }
