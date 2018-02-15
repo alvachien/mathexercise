@@ -687,9 +687,8 @@ export class ChineseChessUI {
   styleSetting: any;
   aidata: any;
 
-  childList: any[];
-  initMap;
-  keys;
+  initMap: any[];
+  mapKeys: Map<string, string>;
   private paneDetail: any;
   private dotDetail: any;
 
@@ -738,6 +737,40 @@ export class ChineseChessUI {
       isShow: false,
       dots: []
     };
+    this.mapKeys = new Map<string, string>();
+    this.mapKeys.set('c0', 'c');
+    this.mapKeys.set('c1', 'c');
+    this.mapKeys.set('m0', 'm');
+    this.mapKeys.set('m1', 'm');
+    this.mapKeys.set('x0', 'x');
+    this.mapKeys.set('x1', 'x');
+    this.mapKeys.set('s0', 's');
+    this.mapKeys.set('s1', 's');
+    this.mapKeys.set('j0', 'j');
+    this.mapKeys.set('p0', 'p');
+    this.mapKeys.set('p1', 'p');
+    this.mapKeys.set('z0', 'z');
+    this.mapKeys.set('z1', 'z');
+    this.mapKeys.set('z2', 'z');
+    this.mapKeys.set('z3', 'z');
+    this.mapKeys.set('z4', 'z');
+
+    this.mapKeys.set('C0', 'C');
+    this.mapKeys.set('C1', 'C');
+    this.mapKeys.set('M0', 'M');
+    this.mapKeys.set('M1', 'M');
+    this.mapKeys.set('X0', 'X');
+    this.mapKeys.set('X1', 'X');
+    this.mapKeys.set('S0', 'S');
+    this.mapKeys.set('S1', 'S');
+    this.mapKeys.set('J0', 'J');
+    this.mapKeys.set('P0', 'P');
+    this.mapKeys.set('P1', 'P');
+    this.mapKeys.set('Z0', 'Z');
+    this.mapKeys.set('Z1', 'Z');
+    this.mapKeys.set('Z2', 'Z');
+    this.mapKeys.set('Z3', 'Z');
+    this.mapKeys.set('Z4', 'Z');
 
     this.initMap = [
       ['C0', 'M0', 'X0', 'S0', 'J0', 'S1', 'X1', 'M1', 'C1'],
@@ -751,24 +784,6 @@ export class ChineseChessUI {
       [, , , , , , , , ],
       ['c0', 'm0', 'x0', 's0', 'j0', 's1', 'x1', 'm1', 'c1']
     ];
-
-    this.keys = {
-      'c0': 'c', 'c1': 'c',
-      'm0': 'm', 'm1': 'm',
-      'x0': 'x', 'x1': 'x',
-      's0': 's', 's1': 's',
-      'j0': 'j',
-      'p0': 'p', 'p1': 'p',
-      'z0': 'z', 'z1': 'z', 'z2': 'z', 'z3': 'z', 'z4': 'z', 'z5': 'z',
-
-      'C0': 'C', 'C1': 'C',
-      'M0': 'M', 'M1': 'M',
-      'X0': 'X', 'X1': 'X',
-      'S0': 'S', 'S1': 'S',
-      'J0': 'J',
-      'P0': 'P', 'P1': 'P',
-      'Z0': 'Z', 'Z1': 'Z', 'Z2': 'Z', 'Z3': 'Z', 'Z4': 'Z', 'Z5': 'Z',
-    };
   }
 
   /**
@@ -782,7 +797,7 @@ export class ChineseChessUI {
         const key = this.initMap[i][j];
 
         if (key !== undefined) {
-          const piecekey = this.keys[key];
+          const piecekey = this.mapKeys.get(key);
           switch (piecekey) {
             case 'c': {
               const piece = new ChineseChessRook(false, key, j, i);
@@ -926,7 +941,7 @@ export class ChineseChessUI {
 
 /**
  * AI class
-*/
+ */
 export class ChineseChessAI {
   historyTable = {};
   gambit: any[];
@@ -1140,13 +1155,12 @@ export class ChineseChess2Play {
   isPlay = true;
   showPane: any;
 
-  map = [];
+  map: any[] = [];
   pace = [];
   nowManKey: string;
   depth = 3;
   isFoul;
   public pieces: Map<string, ChineseChessPieceBase>;
-  private _childList: any[];
   private _instanceUI: ChineseChessUI;
   private _ctx: any;
   private _evtComplete: any;
@@ -1163,14 +1177,14 @@ export class ChineseChess2Play {
    * Initialize
    * @param ui Instance of UI
    */
-  public init(ui: ChineseChessUI) {
+  public init(ui: ChineseChessUI): void {
     this._instanceUI = ui;
 
     this.map = arr2Clone(this._instanceUI.initMap);
     this.pieces = this._instanceUI.createPieces();
   }
 
-  public complete(winner) {
+  public complete(winner): void {
     // Set the winner and complete current set
     this.isPlay = false;
 
@@ -1255,7 +1269,7 @@ export class ChineseChess2Play {
   //     com.show();
   //   }
 
-  clickPiece(key, x, y) {
+  clickPiece(key: string, x, y): void {
     if (environment.LoggingLevel >= LogLevel.Debug) {
       console.log('Entering ChineseChess2Play.clickPiece');
     }
@@ -1264,7 +1278,7 @@ export class ChineseChess2Play {
     const piece = this.getPiece(key);
 
     if (this.nowManKey && this.nowManKey !== key && piece.my !== this.getPiece(this.nowManKey).my) {
-      // Eat the enemy
+      // Eat
       if (this.indexOfPs(this.getPiece(this.nowManKey).ps, [x, y])) {
         piece.isShow = false;
 
