@@ -1113,7 +1113,6 @@ export class ChineseChessAI {
       }
     }
 
-    this.number++;
     return val * my;
   }
 }
@@ -1331,11 +1330,13 @@ export class ChineseChess2Play {
           this.AIPlay();
         }, 500);
       } else {
-        // alert("不能这么走哦！")
       }
     }
   }
 
+  /** 
+   * Entrace of AI logic
+  */
   AIPlay() {
     if (environment.LoggingLevel >= LogLevel.Debug) {
       console.log('Entering ChineseChess2Play.AIPlay');
