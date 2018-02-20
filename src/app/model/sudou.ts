@@ -50,6 +50,45 @@ export class SudouUnitRow {
 export class SudouUnit {
   private _dataRows: SudouUnitRow[] = [];
 
+  /**
+   * Geenrate valid Sudou unit
+   */
+  public static generateValidOne(): SudouUnit {
+    const unit: SudouUnit = new SudouUnit();
+
+    const arInitOne: number[] = [];
+    for (let i = 0; i < SudouSize; i++) {
+      arInitOne.push(0);
+    }
+
+    for (let i = 0; i < SudouSize; i++) {
+      let jpos = Math.round(Math.random() * (SudouSize - 1) + 1);
+      if (arInitOne[jpos] === 0) {
+        arInitOne[jpos] = i + 1;
+      } else {
+        jpos = 0;
+        while (jpos < SudouSize) {
+          if (arInitOne[jpos] === 0) {
+            arInitOne[jpos] = i + 1;
+            break;
+          }
+          jpos++;
+        }
+
+        if (jpos > SudouSize) {
+          throw new Error('Failed to initialize a 3*3!');
+        }
+      }
+    }
+
+    // console.log(arInitOne.join(' '));
+    for (let i = 0; i < SudouSize; i++) {
+      unit.setCell(Math.floor(i / 3), Math.floor(i % 3), arInitOne[i]);
+    }
+
+    return unit;
+  }
+
   constructor() {
     for (let i = 0; i < SudouUnitSize; i++) {
       const row: SudouUnitRow = new SudouUnitRow();
@@ -228,44 +267,6 @@ export class SudouUnit {
     }
   }
 
-  /**
-   * Geenrate valid Sudou unit
-   */
-  public static generateValidOne(): SudouUnit {
-    const unit: SudouUnit = new SudouUnit();
-
-    const arInitOne: number[] = [];
-    for (let i = 0; i < SudouSize; i++) {
-      arInitOne.push(0);
-    }
-
-    for (let i = 0; i < SudouSize; i++) {
-      let jpos = Math.round(Math.random() * (SudouSize - 1) + 1);
-      if (arInitOne[jpos] === 0) {
-        arInitOne[jpos] = i + 1;
-      } else {
-        jpos = 0;
-        while (jpos < SudouSize) {
-          if (arInitOne[jpos] === 0) {
-            arInitOne[jpos] = i + 1;
-            break;
-          }
-          jpos++;
-        }
-
-        if (jpos > SudouSize) {
-          throw new Error('Failed to initialize a 3*3!');
-        }
-      }
-    }
-
-    //console.log(arInitOne.join(' '));
-    for (let i = 0; i < SudouSize; i++) {
-      unit.setCell(Math.floor(i / 3), Math.floor(i % 3), arInitOne[i]);
-    }
-
-    return unit;
-  }
 }
 
 /**
@@ -436,37 +437,37 @@ export function generateValidSudou(): Sudou {
 
   // The central one - B5
   const cunit: SudouUnit = SudouUnit.generateValidOne();
-  //console.log("B5 is ready: ");
-  //cunit.print2Log();
+  // console.log("B5 is ready: ");
+  // cunit.print2Log();
   // Now B4 and B6
   const cunitb6 = cunit.scrollUp();
-  //console.log("B6 is ready: ");
-  //cunitb6.print2Log();
+  // console.log("B6 is ready: ");
+  // cunitb6.print2Log();
   const cunitb4 = cunit.scrollDown();
-  //console.log("B4 is ready: ");
-  //cunitb4.print2Log();
+  // console.log("B4 is ready: ");
+  // cunitb4.print2Log();
   // Now B2 and B8
   const cunitb2 = cunit.scrollRight();
-  //console.log("B2 is ready: ");
-  //cunitb2.print2Log();
+  // console.log("B2 is ready: ");
+  // cunitb2.print2Log();
   const cunitb8 = cunit.scrollLeft();
-  //console.log("B8 is ready: ");
-  //cunitb8.print2Log();
+  // console.log("B8 is ready: ");
+  // cunitb8.print2Log();
 
   // Then B1, B3, B7 and B9
   const cunitb1 = cunitb4.scrollRight();
-  //console.log("B1 is ready: ");
-  //cunitb1.print2Log();
+  // console.log("B1 is ready: ");
+  // cunitb1.print2Log();
   const cunitb7 = cunitb4.scrollLeft();
-  //console.log("B7 is ready: ");
-  //cunitb7.print2Log();
+  // console.log("B7 is ready: ");
+  // cunitb7.print2Log();
 
   const cunitb3 = cunitb6.scrollRight();
-  //console.log("B3 is ready: ");
-  //cunitb3.print2Log();
+  // console.log("B3 is ready: ");
+  // cunitb3.print2Log();
   const cunitb9 = cunitb6.scrollLeft();
-  //console.log("B9 is ready: ");
-  //cunitb9.print2Log();
+  // console.log("B9 is ready: ");
+  // cunitb9.print2Log();
 
   rst.setUnitCell(0, 0, cunitb1);
   rst.setUnitCell(0, 1, cunitb2);
@@ -478,7 +479,7 @@ export function generateValidSudou(): Sudou {
   rst.setUnitCell(2, 1, cunitb8);
   rst.setUnitCell(2, 2, cunitb9);
 
-  //rst.print2Log();
+  // rst.print2Log();
 
   return rst;
 }

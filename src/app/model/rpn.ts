@@ -43,8 +43,7 @@ export function RPNGetOperatorResult(x: number, y: number, operator: any): numbe
     case '/':
       try {
         rst = x / y;
-      }
-      catch (ex) {
+      } catch (ex) {
         throw ex;
       }
       break;
@@ -79,8 +78,7 @@ export function rpn1(strinputs: string) {
     // Token is a value, push it onto the stack
     if (!Number.isNaN(+token)) {
       stack.push(parseFloat(token));
-    }
-    else {
+    } else {
       // Every operation requires two arguments
       if (stack.length < 2) {
         throw new Error('Insufficient values in expression.');
@@ -133,11 +131,10 @@ export class RPN {
 
     for (let i = 0; i < exp.length; i++) {
       const token = exp.charAt(i);
-      if (!Number.isNaN(+token)) // Digitials
-      {
+      if (!Number.isNaN(+token)) {
+        // Digitials
         digit += token;
-      }
-      else if (operations.indexOf(token) >= 0) {
+      } else if (operations.indexOf(token) >= 0) {
         if (digit.length > 0) {
           this._arInputs.push(digit);
           digit = '';
@@ -148,17 +145,14 @@ export class RPN {
           if (opInStack === '(' || RPNOperationPriority(opInStack) < RPNOperationPriority(token)) {
             skOp.push(opInStack);
             break;
-          }
-          else {
+          } else {
             this._arInputs.push(opInStack);
           }
         }
         skOp.push(token);
-      }
-      else if (token === '(') {
+      } else if (token === '(') {
         skOp.push(token);
-      }
-      else if (token === ')') {
+      } else if (token === ')') {
         if (digit.length > 0) {
           this._arInputs.push(digit);
           digit = '';
@@ -168,8 +162,7 @@ export class RPN {
           const opInStack = skOp.pop();
           if (opInStack === '(') {
             break;
-          }
-          else {
+          } else {
             this._arInputs.push(opInStack);
           }
         }
@@ -196,8 +189,7 @@ export class RPN {
       const c = this._arInputs[i];
       if (!Number.isNaN(+c)) {
         stack.push(c);
-      }
-      else if (c === '+' || c === '-' || c === '*' || c === '/') {
+      } else if (c === '+' || c === '-' || c === '*' || c === '/') {
         const nextNum = parseFloat(stack.pop());
         const prevNum = parseFloat(stack.pop());
         result = RPNGetOperatorResult(prevNum, nextNum, c);
@@ -219,9 +211,7 @@ export class RPN {
 
       if (!Number.isNaN(+c)) {
         stack.push(c);
-      }
-
-      else if (c === '+' || c === '-' || c === '*' || c === '/') {
+      } else if (c === '+' || c === '-' || c === '*' || c === '/') {
         const nextNum = parseFloat(stack.pop());
         if (!Number.isInteger(nextNum) && !allowDecimal) {
           return false;

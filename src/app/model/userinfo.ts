@@ -20,6 +20,12 @@ export interface UserDetailInfoJson {
  * User detail
  */
 export class UserDetailInfo {
+  private _awardControl: string;
+  private _awardPlanControl: string;
+  public UserId: string;
+  public DisplayAs: string;
+  public Others: string;
+
   constructor() {
     this.UserId = '';
     this.DisplayAs = '';
@@ -27,12 +33,6 @@ export class UserDetailInfo {
     this._awardControl = '';
     this._awardPlanControl = '';
   }
-
-  public UserId: string;
-  public DisplayAs: string;
-  public Others: string;
-  private _awardControl: string;
-  private _awardPlanControl: string;
 
   get AwardCreate(): boolean {
     return this._awardControl.includes(AuthorityControl_Create);
