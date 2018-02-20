@@ -1,6 +1,7 @@
 import { getCanvasMouseEventPosition } from './uicommon';
 import { environment } from '../../environments/environment';
 import { LogLevel } from './log';
+import { map } from 'rxjs/operators/map';
 
 // Refer to https://github.com/itlwei/chess
 
@@ -954,6 +955,40 @@ export class ChineseChessAI {
   historyBill: any[];
   treeDepth: any;
   number: any;
+
+  public initex(curmap: any[], pieces: ChineseChessPieceBase[], my, pace: any[], depth: number, com: ChineseChessUI) {
+    const bill = this.historyBill || com.aidata; // 开局库
+    if (bill.length > 0) {
+      const len = pace.length;
+      const arr = [];
+
+      // Search for suitable library
+      for (let i = 0; i < bill.length; i++) {
+        if (bill[i].slice(0, len) === pace) {
+          arr.push(bill[i]);
+        }
+      }
+
+      if (arr.length > 0) {
+        // Found it!
+        const inx = Math.floor(Math.random() * arr.length);
+        this.historyBill = arr;
+        return arr[inx].slice(len, len + 4).split('');
+      } else {
+        this.historyBill = [];
+      }
+    }
+
+    // No suitable library, go for AI
+    const initTime = new Date().getTime();
+    // AlphaBeta algorithm
+    let val = this.getAlphaBetaEx(-99999, 99999, this.treeDepth, map, my);
+
+    if (!val || val.value === -8888) {
+      this.treeDepth = 2;
+      val = this.getAlphaBetaEx(-99999, 99999, this.treeDepth, map, my);
+    }
+  }
 
   public init(com: ChineseChessUI, play: ChineseChess2Play, pace, depth) {
     const bill = this.historyBill || com.aidata; // 开局库
