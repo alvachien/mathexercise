@@ -478,6 +478,9 @@ export class Agent {
     }
 }
 
+export class HumanAgent extends Agent {
+}
+
 export class State {
     redAgent: Agent;
     blackAgent: Agent;

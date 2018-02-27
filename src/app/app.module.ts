@@ -58,6 +58,7 @@ import { UsTrendComponent } from './us-trend';
 import { UsNormalComponent } from './us-normal';
 import { PgGobangComponent } from './pg-gobang';
 import { PgChineseChessComponent } from './pg-chinese-chess';
+import { PgChineseChess2Component } from './pg-chinese-chess2';
 
 @NgModule({
   exports: [
@@ -101,6 +102,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     PgTypingtourComponent,
     PgGobangComponent,
     PgChineseChessComponent,
+    PgChineseChess2Component,
     MixedopExerciseComponent,
     PgSummaryDlgComponent,
     EnwordReciteExerciseComponent,
