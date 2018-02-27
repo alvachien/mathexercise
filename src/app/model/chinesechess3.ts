@@ -375,3 +375,454 @@ export class Rule {
       return 1;
   }
 }
+
+export class Agent {
+    team: number;
+    strategy: number = 0;
+    legalMoves: {}; // name->[positions]
+    pastMoves = [];
+    myPieces: Piece[];
+    oppoPieces: Piece[];
+    oppoAgent: Agent;
+    // myPiecesDic: {}; // {name -> pos}
+    boardState: {}; // {posStr->[name, isMyPiece]}
+
+    DEPTH = 0;
+
+
+    constructor(team: number, myPieces = null, pastMoves = [], strategy = 0) {
+        this.team = team;
+        if (myPieces == null)
+            this.myPieces = (team == 1 ? InitGame.getRedPieces() : InitGame.getBlackPieces());
+        else {
+            this.myPieces = myPieces;
+        }
+        this.pastMoves = pastMoves;
+        this.strategy = strategy;
+        // console.log("Agent")
+    }
+    setOppoAgent(oppoAgent) {
+        this.oppoAgent = oppoAgent;
+        this.oppoPieces = oppoAgent.myPieces;
+        this.updateState();
+    }
+    // return | 1:win | -1:lose | 0:continue
+    updateState() {
+        this.updateBoardState();
+        this.computeLegalMoves();
+    }
+
+    // compute legals moves for my pieces after state updated
+    computeLegalMoves() {
+        this.legalMoves = Rule.allPossibleMoves(this.myPieces, this.boardState, this.team);
+    }
+
+    // update board state by pieces
+    updateBoardState() {
+        var state = {};
+        for (var i in this.myPieces) state[this.myPieces[i].position.toString()] = [this.myPieces[i].name, true];
+        for (var i in this.oppoPieces) state[this.oppoPieces[i].position.toString()] = [this.oppoPieces[i].name, false];
+        this.boardState = state;
+    }
+
+    movePieceTo(piece: Piece, pos, isCapture = undefined) {
+        piece.moveTo(pos);
+        this.addMove(piece.name, pos);
+        if (isCapture == undefined) isCapture = this.oppoPieces.filter(x => x.position + '' == pos + '').length > 0;
+        // having oppo piece in target pos
+        if (isCapture) this.captureOppoPiece(pos);
+    }
+
+    // capture piece of opponent
+    // pos: position of piece to be captured
+    captureOppoPiece(pos) {
+        for (var i = 0; i < this.oppoPieces.length; i++) {
+            if (this.oppoPieces[i].position + '' == pos + '') {
+                this.oppoPieces.splice(i, 1); // remove piece from pieces
+                return;
+            }
+        }
+    }
+
+    // add move to pastMoves
+    addMove(pieceName, pos) {
+        this.pastMoves.push({ "name": pieceName, "position": pos });
+    }
+
+    // agent take action
+    nextMove() {
+        var computeResult = this.comptuteNextMove();
+        var piece = computeResult[0];
+        var toPos = computeResult[1];
+        this.movePieceTo(piece, toPos);
+    };
+
+    // TO BE IMPLEMENTED BY CHILD CLASS
+    // return: [piece, toPos]
+    comptuteNextMove() { alert("YOU SHOULD NOT CALL THIS!") }
+
+    getPieceByName(name) {
+        return this.myPieces.filter(x => x.name == name)[0];
+    }
+
+    // TO BE OVERIDE BY TDLeaner
+    update_weights(nSimulations, result) { return []; }
+    // TO BE OVERIDE BY TDLeaner
+    save_state(feature_vec) { }
+    copy() {
+        return new Agent(this.team, this.myPieces.map(x => x.copy()), this.copyMoves());
+    }
+
+    copyMoves() {
+        return this.pastMoves.slice();
+    }
+}
+
+export class State {
+    redAgent: Agent;
+    blackAgent: Agent;
+    playingTeam: number;
+    endFlag = null; // null: on going | 1: red win | -1: black win | 0: draw
+
+    constructor(redAgent: Agent, blacAgent: Agent, playingTeam = 1, setOppoo = true) {
+        this.redAgent = redAgent;
+        this.blackAgent = blacAgent;
+        this.playingTeam = playingTeam;
+        if (setOppoo) {
+            this.blackAgent.setOppoAgent(this.redAgent);
+            this.redAgent.setOppoAgent(this.blackAgent);
+        }
+    }
+
+    // TDlearning
+    learn(nSimulations) {
+        this.redAgent.update_weights(nSimulations, this.endFlag);
+        this.blackAgent.update_weights(nSimulations, this.endFlag);
+    }
+    record_feature(feature_vec) {
+        // console.log("record_feature")
+        this.redAgent.save_state(feature_vec);
+        this.blackAgent.save_state(feature_vec);
+    }
+
+    // return | 1:win | -1:lose | 0:continue for playing team
+    getEndState() {
+        var playing = this.playingTeam == 1 ? this.redAgent : this.blackAgent;
+        var endState = Rule.getGameEndState(playing);
+        return endState;
+    }
+    // return a copy of state
+    copy(setOppoo = true) {
+        var newState = new State(this.redAgent.copy(), this.blackAgent.copy(), this.playingTeam, setOppoo);
+        return newState;
+    }
+
+    // // return next state by action
+    // next_state(movePieceName, toPos) {
+    //     // make a copy a state
+    //     var nextState = this.copy();
+    //     nextState.switchTurn();
+    //     var agent = this.playingTeam == 1 ? nextState.redAgent : nextState.blackAgent;
+    //     agent.movePieceTo(agent.getPieceByName(movePieceName), toPos);
+    //     agent.updateState();
+    //     agent.oppoAgent.updateState();
+    //     return nextState;
+    // }
+
+    switchTurn() {
+        this.playingTeam = -this.playingTeam;
+    }
+    // return a evaluation score for this state
+    getEvaludation(team) {
+
+    }
+}
+
+export class Evaluation {
+
+    static pieceValues = {
+        'k': 6000,
+        's': 120,
+        'x': 120,
+        'j': 600,
+        'm': 270,
+        'p': 285,
+        'z': 30
+    };
+
+    static posValues = {
+        'j': [
+            [-2, 10, 6, 14, 12, 14, 6, 10, -2],
+            [8, 4, 8, 16, 8, 16, 8, 4, 8],
+            [4, 8, 6, 14, 12, 14, 6, 8, 4],
+            [6, 10, 8, 14, 14, 14, 8, 10, 6],
+            [12, 16, 14, 20, 20, 20, 14, 16, 12],
+            [12, 14, 12, 18, 18, 18, 12, 14, 12],
+            [12, 18, 16, 22, 22, 22, 16, 18, 12],
+            [12, 12, 12, 18, 18, 18, 12, 12, 12],
+            [16, 20, 18, 24, 26, 24, 18, 20, 16],
+            [14, 14, 12, 18, 16, 18, 12, 14, 14]
+        ],
+        'j-1': [
+            [14, 14, 12, 18, 16, 18, 12, 14, 14],
+            [16, 20, 18, 24, 26, 24, 18, 20, 16],
+            [12, 12, 12, 18, 18, 18, 12, 12, 12],
+            [12, 18, 16, 22, 22, 22, 16, 18, 12],
+            [12, 14, 12, 18, 18, 18, 12, 14, 12],
+            [12, 16, 14, 20, 20, 20, 14, 16, 12],
+            [6, 10, 8, 14, 14, 14, 8, 10, 6],
+            [4, 8, 6, 14, 12, 14, 6, 8, 4],
+            [8, 4, 8, 16, 8, 16, 8, 4, 8],
+            [-2, 10, 6, 14, 12, 14, 6, 10, -2]
+        ],
+        'm': [
+            [0, -4, 0, 0, 0, 0, 0, -4, 0],
+            [0, 2, 4, 4, -2, 4, 4, 2, 0],
+            [4, 2, 8, 8, 4, 8, 8, 2, 4],
+            [2, 6, 8, 6, 10, 6, 8, 6, 2],
+            [4, 12, 16, 14, 12, 14, 16, 12, 4],
+            [6, 16, 14, 18, 16, 18, 14, 16, 6],
+            [8, 24, 18, 24, 20, 24, 18, 24, 8],
+            [12, 14, 16, 20, 18, 20, 16, 14, 12],
+            [4, 10, 28, 16, 8, 16, 28, 10, 4],
+            [4, 8, 16, 12, 4, 12, 16, 8, 4]
+        ],
+        'm-1': [
+            [4, 8, 16, 12, 4, 12, 16, 8, 4],
+            [4, 10, 28, 16, 8, 16, 28, 10, 4],
+            [12, 14, 16, 20, 18, 20, 16, 14, 12],
+            [8, 24, 18, 24, 20, 24, 18, 24, 8],
+            [6, 16, 14, 18, 16, 18, 14, 16, 6],
+            [4, 12, 16, 14, 12, 14, 16, 12, 4],
+            [2, 6, 8, 6, 10, 6, 8, 6, 2],
+            [4, 2, 8, 8, 4, 8, 8, 2, 4],
+            [0, 2, 4, 4, -2, 4, 4, 2, 0],
+            [0, -4, 0, 0, 0, 0, 0, -4, 0]
+        ],
+        'p': [
+            [0, 0, 2, 6, 6, 6, 2, 0, 0],
+            [0, 2, 4, 6, 6, 6, 4, 2, 0],
+            [4, 0, 8, 6, 10, 6, 8, 0, 4],
+            [0, 0, 0, 2, 4, 2, 0, 0, 0],
+            [-2, 0, 4, 2, 6, 2, 4, 0, -2],
+            [0, 0, 0, 2, 8, 2, 0, 0, 0],
+            [0, 0, -2, 4, 10, 4, -2, 0, 0],
+            [2, 2, 0, -10, -8, -10, 0, 2, 2],
+            [2, 2, 0, -4, -14, -4, 0, 2, 2],
+            [6, 4, 0, -10, -12, -10, 0, 4, 6]
+        ],
+        'p-1': [
+            [6, 4, 0, -10, -12, -10, 0, 4, 6],
+            [2, 2, 0, -4, -14, -4, 0, 2, 2],
+            [2, 2, 0, -10, -8, -10, 0, 2, 2],
+            [0, 0, -2, 4, 10, 4, -2, 0, 0],
+            [0, 0, 0, 2, 8, 2, 0, 0, 0],
+            [-2, 0, 4, 2, 6, 2, 4, 0, -2],
+            [0, 0, 0, 2, 4, 2, 0, 0, 0],
+            [4, 0, 8, 6, 10, 6, 8, 0, 4],
+            [0, 2, 4, 6, 6, 6, 4, 2, 0],
+            [0, 0, 2, 6, 6, 6, 2, 0, 0]
+        ],
+        'z': [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, -2, 0, 4, 0, -2, 0, 0],
+            [2, 0, 8, 0, 8, 0, 8, 0, 2],
+            [6, 12, 18, 18, 20, 18, 18, 12, 6],
+            [10, 20, 30, 34, 40, 34, 30, 20, 10],
+            [14, 26, 42, 60, 80, 60, 42, 26, 14],
+            [18, 36, 56, 80, 120, 80, 56, 36, 18],
+            [0, 3, 6, 9, 12, 9, 6, 3, 0]
+        ],
+        'z-1': [
+            [0, 3, 6, 9, 12, 9, 6, 3, 0],
+            [18, 36, 56, 80, 120, 80, 56, 36, 18],
+            [14, 26, 42, 60, 80, 60, 42, 26, 14],
+            [10, 20, 30, 34, 40, 34, 30, 20, 10],
+            [6, 12, 18, 18, 20, 18, 18, 12, 6],
+            [2, 0, 8, 0, 8, 0, 8, 0, 2],
+            [0, 0, -2, 0, 4, 0, -2, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ],
+    };
+
+    // return value of piece
+    static pieceValue(name) {
+        return this.pieceValues[name[0]];
+    }
+    // return value of position: [row, col]
+    static posValue(name, pos, team = 1) {
+        var matrix = this.posValues[name[0] + team];
+        if (!matrix) return 0;
+        return matrix[pos[0] - 1][pos[1] - 1];
+    }
+
+}
+
+export class EvalFnAgent extends Agent {
+
+    DEPTH = 2;
+    strategy = 1;
+
+    constructor(team: number, depth = 2, myPieces = null, pastMoves = []) {
+        // console.log("EvalFnAgent")
+        super(team, myPieces, pastMoves);
+        this.DEPTH = depth;
+    }
+
+    // return a copy of an agent
+    copy() {
+        return new EvalFnAgent(this.team, this.DEPTH, this.myPieces.map(x => x.copy()), this.copyMoves());
+    }
+}
+
+export class GreedyAgent extends Agent {
+
+    strategy = 0;
+    DEPTH = 1;
+
+    // private method of computing next move
+    comptuteNextMove() {
+        // var pieceNames = Object.keys(this.legalMoves);
+        var piece;
+        var maxVal = 0;
+        var maxVal = -Infinity;
+        var fromPos = [];
+        var toPos = [];
+        for (var i in this.myPieces) {
+            var name = this.myPieces[i].name;
+            var moves = this.legalMoves[name];
+            for (var j in moves) {
+                var move = moves[j];
+                var value = this.getValueOfMove(name, move);
+                fromPos = this.myPieces[i].position;
+                if (value > maxVal) {
+                    toPos = move;
+                    piece = this.myPieces[i];
+                    maxVal = value;
+                }
+            }
+        }
+        return [piece, toPos];
+    }
+
+
+    getValueOfMove(pieceName, toPos) {
+        var piece = this.boardState[toPos.toString()];
+        var posVal = Evaluation.posValue(pieceName, toPos);
+        if (!piece) return posVal; // empty place
+        if (piece[1]) alert("Bug");
+        return Evaluation.pieceValue(piece[0]) + posVal;
+    }
+
+
+    // return a copy of an agent
+    copy() {
+        return new GreedyAgent(this.team, this.myPieces.map(x => x.copy()), this.copyMoves());
+    }
+}
+
+export class MoveReorderPruner extends EvalFnAgent {
+
+    strategy = 2
+
+    constructor(team: number, depth = 2, myPieces = undefined, pastMoves = []) {
+        super(team, depth, myPieces, pastMoves);
+        this.DEPTH = depth;
+    }
+
+    copy() {
+        return new MoveReorderPruner(this.team, this.DEPTH, this.myPieces.map(x => x.copy()), this.copyMoves());
+    }
+}
+
+export class MCTS extends Agent {
+
+
+    strategy = 5;
+    N_SIMULATION;
+    copy() {
+        return new MCTS(this.team, this.N_SIMULATION, this.myPieces.map(x => x.copy()), this.pastMoves);
+    }
+
+    constructor(team: number, N, myPieces = undefined, pastMoves = []) {
+        super(team, myPieces, pastMoves);
+        this.N_SIMULATION = N;
+    }
+}
+
+export class TDLearner extends EvalFnAgent {
+    strategy = 3;
+    weights = [];
+    // INIT_WEIGHTS = [20, 15, 30, 7, 20, 0, 20];
+    // INIT_WEIGHTS = [0, 0, 0, 0, 0, 0, 0];
+    INIT_WEIGHTS = [5, 10, 2, 0, 2, 0, 10];
+    feature_matrix = []; //[fea_vec]
+
+    constructor(team: number, depth = 2, weights, myPieces = null, pastMoves = []) {
+        super(team, depth, myPieces, pastMoves);
+        this.weights = weights;
+        // console.log(this.myPieces)
+        // this.weights = weights ? weights : this.INIT_WEIGHTS;
+    }
+
+    copy() {
+        // console.log(this.pastMoves)
+        // console.log(this.copyMoves())
+        return new TDLearner(this.team, this.DEPTH, this.weights, this.myPieces.map(x => x.copy()), this.copyMoves());
+    }
+
+    merge_arr(x, y) {
+        var r = [];
+        for (var i = 0; i < x.length; i++) r.push(x[i] + y[i]);
+        return r;
+    }
+
+
+    // result: 1-red win | -1:red lose
+    // [nThreat, nCapture, nCenterCannon, nBottomCannon, rook_mob, horse_mob, elephant_mob]
+    update_weights(nSimulations, result) {
+        if (result == 0) return this.weights;
+        result *= this.team;
+        // consolidate features vectors throught whole game into one
+        // console.log("this.feature_matrix:", this.feature_matrix)
+        var accu_fea = this.feature_matrix.reduce(this.merge_arr);
+        accu_fea = accu_fea.map(x => x / this.feature_matrix.length)
+        // var last_fea = this.feature_matrix[this.feature_matrix.length - 1];
+        // var combined_fea = last_fea;
+        // accu_fea = accu_fea.map(this.squash);
+        // console.log("accu_fea:", accu_fea)
+        // console.log("last_fea:", last_fea)
+        // console.log("nSimulations:", nSimulations)
+        var eta = 2 / Math.sqrt(nSimulations); // learning rate
+        // console.log("eta:", eta)
+        // var gradient = combined_fea.map(x => x * result);
+        // console.log("gradient:", gradient)
+        // console.log("this.weights:", this.weights)
+        for (var i = 0; i < accu_fea.length; i++) {
+            this.weights[i] += eta * result * (eta * accu_fea[i]);
+            // this.weights[i] += eta * result * (10 * accu_fea[i] - this.weights[i] + 10 * last_fea[i]);
+            // this.weights[i] += eta * (this.squash(gradient[i], this.weights[i]+1) - this.weights[i]);
+            this.weights[i] = Math.min(Math.max(this.weights[i], 0), 20);
+        }
+        console.log("UPDATED WEIGHT:", this.weights)
+        return this.weights;
+    }
+
+    squash(x, range = 20) { return (1 / (Math.exp(-x) + 1) - 0.5) * range; }
+
+    save_state(feature_vec) {
+        // console.log("save_state: ", feature_vec, " | Current: ", this.feature_matrix)
+        this.feature_matrix.push(feature_vec);
+    }
+
+}
+
+export class TDLearnerTrained extends EvalFnAgent {
+    strategy = 4;
+
+    copy() { return new TDLearnerTrained(this.team, this.DEPTH, this.myPieces.map(x => x.copy()), this.copyMoves()); }
+}
