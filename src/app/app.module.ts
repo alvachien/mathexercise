@@ -53,6 +53,7 @@ import { AwardPlanService } from './services/award-plan.service';
 import { AwardBalanceComponent } from './award-balance';
 import { AwardBalanceService } from './services/award-balance.service';
 import { QuizService } from './services/quiz.service';
+import { ChessAiService } from './services/chess-ai.service';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { UsTrendComponent } from './us-trend';
 import { UsNormalComponent } from './us-normal';
@@ -147,6 +148,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AwardBalanceService,
     QuizService,
     PgService,
+    ChessAiService,
   ],
   bootstrap: [AppComponent]
 })

@@ -1,8 +1,7 @@
-import {
-  Component, OnInit, AfterViewInit, HostListener,
-  EventEmitter, Output, Input
-} from '@angular/core';
-import { State, Piece, DummyPiece, GreedyAgent, EvalFnAgent, MoveReorderPruner, TDLearner, TDLearnerTrained, MCTS, HumanAgent,  } from '../model/chinesechess3';
+import { Component, OnInit, AfterViewInit, HostListener,
+  EventEmitter, Output, Input, } from '@angular/core';
+import { State, Piece, DummyPiece, GreedyAgent, EvalFnAgent, MoveReorderPruner, TDLearner,
+  TDLearnerTrained, MCTS, HumanAgent,  } from '../model/chinesechess3';
 
 @Component({
   selector: 'app-pg-chinese-chess2',
@@ -35,7 +34,7 @@ export class PgChineseChess2Component implements OnInit {
 
   /***************** UI *******************/
   // keep track of all pieces, just for UI purpose (including dummy pieces)
-  pieceSize: number = 67;
+  pieceSize = 67;
   selectedPiece: Piece;
   dummyPieces: DummyPiece[] = [];
   subscription: any;
@@ -63,22 +62,24 @@ export class PgChineseChess2Component implements OnInit {
 
 
   isPossibleMove(pos) {
-    if (!this.selectedPiece) return false;
-    var moves = this.state.redAgent.legalMoves[this.selectedPiece.name];
+    if (!this.selectedPiece) {
+      return false;
+    }
+    const moves = this.state.redAgent.legalMoves[this.selectedPiece.name];
     return moves.map(x => x + '').indexOf(pos + '') >= 0;
   }
   // Add dummy pieces to board
   initDummyButtons() {
     this.dummyPieces = [];
-    for (var i = 1; i <= 10; i++) {
-      for (var j = 1; j <= 9; j++) {
+    for (let i = 1; i <= 10; i++) {
+      for (let j = 1; j <= 9; j++) {
         this.dummyPieces.push(new DummyPiece([i, j]));
       }
     }
   }
 
   parse_agentType(desc) {
-    if (desc == "") {
+    if (desc === '') {
       return 0;
     }
     return parseInt(desc.split('-')[0]);
@@ -116,14 +117,14 @@ export class PgChineseChess2Component implements OnInit {
     this.initGame();
   }
   constructor() {
-    //this.server = server;
+    // this.server = server;
   }
 
   initGame() {
     this.selectedPiece = undefined;
     this.lastState = null;
     // init agents
-    var redAgent;
+    let redAgent;
 
     switch (this.redAgentType) {
       case 0: { redAgent = new GreedyAgent(this.redTeam); break; }
@@ -137,7 +138,7 @@ export class PgChineseChess2Component implements OnInit {
       case 6: { redAgent = new MoveReorderPruner(this.redTeam, this.redAgentDepth); break; }
       default: redAgent = new HumanAgent(this.redTeam); break;
     }
-    var blackAgent;
+    let blackAgent;
     switch (this.blackAgentType) {
       case 0: { blackAgent = new GreedyAgent(this.blackTeam); break; }
       case 1: { blackAgent = new EvalFnAgent(this.blackTeam, this.blackAgentDepth); break; }
@@ -154,17 +155,23 @@ export class PgChineseChess2Component implements OnInit {
   }
 
   clickDummyPiece(piece: Piece) {
-    if (!this.isPossibleMove(piece.position) || this.state.endFlag != null) return;
+    if (!this.isPossibleMove(piece.position) || this.state.endFlag != null) {
+      return;
+    }
     this.humanMove(piece);
   }
 
   clickRedPiece(piece: Piece) {
-    if (this.state.endFlag != null) return;
+    if (this.state.endFlag != null) {
+      return;
+    }
     this.selectedPiece = piece;
   }
 
   clickBlackPiece(piece: Piece) {
-    if (!this.isPossibleMove(piece.position) || this.state.endFlag != null) return;
+    if (!this.isPossibleMove(piece.position) || this.state.endFlag != null) {
+      return;
+    }
     this.humanMove(piece);
   }
 
@@ -177,7 +184,7 @@ export class PgChineseChess2Component implements OnInit {
 
   // end_state: -1: lose | 0: draw | 1: win
   end_game(end_state) {
-    var red_win = end_state * this.state.playingTeam;
+    const red_win = end_state * this.state.playingTeam;
     // update state for end state
     this.state.endFlag = red_win;
     this.results.push(red_win);
@@ -194,11 +201,12 @@ export class PgChineseChess2Component implements OnInit {
     this.onWeightUpdated.emit();
   }
   report_runtime(strategy, depth, time) {
-    var type = this.runtime_dict[strategy + "-" + depth];
-    if (!type) this.runtime_dict[strategy + "-" + depth] = [time, 1];
-    else {
-      var new_num = type[1] + 1;
-      this.runtime_dict[strategy + "-" + depth] = [Math.ceil((type[0] * type[1] + time) / new_num), new_num]
+    const type = this.runtime_dict[strategy + '-' + depth];
+    if (!type) {
+      this.runtime_dict[strategy + '-' + depth] = [time, 1];
+    } else {
+      const new_num = type[1] + 1;
+      this.runtime_dict[strategy + '-' + depth] = [Math.ceil((type[0] * type[1] + time) / new_num), new_num]
     }
     this.onTimeUpdated.emit();
   }
@@ -208,18 +216,20 @@ export class PgChineseChess2Component implements OnInit {
   switchTurn() {
     // update playing team
     this.state.switchTurn();
-    var agent = (this.state.playingTeam == 1 ? this.state.redAgent : this.state.blackAgent);
+    const agent = (this.state.playingTeam === 1 ? this.state.redAgent : this.state.blackAgent);
     agent.updateState();
     // agent.nextMove();
-    var endState = this.state.getEndState();
-    if (endState != 0) {
+    const endState = this.state.getEndState();
+    if (endState !== 0) {
       this.end_game(endState);
       return;
     }
 
     this.selectedPiece = undefined;
     // if human's turn, return
-    if (this.state.playingTeam == 1) return;
+    if (this.state.playingTeam === 1) {
+      return;
+    }
 
     // this.switchTurn();
     // TBD!!!
@@ -247,7 +257,9 @@ export class PgChineseChess2Component implements OnInit {
   }
   // reverse game state to previous state
   go2PreviousState() {
-    if (!this.lastState) return;
+    if (!this.lastState) {
+      return;
+    }
     this.state = this.lastState;
     this.lastState = null;
   }
