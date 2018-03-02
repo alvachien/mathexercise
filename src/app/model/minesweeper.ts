@@ -1,4 +1,4 @@
-import { MatrixPosIntf, workoutSlashEx } from './utility';
+
 import { CanvasCellPositionInf } from './uicommon';
 
 // Refer to https://github.com/liusaint/games/tree/master/mine

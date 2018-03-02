@@ -1,8 +1,9 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, EventEmitter, Output, Input, HostListener } from '@angular/core';
 import {
   LogLevel, QuizDegreeOfDifficulity, getCanvasMouseEventPosition, getCanvasCellPosition,
-  CanvasCellPositionInf, MineSweeper, MatrixPosIntf
+  CanvasCellPositionInf, MineSweeper,
 } from '../model';
+import { MatrixPosIntf } from 'actslib';
 import { environment } from '../../environments/environment';
 import { MatSnackBar } from '@angular/material';
 
@@ -393,7 +394,6 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
   }
 
   discoverAllMines() {
-    let pos: CanvasCellPositionInf = undefined;
     for (let i = 0; i < this._instance.cells.length; i++) {
       for (let j = 0; j < this._instance.cells[i].length; j++) {
         if (this._instance.cells[i][j].isMine === true) {
@@ -494,7 +494,7 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
     ctx2.font = '24px Roboto';
     if (num > 0) {
       ctx2.fillText(num.toString(), area[0] + Math.round(this.PANE_SIZE / 4), area[1] + Math.round(this.PANE_SIZE * 4 / 5), this.PANE_SIZE);
-    }    
+    }
     ctx2.restore();
   }
 
@@ -516,7 +516,7 @@ export class PgMinesweeperComponent implements OnInit, AfterViewInit {
     }
 
     // It is finished!
-    let snackBarRef: any = this.snackBar.open(rst ? 'You Win' : 'You Lose', 'CLOSE', {
+    const snackBarRef: any = this.snackBar.open(rst ? 'You Win' : 'You Lose', 'CLOSE', {
       duration: 2000
     });
 

@@ -1,6 +1,5 @@
 
 export * from './datedef';
-export * from './utility';
 export * from './quizconstants';
 export * from './quizconcept';
 export * from './basicmathquiz';

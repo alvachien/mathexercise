@@ -1,5 +1,5 @@
 import { CanvasCellPositionInf } from './uicommon';
-import { workoutSlash, workoutBackSlash, MatrixPosIntf } from './utility';
+import { Matrix, MatrixPosIntf } from 'actslib';
 
 // Gobang cell
 export class GobangCell {
@@ -101,8 +101,9 @@ export class Gobang {
     }
 
     // Positions
-    this._arSlashPos = workoutSlash(this._dimension);
-    this._arBackSlashPos = workoutBackSlash(this._dimension);
+    const matrx: Matrix = new Matrix(this._dimension, this._dimension);
+    this._arSlashPos = matrx.getSlashOutputPos();
+    this._arBackSlashPos = matrx.getBackSlashOutputPos();
 
     // Analysis
     this._AIAnalysis = [];
