@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit, HostListener,
   EventEmitter, Output, Input, } from '@angular/core';
 import { State, Piece, DummyPiece, GreedyAgent, EvalFnAgent, MoveReorderPruner, TDLearner,
   TDLearnerTrained, MCTS, HumanAgent,  } from '../model/chinesechess3';
+import { ChessAiService } from '../services';
 
 @Component({
   selector: 'app-pg-chinese-chess2',
@@ -116,8 +117,8 @@ export class PgChineseChess2Component implements OnInit {
     this.initDummyButtons();
     this.initGame();
   }
-  constructor() {
-    // this.server = server;
+
+  constructor(private server: ChessAiService) {    
   }
 
   initGame() {
@@ -194,7 +195,6 @@ export class PgChineseChess2Component implements OnInit {
     this.selectedPiece = undefined;
   }
 
-
   // report results
   report_result() {
     this.onResultsUpdated.emit();
@@ -210,7 +210,6 @@ export class PgChineseChess2Component implements OnInit {
     }
     this.onTimeUpdated.emit();
   }
-
 
   // switch game turn
   switchTurn() {
@@ -233,28 +232,27 @@ export class PgChineseChess2Component implements OnInit {
 
     // this.switchTurn();
     // TBD!!!
-    // this.server.launchCompute(this.state.copy(false)).then(
-    //   result => {
-    //     var move = result['move'];
-    //     var time = parseInt(result['time']);
-    //     var state_feature = result['state_feature'];
-    //     if (time) this.report_runtime(agent.strategy, (agent instanceof MCTS ? agent.N_SIMULATION : agent.DEPTH), time)
-    //     if (state_feature) agent.save_state(state_feature);
-    //     if (!move) { // FAIL
-    //       this.end_game(-1);
-    //       return;
-    //     }
-    //     if (move.length == 0) { // DRAW
-    //       this.end_game(0);
-    //       return;
-    //     }
+    this.server.launchCompute(this.state.copy(false)).subscribe((result) => {
+      var move = result['move'];
+      var time = parseInt(result['time']);
+      var state_feature = result['state_feature'];
+      if (time) this.report_runtime(agent.strategy, (agent instanceof MCTS ? agent.N_SIMULATION : agent.DEPTH), time)
+      if (state_feature) agent.save_state(state_feature);
+      if (!move) { // FAIL
+        this.end_game(-1);
+        return;
+      }
+      if (move.length == 0) { // DRAW
+        this.end_game(0);
+        return;
+      }
 
-    //     var piece = agent.getPieceByName(move[0].name);
-    //     agent.movePieceTo(piece, move[1]);
-    //     this.switchTurn();
-    //   }
-    // );
+      var piece = agent.getPieceByName(move[0].name);
+      agent.movePieceTo(piece, move[1]);
+      this.switchTurn();
+    });
   }
+
   // reverse game state to previous state
   go2PreviousState() {
     if (!this.lastState) {
