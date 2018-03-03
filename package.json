@@ -33,7 +33,7 @@
     "@ngx-translate/core": "^9.0.1",
     "@ngx-translate/http-loader": "^2.0.0",
     "@swimlane/ngx-charts": "^7.0.1",
-    "actslib": "^0.2.0",
+    "actslib": "^0.3.0",
     "babel-polyfill": "^6.23.0",
     "bootstrap": "^4.0.0",
     "core-js": "^2.5.1",
