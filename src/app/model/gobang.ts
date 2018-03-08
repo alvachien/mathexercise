@@ -152,7 +152,7 @@ export class Gobang {
     this.cells[row][column].playerinput = playerinput;
 
     // Add to queue
-    this._queuePositions.push({x: row, y: column});
+    this._queuePositions.push({row: row, column: column});
 
     // Now check for the winner
     this.checkWinner(row, column, playerinput);
@@ -178,8 +178,8 @@ export class Gobang {
       return rtnPos;
     } else if (this._queuePositions.length === 1) {
       // First step of AI
-      rtnPos.row = this._queuePositions[0].x;
-      rtnPos.column = (this._queuePositions[0].y + 1 < this._dimension) ? (this._queuePositions[0].y + 1) : (this._queuePositions[0].y - 1);
+      rtnPos.row = this._queuePositions[0].row;
+      rtnPos.column = (this._queuePositions[0].column + 1 < this._dimension) ? (this._queuePositions[0].column + 1) : (this._queuePositions[0].column - 1);
 
       return rtnPos;
     }
@@ -436,7 +436,7 @@ export class Gobang {
     for (let i = 0; i < this._arSlashPos.length; i++) {
       const arCells = [];
       for (const pos of this._arSlashPos[i]) {
-        arCells.push(this.cells[pos.x][pos.y]);
+        arCells.push(this.cells[pos.row][pos.column]);
       }
 
       const rowCells = this.buildUpAnalysisRow(arCells);
@@ -479,7 +479,7 @@ export class Gobang {
     for (let i = 0; i < this._arBackSlashPos.length; i++) {
       const arCells = [];
       for (const pos of this._arBackSlashPos[i]) {
-        arCells.push(this.cells[pos.x][pos.y]);
+        arCells.push(this.cells[pos.row][pos.column]);
       }
 
       const rowCells = this.buildUpAnalysisRow(arCells);

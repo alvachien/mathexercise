@@ -469,10 +469,10 @@ export class Agent {
   // update board state by pieces
   updateBoardState() {
     const state = {};
-    for (const i of this.myPieces) {
+    for (const i in this.myPieces) {
       state[this.myPieces[i].position.toString()] = [this.myPieces[i].name, true];
     }
-    for (const i of this.oppoPieces) {
+    for (const i in this.oppoPieces) {
       state[this.oppoPieces[i].position.toString()] = [this.oppoPieces[i].name, false];
     }
     this.boardState = state;
@@ -730,7 +730,7 @@ export class EvalFnAgent extends Agent {
   constructor(team: number, depth = 2, myPieces = null, pastMoves = []) {
     // console.log("EvalFnAgent")
     super(team, myPieces, pastMoves);
-    this.DEPTH = depth;
+    this.depth = depth;
   }
 
   // return a copy of an agent

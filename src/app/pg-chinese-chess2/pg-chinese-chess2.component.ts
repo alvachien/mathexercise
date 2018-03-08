@@ -236,7 +236,7 @@ export class PgChineseChess2Component implements OnInit {
       const time = parseInt(result['time'], 10);
       const state_feature = result['state_feature'];
       if (time) {
-        this.report_runtime(agent.strategy, (agent instanceof MCTS ? agent.N_SIMULATION : agent.DEPTH), time)
+        this.report_runtime(agent.strategy, (agent instanceof MCTS ? agent.N_SIMULATION : agent.depth), time)
       }
       if (state_feature) {
         agent.save_state(state_feature);
