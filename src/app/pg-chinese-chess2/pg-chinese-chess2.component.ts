@@ -83,7 +83,7 @@ export class PgChineseChess2Component implements OnInit {
     if (desc === '') {
       return 0;
     }
-    return parseInt(desc.split('-')[0]);
+    return parseInt(desc.split('-')[0], 10);
   }
 
   chooseRedAgent(desc) {
@@ -97,19 +97,19 @@ export class PgChineseChess2Component implements OnInit {
     this.initGame();
   }
   chooseRedAgentDepth(depth) {
-    this.redAgentDepth = parseInt(depth);
+    this.redAgentDepth = parseInt(depth, 10);
   }
   chooseBlackAgentDepth(depth) {
-    this.blackAgentDepth = parseInt(depth);
+    this.blackAgentDepth = parseInt(depth, 10);
     this.initGame();
   }
 
   chooseBlackSimulations(n) {
-    this.blackAgentSimulations = parseInt(n);
+    this.blackAgentSimulations = parseInt(n, 10);
     this.initGame();
   }
   chooseRedSimulations(n) {
-    this.redAgentSimulations = parseInt(n);
+    this.redAgentSimulations = parseInt(n, 10);
   }
 
   /***************** LIFE_CYCLE *******************/
@@ -118,7 +118,7 @@ export class PgChineseChess2Component implements OnInit {
     this.initGame();
   }
 
-  constructor(private server: ChessAiService) {    
+  constructor(private server: ChessAiService) {
   }
 
   initGame() {
@@ -126,7 +126,6 @@ export class PgChineseChess2Component implements OnInit {
     this.lastState = null;
     // init agents
     let redAgent;
-
     switch (this.redAgentType) {
       case 0: { redAgent = new GreedyAgent(this.redTeam); break; }
       case 1: { redAgent = new EvalFnAgent(this.redTeam, this.redAgentDepth); break; }
@@ -233,21 +232,27 @@ export class PgChineseChess2Component implements OnInit {
     // this.switchTurn();
     // TBD!!!
     this.server.launchCompute(this.state.copy(false)).subscribe((result) => {
-      var move = result['move'];
-      var time = parseInt(result['time']);
-      var state_feature = result['state_feature'];
-      if (time) this.report_runtime(agent.strategy, (agent instanceof MCTS ? agent.N_SIMULATION : agent.DEPTH), time)
-      if (state_feature) agent.save_state(state_feature);
+      const move = result['move'];
+      const time = parseInt(result['time'], 10);
+      const state_feature = result['state_feature'];
+      if (time) {
+        this.report_runtime(agent.strategy, (agent instanceof MCTS ? agent.N_SIMULATION : agent.DEPTH), time)
+      }
+      if (state_feature) {
+        agent.save_state(state_feature);
+      }
+
       if (!move) { // FAIL
         this.end_game(-1);
         return;
       }
-      if (move.length == 0) { // DRAW
+
+      if (move.length === 0) { // DRAW
         this.end_game(0);
         return;
       }
 
-      var piece = agent.getPieceByName(move[0].name);
+      const piece = agent.getPieceByName(move[0].name);
       agent.movePieceTo(piece, move[1]);
       this.switchTurn();
     });
