@@ -301,8 +301,8 @@ export class Rule {
   // Xiang
   static possibleMovesForXiang(currRow, currCol, boardStates, isLowerTeam) {
     const moves = [];
-    let canMoveDowward = (isLowerTeam || currRow >= 8);
-    let canMoveUpward = (currRow <= 3 || !isLowerTeam);
+    const canMoveDowward = (isLowerTeam || currRow >= 8);
+    const canMoveUpward = (currRow <= 3 || !isLowerTeam);
     if (canMoveUpward && !([currRow + 1, currCol + 1].toString() in boardStates)) {
       moves.push([currRow + 2, currCol + 2]);
     }
@@ -320,8 +320,8 @@ export class Rule {
 
   // Zu
   static possibleMovesForZu(currRow, currCol, boardStates, isLowerTeam) {
-    var beyond = isLowerTeam ? (currRow > 5) : (currRow <= 5); //beyond the river
-    var moves = isLowerTeam ? [[currRow + 1, currCol]] : [[currRow - 1, currCol]];
+    const beyond = isLowerTeam ? (currRow > 5) : (currRow <= 5); // beyond the river
+    const moves = isLowerTeam ? [[currRow + 1, currCol]] : [[currRow - 1, currCol]];
     if (beyond) {
       moves.push([currRow, currCol - 1]);
       moves.push([currRow, currCol + 1]);
@@ -333,10 +333,10 @@ export class Rule {
   // boardStates: {posStr->[name, isMyPiece]}
   // return [(row, col)]
   static possibleMoves = function (piece: Piece, boardStates: {}, isLowerTeam) {
-    var name = piece.name[0];
-    var currRow = piece.position[0];
-    var currCol = piece.position[1];
-    var moves = [];
+    const name = piece.name[0];
+    const currRow = piece.position[0];
+    const currCol = piece.position[1];
+    let moves = [];
 
     switch (name) {
       case 'j':
@@ -369,10 +369,10 @@ export class Rule {
   // return a list of all possible moves
   // boardStates: {posStr->[name, isMyPiece]}
   static allPossibleMoves = function (myPieces: Piece[], boardStates: {}, team) {
-    var moves = {};
+    let moves = {};
     // team is in the lower part of the river
-    var isLowerTeam = (team == 1);
-    for (var i in myPieces) {
+    const isLowerTeam = (team === 1);
+    for (let i of myPieces) {
       var piece = myPieces[i];
       var moves4Piece = this.possibleMoves(piece, boardStates, isLowerTeam);
       // console.log("moves4Piece", piece.name, moves4Piece)
@@ -388,9 +388,9 @@ export class Rule {
   // -1: Lase
   // {posStr->[name, isMyPiece]}
   static getGameEndState = function (agent) {
-    var myPieces: Piece[] = agent.myPieces;
-    var oppoPieces: Piece[] = agent.oppoPieces;
-    var boardState = agent.boardState;
+    const myPieces: Piece[] = agent.myPieces;
+    const oppoPieces: Piece[] = agent.oppoPieces;
+    const boardState = agent.boardState;
     return this.getGameEndStateByState(myPieces, oppoPieces, boardState, agent.team)
 
   }
@@ -494,7 +494,7 @@ export class Agent {
   // pos: position of piece to be captured
   captureOppoPiece(pos) {
     for (let i = 0; i < this.oppoPieces.length; i++) {
-      if (this.oppoPieces[i].position + '' == pos + '') {
+      if (this.oppoPieces[i].position + '' === pos + '') {
         this.oppoPieces.splice(i, 1); // remove piece from pieces
         return;
       }
@@ -715,8 +715,10 @@ export class Evaluation {
   }
   // return value of position: [row, col]
   static posValue(name, pos, team = 1) {
-    var matrix = this.posValues[name[0] + team];
-    if (!matrix) return 0;
+    const matrix = this.posValues[name[0] + team];
+    if (!matrix) {
+      return 0;
+    }
     return matrix[pos[0] - 1][pos[1] - 1];
   }
 
@@ -747,17 +749,17 @@ export class GreedyAgent extends Agent {
   // private method of computing next move
   comptuteNextMove() {
     // var pieceNames = Object.keys(this.legalMoves);
-    var piece;
-    var maxVal = 0;
-    var maxVal = -Infinity;
-    var fromPos = [];
-    var toPos = [];
+    let piece;
+    let maxVal = 0;
+    let maxVal = -Infinity;
+    let fromPos = [];
+    let toPos = [];
     for (var i in this.myPieces) {
-      var name = this.myPieces[i].name;
-      var moves = this.legalMoves[name];
-      for (var j in moves) {
-        var move = moves[j];
-        var value = this.getValueOfMove(name, move);
+      let name = this.myPieces[i].name;
+      let moves = this.legalMoves[name];
+      for (let j in moves) {
+        let move = moves[j];
+        let value = this.getValueOfMove(name, move);
         fromPos = this.myPieces[i].position;
         if (value > maxVal) {
           toPos = move;
@@ -771,10 +773,15 @@ export class GreedyAgent extends Agent {
 
 
   getValueOfMove(pieceName, toPos) {
-    var piece = this.boardState[toPos.toString()];
-    var posVal = Evaluation.posValue(pieceName, toPos);
-    if (!piece) return posVal; // empty place
-    if (piece[1]) alert("Bug");
+    let piece = this.boardState[toPos.toString()];
+    let posVal = Evaluation.posValue(pieceName, toPos);
+    if (!piece) {
+      return posVal; // empty place
+    }
+    if (piece[1]) {
+      alert("Bug");
+    }
+
     return Evaluation.pieceValue(piece[0]) + posVal;
   }
 
@@ -845,7 +852,7 @@ export class TDLearner extends EvalFnAgent {
   // result: 1-red win | -1:red lose
   // [nThreat, nCapture, nCenterCannon, nBottomCannon, rook_mob, horse_mob, elephant_mob]
   update_weights(nSimulations, result) {
-    if (result == 0) return this.weights;
+    if (result === 0) return this.weights;
     result *= this.team;
     // consolidate features vectors throught whole game into one
     // console.log("this.feature_matrix:", this.feature_matrix)
