@@ -373,8 +373,8 @@ export class Rule {
     // team is in the lower part of the river
     const isLowerTeam = (team === 1);
     for (let i of myPieces) {
-      var piece = myPieces[i];
-      var moves4Piece = this.possibleMoves(piece, boardStates, isLowerTeam);
+      let piece = myPieces[i];
+      const moves4Piece = this.possibleMoves(piece, boardStates, isLowerTeam);
       // console.log("moves4Piece", piece.name, moves4Piece)
       // if (!moves4Piece || moves4Piece.length == 0) continue;
       moves[piece.name] = moves4Piece;
@@ -773,13 +773,13 @@ export class GreedyAgent extends Agent {
 
 
   getValueOfMove(pieceName, toPos) {
-    let piece = this.boardState[toPos.toString()];
-    let posVal = Evaluation.posValue(pieceName, toPos);
+    const piece = this.boardState[toPos.toString()];
+    const posVal = Evaluation.posValue(pieceName, toPos);
     if (!piece) {
       return posVal; // empty place
     }
     if (piece[1]) {
-      alert("Bug");
+      alert('Bug');
     }
 
     return Evaluation.pieceValue(piece[0]) + posVal;
@@ -827,7 +827,7 @@ export class TDLearner extends EvalFnAgent {
   // INIT_WEIGHTS = [20, 15, 30, 7, 20, 0, 20];
   // INIT_WEIGHTS = [0, 0, 0, 0, 0, 0, 0];
   INIT_WEIGHTS = [5, 10, 2, 0, 2, 0, 10];
-  feature_matrix = []; //[fea_vec]
+  feature_matrix = []; // [fea_vec]
 
   constructor(team: number, depth = 2, weights, myPieces = null, pastMoves = []) {
     super(team, depth, myPieces, pastMoves);
@@ -843,8 +843,10 @@ export class TDLearner extends EvalFnAgent {
   }
 
   merge_arr(x, y) {
-    var r = [];
-    for (var i = 0; i < x.length; i++) r.push(x[i] + y[i]);
+    const r = [];
+    for (let i = 0; i < x.length; i++) {
+      r.push(x[i] + y[i]);
+    }
     return r;
   }
 
@@ -852,11 +854,14 @@ export class TDLearner extends EvalFnAgent {
   // result: 1-red win | -1:red lose
   // [nThreat, nCapture, nCenterCannon, nBottomCannon, rook_mob, horse_mob, elephant_mob]
   update_weights(nSimulations, result) {
-    if (result === 0) return this.weights;
+    if (result === 0) {
+      return this.weights;
+    }
+
     result *= this.team;
     // consolidate features vectors throught whole game into one
     // console.log("this.feature_matrix:", this.feature_matrix)
-    var accu_fea = this.feature_matrix.reduce(this.merge_arr);
+    let accu_fea = this.feature_matrix.reduce(this.merge_arr);
     accu_fea = accu_fea.map(x => x / this.feature_matrix.length)
     // var last_fea = this.feature_matrix[this.feature_matrix.length - 1];
     // var combined_fea = last_fea;
@@ -864,18 +869,18 @@ export class TDLearner extends EvalFnAgent {
     // console.log("accu_fea:", accu_fea)
     // console.log("last_fea:", last_fea)
     // console.log("nSimulations:", nSimulations)
-    var eta = 2 / Math.sqrt(nSimulations); // learning rate
+    const eta = 2 / Math.sqrt(nSimulations); // learning rate
     // console.log("eta:", eta)
     // var gradient = combined_fea.map(x => x * result);
     // console.log("gradient:", gradient)
     // console.log("this.weights:", this.weights)
-    for (var i = 0; i < accu_fea.length; i++) {
+    for (let i = 0; i < accu_fea.length; i++) {
       this.weights[i] += eta * result * (eta * accu_fea[i]);
       // this.weights[i] += eta * result * (10 * accu_fea[i] - this.weights[i] + 10 * last_fea[i]);
       // this.weights[i] += eta * (this.squash(gradient[i], this.weights[i]+1) - this.weights[i]);
       this.weights[i] = Math.min(Math.max(this.weights[i], 0), 20);
     }
-    console.log("UPDATED WEIGHT:", this.weights)
+    console.log('UPDATED WEIGHT:', this.weights);
     return this.weights;
   }
 
