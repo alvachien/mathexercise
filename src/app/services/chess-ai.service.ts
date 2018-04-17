@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { State } from '../model/chinesechess3';
 import { LogLevel } from '../model';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
+import { map, merge, startWith } from 'rxjs/operators';
 
 @Injectable()
 export class ChessAiService {

@@ -9,8 +9,8 @@ import { LogLevel } from './model';
 import * as moment from 'moment';
 import 'moment/locale/zh-cn';
 import { DateAdapter } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/Rx';
+import { Observable, forkJoin } from 'rxjs';
+import { map, merge, startWith } from 'rxjs/operators';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 
 @Component({
@@ -266,7 +266,7 @@ export class AppComponent implements OnInit {
             this.titleLogin = x.getUserName();
 
             // Get user detail
-            Observable.forkJoin(
+            forkJoin(
               this._userDetailService.fetchUserDetail(),
               this._userDetailService.fetchAllUsers()
             ).subscribe((x2) => {

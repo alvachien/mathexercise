@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { Subject, of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
+import { map, merge, startWith } from 'rxjs/operators';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
@@ -19,7 +20,7 @@ export class PgService {
 
   public fetchChineseChessAIData(): Observable<any> {
     if (this._isChineseChessAIDataLoaded) {
-      return Observable.of(this.listChineseChessAIData.value);
+      return of(this.listChineseChessAIData.value);
     } else {
       let headers = new HttpHeaders();
       headers = headers.append('Content-Type', 'text/plain')

@@ -1,7 +1,7 @@
 import { getCanvasMouseEventPosition } from './uicommon';
 import { environment } from '../../environments/environment';
 import { LogLevel } from './log';
-import { map } from 'rxjs/operators/map';
+import { map } from 'rxjs/operators';
 
 // Refer to https://github.com/itlwei/chess
 

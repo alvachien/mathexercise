@@ -1,10 +1,8 @@
 import { environment } from '../../environments/environment';
 import { Injectable, EventEmitter } from '@angular/core';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
-import 'rxjs/add/operator/map';
-import { Subject } from 'rxjs/Subject';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { Observable, BehaviorSubject, Subject, of } from 'rxjs';
+import { map, merge, startWith } from 'rxjs/operators';
 import { LogLevel, UserAuthInfo, UserDetailInfo, UserDetailInfoJson } from '../model';
 import { AuthService } from './auth.service';
 
@@ -109,7 +107,7 @@ export class UserDetailService {
           return this._usrDetialInfo;
         });
     } else {
-      return Observable.of(this._usrDetialInfo);
+      return of(this._usrDetialInfo);
     }
   }
 
@@ -214,7 +212,7 @@ export class UserDetailService {
           return this._listUsers;
         });
     } else {
-      return Observable.of(this._listUsers);
+      return of(this._listUsers);
     }
   }
 }

@@ -9,17 +9,10 @@ import {
 } from '../model';
 import { AuthService, QuizAttendUser, UserDetailService } from '../services';
 import { environment } from '../../environments/environment';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { MatDialog, MatPaginator, MatSort } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
+import { Observable, forkJoin, BehaviorSubject } from 'rxjs';
 import * as moment from 'moment';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/observable/fromEvent';
-
+import { map, merge, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-us-trend',
@@ -129,7 +122,7 @@ export class UsTrendComponent implements OnInit {
     params = params.set('dtBegin', bgn.format(DateFormat));
     params = params.set('dtEnd', end.format(DateFormat));
 
-    Observable.forkJoin(
+    forkJoin(
       this._http.get(apistatsrate, {
         headers: headers,
         params: params,

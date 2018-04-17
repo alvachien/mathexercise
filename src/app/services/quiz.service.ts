@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
+import { map, merge, startWith } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { LogLevel, UserAuthInfo, PrimarySchoolMathQuiz, QuizCreateResultJSON,
   APIQuizSection, APIQuizFailLog, APIQuiz } from '../model';

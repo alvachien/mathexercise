@@ -7,12 +7,12 @@ import {
   AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem, DateFormat,
   StatisticsDateRange, StatisticsDateRangeEnum, getStatisticsDateRangeEnumString, getStatisticsDateRangeDate
 } from '../model';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { QuizAttendUser, UserDetailService } from '../services/userdetail.service';
 import { DataSource } from '@angular/cdk/collections';
 import { MatDialog, MatPaginator, MatSort } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
