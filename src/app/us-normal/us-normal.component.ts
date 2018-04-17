@@ -10,7 +10,7 @@ import {
 import { AuthService, QuizAttendUser, UserDetailService } from '../services';
 import { environment } from '../../environments/environment';
 import { MatDialog, MatPaginator, MatSort } from '@angular/material';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, range } from 'rxjs';
 import * as moment from 'moment';
 import { map, merge, startWith } from 'rxjs/operators';
 
@@ -32,7 +32,9 @@ export class QuizDataSource extends DataSource<APIQuiz> {
       this._sort.sortChange,
     ];
 
-    return merge(...displayDataChanges).map(() => {
+    const mgerst = merge(...displayDataChanges);
+    
+    return mgerst.map(() => {
       const data = this.getSortedData();
 
       // Grab the page's slice of data.
@@ -260,10 +262,10 @@ export class UsNormalComponent implements OnInit, AfterViewInit {
       headers: headers,
       params: params,
       withCredentials: true
-    })
-      .map((response: HttpResponse<any>) => {
+    }).pipe(
+      map((response: HttpResponse<any>) => {
         return <any>response;
-      })
+      }))
       .subscribe(x => {
         const ndata: APIQuiz[] = [];
         this.dataQuizAmountByDate = [];
