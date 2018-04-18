@@ -10,9 +10,9 @@ import {
 import { AuthService, QuizAttendUser, UserDetailService } from '../services';
 import { environment } from '../../environments/environment';
 import { MatDialog, MatPaginator, MatSort } from '@angular/material';
-import { Observable, BehaviorSubject, range } from 'rxjs';
+import { Observable, BehaviorSubject, from, of, merge } from 'rxjs';
+import { concatAll, every, last as lastValue, map, mergeAll } from 'rxjs/operators';
 import * as moment from 'moment';
-import { map, merge, startWith } from 'rxjs/operators';
 
 /**
  * Quiz data source
@@ -34,13 +34,13 @@ export class QuizDataSource extends DataSource<APIQuiz> {
 
     const mgerst = merge(...displayDataChanges);
     
-    return mgerst.map(() => {
+    return mgerst.pipe(map(() => {
       const data = this.getSortedData();
 
       // Grab the page's slice of data.
       const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
       return data.splice(startIndex, this._paginator.pageSize);
-    });
+    }));
   }
 
   disconnect() { }

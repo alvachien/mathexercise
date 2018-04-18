@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
 import { MatDialog, MatPaginator } from '@angular/material';
-import { Observable } from 'rxjs';
-import { map, merge, startWith } from 'rxjs/operators';
+import { Observable, merge } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { AwardPlan, QuizTypeEnum, QuizTypeEnum2UIString, LogLevel, DateFormat, UserDetailInfo, UIMode } from '../model';
 import { AwardPlanService, QuizAttendUser, UserDetailService, DialogService, AuthService } from '../services';
@@ -32,13 +32,13 @@ export class AwardPlanDataSource extends DataSource<any> {
       this._apService.listSubject,
       this._paginator.page,
     ];
-    return merge(...displayDataChanges).map(() => {
+    return merge(...displayDataChanges).pipe(map(() => {
       const data = this._apService.AwardPlans.slice();
 
       // Grab the page's slice of data.
       const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
       return data.splice(startIndex, this._paginator.pageSize);
-    });
+    }));
   }
 
   disconnect() { }

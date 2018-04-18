@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Subject, of ,  BehaviorSubject ,  Observable } from 'rxjs';
-import { map, merge, startWith } from 'rxjs/operators';
+import { Subject, of, BehaviorSubject, Observable } from 'rxjs';
+import { catchError, finalize, map, startWith } from 'rxjs/operators';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
@@ -30,12 +30,12 @@ export class PgService {
           const listRst = x.split(' ');
           this.listChineseChessAIData.next(listRst);
           return listRst;
-        })).catch((error: HttpErrorResponse) => {
+        }), catchError((error: HttpErrorResponse) => {
           this._isChineseChessAIDataLoaded = false;
           this.listChineseChessAIData.next([]);
 
           return Observable.throw(error.statusText + '; ' + error.error + '; ' + error.message);
-        });
+        }));
     }
   }
 }

@@ -24,12 +24,12 @@ export class ChessAiService {
       .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
 
     return this._http.put(apiurl, state, { headers: headers, withCredentials: true})
-      .map((response: HttpResponse<any>) => {
+      .pipe(map((response: HttpResponse<any>) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log('AC Math Exercise [Debug]:' + response);
         };
 
         return <any>response;
-      });
+      }));
   }
 }

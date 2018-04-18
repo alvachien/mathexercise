@@ -11,6 +11,7 @@ import { QuizTypeEnum, PrimarySchoolMathQuizItem, QuizTypeEnum2UIString, LogLeve
 } from '../model';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
 import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } from '../message-dialog';
+import { map, startWith } from 'rxjs/operators';
 
 export class QuizFailureItem {
   public quiztype: QuizTypeEnum;
@@ -49,12 +50,12 @@ export class FailureRetestComponent implements OnInit {
         headers: headers,
         withCredentials: true
       })
-      .map((response: HttpResponse<any>) => {
+      .pipe(map((response: HttpResponse<any>) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log('AC Math Exericse [Debug]: ' + response);
         }
         return <any>response;
-      })
+      }))
       .subscribe(x => {
         if (x instanceof Array && x.length > 0) {
           for (const si of x) {

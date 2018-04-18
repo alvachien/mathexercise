@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
 import { BehaviorSubject ,  Observable } from 'rxjs';
-import { map, merge, startWith } from 'rxjs/operators';
+import { catchError, finalize, map, startWith } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { LogLevel, UserAuthInfo, UserAward, UserAwardJson } from '../model';
 import { AuthService } from './auth.service';
@@ -41,7 +41,7 @@ export class AwardBalanceService {
         params: params,
         withCredentials: true
       })
-      .map((response: HttpResponse<any>) => {
+      .pipe(map((response: HttpResponse<any>) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log(response);
         }
@@ -58,7 +58,7 @@ export class AwardBalanceService {
         }
 
         return awards;
-      })
+      }))
       .subscribe(x => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log(`AC Math Exercise [Debug]: Succeed in fetchAwardsForUser in AwardBalanceService: ${x}`);
@@ -92,7 +92,7 @@ export class AwardBalanceService {
         headers: headers,
         withCredentials: true
       })
-      .map((response: HttpResponse<any>) => {
+      .pipe(map((response: HttpResponse<any>) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log(response);
         }
@@ -106,7 +106,7 @@ export class AwardBalanceService {
 
         this.dataChangedSubject.next(awards);
         return ap;
-      })
+      }))
       .subscribe(x => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log(`AC Math Exercise [Debug]: Succeed in createAward in AwardBalanceService: ${x}`);
@@ -145,7 +145,7 @@ export class AwardBalanceService {
         // params: params,
         withCredentials: true
       })
-      .map((response: HttpResponse<any>) => {
+      .pipe(map((response: HttpResponse<any>) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log(response);
         }
@@ -155,7 +155,7 @@ export class AwardBalanceService {
         ap.parseData(<UserAwardJson>rjs);
 
         return ap;
-      })
+      }))
       .subscribe(x => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log(`AC Math Exercise [Debug]: Succeed in updateAward in AwardBalanceService: ${x}`);
@@ -191,13 +191,13 @@ export class AwardBalanceService {
         // params: params,
         withCredentials: true
       })
-      .map((response: HttpResponse<any>) => {
+      .pipe(map((response: HttpResponse<any>) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log(response);
         }
 
         return response;
-      })
+      }))
       .subscribe(x => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log(`AC Math Exercise [Debug]: Succeed in deleteAward in AwardBalanceService: ${x}`);

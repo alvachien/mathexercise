@@ -372,13 +372,14 @@ export class Rule {
     let moves = {};
     // team is in the lower part of the river
     const isLowerTeam = (team === 1);
-    for (let i of myPieces) {
-      let piece = myPieces[i];
-      const moves4Piece = this.possibleMoves(piece, boardStates, isLowerTeam);
-      // console.log("moves4Piece", piece.name, moves4Piece)
-      // if (!moves4Piece || moves4Piece.length == 0) continue;
-      moves[piece.name] = moves4Piece;
-    }
+    // Syntax error blow, so comment it out.
+    // for (let i of myPieces) {
+    //   let piece = myPieces[i];
+    //   const moves4Piece = this.possibleMoves(piece, boardStates, isLowerTeam);
+    //   // console.log("moves4Piece", piece.name, moves4Piece)
+    //   // if (!moves4Piece || moves4Piece.length == 0) continue;
+    //   moves[piece.name] = moves4Piece;
+    // }
     return moves;
   }
 
@@ -750,7 +751,6 @@ export class GreedyAgent extends Agent {
   comptuteNextMove() {
     // var pieceNames = Object.keys(this.legalMoves);
     let piece;
-    let maxVal = 0;
     let maxVal = -Infinity;
     let fromPos = [];
     let toPos = [];
@@ -770,7 +770,6 @@ export class GreedyAgent extends Agent {
     }
     return [piece, toPos];
   }
-
 
   getValueOfMove(pieceName, toPos) {
     const piece = this.boardState[toPos.toString()];

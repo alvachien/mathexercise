@@ -1,6 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { catchError, finalize, map, startWith } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { LogLevel, UserAuthInfo, AwardPlan, AwardPlanJson } from '../model';
 import { AuthService } from './auth.service';
@@ -42,7 +43,7 @@ export class AwardPlanService {
       params = params.set('incInvalid', allowInvalid.toString());
     }
     this._http.get(apiurl, { headers: headers, params: params, withCredentials: true })
-      .map((response: HttpResponse<any>) => {
+      .pipe(map((response: HttpResponse<any>) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log(response);
         }
@@ -59,7 +60,7 @@ export class AwardPlanService {
         }
 
         return aplans;
-      })
+      }))
       .subscribe(x => {
         this.listSubject.next(x);
       }, error => {
@@ -90,7 +91,7 @@ export class AwardPlanService {
         headers: headers,
         withCredentials: true
       })
-      .map((response: HttpResponse<any>) => {
+      .pipe(map((response: HttpResponse<any>) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log('AC Math Exercise [Debug]: Map in createAwardPlan of AwardPlanService: ' + response);
         }
@@ -98,7 +99,7 @@ export class AwardPlanService {
         const ap: AwardPlan = new AwardPlan;
         ap.parseData(<any>response);
         return ap;
-      })
+      }))
       .subscribe(x => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log('AC Math Exericse [Debug]: Success createAwardPlan of AwardPlanService: ' + x);
