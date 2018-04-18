@@ -1,7 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { LogLevel, UserAuthInfo, AwardPlan, AwardPlanJson } from '../model';
 import { AuthService } from './auth.service';
@@ -138,7 +137,7 @@ export class AwardPlanService {
         headers: headers,
         withCredentials: true
       })
-      .map((response: HttpResponse<any>) => {
+      .pipe(map((response: HttpResponse<any>) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log('AC Math Exercise [Debug]:' + response);
         }
@@ -146,7 +145,7 @@ export class AwardPlanService {
         const aplan2: AwardPlan = new AwardPlan();
         aplan2.parseData(<any>response);
         return aplan2;
-      })
+      }))
       .subscribe(x => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log('AC Math Exericse [Debug]: ' + x);
@@ -176,13 +175,13 @@ export class AwardPlanService {
         headers: headers,
         withCredentials: true
       })
-      .map((response: HttpResponse<any>) => {
+      .pipe(map((response: HttpResponse<any>) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log('AC Math Exercise [Debug]:' + response);
         }
 
         return <any>response;
-      })
+      }))
       .subscribe(x => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log('AC Math Exericse [Debug]: ' + x);

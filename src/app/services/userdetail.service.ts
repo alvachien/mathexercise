@@ -97,7 +97,7 @@ export class UserDetailService {
           headers: headers,
           withCredentials: true
         })
-        .map((response: HttpResponse<any>) => {
+        .pipe(map((response: HttpResponse<any>) => {
           this._isloaded = true;
 
           const jdata = <any>response;
@@ -105,7 +105,7 @@ export class UserDetailService {
           this._usrDetialInfo = new UserDetailInfo();
           this._usrDetialInfo.onSetData(jdata);
           return this._usrDetialInfo;
-        });
+        }));
     } else {
       return of(this._usrDetialInfo);
     }
@@ -127,12 +127,12 @@ export class UserDetailService {
           headers: headers,
           withCredentials: true
         })
-        .map((response: HttpResponse<any>) => {
+        .pipe(map((response: HttpResponse<any>) => {
           if (environment.LoggingLevel >= LogLevel.Debug) {
             console.log(`AC Math Exercise [Debug]: User Detail Create Map: ${response}`);
           }
           return <any>response;
-        })
+        }))
         .subscribe((data: any) => {
           if (environment.LoggingLevel >= LogLevel.Debug) {
             console.log(`AC Math Exercise [Debug]: User Detail Post Subscribe: ${data}`);
@@ -153,12 +153,12 @@ export class UserDetailService {
           headers: headers,
           withCredentials: true
         })
-        .map((response: HttpResponse<any>) => {
+        .pipe(map((response: HttpResponse<any>) => {
           if (environment.LoggingLevel >= LogLevel.Debug) {
             console.log(`AC Math Exercise [Debug]: User Detail Change Map:  ${response}`);
           }
           return <any>response;
-        })
+        }))
         .subscribe((data: any) => {
           if (environment.LoggingLevel >= LogLevel.Debug) {
             console.log(`AC Math Exercise [Debug]: User Detail Change Subscribe: ${data}`);
@@ -187,7 +187,7 @@ export class UserDetailService {
           headers: headers,
           withCredentials: true
         })
-        .map((response: HttpResponse<any>) => {
+        .pipe(map((response: HttpResponse<any>) => {
           if (environment.LoggingLevel >= LogLevel.Debug) {
             console.log(response);
           }
@@ -210,7 +210,7 @@ export class UserDetailService {
           }
 
           return this._listUsers;
-        });
+        }));
     } else {
       return of(this._listUsers);
     }

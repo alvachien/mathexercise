@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
-import { BehaviorSubject } from 'rxjs';
-import { Observable } from 'rxjs';
-import 'rxjs/add/operator/startWith';
+import { BehaviorSubject ,  Observable } from 'rxjs';
+
 import 'rxjs/add/observable/merge';
-import 'rxjs/add/operator/map';
+
 import {
   PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, MultiplicationQuizItem,
   LogLevel, QuizTypeEnum2UIString, QuizCreateResultJSON

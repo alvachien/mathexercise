@@ -70,6 +70,7 @@
     "karma-remap-istanbul": "^0.6.0",
     "phantomjs-prebuilt": "^2.1.16",
     "protractor": "^5.3.0",
+    "rxjs-tslint": "0.0.0",
     "ts-node": "^4.1.0",
     "tslint": "^5.9.1",
     "typescript": "^2.7.2"

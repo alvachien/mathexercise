@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject, of } from 'rxjs';
-import { BehaviorSubject } from 'rxjs';
-import { Observable } from 'rxjs';
+import { Subject, of ,  BehaviorSubject ,  Observable } from 'rxjs';
 import { map, merge, startWith } from 'rxjs/operators';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -27,12 +25,12 @@ export class PgService {
         .append('Accept', 'text/plain');
 
       return this._http.get(environment.AppHost + '/assets/data/data.txt', { headers: headers, responseType: 'text' })
-        .map(x => {
+        .pipe(map(x => {
           this._isChineseChessAIDataLoaded = true;
           const listRst = x.split(' ');
           this.listChineseChessAIData.next(listRst);
           return listRst;
-        }).catch((error: HttpErrorResponse) => {
+        })).catch((error: HttpErrorResponse) => {
           this._isChineseChessAIDataLoaded = false;
           this.listChineseChessAIData.next([]);
 

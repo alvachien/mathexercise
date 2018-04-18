@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, HostListener,
   EventEmitter, Output, Input } from '@angular/core';
 import { ChineseChessUI, ChineseChess2Play } from '../model/chinesechess2';
 import { environment } from '../../environments/environment';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import {
   PrimarySchoolMathQuiz, QuizTypeEnum, PrimarySchoolMathQuizItem,
   Cal24QuizItem, SudouQuizItem, LogLevel, QuizDegreeOfDifficulity,

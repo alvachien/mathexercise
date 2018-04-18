@@ -1,7 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
-import { Observable } from 'rxjs';
+import { BehaviorSubject ,  Observable } from 'rxjs';
 import { map, merge, startWith } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { LogLevel, UserAuthInfo, UserAward, UserAwardJson } from '../model';

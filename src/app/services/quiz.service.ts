@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
-import { Observable } from 'rxjs';
+import { BehaviorSubject ,  Observable } from 'rxjs';
 import { map, merge, startWith } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { LogLevel, UserAuthInfo, PrimarySchoolMathQuiz, QuizCreateResultJSON,
@@ -28,13 +27,13 @@ export class QuizService {
       .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
 
     return this._http.post(apiurl, data, { headers: headers, withCredentials: true})
-      .map((response: HttpResponse<any>) => {
+      .pipe(map((response: HttpResponse<any>) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log('AC Math Exercise [Debug]:' + response);
         }
 
         const cr: QuizCreateResultJSON = <QuizCreateResultJSON><any>response;
         return cr;
-      });
+      }));
   }
 }
