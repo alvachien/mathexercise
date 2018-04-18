@@ -7,18 +7,12 @@ import {
   AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem, DateFormat,
   StatisticsDateRange, StatisticsDateRangeEnum, getStatisticsDateRangeEnumString, getStatisticsDateRangeDate
 } from '../model';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, merge } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { QuizAttendUser, UserDetailService } from '../services/userdetail.service';
 import { DataSource } from '@angular/cdk/collections';
 import { MatDialog, MatPaginator, MatSort } from '@angular/material';
 import * as moment from 'moment';
-
-import 'rxjs/add/observable/merge';
-
-
-
-import 'rxjs/add/observable/fromEvent';
 
 @Component({
   selector: 'app-user-statistics',

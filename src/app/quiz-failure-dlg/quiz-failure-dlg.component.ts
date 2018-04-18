@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { DialogService } from '../services/dialog.service';
-import { BehaviorSubject ,  Observable } from 'rxjs';
-
-import 'rxjs/add/observable/merge';
-
+import { BehaviorSubject, merge, Observable } from 'rxjs';
 import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, PrimarySchoolMathQuizItem  } from '../model';
 
 export interface QuizFailureInfo {
