@@ -106,9 +106,9 @@ export class AwardPlanService {
         }
 
         // Add the buffer!
-        const data = this.listSubject.value;
-        data.push(x);
-        this.listSubject.next(data);
+        const data2 = this.listSubject.value;
+        data2.push(x);
+        this.listSubject.next(data2);
 
         // Raise the event
         this.createEvent.emit(x);
