@@ -36,6 +36,12 @@
             required>
         </mat-form-field>
       </div>
+      <div class="demo-full-width">
+        <mat-form-field>
+          <input matInput type="number" placeholder="{{'Math.DecimalPlaces' | translate}}" [(ngModel)]="decimalPlaces" name="dmlPlaces"
+            required>
+        </mat-form-field>
+      </div>
     </div>
     
     <div class="demo-full-width" *ngIf="quizInstance.IsStarted">

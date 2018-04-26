@@ -195,6 +195,7 @@
     "Integer": "Integer",
     "Fraction": "Fraction",
     "Decimal": "Decimal",
+    "DecimalPlaces": "Decimal Places",
     "NegativeNumber": "Negative number"
   }
 }

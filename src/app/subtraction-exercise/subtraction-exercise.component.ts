@@ -24,13 +24,13 @@ export class SubtractionExerciseComponent implements OnInit {
   LeftNumberRangeEnd = 10;
   RightNumberRangeBgn = 1;
   RightNumberRangeEnd = 10;
+  decimalPlaces = 0;
 
   quizInstance: PrimarySchoolMathQuiz = null;
   QuizItems: SubtractionQuizItem[] = [];
   DisplayedQuizItems: SubtractionQuizItem[] = [];
   UsedQuizAmount = 0;
 
-  //pageEvent: PageEvent;
   pageSize: number;
   pageIndex: number;
 
@@ -49,8 +49,9 @@ export class SubtractionExerciseComponent implements OnInit {
   }
 
   private generateQuizItem(idx: number): SubtractionQuizItem {
-    const qz: SubtractionQuizItem = new SubtractionQuizItem(Math.floor(Math.random() * (this.LeftNumberRangeEnd - this.LeftNumberRangeBgn) + this.LeftNumberRangeBgn),
-      Math.floor(Math.random() * (this.RightNumberRangeEnd - this.RightNumberRangeBgn) + this.RightNumberRangeBgn));
+    const rnum1 = Math.random() * (this.LeftNumberRangeEnd - this.LeftNumberRangeBgn) + this.LeftNumberRangeBgn;
+    const rnum2 = Math.random() * (this.RightNumberRangeEnd - this.RightNumberRangeBgn) + this.RightNumberRangeBgn;
+    const qz: SubtractionQuizItem = new SubtractionQuizItem(rnum1, rnum2, this.decimalPlaces);
     qz.QuizIndex = idx;
     return qz;
   }

@@ -16,11 +16,6 @@ import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } fr
   selector: 'app-multiplication-quiz',
   templateUrl: './multiplication-quiz.component.html',
   styleUrls: ['./multiplication-quiz.component.scss'],
-  // make slide in/out animation available to this component
-  //animations: [slideInOutAnimation],
-
-  // attach the slide in/out animation to the host (root) element of this component
-  //host: { '[@slideInOutAnimation]': '' }
 })
 export class MultiplicationQuizComponent implements OnInit {
   StartQuizAmount: number = DefaultQuizAmount;
@@ -30,13 +25,13 @@ export class MultiplicationQuizComponent implements OnInit {
   LeftNumberRangeEnd = 10;
   RightNumberRangeBgn = 1;
   RightNumberRangeEnd = 10;
+  decimalPlaces = 0;
 
   quizInstance: PrimarySchoolMathQuiz = null;
   QuizItems: MultiplicationQuizItem[] = [];
   DisplayedQuizItems: MultiplicationQuizItem[] = [];
   UsedQuizAmount = 0;
 
-  //pageEvent: PageEvent;
   pageSize: number;
   pageIndex: number;
 
@@ -55,8 +50,11 @@ export class MultiplicationQuizComponent implements OnInit {
   }
 
   private generateQuizItem(idx: number): MultiplicationQuizItem {
-    const qz: MultiplicationQuizItem = new MultiplicationQuizItem(Math.floor(Math.random() * (this.LeftNumberRangeEnd - this.LeftNumberRangeBgn) + this.LeftNumberRangeBgn),
-      Math.floor(Math.random() * (this.RightNumberRangeEnd - this.RightNumberRangeBgn) + this.RightNumberRangeBgn));
+    const rnum1 = Math.random() * (this.LeftNumberRangeEnd - this.LeftNumberRangeBgn) + this.LeftNumberRangeBgn;
+    const rnum2 = Math.random() * (this.RightNumberRangeEnd - this.RightNumberRangeBgn) + this.RightNumberRangeBgn;
+    const qz: MultiplicationQuizItem = new MultiplicationQuizItem(
+      rnum1, rnum2, this.decimalPlaces
+    );
     qz.QuizIndex = idx;
     return qz;
   }

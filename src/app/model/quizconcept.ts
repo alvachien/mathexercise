@@ -157,14 +157,15 @@ export class PrimarySchoolMathQuizItem extends QuizItem {
 export class PrimarySchoolMathFAOQuizItem extends PrimarySchoolMathQuizItem {
   private _leftNumber: number;
   private _rightNumber: number;
-  
+  private _decimalPlaces: number;
+
   public static restoreFromString(s: string): PrimarySchoolMathFAOQuizItem {
     // Now parse it!
     const idx = s.indexOf(QuizSplitter);
     const idx2 = s.indexOf(QuizSplitter, idx + 1);
 
-    const leftNumber = parseInt(s.substring(0, idx));
-    const rightNumber = parseInt(s.substring(idx + 1, idx2));
+    const leftNumber = parseInt(s.substring(0, idx), 10);
+    const rightNumber = parseInt(s.substring(idx + 1, idx2), 10);
 
     return new PrimarySchoolMathFAOQuizItem(leftNumber, rightNumber);
   }
@@ -175,12 +176,22 @@ export class PrimarySchoolMathFAOQuizItem extends PrimarySchoolMathQuizItem {
   get RightNumber(): number {
     return this._rightNumber;
   }
+  get decimalPlaces(): number {
+    return this._decimalPlaces;
+  }
 
-  constructor(lft: number, right: number) {
+  constructor(lft: number, right: number, dplace?: number) {
     super();
 
-    this._leftNumber = Math.round(lft);
-    this._rightNumber = Math.round(right);
+    if (dplace) {
+      this._decimalPlaces = dplace;
+      this._leftNumber = parseFloat(lft.toFixed(this._decimalPlaces));
+      this._rightNumber = parseFloat(right.toFixed(this._decimalPlaces));
+    } else {
+      this._decimalPlaces = 0; // By default, it is 0
+      this._leftNumber = Math.round(lft);
+      this._rightNumber = Math.round(right);
+    }
   }
 
   public IsCorrect(): boolean {
@@ -278,20 +289,26 @@ export interface PrimarySchoolQuizBaseInfo {
  * Math quiz for Primary School
  */
 export class PrimarySchoolMathQuiz {
-  // Elder runs
   private _elderRun: PrimarySchoolMathQuizSection[] = [];
+  private _curRun: PrimarySchoolMathQuizSection;
+  private _faileFactor: number;
+  private _isStarted: boolean;
+  private _qtype: QuizTypeEnum;
+  private _qbaseinfo: string;
+  private _curRunID: number; // Current run ID
+  private _failedItems: PrimarySchoolMathQuizItem[] = [];
+
+  // Elder runs
   public ElderRuns(): PrimarySchoolMathQuizSection[] {
     return this._elderRun;
   }
 
   // Current run/section
-  private _curRun: PrimarySchoolMathQuizSection;
   public CurrentRun(): PrimarySchoolMathQuizSection {
     return this._curRun;
   }
 
   // Failed factor
-  private _faileFactor: number;
   get FailedFactor(): number {
     return this._faileFactor;
   }
@@ -300,21 +317,19 @@ export class PrimarySchoolMathQuiz {
   }
 
   // Is started
-  private _isStarted: boolean;
   get IsStarted(): boolean {
     return this._isStarted;
   }
 
   // Quiz type
-  private _qtype: QuizTypeEnum;
   get QuizType(): QuizTypeEnum {
     return this._qtype;
   }
   set QuizType(qt: QuizTypeEnum) {
     this._qtype = qt;
   }
+
   // Quiz base info
-  private _qbaseinfo: string;
   get BasicInfo(): string {
     return this._qbaseinfo;
   }
@@ -322,14 +337,14 @@ export class PrimarySchoolMathQuiz {
     this._qbaseinfo = bi;
   }
 
-  // Current run ID
-  private _curRunID: number;
   // Failed items
-  private _failedItems: PrimarySchoolMathQuizItem[] = [];
   get FailedItems(): PrimarySchoolMathQuizItem[] {
     return this._failedItems;
   }
 
+  /**
+   * Constructor
+   */
   constructor() {
     this.init();
   }

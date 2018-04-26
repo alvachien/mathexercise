@@ -26,12 +26,12 @@ export class AdditionExerciseComponent implements OnInit {
   LeftNumberRangeEnd = 1000;
   RightNumberRangeBgn = 1;
   RightNumberRangeEnd = 1000;
+  decimalPlaces = 0;
 
   quizInstance: PrimarySchoolMathQuiz = null;
   QuizItems: AdditionQuizItem[] = [];
   DisplayedQuizItems: AdditionQuizItem[] = [];
 
-  //pageEvent: PageEvent;
   pageSize: number;
   pageIndex: number;
 
@@ -51,8 +51,9 @@ export class AdditionExerciseComponent implements OnInit {
   }
 
   private generateQuizItem(idx: number): AdditionQuizItem {
-    const qz: AdditionQuizItem = new AdditionQuizItem(Math.floor(Math.random() * (this.LeftNumberRangeEnd - this.LeftNumberRangeBgn) + this.LeftNumberRangeBgn),
-      Math.floor(Math.random() * (this.RightNumberRangeEnd - this.RightNumberRangeBgn) + this.RightNumberRangeBgn));
+    const rnum1 = Math.random() * (this.LeftNumberRangeEnd - this.LeftNumberRangeBgn) + this.LeftNumberRangeBgn;
+    const rnum2 = Math.random() * (this.RightNumberRangeEnd - this.RightNumberRangeBgn) + this.RightNumberRangeBgn;
+    const qz: AdditionQuizItem = new AdditionQuizItem(rnum1, rnum2, this.decimalPlaces);
     qz.QuizIndex = idx;
     return qz;
   }

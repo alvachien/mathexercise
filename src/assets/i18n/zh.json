@@ -195,6 +195,7 @@
     "Integer": "整数",
     "Fraction": "分数",
     "Decimal": "小数",
+    "DecimalPlaces": "小数位",
     "NegativeNumber": "负数"
   }
 }
