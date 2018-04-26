@@ -34,11 +34,12 @@ export interface formulaTypeUISelect {
 export class FormulaExerciseComponent implements OnInit {
   StartQuizAmount: number = DefaultQuizAmount;
   FailedQuizFactor: number = DefaultFailedQuizFactor;
-  UsedQuizAmount: number = 0;
+  UsedQuizAmount = 0;
 
-  NumberRangeBgn: number = 1;
-  NumberRangeEnd: number = 10;
-  AlloweDecimal: boolean = false;
+  NumberRangeBgn = 1;
+  NumberRangeEnd  = 10;
+  AlloweDecimal = false;
+  decimalPlaces = 0;
 
   quizInstance: PrimarySchoolMathQuiz = null;
   QuizItems: FormulaQuizItemBase[] = [];
@@ -46,7 +47,6 @@ export class FormulaExerciseComponent implements OnInit {
 
   formulaDef: formulaTypeUISelect[] = [];
 
-  //pageEvent: PageEvent;
   pageSize: number;
   pageIndex: number;
 
@@ -55,7 +55,7 @@ export class FormulaExerciseComponent implements OnInit {
     private _router: Router) {
     for (const item in PrimarySchoolFormulaEnum) {
       if (isNaN(Number(item))) {
-        //console.log(item);
+        // console.log(item);
       } else {
         const lf: formulaTypeUISelect = {
           name: getFormulaNameString(Number(item)),
@@ -88,7 +88,7 @@ export class FormulaExerciseComponent implements OnInit {
       qzidx = Math.round(Math.random() * qztypamt - 1);
       if (qzidx < 0) {
         qzidx = 0;
-      } 
+      }
 
       if (!this.formulaDef[qzidx].disabled && this.formulaDef[qzidx].selected) {
         break;
@@ -98,8 +98,9 @@ export class FormulaExerciseComponent implements OnInit {
     switch (this.formulaDef[qzidx].formulatype) {
       case PrimarySchoolFormulaEnum.CircumferenceOfCircle: {
         const qz: FormulaCOfCircleQuizItem = new FormulaCOfCircleQuizItem(
-          Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
-          <FormulaCOfCircleCalcDirEum>Math.round(Math.random())
+          Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn,
+          <FormulaCOfCircleCalcDirEum>Math.round(Math.random()),
+          this.decimalPlaces
         );
         qz.QuizIndex = idx;
         if (environment.LoggingLevel >= LogLevel.Debug) {
@@ -110,8 +111,9 @@ export class FormulaExerciseComponent implements OnInit {
 
       case PrimarySchoolFormulaEnum.CircumferenceOfSquare: {
         const qz: FormulaCOfSquareQuizItem = new FormulaCOfSquareQuizItem(
-          Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
-          <FormulaCOfSquareCalcDirEum>Math.round(Math.random())
+          Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn,
+          <FormulaCOfSquareCalcDirEum>Math.round(Math.random()),
+          this.decimalPlaces
         );
         qz.QuizIndex = idx;
         if (environment.LoggingLevel >= LogLevel.Debug) {
@@ -122,9 +124,10 @@ export class FormulaExerciseComponent implements OnInit {
 
       case PrimarySchoolFormulaEnum.CircumferenceOfRectangle: {
         const qz: FormulaCOfRectangleQuizItem = new FormulaCOfRectangleQuizItem(
-          Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
-          Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
-          <FormulaCOfRectangleCalcDirEum>Math.round(Math.random() * 2)
+          Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn,
+          Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn,
+          <FormulaCOfRectangleCalcDirEum>Math.round(Math.random() * 2),
+          this.decimalPlaces
         );
         qz.QuizIndex = idx;
 
@@ -136,9 +139,10 @@ export class FormulaExerciseComponent implements OnInit {
 
       case PrimarySchoolFormulaEnum.AreaOfRectangle: {
         const qz: FormulaAreaOfRectangleQuizItem = new FormulaAreaOfRectangleQuizItem(
-          Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
-          Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
-          <FormulaAOfRectangleCalcDirEum>Math.round(Math.random() * 2)
+          Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn,
+          Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn,
+          <FormulaAOfRectangleCalcDirEum>Math.round(Math.random() * 2),
+          this.decimalPlaces
         );
         qz.QuizIndex = idx;
 
@@ -150,8 +154,9 @@ export class FormulaExerciseComponent implements OnInit {
 
       case PrimarySchoolFormulaEnum.AreaOfSquare: {
         const qz: FormulaAreaOfSquareQuizItem = new FormulaAreaOfSquareQuizItem(
-          Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
-          <FormulaAreaOfSquareCalcDirEum>Math.round(Math.random() * 2)
+          Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn,
+          <FormulaAreaOfSquareCalcDirEum>Math.round(Math.random() * 2),
+          this.decimalPlaces
         );
         qz.QuizIndex = idx;
 
@@ -164,9 +169,10 @@ export class FormulaExerciseComponent implements OnInit {
 
       case PrimarySchoolFormulaEnum.DistanceAndSpeed: {
         const qz: FormulaDistAndSpeedQuizItem = new FormulaDistAndSpeedQuizItem(
-          Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
-          Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
-          <FormulaDistAndSpeedCalcDirEum>Math.round(Math.random() * 2)
+          Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn,
+          Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn,
+          <FormulaDistAndSpeedCalcDirEum>Math.round(Math.random() * 2),
+          this.decimalPlaces
         );
         qz.QuizIndex = idx;
 
@@ -178,9 +184,10 @@ export class FormulaExerciseComponent implements OnInit {
 
       case PrimarySchoolFormulaEnum.EfficiencyProblem: {
         const qz: FormulaEfficiencyProblemQuizItem = new FormulaEfficiencyProblemQuizItem(
-          Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
-          Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn),
-          <FormulaEfficiencyProblemCalcDirEum>Math.round(Math.random() * 2)
+          Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn,
+          Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn,
+          <FormulaEfficiencyProblemCalcDirEum>Math.round(Math.random() * 2),
+          this.decimalPlaces
         );
         qz.QuizIndex = idx;
 
@@ -189,7 +196,7 @@ export class FormulaExerciseComponent implements OnInit {
         }
         return qz;
       }
-      
+
       default: {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.error(`AC Math Exercise [Debug]: generating Quiz Item: FAILED: ${this.formulaDef[qzidx].formulatype}`);

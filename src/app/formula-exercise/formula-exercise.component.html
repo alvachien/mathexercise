@@ -35,6 +35,12 @@
 
       <hr />
       <mat-checkbox [(ngModel)]="AlloweDecimal">{{'Home.AllowDecimal' | translate}}</mat-checkbox>
+      <div class="demo-full-width">
+        <mat-form-field>
+          <input matInput type="number" placeholder="{{'Math.DecimalPlaces' | translate}}" [(ngModel)]="decimalPlaces" name="dmlPlaces"
+            required>
+        </mat-form-field>
+      </div>
     </div>
 
     <div *ngIf="quizInstance.IsStarted">

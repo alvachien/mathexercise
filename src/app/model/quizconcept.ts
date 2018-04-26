@@ -155,9 +155,9 @@ export class PrimarySchoolMathQuizItem extends QuizItem {
  * four arithmetic operations
  */
 export class PrimarySchoolMathFAOQuizItem extends PrimarySchoolMathQuizItem {
-  private _leftNumber: number;
-  private _rightNumber: number;
-  private _decimalPlaces: number;
+  protected _leftNumber: number;
+  protected _rightNumber: number;
+  protected _decimalPlaces: number;
 
   public static restoreFromString(s: string): PrimarySchoolMathFAOQuizItem {
     // Now parse it!

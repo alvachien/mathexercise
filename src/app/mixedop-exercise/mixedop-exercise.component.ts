@@ -27,12 +27,12 @@ export class MixedopExerciseComponent implements OnInit {
   NumberOfOperators = 2;
   AllowDecimal = false;
   AllowNegative = false;
+  decimalPlaces = 0;
 
   quizInstance: PrimarySchoolMathQuiz = null;
   QuizItems: MixedOperationQuizItem[] = [];
   DisplayedQuizItems: MixedOperationQuizItem[] = [];
 
-  //pageEvent: PageEvent;
   pageSize: number;
   pageIndex: number;
 
@@ -106,8 +106,7 @@ export class MixedopExerciseComponent implements OnInit {
             console.log(`AC Math Exercise [Debug]: MixedOperation generation FAILED: ${strfrm}`);
           }
         }
-      }
-      catch (exp) {
+      } catch (exp) {
         if (environment.LoggingLevel >= LogLevel.Error) {
           console.log('AC Math Exericse [Debug]: ' + exp);
         }

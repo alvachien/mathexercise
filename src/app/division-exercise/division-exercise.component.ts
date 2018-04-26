@@ -30,6 +30,7 @@ export class DivisionExerciseComponent implements OnInit {
   DivisorRangeEnd = 100;
   DividendRangeBgn = 500;
   DividendRangeEnd = 1000;
+  decimalPlaces = 0;
 
   quizInstance: PrimarySchoolMathQuiz = null;
   QuizItems: DivisionQuizItem[] = [];
@@ -54,11 +55,12 @@ export class DivisionExerciseComponent implements OnInit {
   }
 
   private generateQuizItem(nIdx: number): DivisionQuizItem {
-      const dq: DivisionQuizItem = new DivisionQuizItem(Math.floor(Math.random() * (this.DividendRangeEnd - this.DividendRangeBgn) + this.DividendRangeBgn ),
-        Math.floor(Math.random() * (this.DivisorRangeEnd - this.DivisorRangeBgn) + this.DivisorRangeBgn));
-      dq.QuizIndex = nIdx;
+    const rnum1 = Math.random() * (this.DividendRangeEnd - this.DividendRangeBgn) + this.DividendRangeBgn;
+    const rnum2 = Math.random() * (this.DivisorRangeEnd - this.DivisorRangeBgn) + this.DivisorRangeBgn;
+    const dq: DivisionQuizItem = new DivisionQuizItem(rnum1, rnum2, this.decimalPlaces);
+    dq.QuizIndex = nIdx;
 
-      return dq;
+    return dq;
   }
 
   private generateQuizSection() {

@@ -245,11 +245,16 @@ export class DivisionQuizItem extends PrimarySchoolMathFAOQuizItem {
     return new DivisionQuizItem(qi.LeftNumber, qi.RightNumber);
   }
 
-  constructor(lft: number, right: number) {
-    super(lft, right);
+  constructor(lft: number, right: number, dplace?: number) {
+    super(lft, right, dplace);
 
     this._quotient = Math.floor(this.LeftNumber / this.RightNumber);
     this._remainder = this.LeftNumber % this.RightNumber;
+    if (dplace) {
+      this._quotient = parseFloat(this._quotient.toFixed(dplace));
+    } else {
+      this._quotient = Math.floor(this.LeftNumber / this.RightNumber);
+    }
   }
 
   public IsCorrect(): boolean {
