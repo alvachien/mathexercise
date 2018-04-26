@@ -5,7 +5,7 @@
   <mat-card-content>
     <div>
       <mat-toolbar color="primary">
-        <mat-select placeholder="{{'Home.User' | translate}}" [disabled]="!IsListView" [(ngModel)]="SelectedUser" name="usr" (change)="onUserChanged($event)">
+        <mat-select placeholder="{{'Home.User' | translate}}" [disabled]="!IsListView" [(ngModel)]="SelectedUser" name="usr" (selectionChange)="onUserChanged($event)">
           <mat-option *ngFor="let user of listUsers" [value]="user">
             {{ user.displayas }}
           </mat-option>
