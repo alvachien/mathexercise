@@ -132,17 +132,33 @@ export class FormulaQuizItemBase extends PrimarySchoolMathQuizItem {
     return super.getInputtedForumla();
   }
 
-  /**
-   * Store to string
-   */
-  public storeToString(): string {
-    let srst = super.storeToString();
-    if (srst !== null && srst !== undefined && srst.length > 0) {
-      srst += (<number>this._frmtype).toString();
-    } else {
-      srst = (<number>this._frmtype).toString();
+  protected storeToJsonObject(): any {
+    const jobj: any = super.storeToJsonObject();
+    jobj.forumlaType = this._frmtype;
+    jobj.decimalPlaces = this._decimalPlaces;
+    return jobj;
+  }
+
+  protected restoreFromJsonObject(data: any): void {
+    super.restoreFromJsonObject(data);
+
+    if (data && data.forumlaType) {
+      this._frmtype = data.forumlaType;
     }
-    return srst;
+    if (data && data.decimalPlaces) {
+      this._decimalPlaces = data.decimalPlaces;
+    }
+  }
+
+  protected canCalcResult(): boolean {
+    if (!super.canCalcResult()) {
+      return false;
+    }
+    return true;
+  }
+
+  protected calcResult(): void {
+    // Do nothing
   }
 }
 
@@ -181,26 +197,21 @@ export class FormulaCOfCircleQuizItem extends FormulaQuizItemBase {
   constructor(srcnum: number, bdir: FormulaCOfCircleCalcDirEum, dplace?: number) {
     super(PrimarySchoolFormulaEnum.CircumferenceOfCircle, dplace);
 
-    if (bdir === FormulaCOfCircleCalcDirEum.Radius) {
-      this._direct = FormulaCOfCircleCalcDirEum.Radius;
+    this._direct = bdir;
+    if (this._direct === FormulaCOfCircleCalcDirEum.Radius) {
       if (this._decimalPlaces > 0) {
         this._raidus = parseFloat(srcnum.toFixed(this._decimalPlaces));
-        this._circum = parseFloat((2 * this._raidus * Math.PI).toFixed(this._decimalPlaces));
       } else {
         this._raidus = Math.round(srcnum);
-        this._circum = Math.round(2 * this._raidus * Math.PI);
       }
     } else {
-      this._direct = FormulaCOfCircleCalcDirEum.Circum;
       if (this._decimalPlaces > 0) {
         this._circum = parseFloat(srcnum.toFixed(this._decimalPlaces));
-        this._raidus = parseFloat((this._circum / Math.PI / 2).toFixed(this._decimalPlaces));
       } else {
         this._circum = Math.round(srcnum);
-        this._raidus = Math.round(this._circum / Math.PI / 2);
       }
     }
-  }
+   }
 
   public IsCorrect(): boolean {
     const brst = super.IsCorrect();
@@ -253,31 +264,50 @@ export class FormulaCOfCircleQuizItem extends FormulaQuizItemBase {
     }
   }
 
-  public storeToString(): string {
-    let rstr = super.storeToString();
-
-    if (this._direct === FormulaCOfCircleCalcDirEum.Radius) {
-      rstr += QuizSplitter + '0' + QuizSplitter + this._raidus.toString();
-    } else {
-      rstr += QuizSplitter + '1' + QuizSplitter + this._circum.toString();
-    }
-
-    return rstr;
+  protected storeToJsonObject(): any {
+    const jobj: any = super.storeToJsonObject();
+    jobj.radius = this._raidus;
+    jobj.circum = this._circum;
+    jobj.direction = this._direct;
+    return jobj;
   }
 
-  public static restoreFromString(s: string): FormulaCOfCircleQuizItem | null {
-    try {
-      const idx = s.indexOf(QuizSplitter);
+  protected restoreFromJsonObject(data: any): void {
+    super.restoreFromJsonObject(data);
 
-      const nbol: number = parseInt(s.substring(0, idx));
-      const nnum: number = parseFloat(s.substring(idx + 1));
-      return new FormulaCOfCircleQuizItem(nnum, <FormulaCOfCircleCalcDirEum>nbol);
+    if (data && data.radius) {
+      this._raidus = data.radius;
     }
-    catch (exp) {
-      console.error(exp);
+    if (data && data.circum) {
+      this._circum = data.circum;
+    }
+    if (data && data.direction) {
+      this._direct = data.direction;
+    }
+  }
+
+  protected canCalcResult(): boolean {
+    if (!super.canCalcResult()) {
+      return false;
     }
 
-    return null;
+    return true;
+  }
+
+  protected calcResult(): void {
+    if (this._direct === FormulaCOfCircleCalcDirEum.Radius) {
+      if (this._decimalPlaces > 0) {
+        this._circum = parseFloat((2 * this._raidus * Math.PI).toFixed(this._decimalPlaces));
+      } else {
+        this._circum = Math.round(2 * this._raidus * Math.PI);
+      }
+    } else {
+      if (this._decimalPlaces > 0) {
+        this._raidus = parseFloat((this._circum / Math.PI / 2).toFixed(this._decimalPlaces));
+      } else {
+        this._raidus = Math.round(this._circum / Math.PI / 2);
+      }
+    }
   }
 }
 
@@ -318,23 +348,18 @@ export class FormulaCOfSquareQuizItem extends FormulaQuizItemBase {
   constructor(srcnum: number, bdir: FormulaCOfSquareCalcDirEum, dplace?: number) {
     super(PrimarySchoolFormulaEnum.CircumferenceOfSquare);
 
-    if (bdir === FormulaCOfSquareCalcDirEum.Edge) {
-      this._direct = FormulaCOfSquareCalcDirEum.Edge;
+    this._direct = bdir;
+    if (this._direct === FormulaCOfSquareCalcDirEum.Edge) {
       if (this._decimalPlaces > 0) {
         this._edge = parseFloat(srcnum.toFixed(this._decimalPlaces));
-        this._circum = parseFloat((4 * this._edge).toFixed(this._decimalPlaces));
       } else {
         this._edge = Math.round(srcnum);
-        this._circum = Math.round(4 * this._edge);
       }
     } else {
-      this._direct = FormulaCOfSquareCalcDirEum.Circum;
       if (this._decimalPlaces > 0) {
         this._circum = parseFloat(srcnum.toFixed(this._decimalPlaces));
-        this._edge = parseFloat((this._circum / 4).toFixed(this._decimalPlaces));
       } else {
         this._circum = Math.round(srcnum);
-        this._edge = Math.round(this._circum / 4);
       }
     }
   }
@@ -390,32 +415,50 @@ export class FormulaCOfSquareQuizItem extends FormulaQuizItemBase {
     }
   }
 
-  public storeToString(): string {
-    let rstr = super.storeToString();
-
-    if (this._direct === FormulaCOfSquareCalcDirEum.Edge) {
-      rstr += QuizSplitter + '0' + QuizSplitter + this._edge.toString();
-    } else if (this._direct === FormulaCOfSquareCalcDirEum.Circum) {
-      rstr += QuizSplitter + '1' + QuizSplitter + this._circum.toString();
-    }
-
-    return rstr;
+  protected storeToJsonObject(): any {
+    const jobj: any = super.storeToJsonObject();
+    jobj.edge = this._edge;
+    jobj.circum = this._circum;
+    jobj.direction = this._direct;
+    return jobj;
   }
 
-  public static restoreFromString(s: string): FormulaCOfSquareQuizItem | null {
-    try {
-      const idx = s.indexOf(QuizSplitter);
+  protected restoreFromJsonObject(data: any): void {
+    super.restoreFromJsonObject(data);
 
-      const nbol: number = parseInt(s.substring(0, idx));
-      const nnum: number = parseFloat(s.substring(idx + 1));
-
-      return new FormulaCOfSquareQuizItem(nnum, <FormulaCOfSquareCalcDirEum>nbol);
+    if (data && data.edge) {
+      this._edge = data.edge;
     }
-    catch (exp) {
-      console.error(exp);
+    if (data && data.circum) {
+      this._circum = data.circum;
+    }
+    if (data && data.direction) {
+      this._direct = data.direction;
+    }
+  }
+
+  protected canCalcResult(): boolean {
+    if (!super.canCalcResult()) {
+      return false;
     }
 
-    return null;
+    return true;
+  }
+
+  protected calcResult(): void {
+    if (this._direct === FormulaCOfSquareCalcDirEum.Edge) {
+      if (this._decimalPlaces > 0) {
+        this._circum = parseFloat((4 * this._edge).toFixed(this._decimalPlaces));
+      } else {
+        this._circum = Math.round(4 * this._edge);
+      }
+    } else {
+      if (this._decimalPlaces > 0) {
+        this._edge = parseFloat((this._circum / 4).toFixed(this._decimalPlaces));
+      } else {
+        this._edge = Math.round(this._circum / 4);
+      }
+    }
   }
 }
 
@@ -559,11 +602,67 @@ export class FormulaCOfRectangleQuizItem extends FormulaQuizItemBase {
     const frmstr: string = getFormulaUIString(this.FormulaType);
 
     if (this._direct === FormulaCOfRectangleCalcDirEum.LongEdgeAndShortEdge) {
-      return frmstr.replace('C', this.InputtedResult.toString()).replace('a', this._longedge.toString()).replace('b', this._shortedge.toString());
+      return frmstr.replace('C', this.InputtedResult.toString())
+        .replace('a', this._longedge.toString())
+        .replace('b', this._shortedge.toString());
     } else if (this._direct === FormulaCOfRectangleCalcDirEum.LongEdgeAndCircum) {
-      return frmstr.replace('C', this._circum.toString()).replace('a', this._longedge.toString()).replace('b', this.InputtedResult.toString());
+      return frmstr.replace('C', this._circum.toString())
+        .replace('a', this._longedge.toString())
+        .replace('b', this.InputtedResult.toString());
     } else if (this._direct === FormulaCOfRectangleCalcDirEum.ShortEdgeAndCircum) {
-      return frmstr.replace('C', this._circum.toString()).replace('a', this.InputtedResult.toString()).replace('b', this._shortedge.toString());
+      return frmstr.replace('C', this._circum.toString())
+        .replace('a', this.InputtedResult.toString())
+        .replace('b', this._shortedge.toString());
+    }
+  }
+
+  protected storeToJsonObject(): any {
+    const jobj: any = super.storeToJsonObject();
+    jobj.longEdge = this._longedge;
+    jobj.shortEdge = this._shortedge;
+    jobj.circum = this._circum;
+    jobj.direction = this._direct;
+    return jobj;
+  }
+
+  protected restoreFromJsonObject(data: any): void {
+    super.restoreFromJsonObject(data);
+
+    if (data && data.longEdge) {
+      this._longedge = data.longEdge;
+    }
+    if (data && data.shortEdge) {
+      this._shortedge = data.shortEdge;
+    }
+    if (data && data.circum) {
+      this._circum = data.circum;
+    }
+    if (data && data.direction) {
+      this._direct = data.direction;
+    }
+  }
+
+  protected canCalcResult(): boolean {
+    if (!super.canCalcResult()) {
+      return false;
+    }
+
+    return true;
+  }
+
+  protected calcResult(): void {
+    if (this._direct === FormulaCOfSquareCalcDirEum.Edge) {
+      if (this._decimalPlaces > 0) {
+        this._circum = parseFloat((4 * this._edge).toFixed(this._decimalPlaces));
+      } else {
+        this._circum = Math.round(4 * this._edge);
+      }
+    } else {
+      if (this._decimalPlaces > 0) {
+        this._edge = parseFloat((this._circum / 4).toFixed(this._decimalPlaces));
+      } else {
+        this._edge = Math.round(this._circum / 4);
+      }
     }
   }
 

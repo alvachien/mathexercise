@@ -88,7 +88,7 @@ export function QuizDegreeOfDifficulity2UIString(qd: QuizDegreeOfDifficulity): s
 /**
  * Quiz item
  */
-export class QuizItem {
+export abstract class QuizItem {
   private _index: number;
   get QuizIndex(): number {
     return this._index;
@@ -102,16 +102,42 @@ export class QuizItem {
   }
 
   public IsCorrect(): boolean {
+    if (!this.canCalcResult()) {
+      return false;
+    }
+
     return true;
   }
 
   public getQuizFormat(): string {
-    // return '#' + this.QuizIndex.toString() + QuizSplitter;
     return '';
   }
 
   public storeToString(): string {
-    return '';
+    const jobj: any = this.storeToJsonObject();
+    return JSON && JSON.stringify(jobj);
+  }
+  public restoreFromString(str: string) {
+    const jobj = JSON.parse(str);
+    this.restoreFromJsonObject(jobj);
+
+    if (this.canCalcResult()) {
+      this.calcResult();
+    }
+  }
+
+  protected storeToJsonObject(): any {
+    return {};
+  }
+  protected restoreFromJsonObject(data: any) {
+    // Do nothing
+  }
+
+  protected canCalcResult(): boolean {
+    return true; // Default is true
+  }
+  protected calcResult(): void {
+    // Do nothing
   }
 }
 
@@ -119,13 +145,8 @@ export class QuizItem {
  * Math quiz item for Primary School
  */
 export class PrimarySchoolMathQuizItem extends QuizItem {
-  public static restoreFromString(s: string): PrimarySchoolMathQuizItem | null {
-    return null;
-  }
-
   public IsCorrect(): boolean {
-    const brst = super.IsCorrect();
-    if (!brst) {
+    if (!super.IsCorrect()) {
       return false;
     }
     return true;
@@ -144,9 +165,22 @@ export class PrimarySchoolMathQuizItem extends QuizItem {
     return '';
   }
 
-  public storeToString(): string {
-    const rstr = super.storeToString();
-    return rstr;
+  protected storeToJsonObject(): any {
+    return super.storeToJsonObject();
+  }
+
+  protected restoreFromJsonObject(data: any): void {
+    super.restoreFromJsonObject(data);
+  }
+
+  protected canCalcResult(): boolean {
+    if (!super.canCalcResult()) {
+      return false;
+    }
+    return true;
+  }
+  protected calcResult(): void {
+    // Do nothing
   }
 }
 
@@ -159,17 +193,6 @@ export class PrimarySchoolMathFAOQuizItem extends PrimarySchoolMathQuizItem {
   protected _rightNumber: number;
   protected _decimalPlaces: number;
 
-  public static restoreFromString(s: string): PrimarySchoolMathFAOQuizItem {
-    // Now parse it!
-    const idx = s.indexOf(QuizSplitter);
-    const idx2 = s.indexOf(QuizSplitter, idx + 1);
-
-    const leftNumber = parseInt(s.substring(0, idx), 10);
-    const rightNumber = parseInt(s.substring(idx + 1, idx2), 10);
-
-    return new PrimarySchoolMathFAOQuizItem(leftNumber, rightNumber);
-  }
-
   get LeftNumber(): number {
     return this._leftNumber;
   }
@@ -180,23 +203,37 @@ export class PrimarySchoolMathFAOQuizItem extends PrimarySchoolMathQuizItem {
     return this._decimalPlaces;
   }
 
-  constructor(lft: number, right: number, dplace?: number) {
+  constructor(lft?: number, right?: number, dplace?: number) {
     super();
 
     if (dplace) {
       this._decimalPlaces = dplace;
-      this._leftNumber = parseFloat(lft.toFixed(this._decimalPlaces));
-      this._rightNumber = parseFloat(right.toFixed(this._decimalPlaces));
     } else {
       this._decimalPlaces = 0; // By default, it is 0
-      this._leftNumber = Math.round(lft);
-      this._rightNumber = Math.round(right);
+    }
+
+    if (lft) {
+      if (this._decimalPlaces > 0) {
+        this._leftNumber = parseFloat(lft.toFixed(this._decimalPlaces));
+      } else {
+        this._leftNumber = Math.round(lft);
+      }
+    }
+    if (right) {
+      if (this._decimalPlaces > 0) {
+        this._rightNumber = parseFloat(right.toFixed(this._decimalPlaces));
+      } else {
+        this._rightNumber = Math.round(right);
+      }
+    }
+
+    if (this.canCalcResult()) {
+      this.calcResult();
     }
   }
 
   public IsCorrect(): boolean {
-    const brst = super.IsCorrect();
-    if (!brst) {
+    if (!super.IsCorrect()) {
       return false;
     }
     return true;
@@ -217,10 +254,38 @@ export class PrimarySchoolMathFAOQuizItem extends PrimarySchoolMathQuizItem {
     return rststr;
   }
 
-  public storeToString(): string {
-    let rstr = super.storeToString();
-    rstr = rstr + this._leftNumber.toString() + QuizSplitter + this._rightNumber.toString() + QuizSplitter;
-    return rstr;
+  protected storeToJsonObject(): any {
+    const jobj = super.storeToJsonObject();
+    jobj.leftNumber = this._leftNumber;
+    jobj.rightNumber = this._rightNumber;
+    jobj.decimalPlaces = this.decimalPlaces;
+    return jobj;
+  }
+  protected restoreFromJsonObject(jobj: any) {
+    if (jobj && jobj.leftNumber) {
+      this._leftNumber = +jobj.leftNumber;
+    }
+    if (jobj && jobj.rightNumber) {
+      this._rightNumber = +jobj.rightNumber;
+    }
+    if (jobj && jobj.decimalPlaces) {
+      this._decimalPlaces = +jobj.decimalPlaces;
+    } else {
+      this._decimalPlaces = 0;
+    }
+  }
+  protected canCalcResult(): boolean {
+    if (!super.canCalcResult()) {
+      return false;
+    }
+    if (this._leftNumber === undefined || this._rightNumber === undefined) {
+      return false;
+    }
+
+    return true;
+  }
+  protected calcResult(): void {
+    super.calcResult();
   }
 }
 
