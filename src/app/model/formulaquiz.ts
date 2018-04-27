@@ -43,39 +43,6 @@ export class FormulaQuizItemBase extends PrimarySchoolMathQuizItem {
     return this._decimalPlaces;
   }
 
-  /**
-   * Restore from string
-   * @param s String to restore
-   */
-  public static restoreFromString(s: string): FormulaQuizItemBase | null {
-    const idx = s.indexOf(QuizSplitter);
-    const ntype: PrimarySchoolFormulaEnum = <PrimarySchoolFormulaEnum>parseInt(s.substring(0, idx));
-    switch (ntype) {
-      case PrimarySchoolFormulaEnum.CircumferenceOfCircle:
-        return FormulaCOfCircleQuizItem.restoreFromString(s.substring(idx + 1));
-
-      case PrimarySchoolFormulaEnum.CircumferenceOfSquare:
-        return FormulaCOfSquareQuizItem.restoreFromString(s.substring(idx + 1));
-
-      case PrimarySchoolFormulaEnum.CircumferenceOfRectangle:
-        return FormulaCOfRectangleQuizItem.restoreFromString(s.substring(idx + 1));
-
-      case PrimarySchoolFormulaEnum.AreaOfRectangle:
-        return FormulaAreaOfRectangleQuizItem.restoreFromString(s.substring(idx + 1));
-
-      case PrimarySchoolFormulaEnum.AreaOfSquare:
-        return FormulaAreaOfSquareQuizItem.restoreFromString(s.substring(idx + 1));
-
-      case PrimarySchoolFormulaEnum.DistanceAndSpeed:
-        return FormulaDistAndSpeedQuizItem.restoreFromString(s.substring(idx + 1));
-
-      default:
-        break;
-    }
-
-    return null;
-  }
-
   constructor(frmtype: PrimarySchoolFormulaEnum, dplace?: number) {
     super();
 
@@ -84,6 +51,10 @@ export class FormulaQuizItemBase extends PrimarySchoolMathQuizItem {
       this._decimalPlaces = dplace;
     } else {
       this._decimalPlaces = 0;
+    }
+
+    if (this.canCalcResult()) {
+      this.calcResult();
     }
   }
 
@@ -509,31 +480,25 @@ export class FormulaCOfRectangleQuizItem extends FormulaQuizItemBase {
       if (this._decimalPlaces > 0) {
         this._longedge = parseFloat(num1.toFixed(this._decimalPlaces));
         this._shortedge = parseFloat(num2.toFixed(this._decimalPlaces));
-        this._circum = parseFloat((2 * (this._longedge + this._shortedge)).toFixed(this._decimalPlaces));
       } else {
         this._longedge = Math.round(num1);
         this._shortedge = Math.round(num2);
-        this._circum = Math.round(2 * (this._longedge + this._shortedge));
       }
     } else if (dir === FormulaCOfRectangleCalcDirEum.LongEdgeAndCircum) {
       if (this._decimalPlaces > 0) {
         this._longedge = parseFloat(num1.toFixed(this._decimalPlaces));
         this._circum = parseFloat(num2.toFixed(this._decimalPlaces));
-        this._shortedge = parseFloat(((this._circum - 2 * this._longedge) / 2).toFixed(this._decimalPlaces));
       } else {
         this._longedge = Math.round(num1);
         this._circum = Math.round(num2);
-        this._shortedge = Math.round((this._circum - 2 * this._longedge) / 2);
       }
     } else if (dir === FormulaCOfRectangleCalcDirEum.ShortEdgeAndCircum) {
       if (this._decimalPlaces > 0) {
         this._shortedge = parseFloat(num1.toFixed(this._decimalPlaces));
         this._circum = parseFloat(num2.toFixed(this._decimalPlaces));
-        this._longedge = parseFloat(((this._circum - 2 * this._shortedge) / 2).toFixed(this._decimalPlaces));
       } else {
         this._shortedge = Math.round(num1);
         this._circum = Math.round(num2);
-        this._longedge = Math.round((this._circum - 2 * this._shortedge) / 2);
       }
     } else {
       throw new Error('Unsupported direction!');
@@ -651,50 +616,27 @@ export class FormulaCOfRectangleQuizItem extends FormulaQuizItemBase {
   }
 
   protected calcResult(): void {
-    if (this._direct === FormulaCOfSquareCalcDirEum.Edge) {
+    if (this._direct === FormulaCOfRectangleCalcDirEum.LongEdgeAndShortEdge) {
       if (this._decimalPlaces > 0) {
-        this._circum = parseFloat((4 * this._edge).toFixed(this._decimalPlaces));
+        this._circum = parseFloat((2 * (this._longedge + this._shortedge)).toFixed(this._decimalPlaces));
       } else {
-        this._circum = Math.round(4 * this._edge);
+        this._circum = Math.round(2 * (this._longedge + this._shortedge));
+      }
+    } else if (this._direct === FormulaCOfRectangleCalcDirEum.LongEdgeAndCircum) {
+      if (this._decimalPlaces > 0) {
+        this._shortedge = parseFloat(((this._circum - 2 * this._longedge) / 2).toFixed(this._decimalPlaces));
+      } else {
+        this._shortedge = Math.round((this._circum - 2 * this._longedge) / 2);
+      }
+    } else if (this._direct === FormulaCOfRectangleCalcDirEum.ShortEdgeAndCircum) {
+      if (this._decimalPlaces > 0) {
+        this._longedge = parseFloat(((this._circum - 2 * this._shortedge) / 2).toFixed(this._decimalPlaces));
+      } else {
+        this._longedge = Math.round((this._circum - 2 * this._shortedge) / 2);
       }
     } else {
-      if (this._decimalPlaces > 0) {
-        this._edge = parseFloat((this._circum / 4).toFixed(this._decimalPlaces));
-      } else {
-        this._edge = Math.round(this._circum / 4);
-      }
+      throw new Error('Unsupported direction!');
     }
-  }
-
-  public storeToString(): string {
-    let rstr = super.storeToString();
-
-    if (this._direct === FormulaCOfRectangleCalcDirEum.LongEdgeAndShortEdge) {
-      rstr += QuizSplitter + '0' + QuizSplitter + this._longedge.toString() + QuizSplitter + this._shortedge.toString();
-    } else if (this._direct === FormulaCOfRectangleCalcDirEum.LongEdgeAndCircum) {
-      rstr += QuizSplitter + '1' + QuizSplitter + this._longedge.toString() + QuizSplitter + this._circum.toString();
-    } else if (this._direct === FormulaCOfRectangleCalcDirEum.ShortEdgeAndCircum) {
-      rstr += QuizSplitter + '2' + QuizSplitter + this._shortedge.toString() + QuizSplitter + this._circum.toString();
-    }
-
-    return rstr;
-  }
-
-  public static restoreFromString(s: string): FormulaCOfRectangleQuizItem | null {
-    try {
-      const idx = s.indexOf(QuizSplitter);
-      const idx2 = s.indexOf(QuizSplitter, idx + 1);
-
-      const ndir: number = <FormulaCOfRectangleCalcDirEum>parseInt(s.substring(0, idx));
-      const nnum1: number = parseFloat(s.substring(idx + 1, idx2));
-      const nnum2: number = parseFloat(s.substring(idx2 + 1));
-      return new FormulaCOfRectangleQuizItem(nnum1, nnum2, ndir);
-    }
-    catch (exp) {
-      console.error(exp);
-    }
-
-    return null;
   }
 }
 
@@ -753,31 +695,25 @@ export class FormulaDistAndSpeedQuizItem extends FormulaQuizItemBase {
       if (this._decimalPlaces > 0) {
         this._speed = parseFloat(num1.toFixed(this._decimalPlaces));
         this._time = parseFloat(num2.toFixed(this._decimalPlaces));
-        this._distance = parseFloat((this._speed * this._time).toFixed(this._decimalPlaces));
       } else {
         this._speed = Math.round(num1);
         this._time = Math.round(num2);
-        this._distance = Math.round(this._speed * this._time);
       }
     } else if (dir === FormulaDistAndSpeedCalcDirEum.SpeedAndDistance) {
       if (this._decimalPlaces > 0) {
         this._speed = parseFloat(num1.toFixed(this._decimalPlaces));
         this._distance = parseFloat(num2.toFixed(this._decimalPlaces));
-        this._time = parseFloat((this._distance / this._speed).toFixed(this._decimalPlaces));
       } else {
         this._speed = Math.round(num1);
         this._distance = Math.round(num2);
-        this._time = Math.round(this._distance / this._speed);
       }
     } else if (dir === FormulaDistAndSpeedCalcDirEum.TimeAndDistance) {
       if (this._decimalPlaces > 0) {
         this._time = parseFloat(num1.toFixed(this._decimalPlaces));
         this._distance = parseFloat(num2.toFixed(this._decimalPlaces));
-        this._speed = parseFloat((this._distance / this._time).toFixed(this._decimalPlaces));
       } else {
         this._time = Math.round(num1);
         this._distance = Math.round(num2);
-        this._speed = Math.round(this._distance / this._time);
       }
     } else {
       throw new Error('Unsupported direction!');
@@ -846,43 +782,76 @@ export class FormulaDistAndSpeedQuizItem extends FormulaQuizItemBase {
     const frmstr: string = getFormulaUIString(this.FormulaType);
 
     if (this._direct === FormulaDistAndSpeedCalcDirEum.SpeedAndTime) {
-      return frmstr.replace('S', this.InputtedResult.toString()).replace('v', this._speed.toString()).replace('h', this._time.toString());
+      return frmstr.replace('S', this.InputtedResult.toString())
+        .replace('v', this._speed.toString())
+        .replace('h', this._time.toString());
     } else if (this._direct === FormulaDistAndSpeedCalcDirEum.SpeedAndDistance) {
-      return frmstr.replace('S', this._distance.toString()).replace('v', this._speed.toString()).replace('h', this.InputtedResult.toString());
+      return frmstr.replace('S', this._distance.toString())
+        .replace('v', this._speed.toString())
+        .replace('h', this.InputtedResult.toString());
     } else if (this._direct === FormulaDistAndSpeedCalcDirEum.TimeAndDistance) {
-      return frmstr.replace('S', this._distance.toString()).replace('v', this.InputtedResult.toString()).replace('h', this._time.toString());
+      return frmstr.replace('S', this._distance.toString())
+        .replace('v', this.InputtedResult.toString())
+        .replace('h', this._time.toString());
     }
   }
 
-  public storeToString(): string {
-    let rstr = super.storeToString();
+  protected storeToJsonObject(): any {
+    const jobj: any = super.storeToJsonObject();
+    jobj.speed = this._speed;
+    jobj.time = this._time;
+    jobj.distance = this._distance;
+    jobj.direction = this._direct;
+    return jobj;
+  }
 
+  protected restoreFromJsonObject(data: any): void {
+    super.restoreFromJsonObject(data);
+
+    if (data && data.speed) {
+      this._speed = data.speed;
+    }
+    if (data && data.time) {
+      this._time = data.time;
+    }
+    if (data && data.distance) {
+      this._distance = data.distance;
+    }
+    if (data && data.direction) {
+      this._direct = data.direction;
+    }
+  }
+
+  protected canCalcResult(): boolean {
+    if (!super.canCalcResult()) {
+      return false;
+    }
+
+    return true;
+  }
+
+  protected calcResult(): void {
     if (this._direct === FormulaDistAndSpeedCalcDirEum.SpeedAndTime) {
-      rstr += QuizSplitter + '0' + QuizSplitter + this._speed.toString() + QuizSplitter + this._time.toString();
+      if (this._decimalPlaces > 0) {
+        this._distance = parseFloat((this._speed * this._time).toFixed(this._decimalPlaces));
+      } else {
+        this._distance = Math.round(this._speed * this._time);
+      }
     } else if (this._direct === FormulaDistAndSpeedCalcDirEum.SpeedAndDistance) {
-      rstr += QuizSplitter + '1' + QuizSplitter + this._speed.toString() + QuizSplitter + this._time.toString();
+      if (this._decimalPlaces > 0) {
+        this._time = parseFloat((this._distance / this._speed).toFixed(this._decimalPlaces));
+      } else {
+        this._time = Math.round(this._distance / this._speed);
+      }
     } else if (this._direct === FormulaDistAndSpeedCalcDirEum.TimeAndDistance) {
-      rstr += QuizSplitter + '2' + QuizSplitter + this._time.toString() + QuizSplitter + this._distance.toString();
+      if (this._decimalPlaces > 0) {
+        this._speed = parseFloat((this._distance / this._time).toFixed(this._decimalPlaces));
+      } else {
+        this._speed = Math.round(this._distance / this._time);
+      }
+    } else {
+      throw new Error('Unsupported direction!');
     }
-
-    return rstr;
-  }
-
-  public static restoreFromString(s: string): FormulaDistAndSpeedQuizItem | null {
-    try {
-      const idx = s.indexOf(QuizSplitter);
-      const idx2 = s.indexOf(QuizSplitter, idx + 1);
-
-      const ndir: number = <FormulaDistAndSpeedCalcDirEum>parseInt(s.substring(0, idx));
-      const nnum1: number = parseFloat(s.substring(idx + 1, idx2));
-      const nnum2: number = parseFloat(s.substring(idx2 + 1));
-      return new FormulaDistAndSpeedQuizItem(nnum1, nnum2, ndir);
-    }
-    catch (exp) {
-      console.error(exp);
-    }
-
-    return null;
   }
 }
 
@@ -932,31 +901,25 @@ export class FormulaAreaOfRectangleQuizItem extends FormulaQuizItemBase {
       if (this._decimalPlaces > 0) {
         this._longedge = parseFloat(num1.toFixed(this._decimalPlaces));
         this._shortedge = parseFloat(num2.toFixed(this._decimalPlaces));
-        this._area = parseFloat((this._longedge * this._shortedge).toFixed(this._decimalPlaces));
       } else {
         this._longedge = Math.round(num1);
         this._shortedge = Math.round(num2);
-        this._area = Math.round(this._longedge * this._shortedge);
       }
     } else if (dir === FormulaAOfRectangleCalcDirEum.LongEdgeAndArea) {
       if (this._decimalPlaces > 0) {
         this._longedge = parseFloat(num1.toFixed(this._decimalPlaces));
         this._area = parseFloat(num2.toFixed(this._decimalPlaces));
-        this._shortedge = parseFloat((this._area / this._longedge).toFixed(this._decimalPlaces));
       } else {
         this._longedge = Math.round(num1);
         this._area = Math.round(num2);
-        this._shortedge = Math.round(this._area / this._longedge);
       }
     } else if (dir === FormulaAOfRectangleCalcDirEum.ShortEdgeAndArea) {
       if (this._decimalPlaces > 0) {
         this._shortedge = parseFloat(num1.toFixed(this._decimalPlaces));
         this._area = parseFloat(num2.toFixed(this._decimalPlaces));
-        this._longedge = parseFloat((this._area / this._shortedge).toFixed(this._decimalPlaces));
       } else {
         this._shortedge = Math.round(num1);
         this._area = Math.round(num2);
-        this._longedge = Math.round(this._area / this._shortedge);
       }
     } else {
       throw new Error('Unsupported direction!');
@@ -1039,35 +1002,62 @@ export class FormulaAreaOfRectangleQuizItem extends FormulaQuizItemBase {
     }
   }
 
-  public storeToString(): string {
-    let rstr = super.storeToString();
-
-    if (this._direct === FormulaAOfRectangleCalcDirEum.LongEdgeAndShortEdge) {
-      rstr += QuizSplitter + '0' + QuizSplitter + this._longedge.toString() + QuizSplitter + this._shortedge.toString();
-    } else if (this._direct === FormulaAOfRectangleCalcDirEum.LongEdgeAndArea) {
-      rstr += QuizSplitter + '1' + QuizSplitter + this._longedge.toString() + QuizSplitter + this._area.toString();
-    } else if (this._direct === FormulaAOfRectangleCalcDirEum.ShortEdgeAndArea) {
-      rstr += QuizSplitter + '2' + QuizSplitter + this._shortedge.toString() + QuizSplitter + this._area.toString();
-    }
-
-    return rstr;
+  protected storeToJsonObject(): any {
+    const jobj: any = super.storeToJsonObject();
+    jobj.longEdge = this._longedge;
+    jobj.shortEdge = this._shortedge;
+    jobj.area = this._area;
+    jobj.direction = this._direct;
+    return jobj;
   }
 
-  public static restoreFromString(s: string): FormulaAreaOfRectangleQuizItem | null {
-    try {
-      const idx = s.indexOf(QuizSplitter);
-      const idx2 = s.indexOf(QuizSplitter, idx + 1);
+  protected restoreFromJsonObject(data: any): void {
+    super.restoreFromJsonObject(data);
 
-      const ndir: number = <FormulaAOfRectangleCalcDirEum>parseInt(s.substring(0, idx));
-      const nnum1: number = parseFloat(s.substring(idx + 1, idx2));
-      const nnum2: number = parseFloat(s.substring(idx2 + 1));
-      return new FormulaAreaOfRectangleQuizItem(nnum1, nnum2, ndir);
+    if (data && data.longEdge) {
+      this._longedge = data.longEdge;
     }
-    catch (exp) {
-      console.error(exp);
+    if (data && data.shortEdge) {
+      this._shortedge = data.shortEdge;
+    }
+    if (data && data.area) {
+      this._area = data.area;
+    }
+    if (data && data.direction) {
+      this._direct = data.direction;
+    }
+  }
+
+  protected canCalcResult(): boolean {
+    if (!super.canCalcResult()) {
+      return false;
     }
 
-    return null;
+    return true;
+  }
+
+  protected calcResult(): void {
+    if (this._direct === FormulaAOfRectangleCalcDirEum.LongEdgeAndShortEdge) {
+      if (this._decimalPlaces > 0) {
+        this._area = parseFloat((this._longedge * this._shortedge).toFixed(this._decimalPlaces));
+      } else {
+        this._area = Math.round(this._longedge * this._shortedge);
+      }
+    } else if (this._direct === FormulaAOfRectangleCalcDirEum.LongEdgeAndArea) {
+      if (this._decimalPlaces > 0) {
+        this._shortedge = parseFloat((this._area / this._longedge).toFixed(this._decimalPlaces));
+      } else {
+        this._shortedge = Math.round(this._area / this._longedge);
+      }
+    } else if (this._direct === FormulaAOfRectangleCalcDirEum.ShortEdgeAndArea) {
+      if (this._decimalPlaces > 0) {
+        this._longedge = parseFloat((this._area / this._shortedge).toFixed(this._decimalPlaces));
+      } else {
+        this._longedge = Math.round(this._area / this._shortedge);
+      }
+    } else {
+      throw new Error('Unsupported direction!');
+    }
   }
 }
 
@@ -1106,23 +1096,18 @@ export class FormulaAreaOfSquareQuizItem extends FormulaQuizItemBase {
   constructor(srcnum: number, bdir: FormulaAreaOfSquareCalcDirEum, dplace?: number) {
     super(PrimarySchoolFormulaEnum.AreaOfSquare, dplace);
 
+    this._direct = bdir;
     if (bdir === FormulaAreaOfSquareCalcDirEum.Edge) {
-      this._direct = FormulaAreaOfSquareCalcDirEum.Edge;
       if (this._decimalPlaces > 0) {
         this._edge = parseFloat(srcnum.toFixed(this._decimalPlaces));
-        this._area = parseFloat(Math.pow(this._edge, 2).toFixed(this._decimalPlaces));
       } else {
         this._edge = Math.round(srcnum);
-        this._area = Math.round(Math.pow(this._edge, 2));
       }
     } else {
-      this._direct = FormulaAreaOfSquareCalcDirEum.Area;
       if (this._decimalPlaces > 0) {
         this._area = parseFloat(srcnum.toFixed(this._decimalPlaces));
-        this._edge = parseFloat(Math.sqrt(this._area).toFixed(this._decimalPlaces));
       } else {
         this._area = Math.round(srcnum);
-        this._edge = Math.round(Math.sqrt(this._area));
       }
     }
   }
@@ -1178,32 +1163,50 @@ export class FormulaAreaOfSquareQuizItem extends FormulaQuizItemBase {
     }
   }
 
-  public storeToString(): string {
-    let rstr = super.storeToString();
-
-    if (this._direct === FormulaAreaOfSquareCalcDirEum.Edge) {
-      rstr += QuizSplitter + '0' + QuizSplitter + this._edge.toString();
-    } else if (this._direct === FormulaAreaOfSquareCalcDirEum.Area) {
-      rstr += QuizSplitter + '1' + QuizSplitter + this._area.toString();
-    }
-
-    return rstr;
+  protected storeToJsonObject(): any {
+    const jobj: any = super.storeToJsonObject();
+    jobj.edge = this._edge;
+    jobj.area = this._area;
+    jobj.direction = this._direct;
+    return jobj;
   }
 
-  public static restoreFromString(s: string): FormulaAreaOfSquareQuizItem | null {
-    try {
-      const idx = s.indexOf(QuizSplitter);
+  protected restoreFromJsonObject(data: any): void {
+    super.restoreFromJsonObject(data);
 
-      const nbol: number = parseInt(s.substring(0, idx));
-      const nnum: number = parseFloat(s.substring(idx + 1));
-
-      return new FormulaAreaOfSquareQuizItem(nnum, <FormulaAreaOfSquareCalcDirEum>nbol);
+    if (data && data.edge) {
+      this._edge = data.edge;
     }
-    catch (exp) {
-      console.error(exp);
+    if (data && data.area) {
+      this._area = data.area;
+    }
+    if (data && data.direction) {
+      this._direct = data.direction;
+    }
+  }
+
+  protected canCalcResult(): boolean {
+    if (!super.canCalcResult()) {
+      return false;
     }
 
-    return null;
+    return true;
+  }
+
+  protected calcResult(): void {
+    if (this._direct === FormulaAreaOfSquareCalcDirEum.Edge) {
+      if (this._decimalPlaces > 0) {
+        this._area = parseFloat(Math.pow(this._edge, 2).toFixed(this._decimalPlaces));
+      } else {
+        this._area = Math.round(Math.pow(this._edge, 2));
+      }
+    } else {
+      if (this._decimalPlaces > 0) {
+        this._edge = parseFloat(Math.sqrt(this._area).toFixed(this._decimalPlaces));
+      } else {
+        this._edge = Math.round(Math.sqrt(this._area));
+      }
+    }
   }
 }
 
@@ -1262,31 +1265,25 @@ export class FormulaEfficiencyProblemQuizItem extends FormulaQuizItemBase {
       if (this._decimalPlaces > 0) {
         this._efficiency = parseFloat(num1.toFixed(this._decimalPlaces));
         this._time = parseFloat(num2.toFixed(this._decimalPlaces));
-        this._result = parseFloat((this._efficiency * this._time).toFixed(this._decimalPlaces));
       } else {
         this._efficiency = Math.round(num1);
         this._time = Math.round(num2);
-        this._result = Math.round(this._efficiency * this._time);
       }
     } else if (dir === FormulaEfficiencyProblemCalcDirEum.EfficiencyAndResult) {
       if (this._decimalPlaces > 0) {
         this._efficiency = parseFloat(num1.toFixed(this._decimalPlaces));
         this._result = parseFloat(num2.toFixed(this._decimalPlaces));
-        this._time = parseFloat((this._result / this._efficiency).toFixed(this._decimalPlaces));
       } else {
         this._efficiency = Math.round(num1);
         this._result = Math.round(num2);
-        this._time = Math.round(this._result / this._efficiency);
       }
     } else if (dir === FormulaEfficiencyProblemCalcDirEum.TimeAndResult) {
       if (this._decimalPlaces > 0) {
         this._time = parseFloat(num1.toFixed(this._decimalPlaces));
         this._result = parseFloat(num2.toFixed(this._decimalPlaces));
-        this._efficiency = parseFloat((this._result / this._time).toFixed(this._decimalPlaces));
       } else {
         this._time = Math.round(num1);
         this._result = Math.round(num2);
-        this._efficiency = Math.round(this._result / this._time);
       }
     } else {
       throw new Error('Unsupported direction!');
@@ -1369,34 +1366,61 @@ export class FormulaEfficiencyProblemQuizItem extends FormulaQuizItemBase {
     }
   }
 
-  public storeToString(): string {
-    let rstr = super.storeToString();
-
-    if (this._direct === FormulaEfficiencyProblemCalcDirEum.EfficiencyAndTime) {
-      rstr += QuizSplitter + '0' + QuizSplitter + this._efficiency.toString() + QuizSplitter + this._time.toString();
-    } else if (this._direct === FormulaEfficiencyProblemCalcDirEum.EfficiencyAndResult) {
-      rstr += QuizSplitter + '1' + QuizSplitter + this._efficiency.toString() + QuizSplitter + this._time.toString();
-    } else if (this._direct === FormulaEfficiencyProblemCalcDirEum.TimeAndResult) {
-      rstr += QuizSplitter + '2' + QuizSplitter + this._time.toString() + QuizSplitter + this._result.toString();
-    }
-
-    return rstr;
+  protected storeToJsonObject(): any {
+    const jobj: any = super.storeToJsonObject();
+    jobj.efficiency = this._efficiency;
+    jobj.time = this._time;
+    jobj.result = this._result;
+    jobj.direct = this._direct;
+    return jobj;
   }
 
-  public static restoreFromString(s: string): FormulaEfficiencyProblemQuizItem | null {
-    try {
-      const idx = s.indexOf(QuizSplitter);
-      const idx2 = s.indexOf(QuizSplitter, idx + 1);
+  protected restoreFromJsonObject(data: any): void {
+    super.restoreFromJsonObject(data);
 
-      const ndir: number = <FormulaEfficiencyProblemCalcDirEum>parseInt(s.substring(0, idx));
-      const nnum1: number = parseFloat(s.substring(idx + 1, idx2));
-      const nnum2: number = parseFloat(s.substring(idx2 + 1));
-      return new FormulaEfficiencyProblemQuizItem(nnum1, nnum2, ndir);
+    if (data && data.efficiency) {
+      this._efficiency = data.efficiency;
     }
-    catch (exp) {
-      console.error(exp);
+    if (data && data.time) {
+      this._time = data.time;
+    }
+    if (data && data.result) {
+      this._result = data.result;
+    }
+    if (data && data.direct) {
+      this._direct = data.direct;
+    }
+  }
+
+  protected canCalcResult(): boolean {
+    if (!super.canCalcResult()) {
+      return false;
     }
 
-    return null;
+    return true;
+  }
+
+  protected calcResult(): void {
+    if (this._direct === FormulaEfficiencyProblemCalcDirEum.EfficiencyAndTime) {
+      if (this._decimalPlaces > 0) {
+        this._result = parseFloat((this._efficiency * this._time).toFixed(this._decimalPlaces));
+      } else {
+        this._result = Math.round(this._efficiency * this._time);
+      }
+    } else if (this._direct === FormulaEfficiencyProblemCalcDirEum.EfficiencyAndResult) {
+      if (this._decimalPlaces > 0) {
+        this._time = parseFloat((this._result / this._efficiency).toFixed(this._decimalPlaces));
+      } else {
+        this._time = Math.round(this._result / this._efficiency);
+      }
+    } else if (this._direct === FormulaEfficiencyProblemCalcDirEum.TimeAndResult) {
+      if (this._decimalPlaces > 0) {
+        this._efficiency = parseFloat((this._result / this._time).toFixed(this._decimalPlaces));
+      } else {
+        this._efficiency = Math.round(this._result / this._time);
+      }
+    } else {
+      throw new Error('Unsupported direction!');
+    }
   }
 }

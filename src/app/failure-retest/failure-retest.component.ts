@@ -70,11 +70,36 @@ export class FailureRetestComponent implements OnInit {
             qi.inputted = si.inputted;
             qi.submitdate = new Date(si.submitDate);
             switch (qi.quiztype) {
-              case QuizTypeEnum.add: qi.qsInstance = AdditionQuizItem.restoreFromString(si.expected); break;
-              case QuizTypeEnum.sub: qi.qsInstance = SubtractionQuizItem.restoreFromString(si.expected); break;
-              case QuizTypeEnum.multi: qi.qsInstance = MultiplicationQuizItem.restoreFromString(si.expected); break;
-              case QuizTypeEnum.div: qi.qsInstance = DivisionQuizItem.restoreFromString(si.expected); break;
-              case QuizTypeEnum.formula: qi.qsInstance = FormulaQuizItemBase.restoreFromString(si.expected); break;
+              case QuizTypeEnum.add: {
+                const aqi: AdditionQuizItem = new AdditionQuizItem();
+                aqi.restoreFromString(si.expected);
+                qi.qsInstance = aqi;
+              }
+              break;
+
+              case QuizTypeEnum.sub: {
+                qi.qsInstance = new SubtractionQuizItem();
+                qi.qsInstance.restoreFromString(si.expected);
+              }
+              break;
+
+              case QuizTypeEnum.multi: {
+                qi.qsInstance = new MultiplicationQuizItem();
+                qi.qsInstance.restoreFromString(si.expected);
+              }
+              break;
+
+              case QuizTypeEnum.div: {
+                qi.qsInstance = new DivisionQuizItem();
+                qi.qsInstance.restoreFromString(si.expected);
+              }
+              break;
+
+              case QuizTypeEnum.formula: {
+                qi.qsInstance = new FormulaQuizItemBase.restoreFromString(si.expected);
+              }
+              break;
+
               default: {
                 // No support type, just skip it!
                 if (environment.LoggingLevel >= LogLevel.Debug) {
