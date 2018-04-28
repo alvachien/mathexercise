@@ -17,6 +17,5 @@ export const environment = {
   AppLogoutCallbackUrl: 'http://localhost:20000',
   AppHost: 'http://localhost:20000',
 
-  AppHIH: 'http://localhost:29512',
   AppGallery: 'http://localhost:1601',
 };
