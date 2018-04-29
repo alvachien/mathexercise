@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import {
   RPN, SudouUnit, Sudou, generateValidSudou, SudouSize,
-  PrimarySchoolMathQuiz, QuizTypeEnum, PrimarySchoolMathQuizItem,
+  PrimarySchoolMathQuiz, QuizTypeEnum, PrimarySchoolMathQuizItem, QuizBasicControl,
   Cal24QuizItem, SudouQuizItem, LogLevel, QuizDegreeOfDifficulity, QuizDegreeOfDifficulity2UIString
 } from '../model';
 import { environment } from '../../environments/environment';
@@ -231,7 +231,7 @@ export class PuzzleGamesComponent implements OnInit {
     }
 
     this.Cal24Quiz.BasicInfo = this.Cal24items.join(',');
-    this.Cal24Quiz.Start(1, 0); // Single item and no failor
+    this.Cal24Quiz.Start(new QuizBasicControl()); // Single item and no failor
     this.Cal24Quiz.CurrentRun().SectionStart();
   }
 
@@ -403,7 +403,7 @@ export class PuzzleGamesComponent implements OnInit {
     this.sudouInstance = generateValidSudou();
 
     this.sudouQuiz.BasicInfo = this.sudouInstance.print2String().substring(0, 45);
-    this.sudouQuiz.Start(1, 0); // Single item and no failor
+    this.sudouQuiz.Start(new QuizBasicControl()); // Single item and no failor
     this.sudouQuiz.CurrentRun().SectionStart();
   }
 
@@ -511,7 +511,7 @@ export class PuzzleGamesComponent implements OnInit {
       + (this.typingIncCaptial ? '1' : '0') + ';'
       + (this.typingIncNumber ? '1' : '0') + ';'
       + (this.typingIncSymbols ? '1' : '0') + ';';
-    this.typingQuiz.Start(1, 0); // Single item and no failor
+    this.typingQuiz.Start(new QuizBasicControl()); // Single item and no failor
     this.typingQuiz.CurrentRun().SectionStart();
   }
 
@@ -596,7 +596,7 @@ export class PuzzleGamesComponent implements OnInit {
 
   public OnMineSweepStart(): void {
     this.mineSweepQuiz.BasicInfo = '';
-    this.mineSweepQuiz.Start(1, 0); // Single item and no failor
+    this.mineSweepQuiz.Start(new QuizBasicControl()); // Single item and no failor
     this.mineSweepQuiz.CurrentRun().SectionStart();
   }
 
@@ -689,7 +689,7 @@ export class PuzzleGamesComponent implements OnInit {
 
   public OnGobangStart(): void {
     this.gobangQuiz.BasicInfo = '';
-    this.gobangQuiz.Start(1, 0); // Single item and no failor
+    this.gobangQuiz.Start(new QuizBasicControl()); // Single item and no failor
     this.gobangQuiz.CurrentRun().SectionStart();
   }
 
@@ -771,7 +771,7 @@ export class PuzzleGamesComponent implements OnInit {
    */
   public OnChineseChessStart(): void {
     this.chnchessQuiz.BasicInfo = '';
-    this.chnchessQuiz.Start(1, 0); // Single item and no failor
+    this.chnchessQuiz.Start(new QuizBasicControl()); // Single item and no failor
     this.chnchessQuiz.CurrentRun().SectionStart();
   }
 

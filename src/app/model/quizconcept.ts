@@ -2,6 +2,7 @@
 import { QuizSplitter } from './quizconstants';
 import * as moment from 'moment';
 import { DateFormat } from './datedef';
+import { IStorableObject, StorableObject } from './uicommon';
 
 /**
  * Quiz type
@@ -99,7 +100,7 @@ export function QuizDegreeOfDifficulity2UIString(qd: QuizDegreeOfDifficulity): s
 /**
  * Quiz item
  */
-export abstract class QuizItem {
+export abstract class QuizItem extends StorableObject {
   private _index: number;
   get QuizIndex(): number {
     return this._index;
@@ -109,6 +110,7 @@ export abstract class QuizItem {
   }
 
   constructor() {
+    super();
     this._index = 0;
   }
 
@@ -124,24 +126,11 @@ export abstract class QuizItem {
     return '';
   }
 
-  public storeToString(): string {
-    const jobj: any = this.storeToJsonObject();
-    return JSON && JSON.stringify(jobj);
-  }
-  public restoreFromString(str: string) {
-    const jobj = JSON.parse(str);
-    this.restoreFromJsonObject(jobj);
-
-    if (this.canCalcResult()) {
-      this.calcResult();
-    }
-  }
-
   protected storeToJsonObject(): any {
-    return {};
+    return super.storeToJsonObject();
   }
   protected restoreFromJsonObject(data: any) {
-    // Do nothing
+    super.restoreFromJsonObject(data);
   }
 
   protected canCalcResult(): boolean {
@@ -355,19 +344,248 @@ export class PrimarySchoolMathQuizSection {
 }
 
 /**
- * Setting of the quiz
+ * Control of the quiz
  */
-export abstract class QuizBasicSetting {
-  public readonly numberOfQuestions: number;
-  public readonly failFactor: number;
+export class QuizBasicControl extends StorableObject {
+  private _numOfQ: number;
+  private _failFactor: number;
+  get numberOfQuestions(): number {
+    return this._numOfQ;
+  }
+  set numberOfQuestions(noq: number) {
+    this._numOfQ = noq;
+  }
+
+  get failFactor(): number {
+    return this._failFactor;
+  }
+  set failFactor(ff: number) {
+    this._failFactor = ff;
+  }
+
+  constructor() {
+    super();
+
+    this.failFactor = 0;
+    this._numOfQ = 1;
+  }
+
+  isEqual(other: QuizBasicControl): boolean {
+    return this._numOfQ === other._numOfQ
+      && this._failFactor === other._failFactor;
+  }
+
+  protected storeToJsonObject(): any {
+    const jobj: any = super.storeToJsonObject();
+    jobj.numofq = this._numOfQ;
+    jobj.failfact = this._failFactor;
+    return jobj;
+  }
+  protected restoreFromJsonObject(data: any) {
+    super.restoreFromJsonObject(data);
+    if (data && data.numofq) {
+      this._numOfQ = +data.numofq;
+    }
+    if (data && data.failfact) {
+      this._failFactor = +data.failfact;
+    }
+  }
 }
 
-export class PrimarySchoolMathFAOSetting extends QuizBasicSetting {
-  public readonly leftNumberBegin: number;
-  public readonly leftNumberEnd: number;
-  public readonly rightNumberBegin: number;
-  public readonly rightNumberEnd: number;
-  public readonly decimalPlaces: number;
+export class PrimarySchoolMathMixOpControl extends QuizBasicControl {
+  private _numberBegin: number;
+  private _numberEnd: number;
+  private _numOfOp: number;
+  private _decimalPlaces: number;
+  private _decimalOccurs: boolean;
+  private _negativeOccurs: boolean;
+  get numberBegin(): number {
+    return this._numberBegin;
+  }
+  set numberBegin(lnb: number) {
+    this._numberBegin = lnb;
+  }
+  get numberEnd(): number {
+    return this._numberEnd;
+  }
+  set numberEnd(lne: number) {
+    this._numberEnd = lne;
+  }
+  get numberOfOperators(): number {
+    return this._numOfOp;
+  }
+  set numberOfOperators(noo: number) {
+    this._numOfOp = noo;
+  }
+  get decimalPlaces(): number {
+    return this._decimalPlaces;
+  }
+  set decimalPlaces(dp: number) {
+    this._decimalPlaces = dp;
+  }
+  get decimalOccur(): boolean {
+    return this._decimalOccurs;
+  }
+  set decimalOccur(doc: boolean) {
+    this._decimalOccurs = doc;
+  }
+  get negativeOccur(): boolean {
+    return this._negativeOccurs;
+  }
+  set negativeOccur(noc: boolean) {
+    this._negativeOccurs = noc;
+  }
+
+  constructor() {
+    super();
+
+    this._numberBegin = 1;
+    this._numberEnd = 100;
+    this._numOfOp = 1;
+    this._decimalPlaces = 0;
+    this._decimalOccurs = false;
+    this._negativeOccurs = false;
+  }
+
+  isEqual(other: PrimarySchoolMathMixOpControl): boolean {
+    if (!super.isEqual(other)) {
+      return false;
+    }
+
+    return this._numberBegin === other._numberBegin
+      && this._numberEnd === other._numberEnd
+      && this._numOfOp === other._numOfOp
+      && this._decimalPlaces === other._decimalPlaces
+      && this._decimalOccurs === other._decimalOccurs
+      && this._negativeOccurs === other._negativeOccurs
+      ;
+  }
+  protected storeToJsonObject(): any {
+    const jobj: any = super.storeToJsonObject();
+    jobj.nbgn = this._numberBegin;
+    jobj.nend = this._numberEnd;
+    jobj.noop = this._numOfOp;
+    jobj.dplace = this._decimalPlaces;
+    jobj.dpocur = this._decimalOccurs;
+    jobj.ngocur = this._negativeOccurs;
+    return jobj;
+  }
+  protected restoreFromJsonObject(data: any) {
+    super.restoreFromJsonObject(data);
+    if (data && data.nbgn) {
+      this._numberBegin = +data.nbgn;
+    }
+    if (data && data.nend) {
+      this._numberEnd = +data.nend;
+    }
+    if (data && data.noop) {
+      this._numOfOp = +data.noop;
+    } else {
+      this._numOfOp = 1;
+    }
+    if (data && data.dplace) {
+      this._decimalPlaces = data.dplace;
+    } else {
+      this._decimalPlaces = 0;
+    }
+    if (data && data.dpocur) {
+      this._decimalOccurs = data.dpocur;
+    } else {
+      this._decimalOccurs = false;
+    }
+    if (data && data.ngocur) {
+      this._negativeOccurs = data.ngocur;
+    } else {
+      this._negativeOccurs = false;
+    }
+  }
+}
+
+export class PrimarySchoolMathFAOControl extends QuizBasicControl {
+  private _leftNumberBegin: number;
+  private _leftNumberEnd: number;
+  private _rightNumberBegin: number;
+  private _rightNumberEnd: number;
+  private _decimalPlaces: number;
+
+  get leftNumberBegin(): number {
+    return this._leftNumberBegin;
+  }
+  set leftNumberBegin(lnb: number) {
+    this._leftNumberBegin = lnb;
+  }
+  get leftNumberEnd(): number {
+    return this._leftNumberEnd;
+  }
+  set leftNumberEnd(lne: number) {
+    this._leftNumberEnd = lne;
+  }
+  get rightNumberBegin(): number {
+    return this._rightNumberBegin;
+  }
+  set rightNumberBegin(rnb: number) {
+    this._rightNumberBegin = rnb;
+  }
+  get rightNumberEnd(): number {
+    return this._rightNumberEnd;
+  }
+  set rightNumberEnd(rne: number) {
+    this._rightNumberEnd = rne;
+  }
+  get decimalPlaces(): number {
+    return this._decimalPlaces;
+  }
+  set decimalPlaces(dp: number) {
+    this._decimalPlaces = dp;
+  }
+
+  constructor() {
+    super();
+    this._leftNumberBegin = 1;
+    this._leftNumberEnd = 1000;
+    this._rightNumberBegin = 1;
+    this._rightNumberEnd = 1000;
+    this._decimalPlaces = 0;
+  }
+
+  isEqual(other: PrimarySchoolMathFAOControl): boolean {
+    if (!super.isEqual(other)) {
+      return false;
+    }
+
+    return this._leftNumberBegin === other._leftNumberBegin
+      && this._leftNumberEnd === other._leftNumberEnd
+      && this._rightNumberBegin === other._rightNumberBegin
+      && this._rightNumberEnd === other._rightNumberEnd
+      && this._decimalPlaces === other._decimalPlaces;
+  }
+  protected storeToJsonObject(): any {
+    const jobj: any = super.storeToJsonObject();
+    jobj.lftbgn = this._leftNumberBegin;
+    jobj.lftend = this._leftNumberEnd;
+    jobj.rgtbgn = this._rightNumberBegin;
+    jobj.rgtend = this._rightNumberEnd;
+    jobj.dplace = this._decimalPlaces;
+    return jobj;
+  }
+  protected restoreFromJsonObject(data: any) {
+    super.restoreFromJsonObject(data);
+    if (data && data.lftbgn) {
+      this._leftNumberBegin = +data.lftbgn;
+    }
+    if (data && data.lftend) {
+      this._leftNumberEnd = +data.lftend;
+    }
+    if (data && data.rgtbgn) {
+      this._rightNumberBegin = +data.rgtbgn;
+    }
+    if (data && data.rgtend) {
+      this._rightNumberEnd = +data.rgtend;
+    }
+    if (data && data.dplace) {
+      this._decimalPlaces = data.dplace;
+    }
+  }
 }
 
 /**
@@ -457,7 +675,7 @@ export class PrimarySchoolMathQuiz {
    * @param startnum: Initial number of the questions
    * @param failfactor: Factor of the failure
    */
-  public Start(startnum: number, failfactor: number) {
+  public Start(qcontrol: QuizBasicControl) {
     if (this._isStarted || this._curRun !== null) {
       throw new Error('Quiz already started!');
     }
@@ -465,8 +683,8 @@ export class PrimarySchoolMathQuiz {
     // Empty the elder run
     this.init();
 
-    this._faileFactor = failfactor;
-    this._curRun = new PrimarySchoolMathQuizSection(this._curRunID, startnum);
+    this._faileFactor = qcontrol.failFactor;
+    this._curRun = new PrimarySchoolMathQuizSection(this._curRunID, qcontrol.numberOfQuestions);
 
     this._isStarted = true;
   }

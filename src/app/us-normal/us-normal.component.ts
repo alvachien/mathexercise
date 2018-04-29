@@ -33,7 +33,7 @@ export class QuizDataSource extends DataSource<APIQuiz> {
     ];
 
     const mgerst = merge(...displayDataChanges);
-    
+
     return mgerst.pipe(map(() => {
       const data = this.getSortedData();
 

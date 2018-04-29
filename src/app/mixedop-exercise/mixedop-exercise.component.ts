@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, PrimarySchoolMathQuizItem, QuizTypeEnum,
-  DefaultQuizAmount, DefaultFailedQuizFactor, MixedOperationQuizItem, RPN
+  DefaultQuizAmount, DefaultFailedQuizFactor, MixedOperationQuizItem, RPN, PrimarySchoolMathMixOpControl
 } from '../model';
 import { MatDialog } from '@angular/material';
 import { DialogService } from '../services/dialog.service';
@@ -18,17 +18,8 @@ import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } fr
   styleUrls: ['./mixedop-exercise.component.scss']
 })
 export class MixedopExerciseComponent implements OnInit {
-  StartQuizAmount: number = DefaultQuizAmount;
-  FailedQuizFactor: number = DefaultFailedQuizFactor;
+  quizControl: PrimarySchoolMathMixOpControl;
   UsedQuizAmount = 0;
-
-  NumberRangeBgn = 1;
-  NumberRangeEnd = 100;
-  NumberOfOperators = 2;
-  AllowDecimal = false;
-  AllowNegative = false;
-  decimalPlaces = 0;
-
   quizInstance: PrimarySchoolMathQuiz = null;
   QuizItems: MixedOperationQuizItem[] = [];
   DisplayedQuizItems: MixedOperationQuizItem[] = [];
@@ -39,6 +30,11 @@ export class MixedopExerciseComponent implements OnInit {
   constructor(private dialog: MatDialog,
     private _dlgsvc: DialogService,
     private _router: Router) {
+    this.quizControl = new PrimarySchoolMathMixOpControl();
+    this.quizControl.numberBegin = 1;
+    this.quizControl.numberEnd = 100;
+    this.quizControl.numberOfOperators = 2;
+    this.quizControl.decimalPlaces = 0;
     this.quizInstance = new PrimarySchoolMathQuiz();
     this.quizInstance.QuizType = QuizTypeEnum.mixedop;
   }
@@ -59,9 +55,10 @@ export class MixedopExerciseComponent implements OnInit {
       let step = 0;
       let bprv = false;
 
-      while (step < this.NumberOfOperators) {
+      while (step < this.quizControl.numberOfOperators) {
         if (strfrm.length <= 0) {
-          const n1 = Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn);
+          const n1 = Math.round(Math.random() * (this.quizControl.numberEnd - this.quizControl.numberBegin)
+            + this.quizControl.numberBegin);
           strfrm = n1.toString();
         }
 
@@ -72,7 +69,8 @@ export class MixedopExerciseComponent implements OnInit {
           op = 3;
         }
 
-        let n2: number = Math.round(Math.random() * (this.NumberRangeEnd - this.NumberRangeBgn) + this.NumberRangeBgn);
+        let n2: number = Math.round(Math.random() * (this.quizControl.numberEnd - this.quizControl.numberBegin)
+          + this.quizControl.numberBegin);
         if (op === 3 && n2 > 100) {
           n2 = Math.round(Math.random() * 100);
         }
@@ -82,7 +80,7 @@ export class MixedopExerciseComponent implements OnInit {
           bprv = false;
         } else {
           const buse = Math.round(Math.random());
-          if (buse === 0 && step < this.NumberOfOperators - 1) {
+          if (buse === 0 && step < this.quizControl.numberOfOperators - 1) {
             strfrm += operators.charAt(op).toString() + '(' + n2.toString();
             bprv = true;
           } else {
@@ -96,7 +94,7 @@ export class MixedopExerciseComponent implements OnInit {
       const oprn: RPN = new RPN();
       oprn.buildExpress(strfrm);
       try {
-        if (oprn.VerifyResult(this.AllowNegative, this.AllowDecimal)) {
+        if (oprn.VerifyResult(this.quizControl.negativeOccur, this.quizControl.decimalOccur)) {
           if (environment.LoggingLevel >= LogLevel.Debug) {
             console.log(`AC Math Exercise [Debug]: MixedOperation generation succeed: ${strfrm}`);
           }
@@ -191,8 +189,10 @@ export class MixedopExerciseComponent implements OnInit {
   }
 
   public CanStart(): boolean {
-    if (this.StartQuizAmount <= 0 || this.NumberOfOperators <= 1 || this.NumberRangeBgn < 0
-      || this.NumberRangeEnd <= this.NumberRangeBgn) {
+    if (this.quizControl.numberOfQuestions <= 0
+      || this.quizControl.numberOfOperators <= 1
+      || this.quizControl.numberBegin < 0
+      || this.quizControl.numberEnd <= this.quizControl.numberBegin) {
       return false;
     }
 
@@ -204,9 +204,8 @@ export class MixedopExerciseComponent implements OnInit {
   }
   public onQuizStart(): void {
     // Start it!
-    this.quizInstance.BasicInfo = '[' + this.NumberRangeBgn.toString() + '...' + this.NumberRangeEnd.toString() + '];'
-      + this.NumberOfOperators.toString() + ';' + this.AllowNegative ? 'Neg;' : ';' + this.AllowDecimal ? 'Dec;' : ';';
-    this.quizInstance.Start(this.StartQuizAmount, this.FailedQuizFactor);
+    this.quizInstance.BasicInfo = this.quizControl.storeToString();
+    this.quizInstance.Start(this.quizControl);
 
     // Generated section
     this.generateQuizSection();

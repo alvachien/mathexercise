@@ -18,4 +18,5 @@ export const environment = {
   AppHost: 'http://localhost:20000',
 
   AppGallery: 'http://localhost:1601',
+  AppHIH: 'http://localhost:29521',
 };

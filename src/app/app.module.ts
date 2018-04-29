@@ -60,6 +60,7 @@ import { UsNormalComponent } from './us-normal';
 import { PgGobangComponent } from './pg-gobang';
 import { PgChineseChessComponent } from './pg-chinese-chess';
 import { PgChineseChess2Component } from './pg-chinese-chess2';
+import { QuizControlComponent } from './quiz-control/quiz-control.component';
 
 @NgModule({
   exports: [
@@ -72,6 +73,7 @@ import { PgChineseChess2Component } from './pg-chinese-chess2';
     MatTooltipModule, MatFormFieldModule, MatExpansionModule, MatNativeDateModule,
     CdkTableModule
   ],
+  declarations: [QuizControlComponent],
 })
 export class DSMaterialModule { }
 

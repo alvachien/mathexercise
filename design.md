@@ -19,8 +19,8 @@ QuizItem (abstract)
         Cal24QuizItem
         SudouQuizItem
 
-QuizBasicSetting
-    PrimarySchoolMathFAOSetting
+QuizBasicControl
+    PrimarySchoolMathFAOControl
 
 PrimarySchoolMathQuizSection
 

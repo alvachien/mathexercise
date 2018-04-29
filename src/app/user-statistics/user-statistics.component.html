@@ -5,7 +5,7 @@
   <mat-card-content>
     <mat-radio-group class="example-radio-group" [(ngModel)]="selectedView">
       <mat-radio-button class="example-radio-button" *ngFor="let view of allviews" [value]="view.value">
-        {{view.name}}
+        {{view.name | translate}}
       </mat-radio-button>
     </mat-radio-group>
 

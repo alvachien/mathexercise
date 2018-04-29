@@ -21,8 +21,8 @@ import * as moment from 'moment';
 })
 export class UserStatisticsComponent implements OnInit, AfterViewInit {
   allviews: any[] = [
-    {value: 1, name: 'Normal'},
-    {value: 2, name: 'Trend'},
+    {value: 1, name: 'Home.StandardReport'},
+    {value: 2, name: 'Home.TrendReport'},
   ];
   selectedView: number;
 

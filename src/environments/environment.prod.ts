@@ -12,4 +12,5 @@ export const environment = {
   AppHost: 'http://118.178.58.187:5230',
 
   AppGallery: 'http://118.178.58.187:5210',
+  AppHIH: 'http://118.178.58.187:5200',
 };

@@ -89,7 +89,7 @@ export class AwardPlanComponent implements OnInit {
       this._selUser = cu;
     }
   }
-  private _allowInvalid: boolean = false;
+  private _allowInvalid = false;
   get allowInvalid(): boolean {
     return this._allowInvalid;
   }
@@ -286,7 +286,7 @@ export class AwardPlanComponent implements OnInit {
         disableClose: false,
         width: '500px',
         data: dlginfo
-      }).afterClosed().subscribe(x => {
+      }).afterClosed().subscribe((x: any) => {
         // Do nothing!
         this.setListView();
       });
@@ -306,7 +306,7 @@ export class AwardPlanComponent implements OnInit {
         data: dlginfo
       }).afterClosed().subscribe(x => {
         // Do nothing!
-        //this.setListView();
+        // this.setListView();
       });
     });
 
@@ -348,7 +348,7 @@ export class AwardPlanComponent implements OnInit {
           data: dlginfo
         }).afterClosed().subscribe(x2 => {
           // Do nothing!
-          //this.setListView();
+          // this.setListView();
         });
       }
     });

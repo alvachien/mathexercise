@@ -7,12 +7,12 @@
     <div *ngIf="!quizInstance.IsStarted">
       <div class="demo-full-width">
         <mat-form-field>
-          <input matInput type="number" placeholder="{{'Home.QuizAmount' | translate}}" [(ngModel)]="StartQuizAmount" name="startquizamt"
+          <input matInput type="number" placeholder="{{'Home.QuizAmount' | translate}}" [(ngModel)]="quizControl.numberOfQuestions" name="startquizamt"
             required>
           <mat-error>This field is required</mat-error>
         </mat-form-field>
         <mat-form-field>
-          <input matInput type="number" placeholder="{{'Home.FailedFactor' | translate }}" [(ngModel)]="FailedQuizFactor" name="fquizfactor"
+          <input matInput type="number" placeholder="{{'Home.FailedFactor' | translate }}" [(ngModel)]="quizControl.failFactor" name="fquizfactor"
             required>
           <mat-error>This field is required</mat-error>
         </mat-form-field>
@@ -20,7 +20,7 @@
 
       <div class="demo-full-width">
           <mat-form-field>
-              <input matInput type="number" placeholder="{{'Home.NumberOfOperators' | translate }}" [(ngModel)]="NumberOfOperators" name="fquizfactor"
+              <input matInput type="number" placeholder="{{'Home.NumberOfOperators' | translate }}" [(ngModel)]="quizControl.numberOfOperators" name="nofop"
                 required>
               <mat-error>This field is required</mat-error>
           </mat-form-field>
@@ -28,26 +28,26 @@
       
       <div class="demo-full-width">
         <mat-form-field>
-          <input matInput type="number" placeholder="{{'Math.DecimalPlaces' | translate}}" [(ngModel)]="decimalPlaces" name="dmlPlaces"
+          <input matInput type="number" placeholder="{{'Math.DecimalPlaces' | translate}}" [(ngModel)]="quizControl.decimalPlaces" name="dmlPlaces"
             required>
         </mat-form-field>
       </div>
 
       <div class="demo-full-width">
-        <mat-checkbox [(ngModel)]="AllowDecimal">{{'Home.AllowDecimal' | translate}}</mat-checkbox>
+        <mat-checkbox [(ngModel)]="quizControl.decimalOccur">{{'Home.AllowDecimal' | translate}}</mat-checkbox>
       </div>
       
       <div class="demo-full-width">
-        <mat-checkbox [(ngModel)]="AllowNegative">{{'Home.AllowNegative' | translate}}</mat-checkbox>
+        <mat-checkbox [(ngModel)]="quizControl.negativeOccur">{{'Home.AllowNegative' | translate}}</mat-checkbox>
       </div>
 
       <div class="demo-full-width">
         <mat-form-field>
-          <input matInput type="number" placeholder="{{'Math.Scope' | translate}}" [(ngModel)]="NumberRangeBgn" name="nrbgn"
+          <input matInput type="number" placeholder="{{'Math.Scope' | translate}}" [(ngModel)]="quizControl.numberBegin" name="nrbgn"
             required>
         </mat-form-field>
         <mat-form-field>
-          <input matInput type="number" placeholder="{{'Math.Scope' | translate}}" [(ngModel)]="NumberRangeEnd" name="nrend"
+          <input matInput type="number" placeholder="{{'Math.Scope' | translate}}" [(ngModel)]="quizControl.numberEnd" name="nrend"
             required>
         </mat-form-field>
       </div>

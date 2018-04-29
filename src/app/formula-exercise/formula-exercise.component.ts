@@ -3,10 +3,10 @@ import {
   PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, PrimarySchoolMathQuizItem, QuizTypeEnum, FormulaQuizItemBase,
   DefaultQuizAmount, DefaultFailedQuizFactor, PrimarySchoolFormulaEnum, getFormulaNameString, getFormulaUIString,
   FormulaCOfCircleCalcDirEum, FormulaCOfSquareCalcDirEum, FormulaCOfRectangleCalcDirEum, isFormulaTypeEnabled,
-  FormulaCOfCircleQuizItem, FormulaCOfSquareQuizItem, FormulaCOfRectangleQuizItem, FormulaDistAndSpeedCalcDirEum, 
+  FormulaCOfCircleQuizItem, FormulaCOfSquareQuizItem, FormulaCOfRectangleQuizItem, FormulaDistAndSpeedCalcDirEum,
   FormulaDistAndSpeedQuizItem, FormulaEfficiencyProblemQuizItem,
-  FormulaAOfRectangleCalcDirEum, FormulaAreaOfRectangleQuizItem, FormulaAreaOfSquareQuizItem, 
-  FormulaAreaOfSquareCalcDirEum, FormulaEfficiencyProblemCalcDirEum
+  FormulaAOfRectangleCalcDirEum, FormulaAreaOfRectangleQuizItem, FormulaAreaOfSquareQuizItem,
+  FormulaAreaOfSquareCalcDirEum, FormulaEfficiencyProblemCalcDirEum, QuizBasicControl,
 } from '../model';
 import { MatDialog } from '@angular/material';
 import { DialogService } from '../services/dialog.service';
@@ -294,7 +294,7 @@ export class FormulaExerciseComponent implements OnInit {
   public onQuizStart(): void {
     // Start it!
     this.quizInstance.BasicInfo = '[' + this.NumberRangeBgn.toString() + '...' + this.NumberRangeEnd.toString() + ']';
-    this.quizInstance.Start(this.StartQuizAmount, this.FailedQuizFactor);
+    this.quizInstance.Start(new QuizBasicControl());
 
     // Generated section
     this.generateQuizSection();

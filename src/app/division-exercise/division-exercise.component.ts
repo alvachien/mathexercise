@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, DivisionQuizItem,
-  DefaultQuizAmount, DefaultFailedQuizFactor, QuizTypeEnum, LogLevel } from '../model';
+  DefaultQuizAmount, DefaultFailedQuizFactor, QuizTypeEnum, LogLevel, PrimarySchoolMathFAOControl } from '../model';
 import { MatDialog } from '@angular/material';
 import { DialogService } from '../services/dialog.service';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
@@ -23,15 +23,7 @@ import { environment } from '../../environments/environment';
   styleUrls: ['./division-exercise.component.scss']
 })
 export class DivisionExerciseComponent implements OnInit {
-  StartQuizAmount: number = DefaultQuizAmount;
-  FailedQuizFactor: number = DefaultFailedQuizFactor;
-
-  DivisorRangeBgn = 1;
-  DivisorRangeEnd = 100;
-  DividendRangeBgn = 500;
-  DividendRangeEnd = 1000;
-  decimalPlaces = 0;
-
+  quizControl: PrimarySchoolMathFAOControl;
   quizInstance: PrimarySchoolMathQuiz = null;
   QuizItems: DivisionQuizItem[] = [];
   DisplayedQuizItems: DivisionQuizItem[] = [];
@@ -42,9 +34,19 @@ export class DivisionExerciseComponent implements OnInit {
 
   constructor(private dialog: MatDialog,
     private _dlgsvc: DialogService,
+    private _zone: NgZone,
     private _router: Router) {
     this.quizInstance = new PrimarySchoolMathQuiz();
     this.quizInstance.QuizType = QuizTypeEnum.div;
+
+    this.quizControl = new PrimarySchoolMathFAOControl();
+    this.quizControl.leftNumberBegin = 1;
+    this.quizControl.leftNumberEnd = 1000;
+    this.quizControl.rightNumberBegin = 1;
+    this.quizControl.rightNumberEnd = 1000;
+    this.quizControl.decimalPlaces = 0;
+    this.quizControl.numberOfQuestions = 50;
+    this.quizControl.failFactor = 3;
   }
 
   ngOnInit() {
@@ -55,9 +57,9 @@ export class DivisionExerciseComponent implements OnInit {
   }
 
   private generateQuizItem(nIdx: number): DivisionQuizItem {
-    const rnum1 = Math.random() * (this.DividendRangeEnd - this.DividendRangeBgn) + this.DividendRangeBgn;
-    const rnum2 = Math.random() * (this.DivisorRangeEnd - this.DivisorRangeBgn) + this.DivisorRangeBgn;
-    const dq: DivisionQuizItem = new DivisionQuizItem(rnum1, rnum2, this.decimalPlaces);
+    const rnum1 = Math.random() * (this.quizControl.leftNumberEnd - this.quizControl.leftNumberBegin) + this.quizControl.leftNumberBegin;
+    const rnum2 = Math.random() * (this.quizControl.rightNumberEnd - this.quizControl.rightNumberBegin) + this.quizControl.rightNumberBegin;
+    const dq: DivisionQuizItem = new DivisionQuizItem(rnum1, rnum2, this.quizControl.decimalPlaces);
     dq.QuizIndex = nIdx;
 
     return dq;
@@ -137,10 +139,10 @@ export class DivisionExerciseComponent implements OnInit {
   }
 
   public CanStart(): boolean {
-    if (this.StartQuizAmount <= 0 || this.DividendRangeBgn <= 0
-      || this.DividendRangeEnd <= this.DividendRangeBgn
-      || this.DivisorRangeBgn <= 0
-      || this.DivisorRangeEnd <= this.DivisorRangeBgn) {
+    if (this.quizControl.numberOfQuestions <= 0 || this.quizControl.leftNumberBegin < 0
+      || this.quizControl.leftNumberEnd <= this.quizControl.leftNumberBegin
+      || this.quizControl.rightNumberBegin < 0
+      || this.quizControl.rightNumberEnd <= this.quizControl.rightNumberBegin) {
       return false;
     }
 
@@ -153,9 +155,10 @@ export class DivisionExerciseComponent implements OnInit {
 
   public onQuizStart(): void {
     // Start it!
-    this.quizInstance.BasicInfo = '[' + this.DivisorRangeBgn.toString() + '...' + this.DivisorRangeEnd.toString() + ']'
-      + ' ÷ [' + this.DividendRangeBgn.toString() + '...' + this.DividendRangeEnd.toString() + ']';
-    this.quizInstance.Start(this.StartQuizAmount, this.FailedQuizFactor);
+    this.quizInstance.BasicInfo = this.quizControl.storeToString();
+    this._zone.run(() => {
+      this.quizInstance.Start(this.quizControl);
+    });
 
     // Generated section
     this.generateQuizSection();
@@ -225,5 +228,4 @@ export class DivisionExerciseComponent implements OnInit {
       this._router.navigate(['/quiz-sum']);
     }
   }
-
 }

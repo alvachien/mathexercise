@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, MultiplicationQuizItem,
-  DefaultQuizAmount, DefaultFailedQuizFactor, QuizTypeEnum } from '../model';
+  DefaultQuizAmount, DefaultFailedQuizFactor, QuizTypeEnum,
+  LogLevel, UserAuthInfo, PrimarySchoolMathFAOControl
+} from '../model';
 import { MatDialog } from '@angular/material';
 import { DialogService } from '../services/dialog.service';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
@@ -9,7 +11,6 @@ import { Router } from '@angular/router';
 import { slideInOutAnimation } from '../animation';
 import { PageEvent } from '@angular/material';
 import { environment } from '../../environments/environment';
-import { LogLevel, UserAuthInfo } from '../model';
 import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } from '../message-dialog';
 
 @Component({
@@ -18,15 +19,7 @@ import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } fr
   styleUrls: ['./multiplication-quiz.component.scss'],
 })
 export class MultiplicationQuizComponent implements OnInit {
-  StartQuizAmount: number = DefaultQuizAmount;
-  FailedQuizFactor: number = DefaultFailedQuizFactor;
-
-  LeftNumberRangeBgn = 1;
-  LeftNumberRangeEnd = 10;
-  RightNumberRangeBgn = 1;
-  RightNumberRangeEnd = 10;
-  decimalPlaces = 0;
-
+  quizControl: PrimarySchoolMathFAOControl;
   quizInstance: PrimarySchoolMathQuiz = null;
   QuizItems: MultiplicationQuizItem[] = [];
   DisplayedQuizItems: MultiplicationQuizItem[] = [];
@@ -37,9 +30,19 @@ export class MultiplicationQuizComponent implements OnInit {
 
   constructor(private dialog: MatDialog,
     private _dlgsvc: DialogService,
+    private _zone: NgZone,
     private _router: Router) {
     this.quizInstance = new PrimarySchoolMathQuiz();
     this.quizInstance.QuizType = QuizTypeEnum.multi;
+
+    this.quizControl = new PrimarySchoolMathFAOControl();
+    this.quizControl.leftNumberBegin = 1;
+    this.quizControl.leftNumberEnd = 1000;
+    this.quizControl.rightNumberBegin = 1;
+    this.quizControl.rightNumberEnd = 1000;
+    this.quizControl.decimalPlaces = 0;
+    this.quizControl.numberOfQuestions = 50;
+    this.quizControl.failFactor = 3;
   }
 
   ngOnInit() {
@@ -50,10 +53,10 @@ export class MultiplicationQuizComponent implements OnInit {
   }
 
   private generateQuizItem(idx: number): MultiplicationQuizItem {
-    const rnum1 = Math.random() * (this.LeftNumberRangeEnd - this.LeftNumberRangeBgn) + this.LeftNumberRangeBgn;
-    const rnum2 = Math.random() * (this.RightNumberRangeEnd - this.RightNumberRangeBgn) + this.RightNumberRangeBgn;
+    const rnum1 = Math.random() * (this.quizControl.leftNumberEnd - this.quizControl.leftNumberBegin) + this.quizControl.leftNumberBegin;
+    const rnum2 = Math.random() * (this.quizControl.rightNumberEnd - this.quizControl.rightNumberBegin) + this.quizControl.rightNumberBegin;
     const qz: MultiplicationQuizItem = new MultiplicationQuizItem(
-      rnum1, rnum2, this.decimalPlaces
+      rnum1, rnum2, this.quizControl.decimalPlaces
     );
     qz.QuizIndex = idx;
     return qz;
@@ -132,10 +135,10 @@ export class MultiplicationQuizComponent implements OnInit {
   }
 
   public CanStart(): boolean {
-    if (this.StartQuizAmount <= 0 || this.LeftNumberRangeBgn < 0
-      || this.LeftNumberRangeEnd <= this.LeftNumberRangeBgn
-      || this.RightNumberRangeBgn < 0
-      || this.RightNumberRangeEnd <= this.RightNumberRangeBgn) {
+    if (this.quizControl.numberOfQuestions <= 0 || this.quizControl.leftNumberBegin < 0
+      || this.quizControl.leftNumberEnd <= this.quizControl.leftNumberBegin
+      || this.quizControl.rightNumberBegin < 0
+      || this.quizControl.rightNumberEnd <= this.quizControl.rightNumberBegin) {
       return false;
     }
 
@@ -148,9 +151,10 @@ export class MultiplicationQuizComponent implements OnInit {
 
   public onQuizStart(): void {
     // Start it!
-    this.quizInstance.BasicInfo = '[' + this.LeftNumberRangeBgn.toString() + '...' + this.LeftNumberRangeEnd.toString() + ']'
-      + ' × [' + this.RightNumberRangeBgn.toString() + '...' + this.RightNumberRangeEnd.toString() + ']';
-    this.quizInstance.Start(this.StartQuizAmount, this.FailedQuizFactor);
+    this.quizInstance.BasicInfo = this.quizControl.storeToString();
+    this._zone.run(() => {
+      this.quizInstance.Start(this.quizControl);
+    });
 
     // Generated section
     this.generateQuizSection();

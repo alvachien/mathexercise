@@ -35,6 +35,9 @@ The features of web app including:
 11. Chinese word diction [Ongoing];
 12. More to come
 
+# design
+Take a look at the design doc for this project: [click](https://github.com/alvachien/mathexercise/design.md)
+
 # dependencies
 This web app depends on the following project
 1. [AC Identity Server](https://github.com/alvachien/acidserver)

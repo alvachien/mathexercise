@@ -149,7 +149,9 @@
     "InvalidMathFormat": "Invalid Math Format",
     "Backspace": "Backspace",
     "Reset": "Reset",
-    "Underconstruction": "Page still under construction"
+    "Underconstruction": "Page still under construction",
+    "StandardReport": "Standard Report",
+    "TrendReport": "Trend Report"
   },
   "Math": {
     "Sum": "Sum",

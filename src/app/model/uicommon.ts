@@ -2,9 +2,55 @@
 import * as moment from 'moment';
 
 /**
+ * Storable object
+ */
+export interface IStorableObject {
+  storeToString(): string;
+  restoreFromString(str: string);
+}
+
+/**
+ * Storable object
+ */
+export abstract class StorableObject implements IStorableObject {
+  /**
+   * Store to a string
+   */
+  public storeToString(): string {
+    const jobj: any = this.storeToJsonObject();
+    return JSON && JSON.stringify(jobj);
+  }
+  /**
+   * Restore to a string
+   * @param str String to prase
+   */
+  public restoreFromString(str: string) {
+    const jobj = JSON.parse(str);
+    this.restoreFromJsonObject(jobj);
+
+    if (this.canCalcResult()) {
+      this.calcResult();
+    }
+  }
+
+  protected storeToJsonObject(): any {
+    return {};
+  }
+  protected restoreFromJsonObject(data: any) {
+    // Do nothing
+  }
+
+  protected canCalcResult(): boolean {
+    return true; // Default is true
+  }
+  protected calcResult(): void {
+    // Do nothing
+  }
+}
+
+/**
  * UI mode
  */
-
 export enum UIMode {
   ListView = 0,
   Create = 1,
@@ -12,6 +58,9 @@ export enum UIMode {
   Display = 3
 }
 
+/**
+ * Date range
+ */
 export enum StatisticsDateRangeEnum {
   CurrentMonth = 1,
   PreviousMonth = 2,
@@ -20,12 +69,19 @@ export enum StatisticsDateRangeEnum {
   All = 5
 }
 
+/**
+ * Date range UI
+ */
 export interface DateRangeUI {
   daterange: StatisticsDateRangeEnum,
   i18term: string;
   display: string;
 }
 
+/**
+ * Range string
+ * @param dr: date range
+ */
 export function getStatisticsDateRangeEnumString(dr: StatisticsDateRangeEnum) {
   switch (dr) {
     case StatisticsDateRangeEnum.CurrentMonth:
