@@ -11,14 +11,25 @@ export enum QuizTypeEnum {
   sub = 2,
   multi = 3,
   div = 4,
-  formula = 5,
-  cal24 = 6,        // Calculate
-  sudou = 7,        // Sudou
-  typing = 8,       // Typing
-  mixedop = 9,      // Mixed Operation
-  minesweep = 10,   // Mine Sweeper
-  gobang = 11,      // Gobang, also known as 'row of five'
-  chinesechess = 12 // Chinese Chess
+  cal24 = 6,          // Calculate
+  sudou = 7,          // Sudou
+  typing = 8,         // Typing
+  mixedop = 9,        // Mixed Operation
+  minesweep = 10,     // Mine Sweeper
+  gobang = 11,        // Gobang, also known as 'row of five'
+  chinesechess = 12,  // Chinese Chess
+
+  /** Number range: 90 - 120 reserved for formulas
+   * Logic:
+   * Use the quiz type - formula base => real form type PrimarySchoolFormulaEnum
+  */
+  formula_base = 90,  // Forumla base
+  formula_top = 120,  // Forumla top
+
+  /**
+   * Obsoleted
+   */
+  formula = 5,        // OBSELETED
 }
 
 export interface QuizTypeUI {
@@ -341,6 +352,22 @@ export class PrimarySchoolMathQuizSection {
     rst = rst += ' Time spent: ' + this.TimeSpent.toString() + ' s';
     return rst;
   }
+}
+
+/**
+ * Setting of the quiz
+ */
+export abstract class QuizBasicSetting {
+  public readonly numberOfQuestions: number;
+  public readonly failFactor: number;
+}
+
+export class PrimarySchoolMathFAOSetting extends QuizBasicSetting {
+  public readonly leftNumberBegin: number;
+  public readonly leftNumberEnd: number;
+  public readonly rightNumberBegin: number;
+  public readonly rightNumberEnd: number;
+  public readonly decimalPlaces: number;
 }
 
 /**

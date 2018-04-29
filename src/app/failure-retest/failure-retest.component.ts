@@ -7,7 +7,8 @@ import { AuthService } from '../services/auth.service';
 import { DialogService } from '../services/dialog.service';
 import { QuizTypeEnum, PrimarySchoolMathQuizItem, QuizTypeEnum2UIString, LogLevel,
   AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem,
-  FormulaQuizItemBase
+  FormulaQuizItemBase, PrimarySchoolFormulaEnum, FormulaCOfCircleQuizItem, FormulaCOfSquareQuizItem, FormulaCOfRectangleQuizItem,
+  FormulaDistAndSpeedQuizItem, FormulaAreaOfRectangleQuizItem, FormulaAreaOfSquareQuizItem, FormulaEfficiencyProblemQuizItem,
 } from '../model';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
 import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } from '../message-dialog';
@@ -96,14 +97,71 @@ export class FailureRetestComponent implements OnInit {
               break;
 
               case QuizTypeEnum.formula: {
-                qi.qsInstance = new FormulaQuizItemBase.restoreFromString(si.expected);
+                // This is obsoleted
+                // qi.qsInstance = new FormulaQuizItemBase.restoreFromString(si.expected);
               }
               break;
 
               default: {
-                // No support type, just skip it!
-                if (environment.LoggingLevel >= LogLevel.Debug) {
-                  console.log('AC Math Exericse [Debug]: No supported item found: ' + qi.quiztype);
+                const nqtype: number = +qi.quiztype;
+                if (nqtype >= +QuizTypeEnum.formula_base && nqtype <= +QuizTypeEnum.formula_top) {
+                  const nformtype: PrimarySchoolFormulaEnum = <PrimarySchoolFormulaEnum>(nqtype - +QuizTypeEnum.formula_base);
+                  switch (nformtype) {
+                    case PrimarySchoolFormulaEnum.CircumferenceOfCircle: {
+                      qi.qsInstance = new FormulaCOfCircleQuizItem();
+                      qi.qsInstance.restoreFromString(si.expected);
+                    }
+                    break;
+
+                    case PrimarySchoolFormulaEnum.CircumferenceOfSquare: {
+                      qi.qsInstance = new FormulaCOfSquareQuizItem();
+                      qi.qsInstance.restoreFromString(si.expected);
+                    }
+                    break;
+
+                    case PrimarySchoolFormulaEnum.CircumferenceOfRectangle: {
+                      qi.qsInstance = new FormulaCOfRectangleQuizItem();
+                      qi.qsInstance.restoreFromString(si.expected);
+                    }
+                    break;
+
+                    case PrimarySchoolFormulaEnum.DistanceAndSpeed: {
+                      qi.qsInstance = new FormulaDistAndSpeedQuizItem();
+                      qi.qsInstance.restoreFromString(si.expected);
+                    }
+                    break;
+
+                    case PrimarySchoolFormulaEnum.AreaOfRectangle: {
+                      qi.qsInstance = new FormulaAreaOfRectangleQuizItem();
+                      qi.qsInstance.restoreFromString(si.expected);
+                    }
+                    break;
+
+                    case PrimarySchoolFormulaEnum.AreaOfSquare: {
+                      qi.qsInstance = new FormulaAreaOfSquareQuizItem();
+                      qi.qsInstance.restoreFromString(si.expected);
+                    }
+                    break;
+
+                    case PrimarySchoolFormulaEnum.EfficiencyProblem: {
+                      qi.qsInstance = new FormulaEfficiencyProblemQuizItem();
+                      qi.qsInstance.restoreFromString(si.expected);
+                    }
+                    break;
+
+                    default: {
+                      // No support type, just skip it!
+                      if (environment.LoggingLevel >= LogLevel.Debug) {
+                        console.log('AC Math Exericse [Debug]: No supported item found: ' + nformtype);
+                      }
+                    }
+                    break;
+                  }
+                } else {
+                  // No support type, just skip it!
+                  if (environment.LoggingLevel >= LogLevel.Debug) {
+                    console.log('AC Math Exericse [Debug]: No supported item found: ' + qi.quiztype);
+                  }
                 }
                 continue;
               }

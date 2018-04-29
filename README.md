@@ -42,7 +42,7 @@ This web app depends on the following project
 
 # credits
 This web app credits to the following libraries:
-1. [Angular 5/6](https://angular.io/)
+1. [Angular 6](https://angular.io/)
 2. [Angular Material2](https://material.angular.io/)
 3. [Bootstrap 4](https://getbootstrap.com/)
 4. [ngx-translate](http://www.ngx-translate.com/)
@@ -61,8 +61,7 @@ A programmer, a photographer and a father.
 Contact me:
 
 1. Via mail: alvachien@163.com. Or,
-2. [Check my flickr](http://www.flickr.com/photos/alvachien). Or,
-3. [Visit my website](http://www.alvachien.com)
+2. [Check my flickr](http://www.flickr.com/photos/alvachien).
 
 # license
 MIT

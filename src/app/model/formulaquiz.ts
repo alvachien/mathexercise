@@ -165,21 +165,23 @@ export class FormulaCOfCircleQuizItem extends FormulaQuizItemBase {
     return this._direct;
   }
 
-  constructor(srcnum: number, bdir: FormulaCOfCircleCalcDirEum, dplace?: number) {
+  constructor(srcnum?: number, bdir?: FormulaCOfCircleCalcDirEum, dplace?: number) {
     super(PrimarySchoolFormulaEnum.CircumferenceOfCircle, dplace);
 
-    this._direct = bdir;
-    if (this._direct === FormulaCOfCircleCalcDirEum.Radius) {
-      if (this._decimalPlaces > 0) {
-        this._raidus = parseFloat(srcnum.toFixed(this._decimalPlaces));
+    if (bdir !== undefined && srcnum !== undefined) {
+      this._direct = bdir;
+      if (this._direct === FormulaCOfCircleCalcDirEum.Radius) {
+        if (this._decimalPlaces > 0) {
+          this._raidus = parseFloat(srcnum.toFixed(this._decimalPlaces));
+        } else {
+          this._raidus = Math.round(srcnum);
+        }
       } else {
-        this._raidus = Math.round(srcnum);
-      }
-    } else {
-      if (this._decimalPlaces > 0) {
-        this._circum = parseFloat(srcnum.toFixed(this._decimalPlaces));
-      } else {
-        this._circum = Math.round(srcnum);
+        if (this._decimalPlaces > 0) {
+          this._circum = parseFloat(srcnum.toFixed(this._decimalPlaces));
+        } else {
+          this._circum = Math.round(srcnum);
+        }
       }
     }
    }
@@ -262,6 +264,10 @@ export class FormulaCOfCircleQuizItem extends FormulaQuizItemBase {
       return false;
     }
 
+    if (this._direct === undefined) {
+      return false;
+    }
+
     return true;
   }
 
@@ -316,21 +322,23 @@ export class FormulaCOfSquareQuizItem extends FormulaQuizItemBase {
     return this._direct;
   }
 
-  constructor(srcnum: number, bdir: FormulaCOfSquareCalcDirEum, dplace?: number) {
+  constructor(srcnum?: number, bdir?: FormulaCOfSquareCalcDirEum, dplace?: number) {
     super(PrimarySchoolFormulaEnum.CircumferenceOfSquare);
 
-    this._direct = bdir;
-    if (this._direct === FormulaCOfSquareCalcDirEum.Edge) {
-      if (this._decimalPlaces > 0) {
-        this._edge = parseFloat(srcnum.toFixed(this._decimalPlaces));
+    if (srcnum !== undefined && bdir !== undefined) {
+      this._direct = bdir;
+      if (this._direct === FormulaCOfSquareCalcDirEum.Edge) {
+        if (this._decimalPlaces > 0) {
+          this._edge = parseFloat(srcnum.toFixed(this._decimalPlaces));
+        } else {
+          this._edge = Math.round(srcnum);
+        }
       } else {
-        this._edge = Math.round(srcnum);
-      }
-    } else {
-      if (this._decimalPlaces > 0) {
-        this._circum = parseFloat(srcnum.toFixed(this._decimalPlaces));
-      } else {
-        this._circum = Math.round(srcnum);
+        if (this._decimalPlaces > 0) {
+          this._circum = parseFloat(srcnum.toFixed(this._decimalPlaces));
+        } else {
+          this._circum = Math.round(srcnum);
+        }
       }
     }
   }
@@ -413,6 +421,10 @@ export class FormulaCOfSquareQuizItem extends FormulaQuizItemBase {
       return false;
     }
 
+    if (this._direct === undefined) {
+      return false;
+    }
+
     return true;
   }
 
@@ -472,36 +484,38 @@ export class FormulaCOfRectangleQuizItem extends FormulaQuizItemBase {
     return this._direct;
   }
 
-  constructor(num1: number, num2: number, dir: FormulaCOfRectangleCalcDirEum, dplace?: number) {
+  constructor(num1?: number, num2?: number, dir?: FormulaCOfRectangleCalcDirEum, dplace?: number) {
     super(PrimarySchoolFormulaEnum.CircumferenceOfRectangle, dplace);
 
-    this._direct = dir;
-    if (dir === FormulaCOfRectangleCalcDirEum.LongEdgeAndShortEdge) {
-      if (this._decimalPlaces > 0) {
-        this._longedge = parseFloat(num1.toFixed(this._decimalPlaces));
-        this._shortedge = parseFloat(num2.toFixed(this._decimalPlaces));
+    if (num1 !== undefined && num2 !== undefined && dir !== undefined) {
+      this._direct = dir;
+      if (dir === FormulaCOfRectangleCalcDirEum.LongEdgeAndShortEdge) {
+        if (this._decimalPlaces > 0) {
+          this._longedge = parseFloat(num1.toFixed(this._decimalPlaces));
+          this._shortedge = parseFloat(num2.toFixed(this._decimalPlaces));
+        } else {
+          this._longedge = Math.round(num1);
+          this._shortedge = Math.round(num2);
+        }
+      } else if (dir === FormulaCOfRectangleCalcDirEum.LongEdgeAndCircum) {
+        if (this._decimalPlaces > 0) {
+          this._longedge = parseFloat(num1.toFixed(this._decimalPlaces));
+          this._circum = parseFloat(num2.toFixed(this._decimalPlaces));
+        } else {
+          this._longedge = Math.round(num1);
+          this._circum = Math.round(num2);
+        }
+      } else if (dir === FormulaCOfRectangleCalcDirEum.ShortEdgeAndCircum) {
+        if (this._decimalPlaces > 0) {
+          this._shortedge = parseFloat(num1.toFixed(this._decimalPlaces));
+          this._circum = parseFloat(num2.toFixed(this._decimalPlaces));
+        } else {
+          this._shortedge = Math.round(num1);
+          this._circum = Math.round(num2);
+        }
       } else {
-        this._longedge = Math.round(num1);
-        this._shortedge = Math.round(num2);
+        throw new Error('Unsupported direction!');
       }
-    } else if (dir === FormulaCOfRectangleCalcDirEum.LongEdgeAndCircum) {
-      if (this._decimalPlaces > 0) {
-        this._longedge = parseFloat(num1.toFixed(this._decimalPlaces));
-        this._circum = parseFloat(num2.toFixed(this._decimalPlaces));
-      } else {
-        this._longedge = Math.round(num1);
-        this._circum = Math.round(num2);
-      }
-    } else if (dir === FormulaCOfRectangleCalcDirEum.ShortEdgeAndCircum) {
-      if (this._decimalPlaces > 0) {
-        this._shortedge = parseFloat(num1.toFixed(this._decimalPlaces));
-        this._circum = parseFloat(num2.toFixed(this._decimalPlaces));
-      } else {
-        this._shortedge = Math.round(num1);
-        this._circum = Math.round(num2);
-      }
-    } else {
-      throw new Error('Unsupported direction!');
     }
   }
 
@@ -612,6 +626,10 @@ export class FormulaCOfRectangleQuizItem extends FormulaQuizItemBase {
       return false;
     }
 
+    if (this._direct === undefined) {
+      return false;
+    }
+
     return true;
   }
 
@@ -687,36 +705,38 @@ export class FormulaDistAndSpeedQuizItem extends FormulaQuizItemBase {
     return this._direct;
   }
 
-  constructor(num1: number, num2: number, dir: FormulaDistAndSpeedCalcDirEum, dplace?: number) {
+  constructor(num1?: number, num2?: number, dir?: FormulaDistAndSpeedCalcDirEum, dplace?: number) {
     super(PrimarySchoolFormulaEnum.DistanceAndSpeed, dplace);
 
-    this._direct = dir;
-    if (dir === FormulaDistAndSpeedCalcDirEum.SpeedAndTime) {
-      if (this._decimalPlaces > 0) {
-        this._speed = parseFloat(num1.toFixed(this._decimalPlaces));
-        this._time = parseFloat(num2.toFixed(this._decimalPlaces));
+    if (num1 !== undefined && num2 !== undefined && dir !== undefined) {
+      this._direct = dir;
+      if (dir === FormulaDistAndSpeedCalcDirEum.SpeedAndTime) {
+        if (this._decimalPlaces > 0) {
+          this._speed = parseFloat(num1.toFixed(this._decimalPlaces));
+          this._time = parseFloat(num2.toFixed(this._decimalPlaces));
+        } else {
+          this._speed = Math.round(num1);
+          this._time = Math.round(num2);
+        }
+      } else if (dir === FormulaDistAndSpeedCalcDirEum.SpeedAndDistance) {
+        if (this._decimalPlaces > 0) {
+          this._speed = parseFloat(num1.toFixed(this._decimalPlaces));
+          this._distance = parseFloat(num2.toFixed(this._decimalPlaces));
+        } else {
+          this._speed = Math.round(num1);
+          this._distance = Math.round(num2);
+        }
+      } else if (dir === FormulaDistAndSpeedCalcDirEum.TimeAndDistance) {
+        if (this._decimalPlaces > 0) {
+          this._time = parseFloat(num1.toFixed(this._decimalPlaces));
+          this._distance = parseFloat(num2.toFixed(this._decimalPlaces));
+        } else {
+          this._time = Math.round(num1);
+          this._distance = Math.round(num2);
+        }
       } else {
-        this._speed = Math.round(num1);
-        this._time = Math.round(num2);
+        throw new Error('Unsupported direction!');
       }
-    } else if (dir === FormulaDistAndSpeedCalcDirEum.SpeedAndDistance) {
-      if (this._decimalPlaces > 0) {
-        this._speed = parseFloat(num1.toFixed(this._decimalPlaces));
-        this._distance = parseFloat(num2.toFixed(this._decimalPlaces));
-      } else {
-        this._speed = Math.round(num1);
-        this._distance = Math.round(num2);
-      }
-    } else if (dir === FormulaDistAndSpeedCalcDirEum.TimeAndDistance) {
-      if (this._decimalPlaces > 0) {
-        this._time = parseFloat(num1.toFixed(this._decimalPlaces));
-        this._distance = parseFloat(num2.toFixed(this._decimalPlaces));
-      } else {
-        this._time = Math.round(num1);
-        this._distance = Math.round(num2);
-      }
-    } else {
-      throw new Error('Unsupported direction!');
     }
   }
 
@@ -827,6 +847,10 @@ export class FormulaDistAndSpeedQuizItem extends FormulaQuizItemBase {
       return false;
     }
 
+    if (this._direct === undefined) {
+      return false;
+    }
+
     return true;
   }
 
@@ -893,36 +917,38 @@ export class FormulaAreaOfRectangleQuizItem extends FormulaQuizItemBase {
     return this._direct;
   }
 
-  constructor(num1: number, num2: number, dir: FormulaAOfRectangleCalcDirEum, dplace?: number) {
+  constructor(num1?: number, num2?: number, dir?: FormulaAOfRectangleCalcDirEum, dplace?: number) {
     super(PrimarySchoolFormulaEnum.AreaOfRectangle, dplace);
 
-    this._direct = dir;
-    if (dir === FormulaAOfRectangleCalcDirEum.LongEdgeAndShortEdge) {
-      if (this._decimalPlaces > 0) {
-        this._longedge = parseFloat(num1.toFixed(this._decimalPlaces));
-        this._shortedge = parseFloat(num2.toFixed(this._decimalPlaces));
+    if (num1 !== undefined && num2 !== undefined && dir !== undefined) {
+      this._direct = dir;
+      if (dir === FormulaAOfRectangleCalcDirEum.LongEdgeAndShortEdge) {
+        if (this._decimalPlaces > 0) {
+          this._longedge = parseFloat(num1.toFixed(this._decimalPlaces));
+          this._shortedge = parseFloat(num2.toFixed(this._decimalPlaces));
+        } else {
+          this._longedge = Math.round(num1);
+          this._shortedge = Math.round(num2);
+        }
+      } else if (dir === FormulaAOfRectangleCalcDirEum.LongEdgeAndArea) {
+        if (this._decimalPlaces > 0) {
+          this._longedge = parseFloat(num1.toFixed(this._decimalPlaces));
+          this._area = parseFloat(num2.toFixed(this._decimalPlaces));
+        } else {
+          this._longedge = Math.round(num1);
+          this._area = Math.round(num2);
+        }
+      } else if (dir === FormulaAOfRectangleCalcDirEum.ShortEdgeAndArea) {
+        if (this._decimalPlaces > 0) {
+          this._shortedge = parseFloat(num1.toFixed(this._decimalPlaces));
+          this._area = parseFloat(num2.toFixed(this._decimalPlaces));
+        } else {
+          this._shortedge = Math.round(num1);
+          this._area = Math.round(num2);
+        }
       } else {
-        this._longedge = Math.round(num1);
-        this._shortedge = Math.round(num2);
+        throw new Error('Unsupported direction!');
       }
-    } else if (dir === FormulaAOfRectangleCalcDirEum.LongEdgeAndArea) {
-      if (this._decimalPlaces > 0) {
-        this._longedge = parseFloat(num1.toFixed(this._decimalPlaces));
-        this._area = parseFloat(num2.toFixed(this._decimalPlaces));
-      } else {
-        this._longedge = Math.round(num1);
-        this._area = Math.round(num2);
-      }
-    } else if (dir === FormulaAOfRectangleCalcDirEum.ShortEdgeAndArea) {
-      if (this._decimalPlaces > 0) {
-        this._shortedge = parseFloat(num1.toFixed(this._decimalPlaces));
-        this._area = parseFloat(num2.toFixed(this._decimalPlaces));
-      } else {
-        this._shortedge = Math.round(num1);
-        this._area = Math.round(num2);
-      }
-    } else {
-      throw new Error('Unsupported direction!');
     }
   }
 
@@ -1033,6 +1059,10 @@ export class FormulaAreaOfRectangleQuizItem extends FormulaQuizItemBase {
       return false;
     }
 
+    if (this._direct === undefined) {
+      return false;
+    }
+
     return true;
   }
 
@@ -1093,21 +1123,23 @@ export class FormulaAreaOfSquareQuizItem extends FormulaQuizItemBase {
     return this._direct;
   }
 
-  constructor(srcnum: number, bdir: FormulaAreaOfSquareCalcDirEum, dplace?: number) {
+  constructor(srcnum?: number, bdir?: FormulaAreaOfSquareCalcDirEum, dplace?: number) {
     super(PrimarySchoolFormulaEnum.AreaOfSquare, dplace);
 
-    this._direct = bdir;
-    if (bdir === FormulaAreaOfSquareCalcDirEum.Edge) {
-      if (this._decimalPlaces > 0) {
-        this._edge = parseFloat(srcnum.toFixed(this._decimalPlaces));
+    if (srcnum !== undefined && bdir !== undefined) {
+      this._direct = bdir;
+      if (bdir === FormulaAreaOfSquareCalcDirEum.Edge) {
+        if (this._decimalPlaces > 0) {
+          this._edge = parseFloat(srcnum.toFixed(this._decimalPlaces));
+        } else {
+          this._edge = Math.round(srcnum);
+        }
       } else {
-        this._edge = Math.round(srcnum);
-      }
-    } else {
-      if (this._decimalPlaces > 0) {
-        this._area = parseFloat(srcnum.toFixed(this._decimalPlaces));
-      } else {
-        this._area = Math.round(srcnum);
+        if (this._decimalPlaces > 0) {
+          this._area = parseFloat(srcnum.toFixed(this._decimalPlaces));
+        } else {
+          this._area = Math.round(srcnum);
+        }
       }
     }
   }
@@ -1190,6 +1222,10 @@ export class FormulaAreaOfSquareQuizItem extends FormulaQuizItemBase {
       return false;
     }
 
+    if (this._direct === undefined) {
+      return false;
+    }
+
     return true;
   }
 
@@ -1257,36 +1293,38 @@ export class FormulaEfficiencyProblemQuizItem extends FormulaQuizItemBase {
     return this._direct;
   }
 
-  constructor(num1: number, num2: number, dir: FormulaEfficiencyProblemCalcDirEum, dplace?: number) {
+  constructor(num1?: number, num2?: number, dir?: FormulaEfficiencyProblemCalcDirEum, dplace?: number) {
     super(PrimarySchoolFormulaEnum.EfficiencyProblem, dplace);
 
-    this._direct = dir;
-    if (dir === FormulaEfficiencyProblemCalcDirEum.EfficiencyAndTime) {
-      if (this._decimalPlaces > 0) {
-        this._efficiency = parseFloat(num1.toFixed(this._decimalPlaces));
-        this._time = parseFloat(num2.toFixed(this._decimalPlaces));
+    if (num1 !== undefined && num2 !== undefined && dir !== undefined) {
+      this._direct = dir;
+      if (dir === FormulaEfficiencyProblemCalcDirEum.EfficiencyAndTime) {
+        if (this._decimalPlaces > 0) {
+          this._efficiency = parseFloat(num1.toFixed(this._decimalPlaces));
+          this._time = parseFloat(num2.toFixed(this._decimalPlaces));
+        } else {
+          this._efficiency = Math.round(num1);
+          this._time = Math.round(num2);
+        }
+      } else if (dir === FormulaEfficiencyProblemCalcDirEum.EfficiencyAndResult) {
+        if (this._decimalPlaces > 0) {
+          this._efficiency = parseFloat(num1.toFixed(this._decimalPlaces));
+          this._result = parseFloat(num2.toFixed(this._decimalPlaces));
+        } else {
+          this._efficiency = Math.round(num1);
+          this._result = Math.round(num2);
+        }
+      } else if (dir === FormulaEfficiencyProblemCalcDirEum.TimeAndResult) {
+        if (this._decimalPlaces > 0) {
+          this._time = parseFloat(num1.toFixed(this._decimalPlaces));
+          this._result = parseFloat(num2.toFixed(this._decimalPlaces));
+        } else {
+          this._time = Math.round(num1);
+          this._result = Math.round(num2);
+        }
       } else {
-        this._efficiency = Math.round(num1);
-        this._time = Math.round(num2);
+        throw new Error('Unsupported direction!');
       }
-    } else if (dir === FormulaEfficiencyProblemCalcDirEum.EfficiencyAndResult) {
-      if (this._decimalPlaces > 0) {
-        this._efficiency = parseFloat(num1.toFixed(this._decimalPlaces));
-        this._result = parseFloat(num2.toFixed(this._decimalPlaces));
-      } else {
-        this._efficiency = Math.round(num1);
-        this._result = Math.round(num2);
-      }
-    } else if (dir === FormulaEfficiencyProblemCalcDirEum.TimeAndResult) {
-      if (this._decimalPlaces > 0) {
-        this._time = parseFloat(num1.toFixed(this._decimalPlaces));
-        this._result = parseFloat(num2.toFixed(this._decimalPlaces));
-      } else {
-        this._time = Math.round(num1);
-        this._result = Math.round(num2);
-      }
-    } else {
-      throw new Error('Unsupported direction!');
     }
   }
 
@@ -1394,6 +1432,10 @@ export class FormulaEfficiencyProblemQuizItem extends FormulaQuizItemBase {
 
   protected canCalcResult(): boolean {
     if (!super.canCalcResult()) {
+      return false;
+    }
+
+    if (this._direct === undefined) {
       return false;
     }
 
