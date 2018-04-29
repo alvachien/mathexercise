@@ -30,6 +30,10 @@
         <ng-container matColumnDef="ID">
           <mat-header-cell *matHeaderCellDef> # </mat-header-cell>
           <mat-cell *matCellDef="let element">
+            <button mat-mini-fab [disabled]="!IsListView || (CurrentUser === null) || (CurrentUser !== null && CurrentUser.UserId === element.TargetUser)" 
+              (click)="onTryPlan(element)">
+            <mat-icon class="md-14" aria-label="Copy">play_for_work</mat-icon>
+            </button>
             <button mat-mini-fab [disabled]="!IsListView || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardPlanCreate)" 
               (click)="onCreatePlanByCopy(element)">
               <mat-icon class="md-14" aria-label="Copy">content_copy</mat-icon>
@@ -101,6 +105,10 @@
           {{ qt.displayas | translate }}
         </mat-option>
       </mat-select>
+      
+      <div class="demo-full-width" *ngIf="CurrentPlan.QuizControl" style="border: solid 1px;">
+        <app-quiz-control [controlInstance]="CurrentPlan.QuizControl"></app-quiz-control>
+      </div>
 
       <mat-form-field class="demo-full-width">
         <input matInput type="number" placeholder="{{'Home.Score' | translate}}" [(ngModel)]="CurrentPlan.MinQuizScore">

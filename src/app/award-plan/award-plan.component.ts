@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
 import { MatDialog, MatPaginator } from '@angular/material';
+import { Router } from '@angular/router';
 import { Observable, merge } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
@@ -113,6 +114,7 @@ export class AwardPlanComponent implements OnInit {
 
   constructor(private _http: HttpClient,
     private _dialog: MatDialog,
+    private _router: Router,
     public _apService: AwardPlanService,
     private _authService: AuthService,
     private _userDetailService: UserDetailService) {
@@ -144,6 +146,18 @@ export class AwardPlanComponent implements OnInit {
 
   public onRefreshPlan() {
     this.onUserChanged(null);
+  }
+
+  public onTryPlan(curPlan: AwardPlan) {
+    switch (curPlan.QuizType) {
+      case QuizTypeEnum.add: {
+        this._router.navigate(['/add-ex']);
+      }
+      break;
+
+      default:
+      break;
+    }
   }
 
   public onCreatePlan() {
@@ -286,7 +300,7 @@ export class AwardPlanComponent implements OnInit {
         disableClose: false,
         width: '500px',
         data: dlginfo
-      }).afterClosed().subscribe((x: any) => {
+      }).afterClosed().subscribe((x2: any) => {
         // Do nothing!
         this.setListView();
       });

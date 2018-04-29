@@ -28,9 +28,9 @@ export enum QuizTypeEnum {
   formula_top = 120,  // Forumla top
 
   /**
-   * Obsoleted
+   * For UI usage
    */
-  formula = 5,        // OBSELETED
+  formula = 5,        // UI Usage only
 }
 
 export interface QuizTypeUI {
@@ -375,6 +375,13 @@ export class QuizBasicControl extends StorableObject {
       && this._failFactor === other._failFactor;
   }
 
+  isValid(): boolean {
+    if (this._numOfQ === undefined || this._numOfQ <= 0) {
+      return false;
+    }
+    return true;
+  }
+
   protected storeToJsonObject(): any {
     const jobj: any = super.storeToJsonObject();
     jobj.numofq = this._numOfQ;
@@ -460,6 +467,24 @@ export class PrimarySchoolMathMixOpControl extends QuizBasicControl {
       && this._negativeOccurs === other._negativeOccurs
       ;
   }
+
+  isValid(): boolean {
+    if (!super.isValid()) {
+      return false;
+    }
+
+    if (this._numberBegin === undefined
+      || this._numberEnd === undefined
+      || this._numberBegin < 0
+      || this._numberEnd < this._numberBegin
+      || this._numOfOp === undefined
+      || this._numOfOp <= 0) {
+      return false;
+    }
+
+    return true;
+  }
+
   protected storeToJsonObject(): any {
     const jobj: any = super.storeToJsonObject();
     jobj.nbgn = this._numberBegin;
@@ -559,6 +584,26 @@ export class PrimarySchoolMathFAOControl extends QuizBasicControl {
       && this._rightNumberEnd === other._rightNumberEnd
       && this._decimalPlaces === other._decimalPlaces;
   }
+
+  isValid(): boolean {
+    if (!super.isValid()) {
+      return false;
+    }
+
+    if (this._leftNumberBegin === undefined
+      || this._leftNumberEnd === undefined
+      || this._rightNumberBegin === undefined
+      || this._rightNumberEnd === undefined
+      || this._leftNumberBegin < 0
+      || this._leftNumberEnd < this._leftNumberBegin
+      || this._rightNumberBegin < 0
+      || this._rightNumberEnd < this._rightNumberBegin) {
+      return false;
+    }
+
+    return true;
+  }
+
   protected storeToJsonObject(): any {
     const jobj: any = super.storeToJsonObject();
     jobj.lftbgn = this._leftNumberBegin;
@@ -607,6 +652,7 @@ export class PrimarySchoolMathQuiz {
   private _qbaseinfo: string;
   private _curRunID: number; // Current run ID
   private _failedItems: PrimarySchoolMathQuizItem[] = [];
+  private _dispIntro: string;
 
   // Elder runs
   public ElderRuns(): PrimarySchoolMathQuizSection[] {
@@ -645,6 +691,14 @@ export class PrimarySchoolMathQuiz {
   }
   set BasicInfo(bi: string) {
     this._qbaseinfo = bi;
+  }
+
+  // Display intro
+  get DisplayIntro(): string {
+    return this._dispIntro;
+  }
+  set DisplayIntro(dispintr: string) {
+    this._dispIntro = dispintr;
   }
 
   // Failed items

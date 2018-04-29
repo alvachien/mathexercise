@@ -4,44 +4,7 @@
   </mat-card-header>
   <mat-card-content>
     <div *ngIf="!quizInstance.IsStarted">
-      <div class="demo-full-width">
-        <mat-form-field>
-          <input matInput type="number" placeholder="{{'Home.QuizAmount' | translate}}" [(ngModel)]="quizControl.numberOfQuestions" name="startquizamt"
-            required>
-          <mat-error>This field is required</mat-error>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput type="number" placeholder="{{'Home.FailedFactor' | translate }}" matTooltip="{{'Home.FailedFactorHint' | translate}}" [(ngModel)]="quizControl.failFactor" name="fquizfactor"
-            required>
-          <mat-error>This field is required</mat-error>
-        </mat-form-field>
-      </div>
-      <div class="demo-full-width">
-        <mat-form-field>
-          <input matInput type="number" placeholder="{{'Math.Multiplicand' | translate}}" [(ngModel)]="quizControl.leftNumberBegin" name="leftnrbgn"
-            required>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput type="number" placeholder="{{'Math.Multiplicand' | translate}}" [(ngModel)]="quizControl.leftNumberEnd" name="leftnrend"
-            required>
-        </mat-form-field>
-      </div>
-      <div class="demo-full-width">
-        <mat-form-field>
-          <input matInput type="number" placeholder="{{'Math.Multiplier' | translate}}" [(ngModel)]="quizControl.rightNumberBegin" name="rightnrbgn"
-            required>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput type="number" placeholder="{{'Math.Multiplier' | translate}}" [(ngModel)]="quizControl.rightNumberEnd" name="rightnrend"
-            required>
-        </mat-form-field>
-      </div>
-      <div class="demo-full-width">
-        <mat-form-field>
-          <input matInput type="number" placeholder="{{'Math.DecimalPlaces' | translate}}" [(ngModel)]="quizControl.decimalPlaces" name="dmlPlaces"
-            required>
-        </mat-form-field>
-      </div>
+      <app-quiz-control [controlInstance]="quizControl"></app-quiz-control>
     </div>
 
     <div class="demo-full-width" *ngIf="quizInstance.IsStarted">

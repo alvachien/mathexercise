@@ -6,46 +6,7 @@
   <mat-card-content>
     <div>
       <div *ngIf="!quizInstance.IsStarted">
-        <div class="demo-full-width">
-          <mat-form-field>
-            <input matInput type="number" placeholder="{{'Home.QuizAmount' | translate}}" [(ngModel)]="quizControl.numberOfQuestions" name="startquizamt"
-              required>
-            <mat-error>This field is required</mat-error>
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput type="number" placeholder="{{'Home.FailedFactor' | translate }}" matTooltip="{{'Home.FailedFactorHint' | translate}}" [(ngModel)]="quizControl.failFactor" name="fquizfactor"
-              required>
-            <mat-error>This field is required</mat-error>
-          </mat-form-field>
-        </div>
-
-        <div class="demo-full-width">
-          <mat-form-field>
-            <input matInput type="number" placeholder="{{'Math.Dividend' | translate}}" [(ngModel)]="quizControl.leftNumberBegin" name="dvdendrbgn"
-              required>
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput type="number" placeholder="{{'Math.Dividend' | translate}}" [(ngModel)]="quizControl.leftNumberEnd" name="dvdendrend"
-              required>
-          </mat-form-field>
-        </div>
-
-        <div class="demo-full-width">
-          <mat-form-field>
-            <input matInput type="number" placeholder="{{'Math.Divisor' | translate}}" [(ngModel)]="quizControl.rightNumberBegin" name="dvsorrbgn"
-              required>
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput type="number" placeholder="{{'Math.Divisor' | translate}}" [(ngModel)]="quizControl.rightNumberEnd" name="dvsorrend"
-              required>
-          </mat-form-field>
-        </div>
-        <div class="demo-full-width">
-          <mat-form-field>
-            <input matInput type="number" placeholder="{{'Math.DecimalPlaces' | translate}}" [(ngModel)]="quizControl.decimalPlaces" name="dmlPlaces"
-              required>
-          </mat-form-field>
-        </div>
+        <app-quiz-control [controlInstance]="quizControl"></app-quiz-control>
       </div>
 
       <div class="demo-full-width" *ngIf="quizInstance.IsStarted">

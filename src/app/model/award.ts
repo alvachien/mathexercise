@@ -1,6 +1,7 @@
 import * as moment from 'moment';
 import { DateFormat } from './datedef';
-import { QuizTypeEnum, QuizTypeEnum2UIString } from './quizconcept';
+import { QuizTypeEnum, QuizTypeEnum2UIString,
+  QuizBasicControl, PrimarySchoolMathFAOControl, PrimarySchoolMathMixOpControl } from './quizconcept';
 
 /**
  * Award plan JSON: Communicate with API
@@ -12,6 +13,7 @@ export interface AwardPlanJson {
   validFrom: string;
   validTo: string;
   quizType: number;
+  quizControl?: string;
   minQuizScore?: number;
   maxQuizAvgTime?: number;
   award: number;
@@ -73,6 +75,32 @@ export class AwardPlan {
   }
   set QuizType(qt: QuizTypeEnum) {
     this._qtype = qt;
+
+    switch (this._qtype) {
+      case QuizTypeEnum.add:
+      case QuizTypeEnum.sub:
+      case QuizTypeEnum.multi:
+      case QuizTypeEnum.div: {
+        if (this._control === undefined
+        || !(this._control instanceof PrimarySchoolMathFAOControl)) {
+          this._control = new PrimarySchoolMathFAOControl();
+        }
+      }
+      break;
+
+      case QuizTypeEnum.mixedop: {
+        if (this._control === undefined
+          || !(this._control instanceof PrimarySchoolMathMixOpControl)) {
+          this._control = new PrimarySchoolMathMixOpControl();
+        }
+      }
+      break;
+
+      default: {
+        this._control = undefined;
+      }
+      break;
+    }
   }
 
   private _minScore: number;
@@ -97,6 +125,14 @@ export class AwardPlan {
   }
   set Award(awd: number) {
     this._award = awd;
+  }
+
+  private _control: QuizBasicControl;
+  get QuizControl(): QuizBasicControl {
+    return this._control;
+  }
+  set QuizControl(ctrl: QuizBasicControl) {
+    this._control = ctrl;
   }
 
   constructor() {
@@ -140,6 +176,27 @@ export class AwardPlan {
     this._validfrom = moment(jdata.validFrom, DateFormat);
     this._validto = moment(jdata.validTo, DateFormat);
     this._qtype = +jdata.quizType;
+    if (jdata.quizControl) {
+      switch (this._qtype) {
+        case QuizTypeEnum.add:
+        case QuizTypeEnum.sub:
+        case QuizTypeEnum.multi:
+        case QuizTypeEnum.div: {
+          this._control = new PrimarySchoolMathFAOControl();
+          this._control.restoreFromString(jdata.quizControl);
+        }
+        break;
+
+        case QuizTypeEnum.mixedop: {
+          this._control = new PrimarySchoolMathMixOpControl();
+          this._control.restoreFromString(jdata.quizControl);
+        }
+        break;
+
+        default:
+        break;
+      }
+    }
     if (jdata.minQuizScore) {
       this._minScore = jdata.minQuizScore;
     }
@@ -157,6 +214,7 @@ export class AwardPlan {
       validFrom: this._validfrom.format(DateFormat),
       validTo: this._validto.format(DateFormat),
       quizType: this._qtype,
+      quizControl: this._control === undefined ? undefined : this._control.storeToString(),
       minQuizScore: this._minScore,
       maxQuizAvgTime: this._maxAvgTime,
       award: this._award

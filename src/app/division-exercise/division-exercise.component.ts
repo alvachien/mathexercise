@@ -139,10 +139,8 @@ export class DivisionExerciseComponent implements OnInit {
   }
 
   public CanStart(): boolean {
-    if (this.quizControl.numberOfQuestions <= 0 || this.quizControl.leftNumberBegin < 0
-      || this.quizControl.leftNumberEnd <= this.quizControl.leftNumberBegin
-      || this.quizControl.rightNumberBegin < 0
-      || this.quizControl.rightNumberEnd <= this.quizControl.rightNumberBegin) {
+    if (this.quizControl === undefined
+      || !this.quizControl.isValid()) {
       return false;
     }
 
