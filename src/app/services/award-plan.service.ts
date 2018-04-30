@@ -25,7 +25,7 @@ export class AwardPlanService {
    * Fetch plans for specified user
    * @param usr User
    */
-  public fetchPlansForUser(usr?: string, allowInvalid?: boolean) {
+  public fetchPlansForUser(usr?: string, allowInvalid?: boolean): Observable<any> {
     if (usr === undefined || usr === null) {
       this.listSubject.next([]);
       return;
@@ -38,11 +38,16 @@ export class AwardPlanService {
       .append('Accept', 'application/json')
       .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
     let params: HttpParams = new HttpParams();
-    params = params.set('tgtuser', usr);
+    if (usr) {
+      params = params.set('tgtuser', usr);
+    } else {
+      params = params.set('tgtuser', this._authService.authSubject.getValue().getUserId());
+    }
     if (allowInvalid) {
       params = params.set('incInvalid', allowInvalid.toString());
     }
-    this._http.get(apiurl, { headers: headers, params: params, withCredentials: true })
+
+    return this._http.get(apiurl, { headers: headers, params: params, withCredentials: true })
       .pipe(map((response: HttpResponse<any>) => {
         if (environment.LoggingLevel >= LogLevel.Debug) {
           console.log(response);
@@ -60,15 +65,7 @@ export class AwardPlanService {
         }
 
         return aplans;
-      }))
-      .subscribe(x => {
-        this.listSubject.next(x);
-      }, error => {
-        if (environment.LoggingLevel >= LogLevel.Error) {
-          console.log('AC Math Exericse [Debug]: Failed fetchPlansForUser of AwardPlanService: ' + error);
-        }
-      }, () => {
-      });
+      }));
   }
 
   /**

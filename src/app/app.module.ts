@@ -54,6 +54,7 @@ import { AwardBalanceComponent } from './award-balance';
 import { AwardBalanceService } from './services/award-balance.service';
 import { QuizService } from './services/quiz.service';
 import { ChessAiService } from './services/chess-ai.service';
+import { NavigationService } from './services/navigation.service';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { UsTrendComponent } from './us-trend';
 import { UsNormalComponent } from './us-normal';
@@ -61,6 +62,7 @@ import { PgGobangComponent } from './pg-gobang';
 import { PgChineseChessComponent } from './pg-chinese-chess';
 import { PgChineseChess2Component } from './pg-chinese-chess2';
 import { QuizControlComponent } from './quiz-control';
+import { AvailablePlansComponent } from './available-plans';
 
 @NgModule({
   exports: [
@@ -114,7 +116,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     AwardBalanceComponent,
     UsTrendComponent,
     UsNormalComponent,
-    QuizControlComponent
+    QuizControlComponent,
+    AvailablePlansComponent,
   ],
   entryComponents: [
     QuizFailureDlgComponent,
@@ -152,6 +155,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     QuizService,
     PgService,
     ChessAiService,
+    NavigationService,
   ],
   bootstrap: [AppComponent]
 })

@@ -9,3 +9,4 @@ export * from './award-balance.service';
 export * from './quiz.service';
 export * from './pg.service';
 export * from './chess-ai.service';
+export * from './navigation.service';
