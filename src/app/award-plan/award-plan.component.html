@@ -5,17 +5,17 @@
   <mat-card-content>
     <mat-toolbar color="primary">
       <mat-select placeholder="{{'Home.User' | translate}}" [disabled]="!IsListView" 
-        [(ngModel)]="SelectedUser" name="usr" (selectionChange)="onUserChanged($event)">
+        [(ngModel)]="SelectedUser" name="usr" #ctrlSel>
         <mat-option *ngFor="let user of listUsers" [value]="user">
           {{ user.displayas }}
         </mat-option>
       </mat-select>
       <mat-checkbox [(ngModel)]="allowInvalid">{{'Home.IncludeInvalidOne' | translate}}</mat-checkbox>
 
-      <button mat-icon-button [disabled]="!IsListView || (SelectedUser === null) || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardPlanCreate)" (click)="onCreatePlan()">
+      <button mat-icon-button [disabled]="!IsListView || (SelectedUser === undefined) || (CurrentUser === undefined) || (CurrentUser !== undefined && !CurrentUser.AwardPlanCreate)" (click)="onCreatePlan()">
         <mat-icon class="md-24" aria-label="Create">create_new_folder</mat-icon>
       </button>
-      <button mat-icon-button [disabled]="!IsListView || (SelectedUser === null) || (CurrentUser === null)" (click)="onRefreshPlan()">
+      <button mat-icon-button [disabled]="!IsListView || (SelectedUser === undefined) || (CurrentUser === undefined)" (click)="onRefreshPlan()">
         <mat-icon class="md-24" aria-label="Create">refresh</mat-icon>
       </button>
   
@@ -25,24 +25,25 @@
     </mat-toolbar>
 
     <div class="example-container mat-elevation-z8">
-      <mat-table #table [dataSource]="dataSource">
+      <div class="example-loading-shade"
+        *ngIf="isLoadingResults">
+        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+      </div>
 
+      <mat-table #table [dataSource]="dataSource"
+        matSort matSortActive="ValidTo" matSortDisableClear matSortDirection="asc">
         <ng-container matColumnDef="ID">
           <mat-header-cell *matHeaderCellDef> # </mat-header-cell>
           <mat-cell *matCellDef="let element">
-            <button mat-mini-fab [disabled]="!IsListView || (CurrentUser === null) || (CurrentUser !== null && CurrentUser.UserId === element.TargetUser)" 
-              (click)="onTryPlan(element)">
-            <mat-icon class="md-14" aria-label="Copy">play_for_work</mat-icon>
-            </button>
-            <button mat-mini-fab [disabled]="!IsListView || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardPlanCreate)" 
+            <button mat-mini-fab [disabled]="!IsListView || (CurrentUser === undefined) || (CurrentUser !== undefined && !CurrentUser.AwardPlanCreate)" 
               (click)="onCreatePlanByCopy(element)">
               <mat-icon class="md-14" aria-label="Copy">content_copy</mat-icon>
             </button>
-            <button mat-mini-fab [disabled]="!IsListView || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardPlanUpdate)" 
+            <button mat-mini-fab [disabled]="!IsListView || (CurrentUser === undefined) || (CurrentUser !== undefined && !CurrentUser.AwardPlanUpdate)" 
               (click)="onEditPlan(element)">
               <mat-icon class="md-14" aria-label="Edit">edit</mat-icon>
             </button>
-            <button mat-mini-fab [disabled]="!IsListView || (CurrentUser === null) || (CurrentUser !== null && !CurrentUser.AwardPlanDelete)" 
+            <button mat-mini-fab [disabled]="!IsListView || (CurrentUser === undefined) || (CurrentUser !== undefined && !CurrentUser.AwardPlanDelete)" 
               (click)="onDeletePlan(element)">
               <mat-icon class="md-14" aria-label="Delete">delete</mat-icon>
             </button>
@@ -54,7 +55,7 @@
           <mat-cell *matCellDef="let element"> {{element.ValidFromFormatString}} </mat-cell>
         </ng-container>
         <ng-container matColumnDef="ValidTo">
-          <mat-header-cell *matHeaderCellDef> {{'Home.ValidTo' | translate }} </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header disableClear="true"> {{'Home.ValidTo' | translate }} </mat-header-cell>
           <mat-cell *matCellDef="let element"> {{element.ValidToFormatString}} </mat-cell>
         </ng-container>
         <ng-container matColumnDef="QuizType">
@@ -76,7 +77,7 @@
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
 
-      <mat-paginator #paginator [length]="_apService.AwardPlans.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+      <mat-paginator #paginator [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]" [showFirstLastButtons]="true">
       </mat-paginator>      
     </div>
 

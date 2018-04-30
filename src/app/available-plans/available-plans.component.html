@@ -1,37 +1,43 @@
 <div class="example-container mat-elevation-z8">
   <mat-table #table [dataSource]="dataSource">
 
-    <!-- Position Column -->
-    <ng-container matColumnDef="position">
-      <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.position}} </mat-cell>
+    <ng-container matColumnDef="ID">
+      <mat-header-cell *matHeaderCellDef> # </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <button mat-mini-fab (click)="onTryPlan(element)">
+          <mat-icon class="md-14" aria-label="Copy">play_for_work</mat-icon>
+        </button>
+        {{element.ID}}
+      </mat-cell>
     </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+    <ng-container matColumnDef="ValidFrom">
+      <mat-header-cell *matHeaderCellDef> {{'Home.ValidFrom' | translate }} </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.ValidFromFormatString}} </mat-cell>
     </ng-container>
-
-    <!-- Weight Column -->
-    <ng-container matColumnDef="weight">
-      <mat-header-cell *matHeaderCellDef> Weight </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.weight}} </mat-cell>
+    <ng-container matColumnDef="ValidTo">
+      <mat-header-cell *matHeaderCellDef> {{'Home.ValidTo' | translate }} </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.ValidToFormatString}} </mat-cell>
     </ng-container>
-
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="symbol">
-      <mat-header-cell *matHeaderCellDef> Symbol </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.symbol}} </mat-cell>
+    <ng-container matColumnDef="QuizType">
+      <mat-header-cell *matHeaderCellDef> {{'Home.QuizType' | translate }} </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.QuizTypeUIString | translate}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="AwardCondition">
+      <mat-header-cell *matHeaderCellDef> {{'Home.AwardCondition' | translate }} </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <span>{{ element.getAwardScoreCondition | translate:element.getAwardScoreConditionParam }} ;</span>
+        <span>{{ element.getAwardAvgTimeCondition | translate:element.getAwardAvgTimeConditionParam }}</span>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="Award">
+      <mat-header-cell *matHeaderCellDef> {{'Home.Award' | translate }} </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.Award}} </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
 
-  <mat-paginator #paginator
-                 [pageSize]="10"
-                 [pageSizeOptions]="[5, 10, 20]"
-                 [showFirstLastButtons]="true">
+  <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
   </mat-paginator>
 </div>

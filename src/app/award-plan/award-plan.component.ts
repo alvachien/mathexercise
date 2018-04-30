@@ -1,49 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { DataSource } from '@angular/cdk/collections';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
-import { MatDialog, MatPaginator } from '@angular/material';
+import { MatDialog, MatPaginator, MatTableDataSource, MatSort, MatSelect } from '@angular/material';
 import { Router } from '@angular/router';
-import { Observable, merge } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { Observable, merge, of as observableOf } from 'rxjs';
+import { map, startWith, switchMap, catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { AwardPlan, QuizTypeEnum, QuizTypeEnum2UIString, LogLevel, DateFormat, UserDetailInfo, UIMode } from '../model';
 import { AwardPlanService, QuizAttendUser, UserDetailService, DialogService, AuthService } from '../services';
 import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } from '../message-dialog';
-
-/**
- * Award plan data source
- */
-export class AwardPlanDataSource extends DataSource<any> {
-  constructor(private _apService: AwardPlanService,
-    private _paginator: MatPaginator) {
-    super();
-  }
-
-  /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<AwardPlan[]> {
-    // return this._apService.listSubject.switchMap((v: boolean) => {
-    //   if (this._selUser !== null && this._selUser !== undefined && this._selUser.length > 0) {
-    //     return this._apService.fetchPlansForUser(this._selUser);
-    //   } else {
-    //     return Observable.of([]);
-    //   }
-    // });
-
-    const displayDataChanges = [
-      this._apService.listSubject,
-      this._paginator.page,
-    ];
-    return merge(...displayDataChanges).pipe(map(() => {
-      const data = this._apService.AwardPlans.slice();
-
-      // Grab the page's slice of data.
-      const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
-      return data.splice(startIndex, this._paginator.pageSize);
-    }));
-  }
-
-  disconnect() { }
-}
 
 export interface QuizTypeUI {
   value: QuizTypeEnum;
@@ -55,14 +19,21 @@ export interface QuizTypeUI {
   templateUrl: './award-plan.component.html',
   styleUrls: ['./award-plan.component.scss']
 })
-export class AwardPlanComponent implements OnInit {
+export class AwardPlanComponent implements OnInit, AfterViewInit {
+  private uiMode: UIMode = UIMode.ListView;
+  private _selUser: QuizAttendUser;
+  private _allowInvalid = false;
+  private _curPlan: AwardPlan;
+
   displayedColumns = ['ID', 'ValidFrom', 'ValidTo', 'QuizType', 'AwardCondition', 'Award'];
   pageHeader: string;
-  dataSource: AwardPlanDataSource = null;
+  dataSource = new MatTableDataSource<AwardPlan>();
+  isLoadingResults: boolean;
   listUsers: QuizAttendUser[] = [];
   listQTypes: QuizTypeUI[] = [];
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  private uiMode: UIMode = UIMode.ListView;
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('ctrlSel') ctrlSelect: MatSelect;
 
   get IsListView(): boolean {
     return this.uiMode === UIMode.ListView; ;
@@ -72,25 +43,21 @@ export class AwardPlanComponent implements OnInit {
       || this.uiMode === UIMode.Update;
   }
 
-  private _selUser: QuizAttendUser;
   get SelectedUser(): QuizAttendUser {
     return this._selUser;
   }
 
   set SelectedUser(cu: QuizAttendUser) {
-    if ((this._selUser === null || this._selUser === undefined)
-      && (cu !== null && cu !== undefined)) {
+    if (this._selUser === undefined && (cu !== undefined)) {
       this._selUser = cu;
-    } else if ((this._selUser !== null || this._selUser !== undefined)
-      && (cu === null && cu === undefined)) {
-      this._selUser = null;
-    } else if ((this._selUser !== null || this._selUser !== undefined)
-      && (cu !== null && cu !== undefined)
+    } else if (this._selUser !== undefined && cu === undefined) {
+      this._selUser = undefined;
+    } else if (this._selUser !== undefined
+      && cu !== undefined
       && this._selUser.attenduser !== cu.attenduser) {
       this._selUser = cu;
     }
   }
-  private _allowInvalid = false;
   get allowInvalid(): boolean {
     return this._allowInvalid;
   }
@@ -98,7 +65,8 @@ export class AwardPlanComponent implements OnInit {
     if (this._allowInvalid !== ai) {
       this._allowInvalid = ai;
 
-      this.onUserChanged(null);
+      this.onRefreshPlan();
+      // this.onUserChanged(null);
     }
   }
 
@@ -107,7 +75,6 @@ export class AwardPlanComponent implements OnInit {
     return this._userDetailService.UserDetailInfoInstance;
   }
 
-  private _curPlan: AwardPlan;
   get CurrentPlan(): AwardPlan {
     return this._curPlan;
   }
@@ -119,7 +86,8 @@ export class AwardPlanComponent implements OnInit {
     private _authService: AuthService,
     private _userDetailService: UserDetailService) {
 
-    this._selUser = null;
+    this.isLoadingResults = false;
+    this._selUser = undefined;
     for (const qt in QuizTypeEnum) {
       if (!Number.isNaN(+qt)) {
         const qtu: QuizTypeUI = {
@@ -130,34 +98,47 @@ export class AwardPlanComponent implements OnInit {
       }
     }
 
-    // Attended user
-    this._userDetailService.fetchAllUsers().subscribe((listUsrs) => {
-      if (listUsrs !== null && listUsrs !== undefined || listUsrs.length > 0) {
-        this.listUsers = listUsrs;
-      }
-    });
-
     this.setListView();
   }
 
   ngOnInit() {
-    this.dataSource = new AwardPlanDataSource(this._apService, this.paginator);
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
+    // Attended user
+    this._userDetailService.fetchAllUsers().subscribe((listUsrs) => {
+      if (listUsrs !== undefined && listUsrs instanceof Array && listUsrs.length > 0) {
+        this.listUsers = listUsrs;
+      }
+
+      merge(this.sort.sortChange, this.ctrlSelect.selectionChange)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          this.isLoadingResults = true;
+          return this._apService.fetchPlansForUser(
+            this.SelectedUser === undefined ? undefined : this.SelectedUser.attenduser,
+            this._allowInvalid);
+        }),
+        map(data => {
+          // Flip flag to show that loading has finished.
+          this.isLoadingResults = false;
+
+          return data;
+        }),
+        catchError(() => {
+          this.isLoadingResults = false;
+          return observableOf([]);
+        })
+      ).subscribe(data => this.dataSource.data = data);
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
   }
 
   public onRefreshPlan() {
-    this.onUserChanged(null);
-  }
-
-  public onTryPlan(curPlan: AwardPlan) {
-    switch (curPlan.QuizType) {
-      case QuizTypeEnum.add: {
-        this._router.navigate(['/add-ex']);
-      }
-      break;
-
-      default:
-      break;
-    }
+    // this.onUserChanged(null);
   }
 
   public onCreatePlan() {
@@ -169,9 +150,9 @@ export class AwardPlanComponent implements OnInit {
     this.pageHeader = 'Home.CreateAwardPlan';
   }
 
-  public onCreatePlanByCopy(row) {
+  public onCreatePlanByCopy(row: AwardPlan) {
     this._curPlan = new AwardPlan();
-    this._curPlan.TargetUser = this.SelectedUser.attenduser;
+    this._curPlan.TargetUser = row.TargetUser;
     this._curPlan.CreatedBy = this._authService.authSubject.getValue().getUserId();
     this._curPlan.Award = row.Award;
     this._curPlan.MaxQuizAvgTime = row.MaxQuizAvgTime;
@@ -216,15 +197,6 @@ export class AwardPlanComponent implements OnInit {
         this._apService.deleteAwardPlan(row);
       }
     });
-  }
-
-  public onUserChanged(event) {
-    // Refetch the whole plan list!
-    if (this._selUser === null) {
-      this._apService.fetchPlansForUser();
-    } else {
-      this._apService.fetchPlansForUser(this._selUser.attenduser, this.allowInvalid);
-    }
   }
 
   public canDeactivate(): boolean {
@@ -285,56 +257,71 @@ export class AwardPlanComponent implements OnInit {
   }
 
   private onCreatePlanImpl(): void {
-    this._apService.createEvent.subscribe(x => {
-      if (environment.LoggingLevel >= LogLevel.Debug) {
-        console.log('AC Math Exericse [Debug]: ' + x);
-      }
-
-      // Show a dialog for success
-      const dlginfo: MessageDialogInfo = {
-        Header: 'Home.Success',
-        Content: 'Home.AwardPlanCreatedSuccessfully',
-        Button: MessageDialogButtonEnum.onlyok
-      };
-      this._dialog.open(MessageDialogComponent, {
-        disableClose: false,
-        width: '500px',
-        data: dlginfo
-      }).afterClosed().subscribe((x2: any) => {
-        // Do nothing!
-        this.setListView();
-      });
-    }, error => {
-      if (environment.LoggingLevel >= LogLevel.Error) {
-        console.log('AC Math Exericse [Debug]: ' + error);
-      }
-      // Also show a dialog for error
-      const dlginfo: MessageDialogInfo = {
-        Header: 'Home.Error',
-        Content: error,
-        Button: MessageDialogButtonEnum.onlyok
-      };
-      this._dialog.open(MessageDialogComponent, {
-        disableClose: false,
-        width: '500px',
-        data: dlginfo
-      }).afterClosed().subscribe(x => {
-        // Do nothing!
-        // this.setListView();
-      });
-    });
-
     this.CurrentPlan.TargetUser = this.SelectedUser.attenduser;
-    this._apService.createAwardPlan(this.CurrentPlan);
+    this._apService.createAwardPlan(this.CurrentPlan)
+      .subscribe(data => {
+        if (environment.LoggingLevel >= LogLevel.Debug) {
+          console.log('AC Math Exericse [Debug]: ' + data);
+        }
+
+        const cdata = this.dataSource.data.slice();
+        cdata.push(data);
+        this.dataSource.data = cdata;
+
+        // Show a dialog for success
+        const dlginfo: MessageDialogInfo = {
+          Header: 'Home.Success',
+          Content: 'Home.AwardPlanCreatedSuccessfully',
+          Button: MessageDialogButtonEnum.onlyok
+        };
+        this._dialog.open(MessageDialogComponent, {
+          disableClose: false,
+          width: '500px',
+          data: dlginfo
+        }).afterClosed().subscribe((x2: any) => {
+          // Do nothing!
+          this.setListView();
+        });
+      }, error => {
+        if (environment.LoggingLevel >= LogLevel.Error) {
+          console.log('AC Math Exericse [Debug]: ' + error);
+        }
+        // Also show a dialog for error
+        const dlginfo: MessageDialogInfo = {
+          Header: 'Home.Error',
+          Content: error,
+          Button: MessageDialogButtonEnum.onlyok
+        };
+        this._dialog.open(MessageDialogComponent, {
+          disableClose: false,
+          width: '500px',
+          data: dlginfo
+        }).afterClosed().subscribe(x => {
+          // Do nothing!
+          // this.setListView();
+        });
+      }, () => {
+        // Do nothing
+      });
   }
 
   private onChangePlanImpl(): void {
-    this._apService.changeEvent.subscribe(x => {
-      if (environment.LoggingLevel >= LogLevel.Debug) {
-        console.log('AC Math Exericse [Debug]: ' + x);
-      }
+    this._apService.changeAwardPlan(this.CurrentPlan)
+      .subscribe(x => {
+        const nplan: AwardPlan = <AwardPlan>x;
+        const cdata: AwardPlan[] = this.dataSource.data.slice();
+        let nidx = -1;
+        cdata.forEach((element: AwardPlan, index) => {
+          if (element.ID === nplan.ID) {
+            nidx = index;
+          }
+        });
+        if (nidx !== -1) {
+          cdata.splice(nidx, 1);
+        }
+        cdata.push(nplan);
+        this.dataSource.data = cdata;
 
-      if (x instanceof AwardPlan) {
         // Show a dialog for success
         const dlginfo: MessageDialogInfo = {
           Header: 'Home.Success',
@@ -349,11 +336,11 @@ export class AwardPlanComponent implements OnInit {
           // Do nothing!
           this.setListView();
         });
-      } else {
+      }, error => {
         // Also show a dialog for error
         const dlginfo: MessageDialogInfo = {
           Header: 'Home.Error',
-          Content: x === null ? 'Home.Error' : x,
+          Content: error === null ? 'Home.Error' : error,
           Button: MessageDialogButtonEnum.onlyok
         };
         this._dialog.open(MessageDialogComponent, {
@@ -364,10 +351,9 @@ export class AwardPlanComponent implements OnInit {
           // Do nothing!
           // this.setListView();
         });
-      }
-    });
-
-    this._apService.changeAwardPlan(this.CurrentPlan);
+      }, () => {
+        // Do nothing
+      });
   }
 
   public onDetailPlanCancel(): void {

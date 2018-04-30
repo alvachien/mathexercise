@@ -3,6 +3,7 @@ import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, DivisionQuizItem,
   DefaultQuizAmount, DefaultFailedQuizFactor, QuizTypeEnum, LogLevel, PrimarySchoolMathFAOControl } from '../model';
 import { MatDialog } from '@angular/material';
 import { DialogService } from '../services/dialog.service';
+import { NavigationService } from '../services/navigation.service';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
 import { QuizSummaryComponent } from '../quiz-summary/quiz-summary.component';
 import { Router } from '@angular/router';
@@ -34,6 +35,7 @@ export class DivisionExerciseComponent implements OnInit {
 
   constructor(private dialog: MatDialog,
     private _dlgsvc: DialogService,
+    private _nvgService: NavigationService,
     private _zone: NgZone,
     private _router: Router) {
     this.quizInstance = new PrimarySchoolMathQuiz();
@@ -54,6 +56,14 @@ export class DivisionExerciseComponent implements OnInit {
     this.UsedQuizAmount = 0;
     this.pageSize = 10;
     this.pageIndex = 0;
+
+    // Check the navigation service
+    if (this._nvgService.currentQuizControl !== undefined
+      && this._nvgService.currentQuizControl instanceof PrimarySchoolMathFAOControl) {
+      this.quizControl = this._nvgService.currentQuizControl;
+      // After the setting, clear the service
+      this._nvgService.currentQuizControl = undefined;
+    }
   }
 
   private generateQuizItem(nIdx: number): DivisionQuizItem {

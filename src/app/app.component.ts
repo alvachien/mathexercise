@@ -20,6 +20,7 @@ import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-mo
 })
 export class Home implements AfterViewInit {
   public backgroundimage: string;
+  public currUserID: string;
   // private _sun = new Image();
   // private _moon = new Image();
   // private _earth = new Image();
@@ -29,7 +30,9 @@ export class Home implements AfterViewInit {
   // // Canvas
   // @ViewChild('canvasClock') canvasClock: ElementRef;
 
-  constructor(private _sanitizer: DomSanitizer) {
+  constructor(private _sanitizer: DomSanitizer,
+    private _authService: AuthService,
+    ) {
     const photoamt = 7;
     let bgidx: number = Math.ceil(Math.random() * (photoamt - 1) + 1);
     if (bgidx > photoamt) {
@@ -47,6 +50,7 @@ export class Home implements AfterViewInit {
     // this._sun.src = environment.AppHost + '/assets/image/Canvas_sun.png';
     // this._moon.src = environment.AppHost + '/assets/image/Canvas_moon.png';
     // this._earth.src = environment.AppHost + '/assets/image/Canvas_earth.png';
+    this.currUserID = this._authService.authSubject.getValue().getUserId();
   }
 
   getBackgroundImage() {

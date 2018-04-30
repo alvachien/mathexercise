@@ -8,15 +8,6 @@ import { AuthService } from './auth.service';
 
 @Injectable()
 export class AwardPlanService {
-  public listSubject: BehaviorSubject<AwardPlan[]> = new BehaviorSubject<AwardPlan[]>([]);
-  get AwardPlans(): AwardPlan[] {
-    return this.listSubject.value;
-  }
-
-  createEvent: EventEmitter<AwardPlan | string> = new EventEmitter(null);
-  changeEvent: EventEmitter<AwardPlan | string> = new EventEmitter(null);
-  deleteEvent: EventEmitter<boolean | string> = new EventEmitter(false);
-
   constructor(private _http: HttpClient,
     private _authService: AuthService) {
   }
@@ -26,11 +17,6 @@ export class AwardPlanService {
    * @param usr User
    */
   public fetchPlansForUser(usr?: string, allowInvalid?: boolean): Observable<any> {
-    if (usr === undefined || usr === null) {
-      this.listSubject.next([]);
-      return;
-    }
-
     const apiurl = environment.APIBaseUrl + 'AwardPlan';
 
     let headers = new HttpHeaders();
@@ -40,8 +26,6 @@ export class AwardPlanService {
     let params: HttpParams = new HttpParams();
     if (usr) {
       params = params.set('tgtuser', usr);
-    } else {
-      params = params.set('tgtuser', this._authService.authSubject.getValue().getUserId());
     }
     if (allowInvalid) {
       params = params.set('incInvalid', allowInvalid.toString());
@@ -72,7 +56,7 @@ export class AwardPlanService {
    * Create an award plan
    * @param aplan Award plan to create
    */
-  public createAwardPlan(aplan: AwardPlan) {
+  public createAwardPlan(aplan: AwardPlan): Observable<any> {
     // Submit to the API
     const apiurl = environment.APIBaseUrl + 'AwardPlan';
 
@@ -84,7 +68,7 @@ export class AwardPlanService {
       .append('Accept', 'application/json')
       .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
 
-    this._http.post(apiurl, jdata, {
+    return this._http.post(apiurl, jdata, {
         headers: headers,
         withCredentials: true
       })
@@ -96,30 +80,10 @@ export class AwardPlanService {
         const ap: AwardPlan = new AwardPlan;
         ap.parseData(<any>response);
         return ap;
-      }))
-      .subscribe(x => {
-        if (environment.LoggingLevel >= LogLevel.Debug) {
-          console.log('AC Math Exericse [Debug]: Success createAwardPlan of AwardPlanService: ' + x);
-        }
-
-        // Add the buffer!
-        const data2 = this.listSubject.value;
-        data2.push(x);
-        this.listSubject.next(data2);
-
-        // Raise the event
-        this.createEvent.emit(x);
-      }, error => {
-        if (environment.LoggingLevel >= LogLevel.Error) {
-          console.error('AC Math Exericse [Error]: Failed createAwardPlan of AwardPlanService: ' + error);
-        }
-
-        this.createEvent.emit(error);
-      }, () => {
-      });
+      }));
   }
 
-  public changeAwardPlan(aplan: AwardPlan) {
+  public changeAwardPlan(aplan: AwardPlan): Observable<any> {
     // Submit to the API
     const apiurl = environment.APIBaseUrl + 'AwardPlan/' + aplan.ID;
 
@@ -131,7 +95,7 @@ export class AwardPlanService {
               .append('Accept', 'application/json')
               .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
 
-    this._http.put(apiurl, data, {
+    return this._http.put(apiurl, data, {
         headers: headers,
         withCredentials: true
       })
@@ -143,24 +107,10 @@ export class AwardPlanService {
         const aplan2: AwardPlan = new AwardPlan();
         aplan2.parseData(<any>response);
         return aplan2;
-      }))
-      .subscribe(x => {
-        if (environment.LoggingLevel >= LogLevel.Debug) {
-          console.log('AC Math Exericse [Debug]: ' + x);
-        }
-
-        this.changeEvent.emit(x);
-      }, error => {
-        if (environment.LoggingLevel >= LogLevel.Error) {
-          console.error('AC Math Exericse [Error]: ' + error);
-        }
-
-        this.changeEvent.emit(error);
-      }, () => {
-      });
+      }));
   }
 
-  public deleteAwardPlan(aplanid: number) {
+  public deleteAwardPlan(aplanid: number): Observable<any> {
     // Submit to the API
     const apiurl = environment.APIBaseUrl + 'AwardPlan/' + aplanid;
 
@@ -169,7 +119,7 @@ export class AwardPlanService {
               .append('Accept', 'application/json')
               .append('Authorization', 'Bearer ' + this._authService.authSubject.getValue().getAccessToken());
 
-    this._http.delete(apiurl, {
+    return this._http.delete(apiurl, {
         headers: headers,
         withCredentials: true
       })
@@ -179,20 +129,6 @@ export class AwardPlanService {
         }
 
         return <any>response;
-      }))
-      .subscribe(x => {
-        if (environment.LoggingLevel >= LogLevel.Debug) {
-          console.log('AC Math Exericse [Debug]: ' + x);
-        }
-
-        this.deleteEvent.emit(x);
-      }, error => {
-        if (environment.LoggingLevel >= LogLevel.Error) {
-          console.error('AC Math Exericse [Error]: ' + error);
-        }
-
-        this.deleteEvent.emit(error);
-      }, () => {
-      });
+      }));
   }
 }

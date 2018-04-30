@@ -133,13 +133,13 @@ export class UserDetailService {
           }
           return <any>response;
         }))
-        .subscribe((data: any) => {
+        .subscribe((data2: any) => {
           if (environment.LoggingLevel >= LogLevel.Debug) {
-            console.log(`AC Math Exercise [Debug]: User Detail Post Subscribe: ${data}`);
+            console.log(`AC Math Exercise [Debug]: User Detail Post Subscribe: ${data2}`);
           }
 
           this._usrDetialInfo = new UserDetailInfo();
-          this._usrDetialInfo.onSetData(data);
+          this._usrDetialInfo.onSetData(data2);
           this._isloaded = true;
         }, (err: HttpResponse<any>) => {
           if (environment.LoggingLevel >= LogLevel.Error) {
@@ -159,13 +159,13 @@ export class UserDetailService {
           }
           return <any>response;
         }))
-        .subscribe((data: any) => {
+        .subscribe((data2: any) => {
           if (environment.LoggingLevel >= LogLevel.Debug) {
-            console.log(`AC Math Exercise [Debug]: User Detail Change Subscribe: ${data}`);
+            console.log(`AC Math Exercise [Debug]: User Detail Change Subscribe: ${data2}`);
           }
 
           this._usrDetialInfo = new UserDetailInfo();
-          this._usrDetialInfo.onSetData(data);
+          this._usrDetialInfo.onSetData(data2);
           this._isloaded = true;
         }, (err: HttpResponse<any>) => {
           if (environment.LoggingLevel >= LogLevel.Error) {

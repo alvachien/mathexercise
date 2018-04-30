@@ -19,7 +19,7 @@ export interface MessageDialogInfo {
   templateUrl: './message-dialog.component.html',
   styleUrls: ['./message-dialog.component.scss']
 })
-export class MessageDialogComponent{
+export class MessageDialogComponent {
   get IsOnlyOKButton(): boolean {
     return this.dlgInfo.Button === MessageDialogButtonEnum.onlyok;
   }
