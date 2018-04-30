@@ -5,56 +5,11 @@
 
   <mat-card-content>
     <div *ngIf="!quizInstance.IsStarted">
-      <div class="demo-full-width">
-        <mat-form-field>
-          <input matInput type="number" placeholder="{{'Home.QuizAmount' | translate}}" [(ngModel)]="quizControl.numberOfQuestions" name="startquizamt"
-            required>
-          <mat-error>This field is required</mat-error>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput type="number" placeholder="{{'Home.FailedFactor' | translate }}" [(ngModel)]="quizControl.failFactor" name="fquizfactor"
-            required>
-          <mat-error>This field is required</mat-error>
-        </mat-form-field>
-      </div>
-
-      <div class="demo-full-width">
-        <mat-form-field>
-            <input matInput type="number" placeholder="{{'Home.NumberOfOperators' | translate }}" [(ngModel)]="quizControl.numberOfOperators" name="nofop"
-              required>
-            <mat-error>This field is required</mat-error>
-        </mat-form-field>
-      </div>
-      
-      <div class="demo-full-width">
-        <mat-form-field>
-          <input matInput type="number" placeholder="{{'Math.DecimalPlaces' | translate}}" [(ngModel)]="quizControl.decimalPlaces" name="dmlPlaces"
-            required>
-        </mat-form-field>
-      </div>
-
-      <div class="demo-full-width">
-        <mat-checkbox [(ngModel)]="quizControl.decimalOccur">{{'Home.AllowDecimal' | translate}}</mat-checkbox>
-      </div>
-      
-      <div class="demo-full-width">
-        <mat-checkbox [(ngModel)]="quizControl.negativeOccur">{{'Home.AllowNegative' | translate}}</mat-checkbox>
-      </div>
-
-      <div class="demo-full-width">
-        <mat-form-field>
-          <input matInput type="number" placeholder="{{'Math.Scope' | translate}}" [(ngModel)]="quizControl.numberBegin" name="nrbgn"
-            required>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput type="number" placeholder="{{'Math.Scope' | translate}}" [(ngModel)]="quizControl.numberEnd" name="nrend"
-            required>
-        </mat-form-field>
-      </div>
+      <app-quiz-control [controlInstance]="quizControl" [disabled]="controlFronzen"></app-quiz-control>
     </div>
-
+    
     <div class="demo-full-width" *ngIf="quizInstance.IsStarted">
-        <app-digit-clock [IsStart]="quizInstance.IsStarted" style="display:block;"></app-digit-clock>
+      <app-digit-clock [IsStart]="quizInstance.IsStarted" style="display:block;"></app-digit-clock>
     </div>
     
     <div *ngIf="quizInstance.IsStarted">

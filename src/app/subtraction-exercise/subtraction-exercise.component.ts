@@ -20,6 +20,7 @@ import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } fr
 })
 export class SubtractionExerciseComponent implements OnInit {
   quizControl: PrimarySchoolMathFAOControl;
+  controlFronzen = false;
   quizInstance: PrimarySchoolMathQuiz = null;
   QuizItems: SubtractionQuizItem[] = [];
   DisplayedQuizItems: SubtractionQuizItem[] = [];
@@ -56,6 +57,8 @@ export class SubtractionExerciseComponent implements OnInit {
     if (this._nvgService.currentQuizControl !== undefined
       && this._nvgService.currentQuizControl instanceof PrimarySchoolMathFAOControl) {
       this.quizControl = this._nvgService.currentQuizControl;
+      this.controlFronzen = true;
+
       // After the setting, clear the service
       this._nvgService.currentQuizControl = undefined;
     }

@@ -22,6 +22,7 @@ export class AdditionExerciseComponent implements OnInit {
   quizControl: PrimarySchoolMathFAOControl;
   UsedQuizAmount = 0;
   quizInstance: PrimarySchoolMathQuiz = null;
+  controlFronzen = false;
   QuizItems: AdditionQuizItem[] = [];
   DisplayedQuizItems: AdditionQuizItem[] = [];
 
@@ -56,6 +57,7 @@ export class AdditionExerciseComponent implements OnInit {
     if (this._nvgService.currentQuizControl !== undefined
       && this._nvgService.currentQuizControl instanceof PrimarySchoolMathFAOControl) {
       this.quizControl = this._nvgService.currentQuizControl;
+      this.controlFronzen = true;
 
       // After the setting, clear the service
       this._nvgService.currentQuizControl = undefined;

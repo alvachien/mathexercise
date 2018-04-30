@@ -36,7 +36,7 @@ The features of web app including:
 12. More to come
 
 # design
-Take a look at the design doc for this project: [click](https://github.com/alvachien/mathexercise/design.md)
+Take a look at the design doc for this project: [click here](https://github.com/alvachien/mathexercise/blob/master/design.md).
 
 # dependencies
 This web app depends on the following project

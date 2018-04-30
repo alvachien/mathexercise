@@ -1,64 +1,64 @@
 <div>
   <div class="demo-full-width">
     <mat-form-field>
-      <input matInput type="number" placeholder="{{'Home.QuizAmount' | translate}}" [(ngModel)]="controlInstance.numberOfQuestions" name="startquizamt"
+      <input matInput type="number" [disabled]="disabled" placeholder="{{'Home.QuizAmount' | translate}}" [(ngModel)]="controlInstance.numberOfQuestions" name="startquizamt"
         required>
       <mat-error>This field is required</mat-error>
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="number" placeholder="{{'Home.FailedFactor' | translate }}" matTooltip="{{'Home.FailedFactorHint' | translate}}" [(ngModel)]="controlInstance.failFactor" name="fquizfactor"
+      <input matInput type="number" [disabled]="disabled" placeholder="{{'Home.FailedFactor' | translate }}" matTooltip="{{'Home.FailedFactorHint' | translate}}" [(ngModel)]="controlInstance.failFactor" name="fquizfactor"
         required>
       <mat-error>This field is required</mat-error>
     </mat-form-field>
   </div>
   <div class="demo-full-width" *ngIf="isFAOControl">
     <mat-form-field>
-      <input matInput type="number" placeholder="{{'Math.Summand' | translate}}" [(ngModel)]="controlInstance.leftNumberBegin" name="leftnrbgn"
+      <input matInput type="number" [disabled]="disabled" placeholder="{{'Math.Summand' | translate}}" [(ngModel)]="controlInstance.leftNumberBegin" name="leftnrbgn"
         required>
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="number" placeholder="{{'Math.Summand' | translate}}" [(ngModel)]="controlInstance.leftNumberEnd" name="leftnrend"
+      <input matInput type="number" [disabled]="disabled" placeholder="{{'Math.Summand' | translate}}" [(ngModel)]="controlInstance.leftNumberEnd" name="leftnrend"
         required>
     </mat-form-field>
   </div>
   <div class="demo-full-width" *ngIf="isFAOControl">
     <mat-form-field>
-      <input matInput type="number" placeholder="{{'Math.Addend' | translate}}" [(ngModel)]="controlInstance.rightNumberBegin" name="rightnrbgn"
+      <input matInput type="number" [disabled]="disabled" placeholder="{{'Math.Addend' | translate}}" [(ngModel)]="controlInstance.rightNumberBegin" name="rightnrbgn"
         required>
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="number" placeholder="{{'Math.Addend' | translate}}" [(ngModel)]="controlInstance.rightNumberEnd" name="rightnrend"
+      <input matInput type="number" [disabled]="disabled" placeholder="{{'Math.Addend' | translate}}" [(ngModel)]="controlInstance.rightNumberEnd" name="rightnrend"
         required>
     </mat-form-field>
   </div>
   <div class="demo-full-width" *ngIf="isFAOControl || isMixOPControl">
     <mat-form-field>
-      <input matInput type="number" placeholder="{{'Math.DecimalPlaces' | translate}}" [(ngModel)]="controlInstance.decimalPlaces" name="dmlPlaces"
+      <input matInput type="number" [disabled]="disabled" placeholder="{{'Math.DecimalPlaces' | translate}}" [(ngModel)]="controlInstance.decimalPlaces" name="dmlPlaces"
         required>
     </mat-form-field>
   </div>
   <div class="demo-full-width" *ngIf="isMixOPControl">
     <mat-form-field>
-        <input matInput type="number" placeholder="{{'Home.NumberOfOperators' | translate }}" [(ngModel)]="controlInstance.numberOfOperators" name="nofop"
+        <input matInput type="number" [disabled]="disabled" placeholder="{{'Home.NumberOfOperators' | translate }}" [(ngModel)]="controlInstance.numberOfOperators" name="nofop"
           required>
         <mat-error>This field is required</mat-error>
     </mat-form-field>
   </div>
   <div class="demo-full-width" *ngIf="isMixOPControl">
-    <mat-checkbox [(ngModel)]="controlInstance.decimalOccur">{{'Home.AllowDecimal' | translate}}</mat-checkbox>
+    <mat-checkbox [disabled]="disabled" [(ngModel)]="controlInstance.decimalOccur">{{'Home.AllowDecimal' | translate}}</mat-checkbox>
   </div>
   
   <div class="demo-full-width" *ngIf="isMixOPControl">
-    <mat-checkbox [(ngModel)]="controlInstance.negativeOccur">{{'Home.AllowNegative' | translate}}</mat-checkbox>
+    <mat-checkbox [disabled]="disabled" [(ngModel)]="controlInstance.negativeOccur">{{'Home.AllowNegative' | translate}}</mat-checkbox>
   </div>
 
   <div class="demo-full-width" *ngIf="isMixOPControl">
     <mat-form-field>
-      <input matInput type="number" placeholder="{{'Math.Scope' | translate}}" [(ngModel)]="controlInstance.numberBegin" name="nrbgn"
+      <input matInput type="number" [disabled]="disabled" placeholder="{{'Math.Scope' | translate}}" [(ngModel)]="controlInstance.numberBegin" name="nrbgn"
         required>
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="number" placeholder="{{'Math.Scope' | translate}}" [(ngModel)]="controlInstance.numberEnd" name="nrend"
+      <input matInput type="number" [disabled]="disabled" placeholder="{{'Math.Scope' | translate}}" [(ngModel)]="controlInstance.numberEnd" name="nrend"
         required>
     </mat-form-field>
   </div>

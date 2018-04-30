@@ -22,6 +22,7 @@ export class MixedopExerciseComponent implements OnInit {
   quizControl: PrimarySchoolMathMixOpControl;
   UsedQuizAmount = 0;
   quizInstance: PrimarySchoolMathQuiz = null;
+  controlFronzen = false;
   QuizItems: MixedOperationQuizItem[] = [];
   DisplayedQuizItems: MixedOperationQuizItem[] = [];
 
@@ -51,6 +52,8 @@ export class MixedopExerciseComponent implements OnInit {
     if (this._nvgService.currentQuizControl !== undefined
       && this._nvgService.currentQuizControl instanceof PrimarySchoolMathMixOpControl) {
       this.quizControl = this._nvgService.currentQuizControl;
+      this.controlFronzen = true;
+
       // After the setting, clear the service
       this._nvgService.currentQuizControl = undefined;
     }

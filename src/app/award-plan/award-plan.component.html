@@ -102,8 +102,8 @@
       </div>
 
       <mat-select class="demo-full-width" placeholder="{{'Home.Type' | translate}}" [(ngModel)]="CurrentPlan.QuizType" name="planqtype">
-        <mat-option *ngFor="let qt of listQTypes" [value]="qt.value">
-          {{ qt.displayas | translate }}
+        <mat-option *ngFor="let qt of listQTypes" [value]="qt.qtype">
+          {{ qt.i18term | translate }}
         </mat-option>
       </mat-select>
       

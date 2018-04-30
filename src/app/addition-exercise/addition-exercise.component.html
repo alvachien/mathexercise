@@ -4,7 +4,7 @@
   </mat-card-header>
   <mat-card-content>
     <div *ngIf="!quizInstance.IsStarted">
-      <app-quiz-control [controlInstance]="quizControl"></app-quiz-control>
+      <app-quiz-control [controlInstance]="quizControl" [disabled]="controlFronzen"></app-quiz-control>
     </div>
     
     <div class="demo-full-width" *ngIf="quizInstance.IsStarted">

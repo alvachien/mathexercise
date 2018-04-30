@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import {
   QuizTypeEnum, PrimarySchoolMathQuizItem, QuizTypeEnum2UIString, LogLevel, APIQuizSection, APIQuizFailLog, APIQuiz,
   AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem, DateFormat, QuizTypeUI, DateRangeUI,
-  StatisticsDateRange, StatisticsDateRangeEnum, getStatisticsDateRangeEnumString, getStatisticsDateRangeDate
+  StatisticsDateRange, StatisticsDateRangeEnum, getStatisticsDateRangeEnumString, getStatisticsDateRangeDate, GetAllQuizTypeUIStrings
 } from '../model';
 import { AuthService, QuizAttendUser, UserDetailService } from '../services';
 import { environment } from '../../environments/environment';
@@ -42,24 +42,14 @@ export class UsTrendComponent implements OnInit {
     private _userDetailService: UserDetailService) {
     // Get Quiz type display string
     let arstrs: string[] = [];
-    for (const fe in QuizTypeEnum) {
-      if (isNaN(Number(fe))) {
-      } else {
-        const astr = QuizTypeEnum2UIString(Number(fe));
-        arstrs.push(astr);
-
-        const qtu = {
-          qtype: Number(fe),
-          i18term: astr,
-          display: ''
-        };
-        this.listqtype.push(qtu);
-      }
-    }
+    this.listqtype = GetAllQuizTypeUIStrings();
+    this.listqtype.forEach(value => {
+      arstrs.push(value.i18term);
+    });
 
     // Translate for quiz type
     this._tranService.get(arstrs).subscribe(x => {
-      for (const tran in x) {
+      for (const tran of x) {
         for (const qtu of this.listqtype) {
           if (tran === qtu.i18term) {
             qtu.display = x[tran];

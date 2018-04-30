@@ -1,30 +1,33 @@
 # OVERALL
+Interface **IStorableObject** defines the object which need be stored.
+
+Abstract class **StorableObject** implements that interface and served as the base class.
 
 # Hierarchy of Classes
-QuizItem (abstract)
-    PrimarySchoolMathQuizItem
-        PrimarySchoolMathFAOQuizItem
-            AdditionQuizItem
-            SubtractionQuizItem
-            MultiplicationQuizItem
-            DivisionQuizItem
-        FormulaQuizItemBase
-            FormulaCOfCircleQuizItem
-            FormulaCOfSquareQuizItem
-            FormulaCOfRectangleQuizItem
-            FormulaDistAndSpeedQuizItem
-            FormulaAreaOfRectangleQuizItem
-            FormulaAreaOfSquareQuizItem
-            FormulaEfficiencyProblemQuizItem
-        Cal24QuizItem
-        SudouQuizItem
+- QuizItem (abstract)
+    - PrimarySchoolMathQuizItem
+        - PrimarySchoolMathFAOQuizItem
+            1. AdditionQuizItem
+            2. SubtractionQuizItem
+            3. MultiplicationQuizItem
+            4. DivisionQuizItem
+        - FormulaQuizItemBase
+            1. FormulaCOfCircleQuizItem
+            2. FormulaCOfSquareQuizItem
+            3. FormulaCOfRectangleQuizItem
+            4. FormulaDistAndSpeedQuizItem
+            5. FormulaAreaOfRectangleQuizItem
+            6. FormulaAreaOfSquareQuizItem
+            7. FormulaEfficiencyProblemQuizItem
+        - Cal24QuizItem
+        - SudouQuizItem
 
-QuizBasicControl
-    PrimarySchoolMathFAOControl
+- QuizBasicControl
+    - PrimarySchoolMathFAOControl
 
-PrimarySchoolMathQuizSection
+- PrimarySchoolMathQuizSection
 
-PrimarySchoolMathQuiz
+- PrimarySchoolMathQuiz
 
 # BREAK CHANGES
 ## Quiz Control

@@ -72,6 +72,25 @@ export function QuizTypeEnum2UIString(qt: QuizTypeEnum): string {
   return rst;
 }
 
+export function GetAllQuizTypeUIStrings(): QuizTypeUI[] {
+  const rst: QuizTypeUI[] = [];
+  for (const qt in QuizTypeEnum) {
+    if (!Number.isNaN(+qt)) {
+      const qtu: QuizTypeUI = {
+        qtype: +qt,
+        i18term: QuizTypeEnum2UIString(+qt),
+        display: ''
+      };
+
+      if (qtu.i18term.length > 0) {
+        rst.push(qtu);
+      }
+    }
+  }
+
+  return rst;
+}
+
 /**
  * Degree of difficulity
  */
@@ -380,6 +399,10 @@ export class QuizBasicControl extends StorableObject {
       return false;
     }
     return true;
+  }
+
+  uiInfoString(): string {
+    return this._numOfQ.toString() + ';' + this._failFactor.toString();
   }
 
   protected storeToJsonObject(): any {

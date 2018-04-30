@@ -26,6 +26,7 @@ import { environment } from '../../environments/environment';
 export class DivisionExerciseComponent implements OnInit {
   quizControl: PrimarySchoolMathFAOControl;
   quizInstance: PrimarySchoolMathQuiz = null;
+  controlFronzen = false;
   QuizItems: DivisionQuizItem[] = [];
   DisplayedQuizItems: DivisionQuizItem[] = [];
   UsedQuizAmount = 0;
@@ -61,6 +62,8 @@ export class DivisionExerciseComponent implements OnInit {
     if (this._nvgService.currentQuizControl !== undefined
       && this._nvgService.currentQuizControl instanceof PrimarySchoolMathFAOControl) {
       this.quizControl = this._nvgService.currentQuizControl;
+      this.controlFronzen = true;
+
       // After the setting, clear the service
       this._nvgService.currentQuizControl = undefined;
     }

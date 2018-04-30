@@ -5,14 +5,10 @@ import { Router } from '@angular/router';
 import { Observable, merge, of as observableOf } from 'rxjs';
 import { map, startWith, switchMap, catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { AwardPlan, QuizTypeEnum, QuizTypeEnum2UIString, LogLevel, DateFormat, UserDetailInfo, UIMode } from '../model';
+import { AwardPlan, QuizTypeEnum, GetAllQuizTypeUIStrings, LogLevel, DateFormat,
+  UserDetailInfo, UIMode, QuizTypeUI } from '../model';
 import { AwardPlanService, QuizAttendUser, UserDetailService, DialogService, AuthService } from '../services';
 import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } from '../message-dialog';
-
-export interface QuizTypeUI {
-  value: QuizTypeEnum;
-  displayas: string;
-}
 
 @Component({
   selector: 'app-award-plan',
@@ -88,15 +84,7 @@ export class AwardPlanComponent implements OnInit, AfterViewInit {
 
     this.isLoadingResults = false;
     this._selUser = undefined;
-    for (const qt in QuizTypeEnum) {
-      if (!Number.isNaN(+qt)) {
-        const qtu: QuizTypeUI = {
-          value: +qt,
-          displayas: QuizTypeEnum2UIString(+qt)
-        };
-        this.listQTypes.push(qtu);
-      }
-    }
+    this.listQTypes = GetAllQuizTypeUIStrings();
 
     this.setListView();
   }

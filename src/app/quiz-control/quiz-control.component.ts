@@ -1,15 +1,8 @@
 import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
 import { QuizBasicControl, PrimarySchoolMathFAOControl, PrimarySchoolMathMixOpControl
 } from '../model';
-import { MatDialog } from '@angular/material';
-import { DialogService } from '../services/dialog.service';
-import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
-import { QuizSummaryComponent } from '../quiz-summary/quiz-summary.component';
-import { Router } from '@angular/router';
-import { PageEvent } from '@angular/material';
 import { environment } from '../../environments/environment';
 import { LogLevel, UserAuthInfo } from '../model';
-import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } from '../message-dialog';
 
 @Component({
   selector: 'app-quiz-control',
@@ -25,6 +18,8 @@ export class QuizControlComponent implements OnInit {
   set controlInstance(cin: QuizBasicControl) {
     this._controlInstance = cin;
   }
+  @Input()
+  disabled = false;
 
   get isBasicControl(): boolean {
     return this._controlInstance !== undefined
