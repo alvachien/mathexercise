@@ -1,3 +1,42 @@
-<p>
-  award-plan-detail works!
-</p>
+<div>
+  <div class="demo-full-width">
+    <mat-form-field>
+      <input matInput type="text" placeholder="{{'Home.User' | translate}}" readonly [(ngModel)]="SelectedUser.displayas">
+    </mat-form-field>
+  </div>
+
+  <div class="demo-full-width">
+    <mat-form-field>
+      <input matInput [(ngModel)]="CurrentPlan.ValidFrom" [matDatepicker]="vfmpicker" placeholder="{{'Home.ValidFrom' | translate}}">
+      <mat-datepicker-toggle matSuffix [for]="vfmpicker"></mat-datepicker-toggle>
+      <mat-datepicker #vfmpicker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="CurrentPlan.ValidTo" [matDatepicker]="vtopicker" placeholder="{{'Home.ValidTo' | translate}}">
+      <mat-datepicker-toggle matSuffix [for]="vtopicker"></mat-datepicker-toggle>
+      <mat-datepicker #vtopicker></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <mat-select class="demo-full-width" placeholder="{{'Home.Type' | translate}}" [(ngModel)]="CurrentPlan.QuizType" name="planqtype">
+    <mat-option *ngFor="let qt of listQTypes" [value]="qt.qtype">
+      {{ qt.i18term | translate }}
+    </mat-option>
+  </mat-select>
+  
+  <div class="demo-full-width" *ngIf="CurrentPlan.QuizControl" style="border: solid 1px;">
+    <app-quiz-control [controlInstance]="CurrentPlan.QuizControl"></app-quiz-control>
+  </div>
+
+  <mat-form-field class="demo-full-width">
+    <input matInput type="number" placeholder="{{'Home.Score' | translate}}" [(ngModel)]="CurrentPlan.MinQuizScore">
+  </mat-form-field>
+
+  <mat-form-field class="demo-full-width">
+    <input matInput type="number" placeholder="{{'Home.AdjAvgTimeSpentEachInSeconds' | translate}}" [(ngModel)]="CurrentPlan.MaxQuizAvgTime">
+  </mat-form-field>
+
+  <mat-form-field class="demo-full-width">
+    <input matInput type="number" placeholder="{{'Home.AwardPoint' | translate}}" [(ngModel)]="CurrentPlan.Award">
+  </mat-form-field>
+</div>
