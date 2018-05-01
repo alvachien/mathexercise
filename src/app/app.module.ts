@@ -63,6 +63,7 @@ import { PgChineseChessComponent } from './pg-chinese-chess';
 import { PgChineseChess2Component } from './pg-chinese-chess2';
 import { QuizControlComponent } from './quiz-control';
 import { AvailablePlansComponent } from './available-plans';
+import { AwardPlanDetailComponent } from './award-plan-detail';
 
 @NgModule({
   exports: [
@@ -118,6 +119,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     UsNormalComponent,
     QuizControlComponent,
     AvailablePlansComponent,
+    AwardPlanDetailComponent,
   ],
   entryComponents: [
     QuizFailureDlgComponent,
