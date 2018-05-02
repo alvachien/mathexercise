@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import {
   QuizTypeEnum, PrimarySchoolMathQuizItem, QuizTypeEnum2UIString, LogLevel, APIQuizSection, APIQuizFailLog, APIQuiz,
   AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem, DateFormat, QuizTypeUI, DateRangeUI,
-  StatisticsDateRange, StatisticsDateRangeEnum, getStatisticsDateRangeEnumString, getStatisticsDateRangeDate, GetAllQuizTypeUIStrings,
+  StatisticsDateRange, StatisticsDateRangeEnum, getAllStaticsDateRangeEnumStrings, getStatisticsDateRangeDate, GetAllQuizTypeUIStrings,
 } from '../model';
 import { AuthService, QuizAttendUser, UserDetailService } from '../services';
 import { environment } from '../../environments/environment';
@@ -93,8 +93,8 @@ export class UsNormalComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  // Quiz amount by date
   viewGraph: any[] = [700, 400];
+  // Quiz amount by date
   showXAxisQuizAmountByDate = true;
   showYAxisQuizAmountByDate = true;
   gradientQuizAmountByDate = false;
@@ -155,19 +155,7 @@ export class UsNormalComponent implements OnInit, AfterViewInit {
     });
 
     // Get date range display tring
-    for (const dr in StatisticsDateRangeEnum) {
-      if (isNaN(Number(dr))) {
-      } else {
-        const astr = getStatisticsDateRangeEnumString(Number(dr));
-
-        const dru: DateRangeUI = {
-          daterange: Number(dr),
-          i18term: astr,
-          display: ''
-        };
-        this.listRanges.push(dru);
-      }
-    }
+    this.listRanges = getAllStaticsDateRangeEnumStrings();
 
     // Other strings
     arstrs = ['Home.Amount', 'Home.Type', 'Home.Date', 'Home.CorrectedAmount', 'FailedAmount'];
@@ -330,7 +318,7 @@ export class UsNormalComponent implements OnInit, AfterViewInit {
             if (idx === -1) {
               let typename = '';
               for (const qtu of this.listqtype) {
-                if (qtu.qtype === Number(aq.quizType)) {
+                if (qtu.qtype === <QuizTypeEnum>(+aq.quizType)) {
                   typename = qtu.display;
                 }
               }

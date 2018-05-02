@@ -104,6 +104,31 @@ export function getStatisticsDateRangeEnumString(dr: StatisticsDateRangeEnum) {
   }
 }
 
+/**
+ * Get all range strings
+ */
+export function getAllStaticsDateRangeEnumStrings(): DateRangeUI[] {
+  const arRst: DateRangeUI[] = [];
+  for (const dr in StatisticsDateRangeEnum) {
+    if (isNaN(Number(dr))) {
+    } else {
+      const astr = getStatisticsDateRangeEnumString(Number(dr));
+
+      const dru: DateRangeUI = {
+        daterange: Number(dr),
+        i18term: astr,
+        display: ''
+      };
+      arRst.push(dru);
+    }
+  }
+
+  return arRst;
+}
+
+/**
+ * Statistics date range
+ */
 export interface StatisticsDateRange {
   BeginDate: moment.Moment;
   EndDate: moment.Moment;

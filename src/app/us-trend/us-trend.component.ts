@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import {
   QuizTypeEnum, PrimarySchoolMathQuizItem, QuizTypeEnum2UIString, LogLevel, APIQuizSection, APIQuizFailLog, APIQuiz,
   AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem, DateFormat, QuizTypeUI, DateRangeUI,
-  StatisticsDateRange, StatisticsDateRangeEnum, getStatisticsDateRangeEnumString, getStatisticsDateRangeDate, GetAllQuizTypeUIStrings
+  StatisticsDateRange, StatisticsDateRangeEnum, getAllStaticsDateRangeEnumStrings, getStatisticsDateRangeDate, GetAllQuizTypeUIStrings
 } from '../model';
 import { AuthService, QuizAttendUser, UserDetailService } from '../services';
 import { environment } from '../../environments/environment';
@@ -41,7 +41,7 @@ export class UsTrendComponent implements OnInit {
     private _authService: AuthService,
     private _userDetailService: UserDetailService) {
     // Get Quiz type display string
-    let arstrs: string[] = [];
+    const arstrs: string[] = [];
     this.listqtype = GetAllQuizTypeUIStrings();
     this.listqtype.forEach(value => {
       arstrs.push(value.i18term);
@@ -59,19 +59,7 @@ export class UsTrendComponent implements OnInit {
     });
 
     // Get date range display tring
-    for (const dr in StatisticsDateRangeEnum) {
-      if (isNaN(Number(dr))) {
-      } else {
-        const astr = getStatisticsDateRangeEnumString(Number(dr));
-
-        const dru: DateRangeUI = {
-          daterange: Number(dr),
-          i18term: astr,
-          display: ''
-        };
-        this.listRanges.push(dru);
-      }
-    }
+    this.listRanges = getAllStaticsDateRangeEnumStrings();
 
     // Attended user
     this._userDetailService.fetchAllUsers().subscribe((listUsrs) => {
@@ -131,8 +119,9 @@ export class UsTrendComponent implements OnInit {
           for (const si of sdata) {
             let typename = '';
             for (const qtu of this.listqtype) {
-              if (qtu.qtype === Number(si.quizType)) {
+              if (qtu.qtype === <QuizTypeEnum>(+si.quizType)) {
                 typename = qtu.display;
+                break;
               }
             }
 
@@ -166,8 +155,9 @@ export class UsTrendComponent implements OnInit {
           for (const si of sdata) {
             let typename = '';
             for (const qtu of this.listqtype) {
-              if (qtu.qtype === Number(si.quizType)) {
+              if (qtu.qtype === <QuizTypeEnum>(+si.quizType)) {
                 typename = qtu.display;
+                break;
               }
             }
 
