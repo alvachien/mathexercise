@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from './services/auth.service';
 import { UserDetailService } from './services/userdetail.service';
 import { environment } from '../environments/environment';
-import { LogLevel } from './model';
+import { LogLevel, AppLanguage, AppNavItem, AppNavItemGroupEnum } from './model';
 import * as moment from 'moment';
 import 'moment/locale/zh-cn';
 import { DateAdapter } from '@angular/material';
@@ -195,16 +195,6 @@ export class Home implements AfterViewInit {
   // }
 }
 
-export interface appNavItems {
-  name: string;
-  route: string;
-}
-
-export interface appLanguage {
-  displayas: string;
-  value: string;
-}
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -212,8 +202,8 @@ export interface appLanguage {
   encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent implements OnInit, OnDestroy {
-  public navItems: appNavItems[] = [];
-  public availableLanguages: appLanguage[] = [
+  public navItems: AppNavItem[] = [];
+  public availableLanguages: AppLanguage[] = [
     { displayas: 'Languages.en', value: 'en' },
     { displayas: 'Languages.zh', value: 'zh' }
   ];
@@ -266,20 +256,20 @@ export class AppComponent implements OnInit, OnDestroy {
     this.userDisplayAs = '';
 
     this.navItems = [
-      { name: 'Home.HomePage', route: '' },
-      { name: 'Home.AdditionExercises', route: 'add-ex' },
-      { name: 'Home.SubtractionExercises', route: 'sub-ex' },
-      { name: 'Home.MultiplicationExercises', route: 'multi-ex' },
-      { name: 'Home.DivisionExercises', route: 'divide-ex' },
-      { name: 'Home.MixedOperations', route: 'mixop-ex' },
+      { name: 'Home.HomePage', route: '', group: AppNavItemGroupEnum.home },
+      { name: 'Home.AdditionExercises', route: 'add-ex', group: AppNavItemGroupEnum.ps_basic },
+      { name: 'Home.SubtractionExercises', route: 'sub-ex', group: AppNavItemGroupEnum.ps_basic },
+      { name: 'Home.MultiplicationExercises', route: 'multi-ex', group: AppNavItemGroupEnum.ps_basic },
+      { name: 'Home.DivisionExercises', route: 'divide-ex', group: AppNavItemGroupEnum.ps_basic },
+      { name: 'Home.MixedOperations', route: 'mixop-ex', group: AppNavItemGroupEnum.ps_extend },
       // { name: 'Home.FormulaList', route: 'formula-list' },
-      { name: 'Home.FormulaExercises', route: 'formula-ex' },
-      { name: 'Home.PuzzleGames', route: 'puzz-game' },
-      { name: 'Home.AwardPlan', route: 'award-plan' },
-      { name: 'Home.AwardOverview', route: 'award-bal' },
-      { name: 'Home.RetestPreviousFailures', route: 'fail-retest' },
-      { name: 'Home.Statistics', route: 'user-stat' },
-      { name: 'Home.UserDetail', route: 'user-detail' },
+      { name: 'Home.FormulaExercises', route: 'formula-ex', group: AppNavItemGroupEnum.ps_extend },
+      { name: 'Home.PuzzleGames', route: 'puzz-game', group: AppNavItemGroupEnum.games },
+      { name: 'Home.AwardPlan', route: 'award-plan', group: AppNavItemGroupEnum.award },
+      { name: 'Home.AwardOverview', route: 'award-bal', group: AppNavItemGroupEnum.award },
+      { name: 'Home.RetestPreviousFailures', route: 'fail-retest', group: AppNavItemGroupEnum.ps_extend },
+      { name: 'Home.Statistics', route: 'user-stat', group: AppNavItemGroupEnum.report },
+      // { name: 'Home.UserDetail', route: 'user-detail', group: AppNavItemGroupEnum.ps_basic },
       // { name: 'Home.ChineseWordDictation', route: 'cnword-recite' },
       // { name: 'Home.EnglishWordDictation', route: 'enword-recite' }
     ];

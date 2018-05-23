@@ -18,6 +18,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { AppRoutes } from './app.routes';
 import { Home, AppComponent } from './app.component';
@@ -64,6 +65,7 @@ import { PgChineseChess2Component } from './pg-chinese-chess2';
 import { QuizControlComponent } from './quiz-control';
 import { AvailablePlansComponent } from './available-plans';
 import { AwardPlanDetailComponent } from './award-plan-detail';
+import { NavItemFilterPipe } from './pipes';
 
 @NgModule({
   exports: [
@@ -74,9 +76,8 @@ import { AwardPlanDetailComponent } from './award-plan-detail';
     MatRadioModule, MatSelectModule, MatSidenavModule, MatSliderModule, MatSortModule,
     MatSlideToggleModule, MatSnackBarModule, MatTableModule, MatTabsModule, MatToolbarModule,
     MatTooltipModule, MatFormFieldModule, MatExpansionModule, MatNativeDateModule,
-    CdkTableModule
+    CdkTableModule, FlexLayoutModule
   ],
-  declarations: [],
 })
 export class DSMaterialModule { }
 
@@ -120,6 +121,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     QuizControlComponent,
     AvailablePlansComponent,
     AwardPlanDetailComponent,
+    NavItemFilterPipe,
   ],
   entryComponents: [
     QuizFailureDlgComponent,

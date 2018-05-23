@@ -151,7 +151,10 @@
     "Reset": "Reset",
     "Underconstruction": "Page still under construction",
     "StandardReport": "Standard Report",
-    "TrendReport": "Trend Report"
+    "TrendReport": "Trend Report",
+    "PrimarySchoolBasicMath": "Basic Math of P.S.",
+    "PrimarySchoolExtendMath": "Extended Math of P.S.",
+    "About": "About"
   },
   "Math": {
     "Sum": "Sum",

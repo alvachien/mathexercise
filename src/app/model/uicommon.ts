@@ -216,3 +216,34 @@ export function getCanvasCellPosition(cavpos: CanvasMousePositionInf, cellWidth:
     column: Math.floor(cavpos.x / cellWidth),
   };
 }
+
+/**
+ * Group of nav. item
+ */
+export enum AppNavItemGroupEnum {
+  home = 0,
+  ps_basic  = 1,
+  ps_extend = 2,
+  games = 3,
+  award = 4,
+  report = 5,
+  others = 10
+}
+
+/**
+ * Nav. item
+ */
+export interface AppNavItem {
+  name: string;
+  route: string;
+  group: AppNavItemGroupEnum;
+}
+
+/**
+ * App. language
+ */
+export interface AppLanguage {
+  displayas: string;
+  value: string;
+}
+

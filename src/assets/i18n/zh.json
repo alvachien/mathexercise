@@ -151,7 +151,10 @@
     "Reset": "重置",
     "Underconstruction": "当前页还在开发中",
     "StandardReport": "标准报表",
-    "TrendReport": "趋势报表"
+    "TrendReport": "趋势报表",
+    "PrimarySchoolBasicMath": "小学数学基础",
+    "PrimarySchoolExtendMath": "小学数学强化",
+    "About": "关于"
   },
   "Math": {
     "Sum": "和",
