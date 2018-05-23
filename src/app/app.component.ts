@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, NgZone, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation, NgZone, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl, SafeUrl  } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -9,9 +9,10 @@ import { LogLevel } from './model';
 import * as moment from 'moment';
 import 'moment/locale/zh-cn';
 import { DateAdapter } from '@angular/material';
-import { Observable, forkJoin } from 'rxjs';
+import { Observable, forkJoin, Subscription } from 'rxjs';
 import { map, merge, startWith } from 'rxjs/operators';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { MediaChange, ObservableMedia } from '@angular/flex-layout';
 
 @Component({
   selector: 'app-root-home',
@@ -210,7 +211,7 @@ export interface appLanguage {
   styleUrls: ['./app.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   public navItems: appNavItems[] = [];
   public availableLanguages: appLanguage[] = [
     { displayas: 'Languages.en', value: 'en' },
@@ -219,6 +220,9 @@ export class AppComponent implements OnInit {
   public isLoggedIn: boolean;
   public titleLogin: string;
   public userDisplayAs: string;
+  private _watcherMedia: Subscription;
+  public isXSScreen = false;
+  public sidenavMode: string;
 
   private _selLanguage: string;
   get selectedLanguage(): string {
@@ -238,7 +242,26 @@ export class AppComponent implements OnInit {
     private _userDetailService: UserDetailService,
     private _zone: NgZone,
     private _router: Router,
+    private _media: ObservableMedia,
     private _dateAdapter: DateAdapter<MomentDateAdapter>) {
+    this._watcherMedia = this._media.subscribe((change: MediaChange) => {
+      if (environment.LoggingLevel >= LogLevel.Debug) {
+        console.log(`ACGallery [Debug]: Entering constructor of AppComponent: ${change.mqAlias} = (${change.mediaQuery})`);
+      }
+      // xs	'screen and (max-width: 599px)'
+      // sm	'screen and (min-width: 600px) and (max-width: 959px)'
+      // md	'screen and (min-width: 960px) and (max-width: 1279px)'
+      // lg	'screen and (min-width: 1280px) and (max-width: 1919px)'
+      // xl	'screen and (min-width: 1920px) and (max-width: 5000px)'
+      if ( change.mqAlias === 'xs') {
+        this.isXSScreen = true;
+        this.sidenavMode = 'over';
+      } else {
+        this.isXSScreen = false;
+        this.sidenavMode = 'side';
+      }
+    });
+
     // Setup the translate
     this.userDisplayAs = '';
 
@@ -300,6 +323,10 @@ export class AppComponent implements OnInit {
       this._dateAdapter.setLocale('zh-cn');
       this.updateDocumentTitle();
     });
+  }
+
+  ngOnDestroy() {
+    this._watcherMedia.unsubscribe();
   }
 
   public onLogon() {
