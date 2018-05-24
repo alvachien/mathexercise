@@ -350,9 +350,6 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onOpenGithubRepo(): void {
-    window.open('https://github.com/alvachien/mathexercise', '_blank');
-  }
   public onOpenHIH(): void {
     window.open(environment.AppHIH, '_blank');
   }

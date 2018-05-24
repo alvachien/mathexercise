@@ -129,33 +129,9 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-      <router-outlet></router-outlet>
+      <div class="me-content">
+        <router-outlet></router-outlet>
+      </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
-
-<!-- <mat-sidenav-container class="demo-root" fullscreen>
-  <mat-sidenav #start [mode]="sidenavMode" [fixedInViewport]="isXSScreen" fixedTopGap="56">
-    <div *ngIf="isLoggedIn" class="card">
-      <div class="card-body">
-        <h4 class="card-title text-muted">{{titleLogin}}</h4>
-        <h6 class="card-subtitle mb-2 text-muted">{{userDisplayAs}}</h6>
-        <button (click)="onLogout()" mat-button style="background: #525252;">{{'Home.Logout' | translate}}</button>
-      </div>
-    </div>
-
-    <mat-nav-list dense>
-      <a *ngFor="let navItem of navItems; let i = index" mat-list-item (click)="start.close()" [routerLink]="[navItem.route]">
-        {{i}} - {{navItem.name | translate}}
-      </a>
-    </mat-nav-list>
-    <hr />
-    <button mat-button (click)="start.close()">{{'Home.CloseButton' | translate}}</button>
-  </mat-sidenav>
-
-  <div>
-    <div class="me-content">
-      <router-outlet></router-outlet>
-    </div>
-  </div>
-</mat-sidenav-container> -->
