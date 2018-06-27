@@ -66,6 +66,9 @@ import { QuizControlComponent } from './quiz-control';
 import { AvailablePlansComponent } from './available-plans';
 import { AwardPlanDetailComponent } from './award-plan-detail';
 import { NavItemFilterPipe } from './pipes';
+import { QuestionBankComponent } from './question-bank';
+import { QuestionBankDetailComponent } from './question-bank-detail';
+import { PrintableQuizGeneratorComponent } from './printable-quiz-generator';
 
 @NgModule({
   exports: [
@@ -78,6 +81,7 @@ import { NavItemFilterPipe } from './pipes';
     MatTooltipModule, MatFormFieldModule, MatExpansionModule, MatNativeDateModule,
     CdkTableModule, FlexLayoutModule
   ],
+  declarations: [],
 })
 export class DSMaterialModule { }
 
@@ -122,6 +126,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     AvailablePlansComponent,
     AwardPlanDetailComponent,
     NavItemFilterPipe,
+    QuestionBankComponent,
+    QuestionBankDetailComponent,
+    PrintableQuizGeneratorComponent
   ],
   entryComponents: [
     QuizFailureDlgComponent,

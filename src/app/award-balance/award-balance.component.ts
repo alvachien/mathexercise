@@ -181,7 +181,7 @@ export class AwardBalanceComponent implements OnInit {
             disableClose: false,
             width: '500px',
             data: dlginfo
-          }).afterClosed().subscribe(x => {
+          }).afterClosed().subscribe((x2: any) => {
             // Do nothing!
             this._curMode = UIMode.ListView;
             this.curAward = null;
@@ -199,7 +199,7 @@ export class AwardBalanceComponent implements OnInit {
             data: dlginfo
           }).afterClosed().subscribe(x2 => {
             // Do nothing!
-            //this.setListView();
+            // this.setListView();
           });
         }
       });
@@ -224,7 +224,7 @@ export class AwardBalanceComponent implements OnInit {
             disableClose: false,
             width: '500px',
             data: dlginfo
-          }).afterClosed().subscribe(x => {
+          }).afterClosed().subscribe((x2: any) => {
             // Do nothing!
             this._curMode = UIMode.ListView;
             this.curAward = null;
@@ -242,7 +242,7 @@ export class AwardBalanceComponent implements OnInit {
             data: dlginfo
           }).afterClosed().subscribe(x2 => {
             // Do nothing!
-            //this.setListView();
+            // this.setListView();
           });
         }
       });
@@ -269,7 +269,7 @@ export class AwardBalanceComponent implements OnInit {
       data: dlginfo
     }).afterClosed().subscribe(x => {
       if (x) {
-        this._abService.deleteEvent.subscribe(x => {
+        this._abService.deleteEvent.subscribe((x2: any) => {
           this.curAward = null;
           this._curMode = UIMode.ListView;
         }, error => {

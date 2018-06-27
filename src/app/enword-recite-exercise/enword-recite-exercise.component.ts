@@ -165,10 +165,10 @@ export class EnwordReciteExerciseComponent implements OnInit, AfterViewInit {
         this.audioER.nativeElement.play();
         setTimeout(() => {
           this.onPlayNextRecord();
-        }, 1000 * (this.contentList[this.idxSequence[this.idxContent]].endpoint - this.contentList[this.idxSequence[this.idxContent]].beginpoint));
+        }, 1000 * (this.contentList[this.idxSequence[this.idxContent]].endpoint
+          - this.contentList[this.idxSequence[this.idxContent]].beginpoint));
       }
-    }
-    catch (exp) {
+    } catch (exp) {
       console.error(exp);
     }
   }
@@ -198,7 +198,8 @@ export class EnwordReciteExerciseComponent implements OnInit, AfterViewInit {
       this.audioER.nativeElement.play();
       setTimeout(() => {
         this.onPlayNextRecord();
-      }, 1000 * (this.contentList[this.idxSequence[this.idxContent]].endpoint - this.contentList[this.idxSequence[this.idxContent]].beginpoint));
+      }, 1000 * (this.contentList[this.idxSequence[this.idxContent]].endpoint
+        - this.contentList[this.idxSequence[this.idxContent]].beginpoint));
     } else {
       // Completed
       this.IsQuizStarted = false;

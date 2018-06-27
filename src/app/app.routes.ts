@@ -18,6 +18,9 @@ import { AwardPlanComponent } from './award-plan';
 import { AwardBalanceComponent } from './award-balance';
 import { EnwordReciteExerciseComponent } from './enword-recite-exercise';
 import { CnwordReciteExerciseComponent } from './cnword-recite-exercise';
+import { QuestionBankComponent } from './question-bank';
+import { QuestionBankDetailComponent } from './question-bank-detail';
+import { PrintableQuizGeneratorComponent } from './printable-quiz-generator';
 
 export const AppRoutes: Routes = [
   { path: '', component: Home },
@@ -35,6 +38,9 @@ export const AppRoutes: Routes = [
   { path: 'mixop-ex', component: MixedopExerciseComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateGuard] },
   { path: 'award-plan', component: AwardPlanComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateGuard] },
   { path: 'award-bal', component: AwardBalanceComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateGuard] },
+  { path: 'print-quiz', component: PrintableQuizGeneratorComponent, canActivate: [AuthGuard] },
+  { path: 'qtnbnk-list', component: QuestionBankComponent, canActivate: [AuthGuard] },
+  { path: 'qtnbnk-detail', component: QuestionBankDetailComponent, canActivate: [AuthGuard] },
   { path: 'enword-recite', component: EnwordReciteExerciseComponent, canActivate: [AuthGuard] },
   { path: 'cnword-recite', component: CnwordReciteExerciseComponent, canActivate: [AuthGuard] },
 ];
