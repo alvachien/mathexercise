@@ -7,10 +7,15 @@ import * as jsPDF from 'jspdf';
   styleUrls: ['./printable-quiz-generator.component.scss']
 })
 export class PrintableQuizGeneratorComponent implements OnInit {
+  amountQuiz: number;
+  additionRate: number;
 
   constructor() { }
 
   ngOnInit() {
   }
 
+  onSubmit(): void {
+    // Do nothing
+  }
 }

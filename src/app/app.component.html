@@ -35,12 +35,12 @@
     </mat-menu>
 
     <button mat-icon-button (click)="toggleFullscreen()" title="Toggle fullscreen" matTooltip="{{'Home.FullScreen' | translate }}">
-      <mat-icon color="accent" class="mat-24">fullscreen</mat-icon>
+      <mat-icon>fullscreen</mat-icon>
     </button>
 
-    <a mat-icon-button href="https://github.com/alvachien/mathexercise" aria-label="GitHub Repository">
+    <button mat-icon-button href="https://github.com/alvachien/mathexercise" aria-label="GitHub Repository">
       <mat-icon>code</mat-icon>
-    </a>
+    </button>
 
     <button mat-icon-button mat-button [matMenuTriggerFor]="matMenuApps">
       <mat-icon>apps</mat-icon>
@@ -88,10 +88,10 @@
         </mat-expansion-panel>
         <mat-expansion-panel hideToggle="false">
           <mat-expansion-panel-header>
-            <mat-panel-title>{{'Home.PuzzleGames' | translate}}</mat-panel-title>
+            <mat-panel-title>{{'Home.Others' | translate}}</mat-panel-title>
           </mat-expansion-panel-header>
           <mat-nav-list>
-            <a *ngFor="let navItem of navItems | navItemFilter: 3" mat-list-item (click)="snav.close()" [routerLink]="[navItem.route]">
+            <a *ngFor="let navItem of navItems | navItemFilter: 10" mat-list-item (click)="snav.close()" [routerLink]="[navItem.route]">
               {{navItem.name | translate}}
             </a>
           </mat-nav-list>
