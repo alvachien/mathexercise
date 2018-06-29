@@ -3,12 +3,25 @@
     <mat-card-title>{{'Home.PrintableQuizGenerator' | translate}}</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <mat-form-field class="controller-full-width">
-      <input matInput type="number" placeholder="{{'Home.QuizAmount' | translate}}" [(ngModel)]="amountQuiz">
+    <mat-form-field class="control-full-width">
+      <input matInput type="number" placeholder="{{'Home.QuizAmount' | translate}}" [(ngModel)]="amountAddQuiz">
+    </mat-form-field>
+    <mat-form-field class="control-full-width">
+      <input matInput type="number" placeholder="{{'Home.QuizAmount' | translate}}" [(ngModel)]="amountSubQuiz">
+    </mat-form-field>
+    <mat-form-field class="control-full-width">
+      <input matInput type="number" placeholder="{{'Home.QuizAmount' | translate}}" [(ngModel)]="amountMulQuiz">
+    </mat-form-field>
+    <mat-form-field class="control-full-width">
+      <input matInput type="number" placeholder="{{'Home.QuizAmount' | translate}}" [(ngModel)]="amountDivQuiz">
     </mat-form-field>
   
-    <mat-form-field class="controller-full-width">
-      <input matInput type="number" placeholder="{{'Home.AdditionRate' | translate}}" [(ngModel)]="additionRate">
+    <mat-form-field>
+      <input matInput type="number" placeholder="{{'Math.DecimalPlaces' | translate}}" [(ngModel)]="decimalPlaces" name="dmlPlaces"
+        required>
     </mat-form-field>
   </mat-card-content>
+  <mat-card-actions>
+    <button mat-button (click)="onGenerate()">{{'Home.SubmitButton' | translate }}</button>
+  </mat-card-actions>
 </mat-card>
