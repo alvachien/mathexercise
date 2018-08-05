@@ -16,7 +16,7 @@ export class PrintableQuizGeneratorComponent implements OnInit {
   numberBegin: number;
   numberEnd: number;
 
-  constructor() { 
+  constructor() {
     this.amountAddQuiz = 12;
     this.amountSubQuiz = 12;
     this.amountMulQuiz = 12;
@@ -81,15 +81,15 @@ export class PrintableQuizGeneratorComponent implements OnInit {
       for(let idx2 = 0; idx2 < nrow; idx2 ++) {
         let ielem: number = idx2 * itemsPerRow;
         if (ielem < this.amountAddQuiz) {
-          doc.text(arAdd[ielem].getQuizFormat(), 5, nypos);  
+          doc.text(arAdd[ielem].getQuizFormat(), 5, nypos);
           ielem ++;
         }
         if (ielem < this.amountAddQuiz) {
-          doc.text(arAdd[ielem].getQuizFormat(), 70, nypos);  
+          doc.text(arAdd[ielem].getQuizFormat(), 70, nypos);
           ielem ++;
         }
         if (ielem < this.amountAddQuiz) {
-          doc.text(arAdd[ielem].getQuizFormat(), 135, nypos);  
+          doc.text(arAdd[ielem].getQuizFormat(), 135, nypos);
           ielem ++;
         }
 
@@ -108,15 +108,15 @@ export class PrintableQuizGeneratorComponent implements OnInit {
       for(let idx2 = 0; idx2 < nrow; idx2 ++) {
         let ielem: number = idx2 * itemsPerRow;
         if (ielem < this.amountSubQuiz) {
-          doc.text(arSub[ielem].getQuizFormat(), 5, nypos);  
+          doc.text(arSub[ielem].getQuizFormat(), 5, nypos);
           ielem ++;
         }
         if (ielem < this.amountSubQuiz) {
-          doc.text(arSub[ielem].getQuizFormat(), 70, nypos);  
+          doc.text(arSub[ielem].getQuizFormat(), 70, nypos);
           ielem ++;
         }
         if (ielem < this.amountSubQuiz) {
-          doc.text(arSub[ielem].getQuizFormat(), 135, nypos);  
+          doc.text(arSub[ielem].getQuizFormat(), 135, nypos);
           ielem ++;
         }
         nypos += 10;
@@ -134,15 +134,15 @@ export class PrintableQuizGeneratorComponent implements OnInit {
       for(let idx2 = 0; idx2 < nrow; idx2 ++) {
         let ielem: number = idx2 * itemsPerRow;
         if (ielem < this.amountMulQuiz) {
-          doc.text(arMul[ielem].getQuizFormat(), 5, nypos);  
+          doc.text(arMul[ielem].getQuizFormat(), 5, nypos);
           ielem ++;
         }
         if (ielem < this.amountMulQuiz) {
-          doc.text(arMul[ielem].getQuizFormat(), 70, nypos);  
+          doc.text(arMul[ielem].getQuizFormat(), 70, nypos);
           ielem ++;
         }
         if (ielem < this.amountMulQuiz) {
-          doc.text(arMul[ielem].getQuizFormat(), 135, nypos);  
+          doc.text(arMul[ielem].getQuizFormat(), 135, nypos);
           ielem ++;
         }
         nypos += 10;
@@ -160,15 +160,15 @@ export class PrintableQuizGeneratorComponent implements OnInit {
       for(let idx2 = 0; idx2 < nrow; idx2 ++) {
         let ielem: number = idx2 * itemsPerRow;
         if (ielem < this.amountDivQuiz) {
-          doc.text(arDiv[ielem].getQuizFormat(), 5, nypos);  
+          doc.text(arDiv[ielem].getQuizFormat(), 5, nypos);
           ielem ++;
         }
         if (ielem < this.amountDivQuiz) {
-          doc.text(arDiv[ielem].getQuizFormat(), 70, nypos);  
+          doc.text(arDiv[ielem].getQuizFormat(), 70, nypos);
           ielem ++;
         }
         if (ielem < this.amountDivQuiz) {
-          doc.text(arDiv[ielem].getQuizFormat(), 135, nypos);  
+          doc.text(arDiv[ielem].getQuizFormat(), 135, nypos);
           ielem ++;
         }
         nypos += 10;
@@ -179,14 +179,14 @@ export class PrintableQuizGeneratorComponent implements OnInit {
       }
     }
 
-    doc.save('test.pdf');
+    doc.save('quiz.pdf');
   }
 
   // Generate add
   private generateAddQuizItem(idx: number): AdditionQuizItem {
     const rnum1 = Math.random() * (this.numberEnd - this.numberBegin) + this.numberBegin;
     const rnum2 = Math.random() * (this.numberEnd - this.numberBegin) + this.numberBegin;
-    const qz: AdditionQuizItem = new AdditionQuizItem(rnum1, rnum2, 2);
+    const qz: AdditionQuizItem = new AdditionQuizItem(rnum1, rnum2, this.decimalPlaces);
     qz.QuizIndex = idx;
     return qz;
   }
@@ -195,13 +195,13 @@ export class PrintableQuizGeneratorComponent implements OnInit {
     const rnum1 = Math.random() * (this.numberEnd - this.numberBegin) + this.numberBegin;
     const rnum2 = Math.random() * (this.numberEnd - this.numberBegin) + this.numberBegin;
     if (rnum1 > rnum2) {
-      const qz: SubtractionQuizItem = new SubtractionQuizItem(rnum1, rnum2, 2);
+      const qz: SubtractionQuizItem = new SubtractionQuizItem(rnum1, rnum2, this.decimalPlaces);
       qz.QuizIndex = idx;
-      return qz;  
+      return qz;
     } else {
-      const qz: SubtractionQuizItem = new SubtractionQuizItem(rnum2, rnum1, 2);
+      const qz: SubtractionQuizItem = new SubtractionQuizItem(rnum2, rnum1, this.decimalPlaces);
       qz.QuizIndex = idx;
-      return qz;  
+      return qz;
     }
   }
   // Generate multiply
@@ -209,7 +209,7 @@ export class PrintableQuizGeneratorComponent implements OnInit {
     const rnum1 = Math.random() * (this.numberEnd - this.numberBegin) + this.numberBegin;
     const rnum2 = Math.random() * (this.numberEnd - this.numberBegin) + this.numberBegin;
     const qz: MultiplicationQuizItem = new MultiplicationQuizItem(
-      rnum1, rnum2, 2
+      rnum1, rnum2, this.decimalPlaces
     );
     qz.QuizIndex = idx;
     return qz;
@@ -219,15 +219,15 @@ export class PrintableQuizGeneratorComponent implements OnInit {
     const rnum1 = Math.random() * (this.numberEnd - this.numberBegin) + this.numberBegin;
     const rnum2 = Math.random() * (this.numberEnd - this.numberBegin) + this.numberBegin;
     if (rnum1 > rnum2) {
-      const dq: DivisionQuizItem = new DivisionQuizItem(rnum1, rnum2, 2);
+      const dq: DivisionQuizItem = new DivisionQuizItem(rnum1, rnum2, this.decimalPlaces);
       dq.QuizIndex = nIdx;
-  
-      return dq;  
+
+      return dq;
     } else {
-      const dq: DivisionQuizItem = new DivisionQuizItem(rnum2, rnum1, 2);
+      const dq: DivisionQuizItem = new DivisionQuizItem(rnum2, rnum1, this.decimalPlaces);
       dq.QuizIndex = nIdx;
-  
-      return dq;  
+
+      return dq;
     }
   }
 }
