@@ -158,7 +158,8 @@
     "TrendReport": "趋势报表",
     "PrimarySchoolBasicMath": "小学数学基础",
     "PrimarySchoolExtendMath": "小学数学强化",
-    "About": "关于"
+    "About": "关于",
+    "FontSize": "字体大小"
   },
   "Math": {
     "Sum": "和",

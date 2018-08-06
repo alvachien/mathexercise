@@ -28,6 +28,10 @@
       <input matInput type="number" placeholder="{{'Math.Scope' | translate}}" [(ngModel)]="numberEnd" name="nrend"
         required>
     </mat-form-field>
+    <mat-divider></mat-divider>
+    <mat-form-field class="control-full-width">
+      <input matInput type="number" placeholder="{{'Home.FontSize' | translate}}" [(ngModel)]="fontSize">
+    </mat-form-field>
   </mat-card-content>
   <mat-card-actions>
     <button mat-button (click)="onGenerate()">{{'Home.SubmitButton' | translate }}</button>

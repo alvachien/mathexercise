@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import * as jsPDF from 'jspdf';
-import { AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem } from '../model';
+import { AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem,
+  QuizTypeEnum, QuizTypeEnum2UIString } from '../model';
 
 @Component({
   selector: 'app-printable-quiz-generator',
@@ -8,6 +10,9 @@ import { AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, Division
   styleUrls: ['./printable-quiz-generator.component.scss'],
 })
 export class PrintableQuizGeneratorComponent implements OnInit {
+  private _leftStart: number;
+  private _arSubstr: any[];
+
   amountAddQuiz: number;
   amountSubQuiz: number;
   amountMulQuiz: number;
@@ -15,8 +20,29 @@ export class PrintableQuizGeneratorComponent implements OnInit {
   decimalPlaces: number;
   numberBegin: number;
   numberEnd: number;
+  fontSize: number;
 
-  constructor() {
+  constructor(private _tranService: TranslateService) {
+    this._leftStart = 15;
+    this._arSubstr = [];
+    this._arSubstr.push({
+      qtype: QuizTypeEnum.add,
+      i18n: QuizTypeEnum2UIString(QuizTypeEnum.add),
+      display: ''
+    }, {
+      qtype: QuizTypeEnum.sub,
+      i18n: QuizTypeEnum2UIString(QuizTypeEnum.sub),
+      display: ''
+    }, {
+      qtype: QuizTypeEnum.multi,
+      i18n: QuizTypeEnum2UIString(QuizTypeEnum.multi),
+      display: ''
+    }, {
+      qtype: QuizTypeEnum.div,
+      i18n: QuizTypeEnum2UIString(QuizTypeEnum.div),
+      display: ''
+    });
+
     this.amountAddQuiz = 12;
     this.amountSubQuiz = 12;
     this.amountMulQuiz = 12;
@@ -24,9 +50,23 @@ export class PrintableQuizGeneratorComponent implements OnInit {
     this.decimalPlaces = 2;
     this.numberBegin = 1;
     this.numberEnd = 100;
+    this.fontSize = 10;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    let arstring: string[];
+    this._arSubstr.forEach((val: any) => {
+      arstring.push(val.i18n);
+    });
+    this._tranService.get(arstring).subscribe((x: any) => {
+      for (let attr in x) {
+        for (let lab of this._arSubstr) {
+          if (lab.i18n === attr) {
+            lab.display = x[attr];
+          }
+        }
+      }
+    });
   }
 
   onGenerate(): void {
@@ -67,21 +107,20 @@ export class PrintableQuizGeneratorComponent implements OnInit {
 
     // Generate
     const doc: any = new jsPDF();
-    doc.setFontSize(10);
+    doc.setFontSize(this.fontSize);
 
     // Generate the codes
     let nrow: number = 0;
     let nypos: number = 10;
     if (arAdd.length > 0) {
-
-      doc.text("1. Additional Quiz", 10, nypos);
+      doc.text(this._arSubstr[0].display, 10, nypos);
       nypos += 10;
 
       nrow = Math.ceil(this.amountAddQuiz / itemsPerRow);
       for(let idx2 = 0; idx2 < nrow; idx2 ++) {
         let ielem: number = idx2 * itemsPerRow;
         if (ielem < this.amountAddQuiz) {
-          doc.text(arAdd[ielem].getQuizFormat(), 5, nypos);
+          doc.text(arAdd[ielem].getQuizFormat(), 10, nypos);
           ielem ++;
         }
         if (ielem < this.amountAddQuiz) {
@@ -89,7 +128,7 @@ export class PrintableQuizGeneratorComponent implements OnInit {
           ielem ++;
         }
         if (ielem < this.amountAddQuiz) {
-          doc.text(arAdd[ielem].getQuizFormat(), 135, nypos);
+          doc.text(arAdd[ielem].getQuizFormat(), 130, nypos);
           ielem ++;
         }
 
@@ -101,14 +140,14 @@ export class PrintableQuizGeneratorComponent implements OnInit {
       }
     }
     if (arSub.length > 0) {
-      doc.text("2. Subtraction Quiz", 10, nypos);
+      doc.text(this._arSubstr[1].display, 10, nypos);
       nypos += 10;
 
       nrow = Math.ceil(this.amountSubQuiz / itemsPerRow);
       for(let idx2 = 0; idx2 < nrow; idx2 ++) {
         let ielem: number = idx2 * itemsPerRow;
         if (ielem < this.amountSubQuiz) {
-          doc.text(arSub[ielem].getQuizFormat(), 5, nypos);
+          doc.text(arSub[ielem].getQuizFormat(), 10, nypos);
           ielem ++;
         }
         if (ielem < this.amountSubQuiz) {
@@ -116,7 +155,7 @@ export class PrintableQuizGeneratorComponent implements OnInit {
           ielem ++;
         }
         if (ielem < this.amountSubQuiz) {
-          doc.text(arSub[ielem].getQuizFormat(), 135, nypos);
+          doc.text(arSub[ielem].getQuizFormat(), 130, nypos);
           ielem ++;
         }
         nypos += 10;
@@ -127,14 +166,14 @@ export class PrintableQuizGeneratorComponent implements OnInit {
       }
     }
     if (arMul.length > 0) {
-      doc.text("3. Multiplication Quiz", 10, nypos);
+      doc.text(this._arSubstr[2].display, 10, nypos);
       nypos += 10;
 
       nrow = Math.ceil(this.amountMulQuiz / itemsPerRow);
       for(let idx2 = 0; idx2 < nrow; idx2 ++) {
         let ielem: number = idx2 * itemsPerRow;
         if (ielem < this.amountMulQuiz) {
-          doc.text(arMul[ielem].getQuizFormat(), 5, nypos);
+          doc.text(arMul[ielem].getQuizFormat(), 10, nypos);
           ielem ++;
         }
         if (ielem < this.amountMulQuiz) {
@@ -142,7 +181,7 @@ export class PrintableQuizGeneratorComponent implements OnInit {
           ielem ++;
         }
         if (ielem < this.amountMulQuiz) {
-          doc.text(arMul[ielem].getQuizFormat(), 135, nypos);
+          doc.text(arMul[ielem].getQuizFormat(), 130, nypos);
           ielem ++;
         }
         nypos += 10;
@@ -153,14 +192,14 @@ export class PrintableQuizGeneratorComponent implements OnInit {
       }
     }
     if (arDiv.length > 0) {
-      doc.text("4. Division Quiz", 10, nypos);
+      doc.text(this._arSubstr[3].display, 10, nypos);
       nypos += 10;
 
       nrow = Math.ceil(this.amountDivQuiz / itemsPerRow);
       for(let idx2 = 0; idx2 < nrow; idx2 ++) {
         let ielem: number = idx2 * itemsPerRow;
         if (ielem < this.amountDivQuiz) {
-          doc.text(arDiv[ielem].getQuizFormat(), 5, nypos);
+          doc.text(arDiv[ielem].getQuizFormat(), 10, nypos);
           ielem ++;
         }
         if (ielem < this.amountDivQuiz) {
@@ -168,7 +207,7 @@ export class PrintableQuizGeneratorComponent implements OnInit {
           ielem ++;
         }
         if (ielem < this.amountDivQuiz) {
-          doc.text(arDiv[ielem].getQuizFormat(), 135, nypos);
+          doc.text(arDiv[ielem].getQuizFormat(), 130, nypos);
           ielem ++;
         }
         nypos += 10;

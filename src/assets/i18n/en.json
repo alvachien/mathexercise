@@ -158,7 +158,8 @@
     "TrendReport": "Trend Report",
     "PrimarySchoolBasicMath": "Basic Math of P.S.",
     "PrimarySchoolExtendMath": "Extended Math of P.S.",
-    "About": "About"
+    "About": "About",
+    "FontSize": "Font Size"
   },
   "Math": {
     "Sum": "Sum",
