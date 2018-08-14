@@ -42,6 +42,7 @@
     "howler": "^2.0.13",
     "jquery": "^3.2.1",
     "jspdf": "^1.4.1",
+    "jspdf-customfonts": "0.0.4-rc.3",
     "moment": "^2.22.2",
     "oidc-client": "^1.5.1",
     "popper.js": "^1.14.3",
