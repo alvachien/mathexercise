@@ -9,7 +9,7 @@
     <button mat-icon-button *ngIf="!isLoggedIn" (click)="onLogon()" title="Logon" matTooltip="{{'Home.Logon' | translate }}">
       <mat-icon>account_box</mat-icon>
     </button>
-    <button mat-icon-button *ngIf="isLoggedIn" [matMenuTriggerFor]="matMenuUser">
+    <button mat-icon-button *ngIf="isLoggedIn" [matMenuTriggerFor]="matMenuUser" matTooltip="{{'Home.UserDetail' | translate }}">
       <mat-icon>account_box</mat-icon>
     </button>
     <mat-menu #matMenuUser="matMenu" overlapTrigger="false" xPosition="after" yPosition="below">
@@ -24,7 +24,7 @@
       </button>
     </mat-menu>
 
-    <button mat-icon-button mat-button [matMenuTriggerFor]="matMenuLanguage">
+    <button mat-icon-button mat-button matTooltip="{{'Home.Language' | translate }}" [matMenuTriggerFor]="matMenuLanguage">
       <mat-icon>language</mat-icon>
     </button>
     <mat-menu #matMenuLanguage="matMenu" overlapTrigger="false" xPosition="after" yPosition="below">
@@ -38,13 +38,14 @@
       <mat-icon>fullscreen</mat-icon>
     </button>
 
-    <button mat-icon-button href="https://github.com/alvachien/mathexercise" aria-label="GitHub Repository">
+    <button mat-icon-button (click)="launchSourceCode()" href="https://github.com/alvachien/mathexercise" aria-label="GitHub Repository">
       <mat-icon>code</mat-icon>
     </button>
 
     <button mat-icon-button mat-button [matMenuTriggerFor]="matMenuApps">
       <mat-icon>apps</mat-icon>
     </button>
+
     <mat-menu #matMenuApps="matMenu" overlapTrigger="false" xPosition="after" yPosition="below">
       <button mat-menu-item disabled>{{'Home.MathExercise' | translate}}</button>
       <button mat-menu-item (click)="onOpenHIH()">H.I.H.</button>
@@ -58,7 +59,9 @@
       <mat-accordion class="sidenav-headers-align">
         <mat-expansion-panel hideToggle="false">
           <mat-expansion-panel-header>
-            <mat-panel-title><mat-icon>home</mat-icon> {{'Home.HomePage' | translate}}</mat-panel-title>
+            <mat-panel-title>
+              <mat-icon>home</mat-icon> {{'Home.HomePage' | translate}}
+            </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-nav-list>
             <a *ngFor="let navItem of navItems | navItemFilter: 0" mat-list-item (click)="snav.close()" [routerLink]="[navItem.route]">
@@ -68,7 +71,9 @@
         </mat-expansion-panel>
         <mat-expansion-panel hideToggle="false">
           <mat-expansion-panel-header>
-            <mat-panel-title>{{'Home.PrimarySchoolBasicMath' | translate}}</mat-panel-title>
+            <mat-panel-title>
+              <mat-icon>school</mat-icon>{{'Home.PrimarySchoolBasicMath' | translate}}
+            </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-nav-list>
             <a *ngFor="let navItem of navItems | navItemFilter: 1" mat-list-item (click)="snav.close()" [routerLink]="[navItem.route]">
@@ -78,7 +83,9 @@
         </mat-expansion-panel>
         <mat-expansion-panel hideToggle="false">
           <mat-expansion-panel-header>
-            <mat-panel-title>{{'Home.PrimarySchoolExtendMath' | translate}}</mat-panel-title>
+            <mat-panel-title>
+              <mat-icon>flight_takeoff</mat-icon>{{'Home.PrimarySchoolExtendMath' | translate}}
+            </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-nav-list>
             <a *ngFor="let navItem of navItems | navItemFilter: 2" mat-list-item (click)="snav.close()" [routerLink]="[navItem.route]">
@@ -88,7 +95,9 @@
         </mat-expansion-panel>
         <mat-expansion-panel hideToggle="false">
           <mat-expansion-panel-header>
-            <mat-panel-title>{{'Home.Others' | translate}}</mat-panel-title>
+            <mat-panel-title>
+              <mat-icon>public</mat-icon>{{'Home.Others' | translate}}
+            </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-nav-list>
             <a *ngFor="let navItem of navItems | navItemFilter: 10" mat-list-item (click)="snav.close()" [routerLink]="[navItem.route]">
@@ -98,7 +107,9 @@
         </mat-expansion-panel>
         <mat-expansion-panel hideToggle="false">
           <mat-expansion-panel-header>
-            <mat-panel-title>{{'Home.Award' | translate}}</mat-panel-title>
+            <mat-panel-title>
+              <mat-icon>thumb_up_alt</mat-icon>{{'Home.Award' | translate}}
+            </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-nav-list>
             <a *ngFor="let navItem of navItems | navItemFilter: 4" mat-list-item (click)="snav.close()" [routerLink]="[navItem.route]">
@@ -108,7 +119,9 @@
         </mat-expansion-panel>
         <mat-expansion-panel hideToggle="false">
           <mat-expansion-panel-header>
-            <mat-panel-title>{{'Home.Statistics' | translate}}</mat-panel-title>
+            <mat-panel-title>
+              <mat-icon>poll</mat-icon>{{'Home.Statistics' | translate}}
+            </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-nav-list>
             <a *ngFor="let navItem of navItems | navItemFilter: 5" mat-list-item (click)="snav.close()" [routerLink]="[navItem.route]">
@@ -119,7 +132,8 @@
         <mat-expansion-panel hideToggle="false">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              <mat-icon>info</mat-icon>{{'Home.About' | translate}}</mat-panel-title>
+              <mat-icon>info</mat-icon>{{'Home.About' | translate}}
+            </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-nav-list>
             <a mat-list-item routerLink="/about" routerLinkActive="active">{{'Home.About' | translate}}</a>
