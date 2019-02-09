@@ -1,5 +1,5 @@
 import { Gobang } from './gobang';
-import { MatrixPosIntf } from 'app/model';
+import { MatrixPosIntf } from 'actslib';
 
 describe('Gobang without TestBed', () => {
   let gobang: Gobang;

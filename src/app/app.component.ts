@@ -12,7 +12,7 @@ import { DateAdapter } from '@angular/material';
 import { Observable, forkJoin, Subscription } from 'rxjs';
 import { map, merge, startWith } from 'rxjs/operators';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
-import { MediaChange, ObservableMedia } from '@angular/flex-layout';
+import { MediaChange, MediaObserver } from '@angular/flex-layout';
 
 @Component({
   selector: 'app-root-home',
@@ -102,9 +102,9 @@ export class AppComponent implements OnInit, OnDestroy {
     private _userDetailService: UserDetailService,
     private _zone: NgZone,
     private _router: Router,
-    private _media: ObservableMedia,
+    private _media: MediaObserver,
     private _dateAdapter: DateAdapter<MomentDateAdapter>) {
-    this._watcherMedia = this._media.subscribe((change: MediaChange) => {
+    this._watcherMedia = this._media.media$.subscribe((change: MediaChange) => {
       if (environment.LoggingLevel >= LogLevel.Debug) {
         console.log(`ACGallery [Debug]: Entering constructor of AppComponent: ${change.mqAlias} = (${change.mediaQuery})`);
       }
