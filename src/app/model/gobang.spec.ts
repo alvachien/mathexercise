@@ -24,8 +24,8 @@ describe('Gobang without TestBed', () => {
     gobang.setCellValue(Math.round(gobang.Dimension / 2), Math.round(gobang.Dimension / 2), true);
 
     expect(gobang.QueuePositions.length).toBe(1);
-    expect(gobang.QueuePositions[0].x).toBe(Math.round(gobang.Dimension / 2));
-    expect(gobang.QueuePositions[0].y).toBe(Math.round(gobang.Dimension / 2));
+    expect(gobang.QueuePositions[0].row).toBe(Math.round(gobang.Dimension / 2));
+    expect(gobang.QueuePositions[0].column).toBe(Math.round(gobang.Dimension / 2));
   });
 
   it('#3. Queue position for 5 inputs', () => {
@@ -36,10 +36,10 @@ describe('Gobang without TestBed', () => {
     let pos: MatrixPosIntf;
     for (let i = 0; i < 5; i ++) {
       do {
-        pos = { x: Math.floor(Math.random() * gobang.Dimension), y: Math.floor(Math.random() * gobang.Dimension), };
+        pos = { row: Math.floor(Math.random() * gobang.Dimension), column: Math.floor(Math.random() * gobang.Dimension), };
 
         const idx: number = arPos.findIndex((value: MatrixPosIntf) => {
-          if (value.x === pos.x && value.y === pos.y) {
+          if (value.row === pos.row && value.column === pos.column) {
             return true;
           }
           return false;
@@ -53,7 +53,7 @@ describe('Gobang without TestBed', () => {
     }
 
     for (let i = 0; i < 5; i ++) {
-      gobang.setCellValue(arPos[i].x, arPos[i].y, (i % 2) === 0 ? true : false);
+      gobang.setCellValue(arPos[i].row, arPos[i].column, (i % 2) === 0 ? true : false);
     }
 
     expect(gobang.QueuePositions.length).toBe(5);
@@ -64,9 +64,9 @@ describe('Gobang without TestBed', () => {
     gobang.init();
 
     const pos: MatrixPosIntf = {
-      x: 4, y: 6,
+      row: 4, column: 6,
     };
-    gobang.setCellValue(pos.x, pos.y, true);
+    gobang.setCellValue(pos.row, pos.column, true);
     gobang['buildUpAIAnalyis']();
 
     expect(gobang.PlayerAnalysisResult.length).toBe(4);
@@ -77,9 +77,9 @@ describe('Gobang without TestBed', () => {
     gobang.init();
 
     const pos: MatrixPosIntf = {
-      x: 4, y: 6,
+      row: 4, column: 6,
     };
-    gobang.setCellValue(pos.x, pos.y, false);
+    gobang.setCellValue(pos.row, pos.column, false);
     gobang['buildUpAIAnalyis']();
 
     expect(gobang.AIAnalysisResult.length).toBe(4);

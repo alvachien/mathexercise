@@ -45,7 +45,9 @@
               "node_modules/popper.js/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js",
               "node_modules/moment/min/moment-with-locales.min.js",
-              "node_modules/jspdf/dist/jspdf.min.js"
+              "node_modules/jspdf/dist/jspdf.min.js",
+              "node_modules/mathjax/MathJax.js",
+              "node_modules/mathjax/config/TeX-MML-AM_CHTML.js"
             ]
           },
           "configurations": {
@@ -139,7 +141,9 @@
               "node_modules/popper.js/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js",
               "node_modules/moment/min/moment-with-locales.min.js",
-              "node_modules/jspdf/dist/jspdf.min.js"
+              "node_modules/jspdf/dist/jspdf.min.js",
+              "node_modules/mathjax/MathJax.js",
+              "node_modules/mathjax/config/TeX-MML-AM_CHTML.js"
             ],
             "styles": [
               "src/styles.scss"

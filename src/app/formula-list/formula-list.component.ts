@@ -13,7 +13,7 @@ export class FormulaListComponent implements OnInit {
   constructor() {
     for (const item in PrimarySchoolFormulaEnum) {
       if (isNaN(Number(item))) {
-         //console.log(item);
+         // console.log(item);
       } else {
         const str0: string = getFormulaNameString(Number(item));
         const str1: string = getFormulaUIString(Number(item));

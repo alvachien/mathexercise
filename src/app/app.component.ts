@@ -132,7 +132,7 @@ export class AppComponent implements OnInit, OnDestroy {
       { name: 'Home.MultiplicationExercises', route: 'multi-ex', group: AppNavItemGroupEnum.ps_basic },
       { name: 'Home.DivisionExercises', route: 'divide-ex', group: AppNavItemGroupEnum.ps_basic },
       { name: 'Home.MixedOperations', route: 'mixop-ex', group: AppNavItemGroupEnum.ps_extend },
-      // { name: 'Home.FormulaList', route: 'formula-list' },
+      { name: 'Home.FormulaList', route: 'formula-list', group: AppNavItemGroupEnum.ps_extend },
       { name: 'Home.FormulaExercises', route: 'formula-ex', group: AppNavItemGroupEnum.ps_extend },
       { name: 'Home.PuzzleGames', route: 'puzz-game', group: AppNavItemGroupEnum.others },
       { name: 'Home.AwardPlan', route: 'award-plan', group: AppNavItemGroupEnum.award },

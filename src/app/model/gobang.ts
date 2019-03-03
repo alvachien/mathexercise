@@ -101,7 +101,7 @@ export class Gobang {
     }
 
     // Positions
-    const matrx: Matrix = new Matrix(this._dimension, this._dimension);
+    const matrx: Matrix<number> = new Matrix(this._dimension, this._dimension);
     this._arSlashPos = matrx.getSlashOutputPos();
     this._arBackSlashPos = matrx.getBackSlashOutputPos();
 
@@ -179,7 +179,8 @@ export class Gobang {
     } else if (this._queuePositions.length === 1) {
       // First step of AI
       rtnPos.row = this._queuePositions[0].row;
-      rtnPos.column = (this._queuePositions[0].column + 1 < this._dimension) ? (this._queuePositions[0].column + 1) : (this._queuePositions[0].column - 1);
+      rtnPos.column = (this._queuePositions[0].column + 1 < this._dimension)
+        ? (this._queuePositions[0].column + 1) : (this._queuePositions[0].column - 1);
 
       return rtnPos;
     }
@@ -192,13 +193,13 @@ export class Gobang {
       if (maxdefendindex === -1 && (value.headsealed !== true || value.tailsealed !== true)) {
         maxdefendindex = index;
       } else {
-        if (this._playAnalysis[maxdefendindex].risklevel < value.risklevel 
+        if (this._playAnalysis[maxdefendindex].risklevel < value.risklevel
           && (value.headsealed !== true || value.tailsealed !== true)) {
           maxdefendindex = index;
         }
       }
     });
-    
+
     let maxattackindex = -1;
     this._AIAnalysis.forEach((value, index) => {
       if (maxattackindex === -1 && (value.headsealed !== true || value.tailsealed !== true)) {
@@ -235,14 +236,16 @@ export class Gobang {
           break;
 
           case GobangDirectionEnum.slash: {
-            rtnPos.row = this._arSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].endidx + 1].x;
-            rtnPos.column = this._arSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].endidx + 1].y;
+            rtnPos.row = this._arSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].endidx + 1].row;
+            rtnPos.column =
+              this._arSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].endidx + 1].column;
           }
           break;
 
           case GobangDirectionEnum.backslash: {
-            rtnPos.row = this._arBackSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].endidx + 1].x;
-            rtnPos.column = this._arBackSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].endidx + 1].y;
+            rtnPos.row = this._arBackSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].endidx + 1].row;
+            rtnPos.column =
+              this._arBackSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].endidx + 1].column;
           }
           break;
 
@@ -264,14 +267,17 @@ export class Gobang {
           break;
 
           case GobangDirectionEnum.slash: {
-            rtnPos.row = this._arSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].startidx - 1].x;
-            rtnPos.column = this._arSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].startidx - 1].y;
+            rtnPos.row = this._arSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].startidx - 1].row;
+            rtnPos.column =
+             this._arSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].startidx - 1].column;
           }
           break;
 
           case GobangDirectionEnum.backslash: {
-            rtnPos.row = this._arBackSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].startidx - 1].x;
-            rtnPos.column = this._arBackSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].startidx - 1].y;
+            rtnPos.row =
+              this._arBackSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].startidx - 1].row;
+            rtnPos.column =
+              this._arBackSlashPos[this._playAnalysis[maxdefendindex].relid][this._playAnalysis[maxdefendindex].startidx - 1].column;
           }
           break;
 
@@ -299,14 +305,15 @@ export class Gobang {
           break;
 
           case GobangDirectionEnum.slash: {
-            rtnPos.row = this._arSlashPos[this._AIAnalysis[maxattackindex].relid][this._AIAnalysis[maxattackindex].endidx + 1].x;
-            rtnPos.column = this._arSlashPos[this._AIAnalysis[maxattackindex].relid][this._AIAnalysis[maxattackindex].endidx + 1].y;
+            rtnPos.row = this._arSlashPos[this._AIAnalysis[maxattackindex].relid][this._AIAnalysis[maxattackindex].endidx + 1].row;
+            rtnPos.column = this._arSlashPos[this._AIAnalysis[maxattackindex].relid][this._AIAnalysis[maxattackindex].endidx + 1].column;
           }
           break;
 
           case GobangDirectionEnum.backslash: {
-            rtnPos.row = this._arBackSlashPos[this._AIAnalysis[maxattackindex].relid][this._AIAnalysis[maxattackindex].endidx + 1].x;
-            rtnPos.column = this._arBackSlashPos[this._AIAnalysis[maxattackindex].relid][this._AIAnalysis[maxattackindex].endidx + 1].y;
+            rtnPos.row = this._arBackSlashPos[this._AIAnalysis[maxattackindex].relid][this._AIAnalysis[maxattackindex].endidx + 1].row;
+            rtnPos.column =
+              this._arBackSlashPos[this._AIAnalysis[maxattackindex].relid][this._AIAnalysis[maxattackindex].endidx + 1].column;
           }
           break;
 
@@ -328,14 +335,15 @@ export class Gobang {
           break;
 
           case GobangDirectionEnum.slash: {
-            rtnPos.row = this._arSlashPos[this._AIAnalysis[maxattackindex].relid][this._AIAnalysis[maxattackindex].startidx - 1].x;
-            rtnPos.column = this._arSlashPos[this._AIAnalysis[maxattackindex].relid][this._AIAnalysis[maxattackindex].startidx - 1].y;
+            rtnPos.row = this._arSlashPos[this._AIAnalysis[maxattackindex].relid][this._AIAnalysis[maxattackindex].startidx - 1].row;
+            rtnPos.column = this._arSlashPos[this._AIAnalysis[maxattackindex].relid][this._AIAnalysis[maxattackindex].startidx - 1].column;
           }
           break;
 
           case GobangDirectionEnum.backslash: {
-            rtnPos.row = this._arBackSlashPos[this._AIAnalysis[maxattackindex].relid][this._AIAnalysis[maxattackindex].startidx - 1].x;
-            rtnPos.column = this._arBackSlashPos[this._AIAnalysis[maxattackindex].relid][this._AIAnalysis[maxattackindex].startidx - 1].y;
+            rtnPos.row = this._arBackSlashPos[this._AIAnalysis[maxattackindex].relid][this._AIAnalysis[maxattackindex].startidx - 1].row;
+            rtnPos.column =
+              this._arBackSlashPos[this._AIAnalysis[maxattackindex].relid][this._AIAnalysis[maxattackindex].startidx - 1].column;
           }
           break;
 

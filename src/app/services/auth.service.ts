@@ -187,9 +187,9 @@ export class AuthService {
       if (environment.LoggingLevel >= LogLevel.Debug) {
         console.log('signed out', resp);
       }
-      setTimeout(5000, () => {
+      setTimeout(() => {
         console.log('testing to see if fired...');
-      });
+      }, 5000);
     }).catch(function (err) {
       console.error(err);
     });
