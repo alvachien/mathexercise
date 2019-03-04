@@ -32,7 +32,7 @@ import { DialogService } from './services/dialog.service';
 import { AuthService } from './services/auth.service';
 import { UserDetailService } from './services/userdetail.service';
 import { FormulaExerciseComponent } from './formula-exercise/';
-import { FormulaListComponent } from './formula-list/';
+import { FormulaListComponent, MathJaxDirective, } from './formula-list/';
 import { FailureRetestComponent } from './failure-retest';
 import { UserStatisticsComponent } from './user-statistics';
 import { UserDetailComponent } from './user-detail';
@@ -101,6 +101,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     QuizFailureDlgComponent,
     QuizSummaryComponent,
     FormulaExerciseComponent,
+    MathJaxDirective,
     FormulaListComponent,
     FailureRetestComponent,
     UserStatisticsComponent,

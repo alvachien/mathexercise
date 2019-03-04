@@ -12,7 +12,13 @@ export enum PrimarySchoolFormulaEnum {
   CircumferenceOfRectangle = 12,
 
   DistanceAndSpeed = 20,
-  EfficiencyProblem = 21
+  EfficiencyProblem = 21,
+
+  SumOfSquares = 30,
+  DifferenceOfSquares = 31,
+  PerfectSquareTrinomial = 32,
+  QEquationOfOneUnknown = 33,
+  CubicMetre = 34,
 }
 
 export function getFormulaNameString(fe: PrimarySchoolFormulaEnum): string {
@@ -70,6 +76,31 @@ export function getFormulaNameString(fe: PrimarySchoolFormulaEnum): string {
 
     case PrimarySchoolFormulaEnum.EfficiencyProblem: {
       rst = 'Math.EfficiencyProblem';
+    }
+    break;
+
+    case PrimarySchoolFormulaEnum.SumOfSquares: {
+      rst = 'Math.SumOfSquares';
+    }
+    break;
+
+    case PrimarySchoolFormulaEnum.DifferenceOfSquares: {
+      rst = 'Math.FormulaForTheDifferenceOfSquare';
+    }
+    break;
+
+    case PrimarySchoolFormulaEnum.PerfectSquareTrinomial: {
+      rst = 'Math.PerfectSquareTrinomial';
+    }
+    break;
+
+    case PrimarySchoolFormulaEnum.QEquationOfOneUnknown: {
+      rst = 'Math.QEquationOfOneUnknown';
+    }
+    break;
+
+    case PrimarySchoolFormulaEnum.CubicMetre: {
+      rst = 'Math.CubicMetre';
     }
     break;
 
@@ -135,6 +166,31 @@ export function getFormulaUIString(fe: PrimarySchoolFormulaEnum): string {
 
     case PrimarySchoolFormulaEnum.EfficiencyProblem: {
       rst = '<var>R</var> = <var>e</var> × <var>h</var>';
+    }
+    break;
+
+    case PrimarySchoolFormulaEnum.SumOfSquares: {
+      rst = `\\(\\sum_{k=1}^{n}k^2=\\frac{n(n+1)(2n+1)}{6}.\\)`;
+    }
+    break;
+
+    case PrimarySchoolFormulaEnum.DifferenceOfSquares: {
+      rst = `\\(a^2-b^2=(a+b)(a-b).\\)`;
+    }
+    break;
+
+    case PrimarySchoolFormulaEnum.PerfectSquareTrinomial: {
+      rst = ` \\((a \\pm b)^2= a^2 \\pm 2ab + b^2.\\) \\((a+b)^2=a^2+2ab+b^2.\\) \\((a-b)^2=a^2-2ab+b^2.\\)`;
+    }
+    break;
+
+    case PrimarySchoolFormulaEnum.QEquationOfOneUnknown: {
+      rst = `\\(ax^2 + bx + c = 0\\) $$x = {-b \\pm \\sqrt{b^2-4ac} \\over 2a}.$$  `;
+    }
+    break;
+
+    case PrimarySchoolFormulaEnum.CubicMetre: {
+      rst = `\\(a^3 \\pm b^3=(a \\pm b)(a^2 \\mp ab + b^2).\\)  \\(a^3+b^3=(a+b)(a^2-ab+b^2).\\) \\(a^3-b^3=(a-b)(a^2+ab+b^2).\\)`;
     }
     break;
 
