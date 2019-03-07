@@ -19,6 +19,12 @@ export enum PrimarySchoolFormulaEnum {
   PerfectSquareTrinomial = 32,
   QEquationOfOneUnknown = 33,
   CubicMetre = 34,
+
+  ArithmeticProgression = 71,
+  GeometricProgression = 72,
+
+  Arrangement = 91,
+  Combination = 92,
 }
 
 export function getFormulaNameString(fe: PrimarySchoolFormulaEnum): string {
@@ -104,6 +110,26 @@ export function getFormulaNameString(fe: PrimarySchoolFormulaEnum): string {
     }
     break;
 
+    case PrimarySchoolFormulaEnum.ArithmeticProgression: {
+      rst = 'Math.ArithmeticProgression';
+    }
+    break;
+
+    case PrimarySchoolFormulaEnum.GeometricProgression: {
+      rst = 'Math.GeometricProgression';
+    }
+    break;
+
+    case PrimarySchoolFormulaEnum.Arrangement: {
+      rst = 'Math.Arrangement';
+    }
+    break;
+
+    case PrimarySchoolFormulaEnum.Combination: {
+      rst = 'Math.Combination';
+    }
+    break;
+
     default:
     break;
   }
@@ -185,12 +211,32 @@ export function getFormulaUIString(fe: PrimarySchoolFormulaEnum): string {
     break;
 
     case PrimarySchoolFormulaEnum.QEquationOfOneUnknown: {
-      rst = `\\(ax^2 + bx + c = 0\\) $$x = {-b \\pm \\sqrt{b^2-4ac} \\over 2a}.$$  `;
+      rst = `\\(ax^2 + bx + c = 0.\\) \\(x = {-b \\pm \\sqrt{b^2-4ac} \\over 2a}.\\)  `;
     }
     break;
 
     case PrimarySchoolFormulaEnum.CubicMetre: {
       rst = `\\(a^3 \\pm b^3=(a \\pm b)(a^2 \\mp ab + b^2).\\)  \\(a^3+b^3=(a+b)(a^2-ab+b^2).\\) \\(a^3-b^3=(a-b)(a^2+ab+b^2).\\)`;
+    }
+    break;
+
+    case PrimarySchoolFormulaEnum.ArithmeticProgression: {
+      rst = `\\(a_n = a_1 + (n - 1) \\cdot d.\\) \\(\\sum_{k=1}^{n}a_k = na_1 + \\frac{n(n-1)}{2}d.\\)`;
+    }
+    break;
+
+    case PrimarySchoolFormulaEnum.GeometricProgression: {
+      rst = `\\(a_n = a_1 \\cdot q^{(n-1)} .\\) \\(\\sum_{k=1}^{n}a_k = \\frac{a_1(1-q^n)}{1-q} (q\\ne1).\\)`;
+    }
+    break;
+
+    case PrimarySchoolFormulaEnum.Arrangement: {
+      rst = `\\( A_{n}^{m} = P_{n}^{m} = \\frac{n!}{(n-m)!} \\)`;
+    }
+    break;
+
+    case PrimarySchoolFormulaEnum.Combination: {
+      rst = `\\( C_{n}^{m} = \\tbinom{n}{m} = \\frac{n!}{m!(n-m)!} \\)`;
     }
     break;
 
