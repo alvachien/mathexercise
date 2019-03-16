@@ -45,15 +45,16 @@ This web app depends on the following project
 
 # credits
 This web app credits to the following libraries:
-1. [Angular 6](https://angular.io/)
+1. [Angular 7](https://angular.io/) and its [Github repo](https://github.com/angular/angular)
 2. [Angular Material2](https://material.angular.io/)
-3. [Bootstrap 4](https://getbootstrap.com/)
-4. [ngx-translate](http://www.ngx-translate.com/)
-5. [oidc-client](https://github.com/IdentityModel/oidc-client-js)
-6. [Angular CLI](https://github.com/angular/angular-cli)
-7. [d3.js](https://d3js.org)
-8. [ngx-charts](https://swimlane.github.io/ngx-charts/)
-9. [moment](https://github.com/moment/moment)
+3. [ngx-translate](http://www.ngx-translate.com/)
+4. [oidc-client](https://github.com/IdentityModel/oidc-client-js)
+5. [mathjax](http://www.mathjax.org/), and its [Github repo](https://github.com/mathjax/MathJax)
+6. [jspdf](https://parall.ax/products/jspdf), and its [Github repo](https://github.com/MrRio/jsPDF)
+5. [Angular CLI](https://github.com/angular/angular-cli)
+6. [d3.js](https://d3js.org)
+7. [ngx-charts](https://swimlane.github.io/ngx-charts/)
+8. [moment](https://github.com/moment/moment)
 10. [howler.js](https://howlerjs.com/)
 
 # author
