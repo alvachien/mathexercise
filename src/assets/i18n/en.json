@@ -164,7 +164,9 @@
     "RandomizeInputPosition": "Randomize input position",
     "AddScorePart": "Add Score part",
     "AddDatePart": "Add Date part",
-    "CustomizeHeader": "Customize Header"
+    "CustomizeHeader": "Customize Header",
+    "Content": "Content",
+    "PrintSetting": "Print Setting"
   },
   "Math": {
     "Sum": "Sum",

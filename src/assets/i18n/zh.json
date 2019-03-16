@@ -164,7 +164,9 @@
     "RandomizeInputPosition": "随机生成输入位置",
     "AddScorePart": "添加成绩框",
     "AddDatePart": "添加日期框",
-    "CustomizeHeader": "自定义标题"
+    "CustomizeHeader": "自定义标题",
+    "Content": "内容",
+    "PrintSetting": "打印设置"
   },
   "Math": {
     "Sum": "和",
