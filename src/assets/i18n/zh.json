@@ -159,7 +159,12 @@
     "PrimarySchoolBasicMath": "小学数学基础",
     "PrimarySchoolExtendMath": "小学数学强化",
     "About": "关于",
-    "FontSize": "字体大小"
+    "FontSize": "字体大小",
+    "NumberOfCopies": "拷贝份数",
+    "RandomizeInputPosition": "随机生成输入位置",
+    "AddScorePart": "添加成绩框",
+    "AddDatePart": "添加日期框",
+    "CustomizeHeader": "自定义标题"
   },
   "Math": {
     "Sum": "和",

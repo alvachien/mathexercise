@@ -159,7 +159,12 @@
     "PrimarySchoolBasicMath": "Basic Math of P.S.",
     "PrimarySchoolExtendMath": "Extended Math of P.S.",
     "About": "About",
-    "FontSize": "Font Size"
+    "FontSize": "Font Size",
+    "NumberOfCopies": "Number of Copies",
+    "RandomizeInputPosition": "Randomize input position",
+    "AddScorePart": "Add Score part",
+    "AddDatePart": "Add Date part",
+    "CustomizeHeader": "Customize Header"
   },
   "Math": {
     "Sum": "Sum",

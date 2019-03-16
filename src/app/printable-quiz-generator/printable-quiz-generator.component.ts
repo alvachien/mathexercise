@@ -1,8 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import * as jsPDF from 'jspdf';
-import { AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem,
-  QuizTypeEnum, QuizTypeEnum2UIString } from '../model';
+import { MatAccordion, SELECT_PANEL_INDENT_PADDING_X } from '@angular/material';
+import * as html2canvas from 'html2canvas';
+
+import {
+  AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem,
+  QuizTypeEnum, QuizTypeEnum2UIString
+} from '../model';
 
 @Component({
   selector: 'app-printable-quiz-generator',
@@ -20,9 +25,40 @@ export class PrintableQuizGeneratorComponent implements OnInit {
   decimalPlaces: number;
   numberBegin: number;
   numberEnd: number;
-  fontSize: number;
+  // fontSize: number;
+  numberOfCopy: number;
+  randomInput: boolean;
+  addScoreInput: boolean;
+  addDateInput: boolean;
+  quizHeader: string;
+  showresult: boolean;
 
-  constructor(private _tranService: TranslateService) {
+  arAddQuizFinal: any[];
+  arSubQuizFinal: any[];
+  arMulQuizFinal: any[];
+
+  get numberDisplayLength(): number {
+    return 2 * (this.numberEnd.toString().length + this.decimalPlaces + 2);
+  }
+  get arPlaceHolder(): any[] {
+    const arholder: any[] = [];
+    for (let i = 0; i < this.numberDisplayLength; i++) {
+      arholder.push(' ');
+    }
+    return arholder;
+  }
+
+  constructor(private _tranService: TranslateService,
+    private _changeDetecive: ChangeDetectorRef) {
+
+    this.showresult = false;
+    this.arAddQuizFinal = [];
+
+    this.randomInput = true;
+    this.numberOfCopy = 1;
+    this.addScoreInput = true;
+    this.addDateInput = true;
+
     this._leftStart = 15;
     this._arSubstr = [];
     this._arSubstr.push({
@@ -30,40 +66,42 @@ export class PrintableQuizGeneratorComponent implements OnInit {
       i18n: '',
       display: ''
     }, {
-      qtype: QuizTypeEnum.sub,
-      i18n: '',
-      display: ''
-    }, {
-      qtype: QuizTypeEnum.multi,
-      i18n: '',
-      display: ''
-    }, {
-      qtype: QuizTypeEnum.div,
-      i18n: '',
-      display: ''
-    });
-    for (let astr of this._arSubstr) {
+        qtype: QuizTypeEnum.sub,
+        i18n: '',
+        display: ''
+      }, {
+        qtype: QuizTypeEnum.multi,
+        i18n: '',
+        display: ''
+      }, {
+        qtype: QuizTypeEnum.div,
+        i18n: '',
+        display: ''
+      });
+    for (const astr of this._arSubstr) {
       astr.i18n = QuizTypeEnum2UIString(astr.qtype);
     }
 
     this.amountAddQuiz = 12;
     this.amountSubQuiz = 12;
     this.amountMulQuiz = 12;
-    this.amountDivQuiz = 12;
+    this.amountDivQuiz = 0;
     this.decimalPlaces = 2;
     this.numberBegin = 1;
     this.numberEnd = 100;
-    this.fontSize = 10;
+    // this.fontSize = 10;
   }
 
   ngOnInit(): void {
+    // this.accordion.openAll();
+
     let arstring: string[] = [];
-    for (let astr of this._arSubstr) {
+    for (const astr of this._arSubstr) {
       arstring.push(astr.i18n);
     }
     this._tranService.get(arstring).subscribe((x: any) => {
-      for (let attr in x) {
-        for (let lab of this._arSubstr) {
+      for (const attr in x) {
+        for (const lab of this._arSubstr) {
           if (lab.i18n === attr) {
             lab.display = x[attr];
           }
@@ -72,209 +110,245 @@ export class PrintableQuizGeneratorComponent implements OnInit {
     });
   }
 
-  onGenerate(): void {
-    let arAdd: AdditionQuizItem[] = [];
-    let arSub: SubtractionQuizItem[] = [];
-    let arMul: MultiplicationQuizItem[] = [];
-    let arDiv: DivisionQuizItem[] = [];
+  onNewGenerate(): void {
+    if (this.numberOfCopy < 1) {
+      return;
+    }
 
+    let idx = 0;
+
+    this.arAddQuizFinal = [];
+    this.arSubQuizFinal = [];
+    this.arMulQuizFinal = [];
+
+    const arAddQuiz: any[] = [];
     if (this.amountAddQuiz > 0) {
-      let idx: number = 0;
+      idx = 0;
       do {
-        let qi: AdditionQuizItem = this.generateAddQuizItem(idx);
-        arAdd.push(qi);
-      } while (idx ++ < this.amountAddQuiz);
+        let rnum1 = Math.random() * (this.numberEnd - this.numberBegin) + this.numberBegin;
+        let rnum2 = Math.random() * (this.numberEnd - this.numberBegin) + this.numberBegin;
+        if (this.decimalPlaces > 0) {
+          rnum1 = parseFloat(rnum1.toFixed(this.decimalPlaces));
+        } else {
+          rnum1 = Math.round(rnum1);
+        }
+        if (this.decimalPlaces > 0) {
+          rnum2 = parseFloat(rnum2.toFixed(this.decimalPlaces));
+        } else {
+          rnum2 = Math.round(rnum2);
+        }
+
+        if (this.randomInput) {
+          let rnum3 = rnum1 + rnum2;
+          if (this.decimalPlaces > 0) {
+            rnum3 = parseFloat(rnum3.toFixed(this.decimalPlaces));
+          } else {
+            rnum3 = Math.round(rnum3);
+          }
+          const nRandom: number = Math.random() * 3;
+          if (nRandom > 2) {
+            arAddQuiz.push([rnum1, '+', rnum2, '=']);
+          } else if (nRandom > 1) {
+            arAddQuiz.push([rnum1, '+', undefined, '=', rnum3]);
+          } else {
+            arAddQuiz.push([undefined, '+', rnum2, '=', rnum3]);
+          }
+        } else {
+          arAddQuiz.push([rnum1, '+', rnum2, '=']);
+        }
+      } while (idx++ < this.amountAddQuiz);
     }
+
+    for (let i = 0; i < this.amountAddQuiz; i += 3) {
+      if (i < this.amountAddQuiz - 2) {
+        this.arAddQuizFinal.push([arAddQuiz[i], arAddQuiz[i + 1], arAddQuiz[i + 2]]);
+      } else if (i < this.amountAddQuiz - 1) {
+        this.arAddQuizFinal.push([arAddQuiz[i], arAddQuiz[i + 1]]);
+      } else {
+        this.arAddQuizFinal.push([arAddQuiz[i]]);
+      }
+    }
+
+    const arSubQuiz: any[] = [];
     if (this.amountSubQuiz > 0) {
-      let idx: number = 0;
+      idx = 0;
       do {
-        let qi: SubtractionQuizItem = this.generateSubQuizItem(idx);
-        arSub.push(qi);
-      } while (idx ++ < this.amountSubQuiz);
+        let rnum1 = Math.random() * (this.numberEnd - this.numberBegin) + this.numberBegin;
+        let rnum2 = Math.random() * (this.numberEnd - this.numberBegin) + this.numberBegin;
+        if (this.decimalPlaces > 0) {
+          rnum1 = parseFloat(rnum1.toFixed(this.decimalPlaces));
+        } else {
+          rnum1 = Math.round(rnum1);
+        }
+        if (this.decimalPlaces > 0) {
+          rnum2 = parseFloat(rnum2.toFixed(this.decimalPlaces));
+        } else {
+          rnum2 = Math.round(rnum2);
+        }
+
+        if (this.randomInput) {
+          let rnum3 = rnum1 - rnum2;
+          if (this.decimalPlaces > 0) {
+            rnum3 = parseFloat(rnum3.toFixed(this.decimalPlaces));
+          } else {
+            rnum3 = Math.round(rnum3);
+          }
+          if (rnum3 < 0) {
+            const ntmp = rnum1;
+            rnum1 = rnum2;
+            rnum2 = ntmp;
+            rnum3 = Math.abs(rnum3);
+          }
+          const nRandom: number = Math.random() * 3;
+          if (nRandom > 2) {
+            arSubQuiz.push([rnum1, '-', rnum2, '=']);
+          } else if (nRandom > 1) {
+            arSubQuiz.push([rnum1, '-', undefined, '=', rnum3]);
+          } else {
+            arSubQuiz.push([undefined, '-', rnum2, '=', rnum3]);
+          }
+        } else {
+          arSubQuiz.push([rnum1, '-', rnum2, '=']);
+        }
+      } while (idx++ < this.amountSubQuiz);
     }
-    if (this.amountMulQuiz > 0) {
-      let idx: number = 0;
+
+    for (let i = 0; i < this.amountSubQuiz; i += 3) {
+      if (i < this.amountSubQuiz - 2) {
+        this.arSubQuizFinal.push([arSubQuiz[i], arSubQuiz[i + 1], arSubQuiz[i + 2]]);
+      } else if (i < this.amountSubQuiz - 1) {
+        this.arSubQuizFinal.push([arSubQuiz[i], arSubQuiz[i + 1]]);
+      } else {
+        this.arSubQuizFinal.push([arSubQuiz[i]]);
+      }
+    }
+
+    const arMulQuiz: any[] = [];
+    if (this.amountSubQuiz > 0) {
+      idx = 0;
       do {
-        let qi: MultiplicationQuizItem = this.generateMulQuizItem(idx);
-        arMul.push(qi);
-      } while (idx ++ < this.amountMulQuiz);
+        let rnum1 = Math.random() * (this.numberEnd - this.numberBegin) + this.numberBegin;
+        let rnum2 = Math.random() * (this.numberEnd - this.numberBegin) + this.numberBegin;
+        if (this.decimalPlaces > 0) {
+          rnum1 = parseFloat(rnum1.toFixed(this.decimalPlaces));
+        } else {
+          rnum1 = Math.round(rnum1);
+        }
+        if (this.decimalPlaces > 0) {
+          rnum2 = parseFloat(rnum2.toFixed(this.decimalPlaces));
+        } else {
+          rnum2 = Math.round(rnum2);
+        }
+
+        if (this.randomInput) {
+          let rnum3 = rnum1 * rnum2;
+          if (this.decimalPlaces > 0) {
+            rnum3 = parseFloat(rnum3.toFixed(this.decimalPlaces));
+          } else {
+            rnum3 = Math.round(rnum3);
+          }
+
+          const nRandom: number = Math.random() * 3;
+          if (nRandom > 2) {
+            arMulQuiz.push([rnum1, 'X', rnum2, '=']);
+          } else if (nRandom > 1) {
+            arMulQuiz.push([rnum1, 'X', undefined, '=', rnum3]);
+          } else {
+            arMulQuiz.push([undefined, 'X', rnum2, '=', rnum3]);
+          }
+        } else {
+          arMulQuiz.push([rnum1, 'X', rnum2, '=']);
+        }
+      } while (idx++ < this.amountMulQuiz);
     }
-    if (this.amountDivQuiz > 0) {
-      let idx: number = 0;
-      do {
-        let qi: DivisionQuizItem = this.generateDivQuizItem(idx);
-        arDiv.push(qi);
-      } while (idx ++ < this.amountDivQuiz);
-    }
-    const itemsPerRow: number = 3;
 
-    // Generate
-    const doc: any = new jsPDF();
-    // doc.addFont('Roboto');
-    doc.setFontSize(this.fontSize);
-
-    // Generate the codes
-    let nrow: number = 0;
-    let nypos: number = 10;
-    if (arAdd.length > 0) {
-      // doc.text(this._arSubstr[0].display, 10, nypos);
-      doc.text('Addition Exercise', 10, nypos);
-      nypos += 10;
-
-      nrow = Math.ceil(this.amountAddQuiz / itemsPerRow);
-      for(let idx2 = 0; idx2 < nrow; idx2 ++) {
-        let ielem: number = idx2 * itemsPerRow;
-        if (ielem < this.amountAddQuiz) {
-          doc.text(arAdd[ielem].getQuizFormat(), 10, nypos);
-          ielem ++;
-        }
-        if (ielem < this.amountAddQuiz) {
-          doc.text(arAdd[ielem].getQuizFormat(), 70, nypos);
-          ielem ++;
-        }
-        if (ielem < this.amountAddQuiz) {
-          doc.text(arAdd[ielem].getQuizFormat(), 130, nypos);
-          ielem ++;
-        }
-
-        nypos += 10;
-        if (nypos > 280) {
-          nypos = 10;
-          doc.addPage();
-        }
-      }
-    }
-    if (arSub.length > 0) {
-      doc.text('Subtraction Exercise', 10, nypos);
-      // doc.text(this._arSubstr[1].display, 10, nypos);
-      nypos += 10;
-
-      nrow = Math.ceil(this.amountSubQuiz / itemsPerRow);
-      for(let idx2 = 0; idx2 < nrow; idx2 ++) {
-        let ielem: number = idx2 * itemsPerRow;
-        if (ielem < this.amountSubQuiz) {
-          doc.text(arSub[ielem].getQuizFormat(), 10, nypos);
-          ielem ++;
-        }
-        if (ielem < this.amountSubQuiz) {
-          doc.text(arSub[ielem].getQuizFormat(), 70, nypos);
-          ielem ++;
-        }
-        if (ielem < this.amountSubQuiz) {
-          doc.text(arSub[ielem].getQuizFormat(), 130, nypos);
-          ielem ++;
-        }
-        nypos += 10;
-        if (nypos > 280) {
-          nypos = 10;
-          doc.addPage();
-        }
-      }
-    }
-    if (arMul.length > 0) {
-      doc.text('Multiplication Exercise', 10, nypos);
-      // doc.text(this._arSubstr[2].display, 10, nypos);
-      nypos += 10;
-
-      nrow = Math.ceil(this.amountMulQuiz / itemsPerRow);
-      for(let idx2 = 0; idx2 < nrow; idx2 ++) {
-        let ielem: number = idx2 * itemsPerRow;
-        if (ielem < this.amountMulQuiz) {
-          doc.text(arMul[ielem].getQuizFormat(), 10, nypos);
-          ielem ++;
-        }
-        if (ielem < this.amountMulQuiz) {
-          doc.text(arMul[ielem].getQuizFormat(), 70, nypos);
-          ielem ++;
-        }
-        if (ielem < this.amountMulQuiz) {
-          doc.text(arMul[ielem].getQuizFormat(), 130, nypos);
-          ielem ++;
-        }
-        nypos += 10;
-        if (nypos > 280) {
-          nypos = 10;
-          doc.addPage();
-        }
-      }
-    }
-    if (arDiv.length > 0) {
-      doc.text('Division Exercise', 10, nypos);
-      // doc.text(this._arSubstr[3].display, 10, nypos);
-      nypos += 10;
-
-      nrow = Math.ceil(this.amountDivQuiz / itemsPerRow);
-      for(let idx2 = 0; idx2 < nrow; idx2 ++) {
-        let ielem: number = idx2 * itemsPerRow;
-        if (ielem < this.amountDivQuiz) {
-          doc.text(arDiv[ielem].getQuizFormat(), 10, nypos);
-          ielem ++;
-        }
-        if (ielem < this.amountDivQuiz) {
-          doc.text(arDiv[ielem].getQuizFormat(), 70, nypos);
-          ielem ++;
-        }
-        if (ielem < this.amountDivQuiz) {
-          doc.text(arDiv[ielem].getQuizFormat(), 130, nypos);
-          ielem ++;
-        }
-        nypos += 10;
-        if (nypos > 280) {
-          nypos = 10;
-          doc.addPage();
-        }
+    for (let i = 0; i < this.amountMulQuiz; i += 3) {
+      if (i < this.amountMulQuiz - 2) {
+        this.arMulQuizFinal.push([arMulQuiz[i], arMulQuiz[i + 1], arMulQuiz[i + 2]]);
+      } else if (i < this.amountMulQuiz - 1) {
+        this.arMulQuizFinal.push([arMulQuiz[i], arMulQuiz[i + 1]]);
+      } else {
+        this.arMulQuizFinal.push([arMulQuiz[i]]);
       }
     }
 
-    doc.save('quiz.pdf');
+    this.showresult = true;
+    this._changeDetecive.detectChanges();
+    setTimeout(() => this.onNewPrint(), 1000);
   }
 
-  // Generate add
-  private generateAddQuizItem(idx: number): AdditionQuizItem {
-    const rnum1 = Math.random() * (this.numberEnd - this.numberBegin) + this.numberBegin;
-    const rnum2 = Math.random() * (this.numberEnd - this.numberBegin) + this.numberBegin;
-    const qz: AdditionQuizItem = new AdditionQuizItem(rnum1, rnum2, this.decimalPlaces);
-    qz.QuizIndex = idx;
-    return qz;
-  }
-  // Generate subtract
-  private generateSubQuizItem(idx: number): SubtractionQuizItem {
-    const rnum1 = Math.random() * (this.numberEnd - this.numberBegin) + this.numberBegin;
-    const rnum2 = Math.random() * (this.numberEnd - this.numberBegin) + this.numberBegin;
-    if (rnum1 > rnum2) {
-      const qz: SubtractionQuizItem = new SubtractionQuizItem(rnum1, rnum2, this.decimalPlaces);
-      qz.QuizIndex = idx;
-      return qz;
-    } else {
-      const qz: SubtractionQuizItem = new SubtractionQuizItem(rnum2, rnum1, this.decimalPlaces);
-      qz.QuizIndex = idx;
-      return qz;
-    }
-  }
-  // Generate multiply
-  private generateMulQuizItem(idx: number): MultiplicationQuizItem {
-    const rnum1 = Math.random() * (this.numberEnd - this.numberBegin) + this.numberBegin;
-    const rnum2 = Math.random() * (this.numberEnd - this.numberBegin) + this.numberBegin;
-    const qz: MultiplicationQuizItem = new MultiplicationQuizItem(
-      rnum1, rnum2, this.decimalPlaces
-    );
-    qz.QuizIndex = idx;
-    return qz;
-  }
-  // Generate div
-  private generateDivQuizItem(nIdx: number): DivisionQuizItem {
-    const rnum1 = Math.random() * (this.numberEnd - this.numberBegin) + this.numberBegin;
-    const rnum2 = Math.random() * (this.numberEnd - this.numberBegin) + this.numberBegin;
-    if (rnum1 > rnum2) {
-      const dq: DivisionQuizItem = new DivisionQuizItem(rnum1, rnum2, this.decimalPlaces);
-      dq.QuizIndex = nIdx;
+  private onNewPrint(): void {
+    let target: any = document.getElementById('id_result');
+    const width = target.offsetWidth; //获取dom 宽度
+    const height = target.offsetHeight; //获取dom 高度
+    let canvas = document.createElement("canvas"); //创建一个canvas节点
+    const scale = 2; //定义任意放大倍数 支持小数
+    canvas.width = width * scale; //定义canvas 宽度 * 缩放
+    canvas.height = height * scale; //定义canvas高度 *缩放
+    canvas.getContext('2d').scale(scale, scale); //获取context,设置scale 
 
-      return dq;
-    } else {
-      const dq: DivisionQuizItem = new DivisionQuizItem(rnum2, rnum1, this.decimalPlaces);
-      dq.QuizIndex = nIdx;
+    const opts: any = {
+      scale: scale, // 添加的scale 参数
+      canvas: canvas, //自定义 canvas
+      // logging: true, //日志开关，便于查看html2canvas的内部执行流程
+      width: width, //dom 原始宽度
+      height: height,
+      useCORS: true // 【重要】开启跨域配置
+    };
 
-      return dq;
-    }
+    html2canvas(target, opts).then((canvas: any) => {
+      var context = canvas.getContext('2d');
+      // 【重要】关闭抗锯齿
+      // context.mozImageSmoothingEnabled = false;
+      // context.webkitImageSmoothingEnabled = false;
+      // context.msImageSmoothingEnabled = false;
+      context.imageSmoothingEnabled = false;
+
+      // // 【重要】默认转化的格式为png,也可设置为其他格式
+      // var img = Canvas2Image.convertToJPEG(canvas, canvas.width, canvas.height);
+
+      let contentWidth = canvas.width;
+      let contentHeight = canvas.height;
+
+      // 一页pdf显示html页面生成的canvas高度;
+      let pageHeight = contentWidth / 592.28 * 841.89;
+      // 未生成pdf的html页面高度
+      let leftHeight = contentHeight;
+      //页面偏移
+      let position = 0;
+      // A4纸的尺寸[595.28, 841.89]，html页面生成的canvas在pdf中图片的宽高
+      let imgWidth = 595.28;
+      let imgHeight = 592.28 / contentWidth * contentHeight;
+
+      let pageData = canvas.toDataURL('image/jpeg', 1.0);
+
+      let pdf = new jsPDF('', 'pt', 'a4');
+      // pdf.setFontSize(this.fontSize);
+
+      // 有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
+      // 当内容未超过pdf一页显示的范围，无需分页
+      if (leftHeight < pageHeight) {
+        pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight);
+      } else {
+        while (leftHeight > 0) {
+          pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
+          leftHeight -= pageHeight;
+          position -= 841.89;
+          // 避免添加空白页
+          if (leftHeight > 0) {
+            pdf.addPage();
+          }
+        }
+      }
+
+      pdf.save('quiz.pdf');
+
+      this.showresult = false;
+      this.numberOfCopy--;
+
+      if (this.numberOfCopy > 0) {
+        this.onNewGenerate();
+      }
+    });
   }
 }

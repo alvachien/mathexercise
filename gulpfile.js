@@ -13,7 +13,7 @@ function mathjax_lib() {
     // Copy the mathjax file
     return src(['node_modules/mathjax/config/**/*.*',
         'node_modules/mathjax/extensions/*.*',
-        'node_modules/mathjax/fonts/**/.*',
+        'node_modules/mathjax/fonts/**/*.*',
         'node_modules/mathjax/jax/**/*.*',
         'node_modules/mathjax/localization/en/*.*',
         'node_modules/mathjax/localization/ja/*.*',
