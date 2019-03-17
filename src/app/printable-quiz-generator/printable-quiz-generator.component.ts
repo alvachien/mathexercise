@@ -25,7 +25,7 @@ export class PrintableQuizGeneratorComponent implements OnInit {
   decimalPlaces: number;
   numberBegin: number;
   numberEnd: number;
-  // fontSize: number;
+  fontSize: number;
   numberOfCopy: number;
   randomInput: boolean;
   addScoreInput: boolean;
@@ -38,18 +38,17 @@ export class PrintableQuizGeneratorComponent implements OnInit {
   arMulQuizFinal: any[];
 
   get numberDisplayLength(): number {
-    return 2 * (this.numberEnd.toString().length + this.decimalPlaces + 2);
+    return 2 * (this.numberEnd.toString().length + this.decimalPlaces);
   }
   get arPlaceHolder(): any[] {
     const arholder: any[] = [];
     for (let i = 0; i < this.numberDisplayLength; i++) {
-      arholder.push(' ');
+      arholder.push('_');
     }
     return arholder;
   }
 
-  constructor(private _tranService: TranslateService,
-    private _changeDetecive: ChangeDetectorRef) {
+  constructor(private _tranService: TranslateService) {
 
     this.showresult = false;
     this.arAddQuizFinal = [];
@@ -58,6 +57,7 @@ export class PrintableQuizGeneratorComponent implements OnInit {
     this.numberOfCopy = 1;
     this.addScoreInput = true;
     this.addDateInput = true;
+    this.fontSize = 15;
 
     this._leftStart = 15;
     this._arSubstr = [];
@@ -89,21 +89,22 @@ export class PrintableQuizGeneratorComponent implements OnInit {
     this.decimalPlaces = 2;
     this.numberBegin = 1;
     this.numberEnd = 100;
-    // this.fontSize = 10;
   }
 
   ngOnInit(): void {
     // this.accordion.openAll();
 
-    let arstring: string[] = [];
+    const arstring: string[] = [];
     for (const astr of this._arSubstr) {
       arstring.push(astr.i18n);
     }
     this._tranService.get(arstring).subscribe((x: any) => {
-      for (const attr in x) {
-        for (const lab of this._arSubstr) {
-          if (lab.i18n === attr) {
-            lab.display = x[attr];
+      if (x) {
+        for (const attr in x) {
+          for (const lab of this._arSubstr) {
+            if (lab.i18n === attr) {
+              lab.display = x[attr];
+            }
           }
         }
       }
@@ -273,31 +274,31 @@ export class PrintableQuizGeneratorComponent implements OnInit {
     }
 
     this.showresult = true;
-    this._changeDetecive.detectChanges();
+    // this._changeDetecive.detectChanges();
     setTimeout(() => this.onNewPrint(), 1000);
   }
 
   private onNewPrint(): void {
-    let target: any = document.getElementById('id_result');
-    const width = target.offsetWidth; //获取dom 宽度
-    const height = target.offsetHeight; //获取dom 高度
-    let canvas = document.createElement("canvas"); //创建一个canvas节点
-    const scale = 2; //定义任意放大倍数 支持小数
-    canvas.width = width * scale; //定义canvas 宽度 * 缩放
-    canvas.height = height * scale; //定义canvas高度 *缩放
-    canvas.getContext('2d').scale(scale, scale); //获取context,设置scale 
+    const target: any = document.getElementById('id_result');
+    const width = target.offsetWidth; // 获取dom 宽度
+    const height = target.offsetHeight; // 获取dom 高度
+    const canvas = document.createElement('canvas'); // 创建一个canvas节点
+    const scale = 2; // 定义任意放大倍数 支持小数
+    canvas.width = width * scale; // 定义canvas 宽度 * 缩放
+    canvas.height = height * scale; // 定义canvas高度 *缩放
+    canvas.getContext('2d').scale(scale, scale); // 获取context,设置scale
 
     const opts: any = {
       scale: scale, // 添加的scale 参数
-      canvas: canvas, //自定义 canvas
+      canvas: canvas, // 自定义 canvas
       // logging: true, //日志开关，便于查看html2canvas的内部执行流程
-      width: width, //dom 原始宽度
+      width: width, // dom 原始宽度
       height: height,
       useCORS: true // 【重要】开启跨域配置
     };
 
-    html2canvas(target, opts).then((canvas: any) => {
-      var context = canvas.getContext('2d');
+    html2canvas(target, opts).then((canvas2: any) => {
+      const context: any = canvas2.getContext('2d');
       // 【重要】关闭抗锯齿
       // context.mozImageSmoothingEnabled = false;
       // context.webkitImageSmoothingEnabled = false;
@@ -307,22 +308,22 @@ export class PrintableQuizGeneratorComponent implements OnInit {
       // // 【重要】默认转化的格式为png,也可设置为其他格式
       // var img = Canvas2Image.convertToJPEG(canvas, canvas.width, canvas.height);
 
-      let contentWidth = canvas.width;
-      let contentHeight = canvas.height;
+      const contentWidth = canvas2.width;
+      const contentHeight = canvas2.height;
 
       // 一页pdf显示html页面生成的canvas高度;
-      let pageHeight = contentWidth / 592.28 * 841.89;
+      const pageHeight = contentWidth / 592.28 * 841.89;
       // 未生成pdf的html页面高度
       let leftHeight = contentHeight;
-      //页面偏移
+      // 页面偏移
       let position = 0;
       // A4纸的尺寸[595.28, 841.89]，html页面生成的canvas在pdf中图片的宽高
-      let imgWidth = 595.28;
-      let imgHeight = 592.28 / contentWidth * contentHeight;
+      const imgWidth = 595.28;
+      const imgHeight = 592.28 / contentWidth * contentHeight;
 
-      let pageData = canvas.toDataURL('image/jpeg', 1.0);
+      const pageData = canvas2.toDataURL('image/jpeg', 1.0);
 
-      let pdf = new jsPDF('', 'pt', 'a4');
+      const pdf = new jsPDF('', 'pt', 'a4');
       // pdf.setFontSize(this.fontSize);
 
       // 有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
