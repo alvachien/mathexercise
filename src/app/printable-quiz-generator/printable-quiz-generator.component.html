@@ -104,8 +104,8 @@
 
       <hr />
 
-      <div *ngIf="arAddQuizFinal">
-        <p style="padding-left: 10px;">{{'Home.AdditionExercises' | translate}}</p>
+      <div *ngIf="arAddQuizFinal && arAddQuizFinal.length > 0">
+        <p style="padding-left: 15px;">{{'Home.AdditionExercises' | translate}}</p>
         <div fxLayout="row" fxLayoutAlign="space-around center" *ngFor="let quiz of arAddQuizFinal">
           <div fxFlex="28" style="padding-top: 2px; padding-bottom: 2px;">
             <div *ngIf="quiz.length > 0">
@@ -160,8 +160,8 @@
         </div>
       </div>
 
-      <div *ngIf="arSubQuizFinal">
-        <p style="padding-left: 10px;">{{'Home.SubtractionExercises' | translate}}</p>
+      <div *ngIf="arSubQuizFinal && arSubQuizFinal.length > 0">
+        <p style="padding-left: 15px;">{{'Home.SubtractionExercises' | translate}}</p>
         <div fxLayout="row" fxLayoutAlign="space-around center" *ngFor="let quiz of arSubQuizFinal">
           <div fxFlex="28" style="padding-top: 2px; padding-bottom: 2px;">
             <div *ngIf="quiz.length > 0">
@@ -216,8 +216,8 @@
         </div>
       </div>
 
-      <div *ngIf="arMulQuizFinal">
-        <p style="padding-left: 10px;">{{'Home.MultiplicationExercises' | translate}}</p>
+      <div *ngIf="arMulQuizFinal && arMulQuizFinal.length > 0">
+        <p style="padding-left: 15px;">{{'Home.MultiplicationExercises' | translate}}</p>
         <div fxLayout="row" fxLayoutAlign="space-around center" *ngFor="let quiz of arMulQuizFinal">
           <div fxFlex="28" style="padding-top: 2px; padding-bottom: 2px;">
             <div *ngIf="quiz.length > 0">

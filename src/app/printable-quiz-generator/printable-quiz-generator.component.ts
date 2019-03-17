@@ -225,7 +225,7 @@ export class PrintableQuizGeneratorComponent implements OnInit {
     }
 
     const arMulQuiz: any[] = [];
-    if (this.amountSubQuiz > 0) {
+    if (this.amountMulQuiz > 0) {
       idx = 0;
       do {
         let rnum1 = Math.random() * (this.numberEnd - this.numberBegin) + this.numberBegin;
