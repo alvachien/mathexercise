@@ -22,6 +22,7 @@ export class PrintableQuizGeneratorComponent implements OnInit {
   amountSubQuiz: number;
   amountMulQuiz: number;
   amountDivQuiz: number;
+  amountMixOpQuiz: number;
   decimalPlaces: number;
   numberBegin: number;
   numberEnd: number;

@@ -29,6 +29,17 @@
               <input matInput type="number" placeholder="{{'Home.DivisionExercises' | translate}}"
                 [(ngModel)]="amountDivQuiz">
             </mat-form-field> -->
+            <div class="control-full-width">
+              <mat-slide-toggle [(ngModel)]="amountMixOpQuiz">
+                {{'Home.MixedOperations' | translate}}
+              </mat-slide-toggle>
+            </div>
+            <mat-form-field>
+              <mat-select placeholder="Toppings" [(ngModel)]="mixOperators" multiple>
+                <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            
           </div>
           <div fxFlex="46">
             <div class="control-full-width">
