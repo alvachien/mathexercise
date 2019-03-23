@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import * as jsPDF from 'jspdf';
 import { MatAccordion, SELECT_PANEL_INDENT_PADDING_X } from '@angular/material';
 import * as html2canvas from 'html2canvas';
+import * as math from 'mathjs';
 
 import {
   AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem,
@@ -23,6 +24,8 @@ export class PrintableQuizGeneratorComponent implements OnInit {
   amountMulQuiz: number;
   amountDivQuiz: number;
   amountMixOpQuiz: number;
+  mixOpOperators: string[];
+  mixOpList: string[] = ['+', '-', 'X', '/'];
   decimalPlaces: number;
   numberBegin: number;
   numberEnd: number;
@@ -37,6 +40,7 @@ export class PrintableQuizGeneratorComponent implements OnInit {
   arAddQuizFinal: any[];
   arSubQuizFinal: any[];
   arMulQuizFinal: any[];
+  arMixOpQuizFinal: any[];
 
   get numberDisplayLength(): number {
     return 2 * (this.numberEnd.toString().length + this.decimalPlaces);
@@ -87,6 +91,7 @@ export class PrintableQuizGeneratorComponent implements OnInit {
     this.amountSubQuiz = 12;
     this.amountMulQuiz = 12;
     this.amountDivQuiz = 0;
+    this.amountMixOpQuiz = 20;
     this.decimalPlaces = 2;
     this.numberBegin = 1;
     this.numberEnd = 100;
@@ -122,7 +127,9 @@ export class PrintableQuizGeneratorComponent implements OnInit {
     this.arAddQuizFinal = [];
     this.arSubQuizFinal = [];
     this.arMulQuizFinal = [];
+    this.arMixOpQuizFinal = [];
 
+    // Add.
     const arAddQuiz: any[] = [];
     if (this.amountAddQuiz > 0) {
       idx = 0;
@@ -171,6 +178,7 @@ export class PrintableQuizGeneratorComponent implements OnInit {
       }
     }
 
+    // Sub.
     const arSubQuiz: any[] = [];
     if (this.amountSubQuiz > 0) {
       idx = 0;
@@ -225,6 +233,7 @@ export class PrintableQuizGeneratorComponent implements OnInit {
       }
     }
 
+    // Multipy.
     const arMulQuiz: any[] = [];
     if (this.amountMulQuiz > 0) {
       idx = 0;
@@ -272,6 +281,16 @@ export class PrintableQuizGeneratorComponent implements OnInit {
       } else {
         this.arMulQuizFinal.push([arMulQuiz[i]]);
       }
+    }
+
+    // Mixed operators
+    const arMixOpQuiz: any[] = [];
+    if (this.amountMixOpQuiz > 0) {
+      idx = 0;
+      do {
+        idx ++;
+      }
+      while (idx < this.amountMixOpQuiz);
     }
 
     this.showresult = true;
