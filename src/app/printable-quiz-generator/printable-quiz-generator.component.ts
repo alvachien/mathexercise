@@ -1,9 +1,7 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import * as jsPDF from 'jspdf';
-import { MatAccordion, SELECT_PANEL_INDENT_PADDING_X } from '@angular/material';
 import * as html2canvas from 'html2canvas';
-import * as math from 'mathjs';
 
 import {
   AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem,

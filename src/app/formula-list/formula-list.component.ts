@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { PrimarySchoolFormulaEnum, getFormulaUIString, getFormulaNameString } from '../model';
-declare var MathJax;
 
 @Component({
   selector: 'app-formula-list',

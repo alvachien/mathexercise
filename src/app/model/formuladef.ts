@@ -141,102 +141,102 @@ export function getFormulaUIString(fe: PrimarySchoolFormulaEnum): string {
   let rst = '';
   switch (fe) {
     case PrimarySchoolFormulaEnum.AreaOfCircle: {
-      rst = '<var>S</var> = π<var>r</var><sup>2</sup>';
+      rst = 'S = πr^2';
     }
     break;
 
     case PrimarySchoolFormulaEnum.AreaOfParallelogram: {
-      rst = '<var>S</var> = <var>a</var> × <var>h</var>';
+      rst = 'S = a × h';
     }
     break;
 
     case PrimarySchoolFormulaEnum.AreaOfRectangle: {
-      rst = '<var>S</var> = <var>a</var> × <var>b</var>';
+      rst = 'S = a × b';
     }
     break;
 
     case PrimarySchoolFormulaEnum.AreaOfSquare: {
-      rst = '<var>S</var> = <var>a</var> <sup>2</sup>';
+      rst = 'S = a^2';
     }
     break;
 
     case PrimarySchoolFormulaEnum.AreaOfTrapezoid: {
-      rst = '<var>S</var> = (<var>a</var> + <var>b</var>) × <var>h</var> ÷ 2';
+      rst = 'S = { (a + b) × h \\over 2}';
     }
     break;
 
     case PrimarySchoolFormulaEnum.AreaOfTriangle: {
-      rst = '<var>S</var> = (<var>a</var> × <var>h</var>) ÷ 2';
+      rst = 'S = { (a × h) \\over 2 }';
     }
     break;
 
     case PrimarySchoolFormulaEnum.CircumferenceOfCircle: {
-      rst = '<var>C</var> = π<var>D</var> = 2π<var>r</var>';
+      rst = 'C = πD = 2πr';
     }
     break;
 
     case PrimarySchoolFormulaEnum.CircumferenceOfSquare: {
-      rst = '<var>C</var> = 4 × <var>a</var>';
+      rst = 'C = 4 × a';
     }
     break;
 
     case PrimarySchoolFormulaEnum.CircumferenceOfRectangle: {
-      rst = '<var>C</var> = 2 × (<var>a</var> + <var>b</var>)';
+      rst = 'C = 2 × (a + b)';
     }
     break;
 
     case PrimarySchoolFormulaEnum.DistanceAndSpeed: {
-      rst = '<var>S</var> = <var>v</var> × <var>h</var>';
+      rst = 'S = v × h';
     }
     break;
 
     case PrimarySchoolFormulaEnum.EfficiencyProblem: {
-      rst = '<var>R</var> = <var>e</var> × <var>h</var>';
+      rst = 'R = e × h';
     }
     break;
 
     case PrimarySchoolFormulaEnum.SumOfSquares: {
-      rst = `\\(\\sum_{k=1}^{n}k^2=\\frac{n(n+1)(2n+1)}{6}.\\)`;
+      rst = `\\sum_{k=1}^{n}k^2 = \\frac{n(n+1)(2n+1)}{6}.`;
     }
     break;
 
     case PrimarySchoolFormulaEnum.DifferenceOfSquares: {
-      rst = `\\(a^2-b^2=(a+b)(a-b).\\)`;
+      rst = `a^2-b^2=(a+b)(a-b).`;
     }
     break;
 
     case PrimarySchoolFormulaEnum.PerfectSquareTrinomial: {
-      rst = ` \\((a \\pm b)^2= a^2 \\pm 2ab + b^2.\\) \\((a+b)^2=a^2+2ab+b^2.\\) \\((a-b)^2=a^2-2ab+b^2.\\)`;
+      rst = `(a \\pm b)^2= a^2 \\pm 2ab + b^2;(a+b)^2=a^2+2ab+b^2; (a-b)^2=a^2-2ab+b^2.`;
     }
     break;
 
     case PrimarySchoolFormulaEnum.QEquationOfOneUnknown: {
-      rst = `\\(ax^2 + bx + c = 0.\\) \\(x = {-b \\pm \\sqrt{b^2-4ac} \\over 2a}.\\)  `;
+      rst = `ax^2 + bx + c = 0. x = {-b \\pm \\sqrt{b^2-4ac} \\over 2a}.`;
     }
     break;
 
     case PrimarySchoolFormulaEnum.CubicMetre: {
-      rst = `\\(a^3 \\pm b^3=(a \\pm b)(a^2 \\mp ab + b^2).\\)  \\(a^3+b^3=(a+b)(a^2-ab+b^2).\\) \\(a^3-b^3=(a-b)(a^2+ab+b^2).\\)`;
+      rst = `a^3 \\pm b^3 = (a \\pm b)(a^2 \\mp ab + b^2). a^3 + b^3=(a+b)(a^2-ab+b^2). a^3-b^3=(a-b)(a^2+ab+b^2).`;
     }
     break;
 
     case PrimarySchoolFormulaEnum.ArithmeticProgression: {
-      rst = `\\(a_n = a_1 + (n - 1) \\cdot d.\\) \\(\\sum_{k=1}^{n}a_k = na_1 + \\frac{n(n-1)}{2}d.\\)`;
+      rst = `a_n = a_1 + (n - 1) \\cdot d. \\sum_{k=1}^{n}a_k = na_1 + \\frac{n(n-1)}{2}d.`;
     }
     break;
 
     case PrimarySchoolFormulaEnum.GeometricProgression: {
-      rst = `\\(a_n = a_1 \\cdot q^{(n-1)} .\\) \\(\\sum_{k=1}^{n}a_k = \\frac{a_1(1-q^n)}{1-q} (q\\ne1).\\)`;
+      rst = `a_n = a_1 \\cdot q^{(n-1)} . \\sum_{k=1}^{n}a_k = \\frac{a_1(1-q^n)}{1-q} (q\\ne1).`;
     }
     break;
 
     case PrimarySchoolFormulaEnum.Arrangement: {
-      rst = `\\( A_{n}^{m} = P_{n}^{m} = \\frac{n!}{(n-m)!} \\)`;
+      rst = `A_{n}^{m} = P_{n}^{m} = \\frac{n!}{(n-m)!} `;
     }
     break;
 
     case PrimarySchoolFormulaEnum.Combination: {
-      rst = `\\( C_{n}^{m} = \\tbinom{n}{m} = \\frac{n!}{m!(n-m)!} \\)`;
+      rst = `C_{n}^{m} = \\tbinom{n}{m} = \\frac{n!}{m!(n-m)!} `;
     }
     break;
 

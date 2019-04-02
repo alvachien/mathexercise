@@ -19,6 +19,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { KatexModule } from 'ng-katex';
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 
 import { AppRoutes } from './app.routes';
 import { Home, AppComponent } from './app.component';
@@ -32,7 +34,7 @@ import { DialogService } from './services/dialog.service';
 import { AuthService } from './services/auth.service';
 import { UserDetailService } from './services/userdetail.service';
 import { FormulaExerciseComponent } from './formula-exercise/';
-import { FormulaListComponent, MathJaxDirective, } from './formula-list/';
+import { FormulaListComponent, } from './formula-list/';
 import { FailureRetestComponent } from './failure-retest';
 import { UserStatisticsComponent } from './user-statistics';
 import { UserDetailComponent } from './user-detail';
@@ -56,7 +58,6 @@ import { AwardBalanceService } from './services/award-balance.service';
 import { QuizService } from './services/quiz.service';
 import { ChessAiService } from './services/chess-ai.service';
 import { NavigationService } from './services/navigation.service';
-import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { UsTrendComponent } from './us-trend';
 import { UsNormalComponent } from './us-normal';
 import { PgGobangComponent } from './pg-gobang';
@@ -101,7 +102,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     QuizFailureDlgComponent,
     QuizSummaryComponent,
     FormulaExerciseComponent,
-    MathJaxDirective,
     FormulaListComponent,
     FailureRetestComponent,
     UserStatisticsComponent,
@@ -145,6 +145,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     DSMaterialModule,
     NgxChartsModule,
     HttpClientModule,
+    KatexModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

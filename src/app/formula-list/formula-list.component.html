@@ -6,7 +6,7 @@
     <mat-list class="demo-full-width">
       <mat-list-item *ngFor="let lf of listFormula">
         <span>{{lf.name | translate}} &nbsp;:&nbsp;&nbsp; </span>
-        <span [mathJaxExpr]='lf.formula'></span> 
+        <ng-katex [equation]="lf.formula"></ng-katex>
       </mat-list-item>
     </mat-list>
   </mat-card-content>
