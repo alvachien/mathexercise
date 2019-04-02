@@ -1,12 +1,14 @@
-# introduction
-This web app which used to generate exercises of Math (actually it is more than Math, including the puzzle game and English), targets for the students in Primary School to do practices. It can store the failure in the exercises, trace the results via statistics charts, plan and integrated for award plans, and it also provided several puzzle games.
+# INTRODUCTION
+This web app was written for exercises' generation of Math (including the puzzle game and English), targets to help the students in Primary School to do practices. It can store the failure in the exercises, trace the results via statistics charts, plan and integrated for award plans, and it also provided several puzzle games.
 
-# demo
-A demo was deployed in [github.io](https://alvachien.github.io/mathexercise/).
+This app also support to print the exercise out as PDF format.
 
-The demo above does not support the functionalities requires login, in other words, this simple app supports neither trace the result of the quiz nor award system.
+# LIVE DEMO
+A live demo was deployed in [github.io](https://alvachien.github.io/mathexercise/).
 
-# content
+The demo above does not support the functionalities requires data storing, including awarding, failure retry, etc.
+
+# CONTENT
 The features of web app including:
 1. Generate the quiz based on specified scope; Including:
     - Addition
@@ -19,31 +21,32 @@ The features of web app including:
     - Puzzle game: Typing tour
     - Puzzle game: MineSweeper
     - Puzzle game: Gobang
-2. Record the time spent and trace the failure of the exercies;
-3. Use the failure failor to continue the exercise until it is fully succeed;
-4. Possibility to retest upon failures;
-5. Show the statistics of the quiz to the authorized user;
-6. Chosen puzzle games included: Calculate 24, Sudou, and more to come;
-7. Multiple langues supported: English, Simplified Chinese;
-8. Integrated award system;
+2. Print the exercies to PDF file;
+3. Record the time spent and trace the failure of the exercies;
+5. Use the failure failor to continue the exercise until it is fully succeed;
+6. Possibility to retest upon failures;
+7. Show the statistics of the quiz to the authorized user;
+8. Chosen puzzle games included: Calculate 24, Sudou, and more to come;
+9. Multiple langues supported: English, Simplified Chinese;
+10. Integrated award system;
     - Award plan. Set a plan to encourage the quiz taker;
     - Award overview. Take the analysis upon the point owned and used;
-9. Authority control. Only authorizied users (normally parents) can use the following part:
+11. Authority control. Only authorizied users (normally parents) can use the following part:
     - Statistics of the quiz result
     - Award plan creation
-10. English word diction [Ongoing];
-11. Chinese word diction [Ongoing];
-12. More to come
+12. English word diction [Ongoing];
+13. Chinese word diction [Ongoing];
+14. More to come
 
-# design
+# DESIGN
 Take a look at the design doc for this project: [click here](https://github.com/alvachien/mathexercise/blob/master/design.md).
 
-# dependencies
+# DEPENDENCIES
 This web app depends on the following project
 1. [AC Identity Server](https://github.com/alvachien/acidserver)
 2. [AC Quiz API](https://github.com/alvachien/acquizapi)
 
-# credits
+# CREDITS
 This web app credits to the following libraries:
 1. [Angular 7](https://angular.io/) and its [Github repo](https://github.com/angular/angular)
 2. [Angular Material2](https://material.angular.io/)
@@ -54,7 +57,7 @@ This web app credits to the following libraries:
 7. [moment](https://github.com/moment/moment)
 8. [howler.js](https://howlerjs.com/)
 
-# author
+# AUTHOR
 **Alva Chien (Hongjun Qian) | 钱红俊**
 
 A programmer, a photographer and a father.
@@ -64,5 +67,5 @@ Contact me:
 1. Via mail: alvachien@163.com. Or,
 2. [Check my flickr](http://www.flickr.com/photos/alvachien).
 
-# license
+# LICENSE
 MIT

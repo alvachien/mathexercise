@@ -6,7 +6,7 @@ import { PrimarySchoolFormulaEnum, getFormulaUIString, getFormulaNameString } fr
   templateUrl: './formula-list.component.html',
   styleUrls: ['./formula-list.component.scss']
 })
-export class FormulaListComponent implements OnInit {
+export class FormulaListComponent {
 
   listFormula: any[] = [];
 
@@ -21,8 +21,5 @@ export class FormulaListComponent implements OnInit {
         this.listFormula.push(lf);
       }
     }
-  }
-
-  ngOnInit() {
   }
 }
