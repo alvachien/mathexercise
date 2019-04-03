@@ -19,21 +19,12 @@ import { MediaChange, MediaObserver } from '@angular/flex-layout';
   templateUrl: './app.home.html',
   styleUrls: ['./app.home.scss'],
 })
-export class Home implements AfterViewInit {
+export class Home {
   public backgroundimage: string;
   public currUserID: string;
-  // private _sun = new Image();
-  // private _moon = new Image();
-  // private _earth = new Image();
-
-  // // Canvas
-  // @ViewChild('canvasSolar') canvasSolar: ElementRef;
-  // // Canvas
-  // @ViewChild('canvasClock') canvasClock: ElementRef;
 
   constructor(private _sanitizer: DomSanitizer,
-    private _authService: AuthService,
-    ) {
+    private _authService: AuthService) {
     const photoamt = 7;
     let bgidx: number = Math.ceil(Math.random() * (photoamt - 1) + 1);
     if (bgidx > photoamt) {
@@ -48,20 +39,11 @@ export class Home implements AfterViewInit {
       this.backgroundimage = environment.AppHost + '/assets/image/home-bg' + bgidx.toString() + '.jpg';
     }
 
-    // this._sun.src = environment.AppHost + '/assets/image/Canvas_sun.png';
-    // this._moon.src = environment.AppHost + '/assets/image/Canvas_moon.png';
-    // this._earth.src = environment.AppHost + '/assets/image/Canvas_earth.png';
     this.currUserID = this._authService.authSubject.getValue().getUserId();
   }
 
   getBackgroundImage() {
     return this._sanitizer.bypassSecurityTrustStyle('url(' + this.backgroundimage + ')');
-  }
-
-  ngAfterViewInit() {
-    // window.requestAnimationFrame(() => {
-    //   this.drawContent();
-    // });
   }
 }
 
@@ -188,7 +170,9 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._watcherMedia.unsubscribe();
+    if (this._watcherMedia) {
+      this._watcherMedia.unsubscribe();
+    }
   }
 
   public onLogon() {

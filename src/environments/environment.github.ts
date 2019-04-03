@@ -9,7 +9,7 @@ export const environment = {
   AppLoginCallbackUrl: '',
   AppLoginSlientRevewCallbackUrl: '',
   AppLogoutCallbackUrl: '',
-  AppHost: '',
+  AppHost: '/mathexercise/',
 
   AppGallery: 'http://localhost:16001',
   AppHIH: 'http://118.178.58.187:5210'

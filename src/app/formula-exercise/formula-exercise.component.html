@@ -30,7 +30,11 @@
       </div>
 
       <div class="demo-full-width" *ngFor="let fs of formulaDef">
-        <mat-checkbox [(ngModel)]="fs.selected" [disabled]="fs.disabled"><span>{{fs.name | translate}}</span><span style="white-space:pre">  </span><span [innerHtml]="fs.formula"></span></mat-checkbox>
+        <mat-checkbox [(ngModel)]="fs.selected" [disabled]="fs.disabled">
+          <span>{{fs.name | translate}}</span>
+          <span style="white-space:pre"></span>
+          <ng-katex [equation]="fs.formula"></ng-katex>
+        </mat-checkbox>
       </div>
 
       <mat-divider></mat-divider>
