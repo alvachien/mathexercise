@@ -1,12 +1,14 @@
-<div *ngIf="!currUserID" class="jumbotron" 
-  [style.background-image]="getBackgroundImage()" style="background-repeat: no-repeat;background-position: right top;">
-
-  <h1 class="display-3 text-dark">{{'Home.HomePage' | translate}}</h1>
-  <p class="lead text-dark">{{'Home.WelcomeTitle' | translate}}</p>
-
-  <p class="text-dark">{{'Home.WelcomeDetail' | translate}}</p>
-  <p class="text-dark">{{'Home.WelcomeDetail2' | translate}}</p>
-</div>
+<mat-card *ngIf="!currUserID">
+  <mat-card-header>
+    <mat-card-title>{{'Home.HomePage' | translate}}</mat-card-title>
+  </mat-card-header>
+  <!-- <img mat-card-image src="{{getBackgroundImage()}}" alt="Photos"> -->
+  <mat-card-content>
+    <div class="mat-headline">{{'Home.WelcomeTitle' | translate}}</div>
+    <p class="mat-body">{{'Home.WelcomeDetail' | translate}}</p>
+    <p class="mat-body">{{'Home.WelcomeDetail2' | translate}}</p>
+  </mat-card-content>
+</mat-card>
 
 <div *ngIf="currUserID">
   <app-available-plans [CurrentUser]="currUserID"></app-available-plans>

@@ -175,7 +175,7 @@
       }
     },
     "mathexercise-e2e": {
-      "root": "",
+      "root": "e2e/",
       "projectType": "application",
       "cli": {},
       "schematics": {},
@@ -208,5 +208,6 @@
     "@schematics/angular:directive": {
       "prefix": "app"
     }
-  }
+  },
+  "defaultProject": "mathexercise"
 }

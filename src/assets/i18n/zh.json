@@ -166,7 +166,10 @@
     "AddDatePart": "添加日期框",
     "CustomizeHeader": "自定义标题",
     "Content": "内容",
-    "PrintSetting": "打印设置"
+    "PrintSetting": "打印设置",
+    "Next": "下一步",
+    "Previous": "前一步",
+    "PrintPreview": "打印预览"
   },
   "Math": {
     "Sum": "和",

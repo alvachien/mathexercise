@@ -11,7 +11,7 @@ import {
   MatListModule, MatMenuModule, MatProgressBarModule, MatProgressSpinnerModule,
   MatRadioModule, MatSelectModule, MatSidenavModule, MatSliderModule, MatSortModule,
   MatSlideToggleModule, MatSnackBarModule, MatTableModule, MatTabsModule, MatToolbarModule,
-  MatTooltipModule, MatFormFieldModule, MatExpansionModule,
+  MatTooltipModule, MatFormFieldModule, MatExpansionModule, MatStepperModule,
   MatNativeDateModule, MAT_DATE_FORMATS, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_LOCALE_PROVIDER,
 } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk/table';
@@ -70,19 +70,20 @@ import { NavItemFilterPipe } from './pipes';
 import { QuestionBankComponent } from './question-bank';
 import { QuestionBankDetailComponent } from './question-bank-detail';
 import { PrintableQuizGeneratorComponent } from './printable-quiz-generator';
+import { PrintableQuizSectionComponent } from './printable-quiz-section';
+import { PrintableQuizComponent } from './printable-quiz';
 
 @NgModule({
   exports: [
     MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatPaginatorModule,
     MatCardModule, MatCheckboxModule, MatChipsModule, MatDatepickerModule,
-    MatDialogModule, MatGridListModule, MatIconModule, MatInputModule,
+    MatDialogModule, MatGridListModule, MatIconModule, MatInputModule, MatStepperModule,
     MatListModule, MatMenuModule, MatProgressBarModule, MatProgressSpinnerModule,
     MatRadioModule, MatSelectModule, MatSidenavModule, MatSliderModule, MatSortModule,
     MatSlideToggleModule, MatSnackBarModule, MatTableModule, MatTabsModule, MatToolbarModule,
     MatTooltipModule, MatFormFieldModule, MatExpansionModule, MatNativeDateModule,
     CdkTableModule, FlexLayoutModule
   ],
-  declarations: [],
 })
 export class DSMaterialModule { }
 
@@ -129,7 +130,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     NavItemFilterPipe,
     QuestionBankComponent,
     QuestionBankDetailComponent,
-    PrintableQuizGeneratorComponent
+    PrintableQuizComponent,
+    PrintableQuizGeneratorComponent,
+    PrintableQuizSectionComponent,
   ],
   entryComponents: [
     QuizFailureDlgComponent,

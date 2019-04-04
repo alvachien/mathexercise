@@ -1,0 +1,142 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{'Home.PrintableQuizGenerator' | translate}}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-horizontal-stepper linear="true" #stepper (selectionChange)="onStepSelectionChange($event)">
+      <mat-step [stepControl]="contentFormGroup">
+        <form [formGroup]="contentFormGroup" #formContent>
+          <ng-template matStepLabel>{{'Home.Content' | translate}}</ng-template>
+          <mat-form-field class="control-full-width">
+            <input matInput type="number" placeholder="{{'Home.AdditionExercises' | translate}}"
+              formControlName="amountAddCtrl">
+          </mat-form-field>
+          <mat-form-field class="control-full-width">
+            <input matInput type="number" placeholder="{{'Home.SubtractionExercises' | translate}}"
+            formControlName="amountSubCtrl">
+          </mat-form-field>
+          <mat-form-field class="control-full-width">
+            <input matInput type="number" placeholder="{{'Home.MultiplicationExercises' | translate}}"
+            formControlName="amountMulCtrl">
+          </mat-form-field>
+          <mat-form-field class="control-full-width">
+            <input matInput type="number" placeholder="{{'Home.MixedOperations' | translate}}"
+            formControlName="amountMixOpCtrl">
+          </mat-form-field>
+          <mat-form-field *ngIf="amountMixOp">
+            <mat-select placeholder="Operators" formControlName="mixOpsCtrl" multiple>
+              <mat-option *ngFor="let op of mixOpList" [value]="op">{{op}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div class="control-full-width">
+            <mat-slide-toggle formControlName="randomInputCtrl">
+              {{'Home.RandomizeInputPosition' | translate}}
+            </mat-slide-toggle>
+          </div>
+          <mat-form-field>
+            <input matInput type="number" placeholder="{{'Math.DecimalPlaces' | translate}}"
+              formControlName="decimalPlacesCtrl" name="dmlPlaces">
+          </mat-form-field>
+          <div fxLayout="row" fxLayoutAlign="space-around center">
+            <mat-form-field fxFlex="48">
+              <input matInput type="number" placeholder="{{'Math.Scope' | translate}}" 
+                formControlName="numberBeginCtrl">
+            </mat-form-field>
+            <mat-form-field fxFlex="48">
+              <input matInput type="number" placeholder="{{'Math.Scope' | translate}}" 
+                formControlName="numberEndCtrl">
+            </mat-form-field>
+          </div>
+
+          <mat-divider></mat-divider>
+          <mat-error *ngIf="contentFormGroup.hasError('invalidmixoperators')"><div class="mat-h3">Invalid mixed operators</div></mat-error>
+          <mat-error *ngIf="contentFormGroup.hasError('invalidamount')"><div class="mat-h3">Invalid amount</div></mat-error>
+          <mat-error *ngIf="contentFormGroup.hasError('invalidrange')"><div class="mat-h3">Invalid number range></div></mat-error>
+          <div>
+            <button mat-button matStepperNext>{{'Home.Next' | translate}}</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="quizFormGroup">
+        <form [formGroup]="quizFormGroup">
+          <ng-template matStepLabel>{{'Home.PrintSetting' | translate}}</ng-template>
+
+          <mat-form-field>
+            <input matInput type="text" placeholder="{{'Home.CustomizeHeader' | translate}}"
+              formControlName="headerCtrl">
+          </mat-form-field>
+          <div class="control-full-width">
+            <mat-slide-toggle formControlName="enableScoreCtrl">
+              {{'Home.AddScorePart' | translate}}
+            </mat-slide-toggle>
+          </div>
+          <div class="control-full-width">
+            <mat-slide-toggle formControlName="enableDateCtrl">
+              {{'Home.AddDatePart' | translate}}
+            </mat-slide-toggle>
+          </div>
+          <mat-form-field class="control-full-width">
+            <input matInput type="number" placeholder="{{'Home.FontSize' | translate}}"
+              formControlName="fontSizeCtrl">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" placeholder="{{'Home.NumberOfCopies' | translate}}"
+              formControlName="amountOfCopyCtrl" />
+          </mat-form-field>
+          <div>
+            <button mat-button matStepperPrevious>{{'Home.Previous' | translate}}</button>
+            <button mat-button matStepperNext>{{'Home.Next' | translate}}</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>{{'Home.PrintPreview' | translate}}</ng-template>
+
+        <div id="id_result" [style.font-size.em]="fontSize / 10">
+          <div fxLayout="row" *ngIf="quizHeader" fxLayoutAlign="space-around center">
+            <p>{{quizHeader}}</p>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="space-around center" *ngIf="isDateInputEnabled || isScoreInputEnabled">
+            <div fxFlex="28" *ngIf="isDateInputEnabled">
+              <label>{{'Home.Date' | translate}}:</label>
+            </div>
+            <div fxFlex="28" *ngIf="isScoreInputEnabled">
+              <label>{{'Home.Score' | translate}}:</label>
+            </div>
+          </div>
+    
+          <mat-divider></mat-divider>
+    
+          <div *ngIf="arAddQuizFinal && arAddQuizFinal.length > 0">
+            <p style="padding-left: 15px;">{{'Home.AdditionExercises' | translate}}</p>
+            <app-printable-quiz-section [arQuiz]="arAddQuizFinal" [arPlaceHolder]="arPlaceHolder"></app-printable-quiz-section>
+          </div>
+    
+          <div *ngIf="arSubQuizFinal && arSubQuizFinal.length > 0">
+            <p style="padding-left: 15px;">{{'Home.SubtractionExercises' | translate}}</p>
+            <app-printable-quiz-section [arQuiz]="arSubQuizFinal" [arPlaceHolder]="arPlaceHolder"></app-printable-quiz-section>
+          </div>
+    
+          <div *ngIf="arMulQuizFinal && arMulQuizFinal.length > 0">
+            <p style="padding-left: 15px;">{{'Home.MultiplicationExercises' | translate}}</p>
+            <app-printable-quiz-section [arQuiz]="arMulQuizFinal" [arPlaceHolder]="arPlaceHolder"></app-printable-quiz-section>
+          </div>
+    
+          <div *ngIf="arMixOpQuizFinal && arMixOpQuizFinal.length > 0">
+            <p style="padding-left: 15px;">{{'Home.MixedOperations' | translate}}</p>
+            <div fxLayout="row" fxLayoutAlign="space-around center" *ngFor="let quiz of arMixOpQuizFinal">
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <button mat-button matStepperPrevious>{{'Home.Previous' | translate}}</button>
+          <button mat-button (click)="stepper.reset()" color="warning">Reset</button>
+          <button mat-button matStepperPrevious color="primary" (click)="onGenerate()">Generate PDF file</button>
+        </div>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </mat-card-content>
+</mat-card>
