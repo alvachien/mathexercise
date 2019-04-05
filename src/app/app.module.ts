@@ -69,7 +69,6 @@ import { AwardPlanDetailComponent } from './award-plan-detail';
 import { NavItemFilterPipe } from './pipes';
 import { QuestionBankComponent } from './question-bank';
 import { QuestionBankDetailComponent } from './question-bank-detail';
-import { PrintableQuizGeneratorComponent } from './printable-quiz-generator';
 import { PrintableQuizSectionComponent } from './printable-quiz-section';
 import { PrintableQuizComponent } from './printable-quiz';
 
@@ -131,7 +130,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     QuestionBankComponent,
     QuestionBankDetailComponent,
     PrintableQuizComponent,
-    PrintableQuizGeneratorComponent,
     PrintableQuizSectionComponent,
   ],
   entryComponents: [

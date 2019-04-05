@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, ValidatorFn, ValidationErrors, Validators, } from '@angular/forms';
+import { MatHorizontalStepper, MatSnackBar } from '@angular/material';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import * as jsPDF from 'jspdf';
 import * as html2canvas from 'html2canvas';
@@ -10,6 +11,9 @@ import * as html2canvas from 'html2canvas';
   styleUrls: ['./printable-quiz.component.scss']
 })
 export class PrintableQuizComponent implements OnInit {
+  private _eventPDF: EventEmitter<boolean> = new EventEmitter();
+
+  @ViewChild(MatHorizontalStepper) stepper: MatHorizontalStepper;
   mixOpList: string[] = ['+', '-', 'X', '/'];
   contentFormGroup: FormGroup;
   quizFormGroup: FormGroup;
@@ -34,8 +38,19 @@ export class PrintableQuizComponent implements OnInit {
   get isScoreInputEnabled(): boolean {
     return this.quizFormGroup.get('enableScoreCtrl').value as boolean;
   }
+  get arPlaceHolder(): any[] {
+    const dcmplace: number = +this.contentFormGroup.get('decimalPlacesCtrl').value;
+    const endnr: number = +this.contentFormGroup.get('numberEndCtrl').value;
+    const amtLength: number = 2 * (endnr.toString().length + dcmplace);
 
-  constructor() {
+    const arholder: any[] = [];
+    for (let i = 0; i < amtLength; i++) {
+      arholder.push('_');
+    }
+    return arholder;
+  }
+
+  constructor(private _snackbar: MatSnackBar) {
     this.contentFormGroup = new FormGroup({
       amountAddCtrl: new FormControl(),
       amountSubCtrl: new FormControl(),
@@ -97,44 +112,87 @@ export class PrintableQuizComponent implements OnInit {
 
   public onStepSelectionChange(event: StepperSelectionEvent): void {
     if (event.selectedIndex === 2) {
-      const addamt: number = +this.contentFormGroup.get('amountAddCtrl').value;
-      const subamt: number = +this.contentFormGroup.get('amountSubCtrl').value;
-      const mulamt: number = +this.contentFormGroup.get('amountMulCtrl').value;
-      const mopamt: number = +this.contentFormGroup.get('amountMixOpCtrl').value;
-      const bgnnr: number = +this.contentFormGroup.get('numberBeginCtrl').value;
-      const endnr: number = +this.contentFormGroup.get('numberEndCtrl').value;
-      const dcmplace: number = +this.contentFormGroup.get('decimalPlacesCtrl').value;
-      const randminput: boolean = this.contentFormGroup.get('randomInputCtrl').value;
+      this._generateWholeQuizContent();
+    }
+  }
 
-      this.arAddQuizFinal = [];
-      this.arSubQuizFinal = [];
-      this.arMulQuizFinal = [];
-      this.arMixOpQuizFinal = [];
-
-      // Add.
-      this._generateAddQuizs(addamt, endnr, bgnnr, dcmplace, randminput);
-
-      // Sub.
-      this._generateSubQuizs(subamt, endnr, bgnnr, dcmplace, randminput);
-
-      // Multipy.
-      this._generateMulQuizs(mulamt, endnr, bgnnr, dcmplace, randminput);
-
-      // Mixed operators
-      const arMixOpQuiz: any[] = [];
-      let idx = 0;
-      if (mopamt > 0) {
-        idx = 0;
-        do {
-          idx++;
-        }
-        while (idx < mopamt);
-      }
+  private _generateWholeQuizContent() {
+    const addamt: number = +this.contentFormGroup.get('amountAddCtrl').value;
+    const subamt: number = +this.contentFormGroup.get('amountSubCtrl').value;
+    const mulamt: number = +this.contentFormGroup.get('amountMulCtrl').value;
+    const mopamt: number = +this.contentFormGroup.get('amountMixOpCtrl').value;
+    const bgnnr: number = +this.contentFormGroup.get('numberBeginCtrl').value;
+    const endnr: number = +this.contentFormGroup.get('numberEndCtrl').value;
+    const dcmplace: number = +this.contentFormGroup.get('decimalPlacesCtrl').value;
+    const randminput: boolean = this.contentFormGroup.get('randomInputCtrl').value;
+    this.arAddQuizFinal = [];
+    this.arSubQuizFinal = [];
+    this.arMulQuizFinal = [];
+    this.arMixOpQuizFinal = [];
+    // Add.
+    this._generateAddQuizs(addamt, endnr, bgnnr, dcmplace, randminput);
+    // Sub.
+    this._generateSubQuizs(subamt, endnr, bgnnr, dcmplace, randminput);
+    // Multipy.
+    this._generateMulQuizs(mulamt, endnr, bgnnr, dcmplace, randminput);
+    // Mixed operators
+    const arMixOpQuiz: any[] = [];
+    let idx = 0;
+    if (mopamt > 0) {
+      idx = 0;
+      do {
+        idx++;
+      } while (idx < mopamt);
     }
   }
 
   public onGenerate(): void {
-    // Generate the PDF
+    let aoc: number = this.quizFormGroup.get('amountOfCopyCtrl').value;
+
+    if (aoc >= 1) {
+      // Generate the PDF
+      this._pdfFileGenerate();
+
+      this._eventPDF.subscribe((val: boolean) => {
+
+        aoc --;
+        if (aoc >= 1) {
+          // Regeneate the whole page
+          this._generateWholeQuizContent();
+
+          this._pdfFileGenerate();
+
+        } else {
+          this._snackbar.open('File(s) generated and downloaded', undefined, {
+            duration: 2000,
+          });
+
+          this.onReset();
+        }
+      }, (error: any) => {
+        // Failed
+        this._snackbar.open(error.toString(), undefined, {
+          duration: 2000,
+        });
+      });
+    }
+  }
+
+  public onReset(): void {
+    if (this.stepper) {
+      this.stepper.reset();
+    }
+
+    // Set default values
+    this.contentFormGroup.get('numberBeginCtrl').setValue(1);
+    this.contentFormGroup.get('numberEndCtrl').setValue(100);
+    this.contentFormGroup.get('randomInputCtrl').setValue(true);
+    this.contentFormGroup.get('mixOpsCtrl').setValue(['+', '-']);
+    this.quizFormGroup.get('fontSizeCtrl').setValue(15);
+    this.quizFormGroup.get('amountOfCopyCtrl').setValue(1);
+  }
+
+  private _pdfFileGenerate() {
     const target: any = document.getElementById('id_result');
     const width = target.offsetWidth; // 获取dom 宽度
     const height = target.offsetHeight; // 获取dom 高度
@@ -143,16 +201,14 @@ export class PrintableQuizComponent implements OnInit {
     canvas.width = width * scale; // 定义canvas 宽度 * 缩放
     canvas.height = height * scale; // 定义canvas高度 *缩放
     canvas.getContext('2d').scale(scale, scale); // 获取context,设置scale
-
     const opts: any = {
-      scale: scale, // 添加的scale 参数
-      canvas: canvas, // 自定义 canvas
+      scale: scale,
+      canvas: canvas,
       // logging: true, //日志开关，便于查看html2canvas的内部执行流程
-      width: width, // dom 原始宽度
+      width: width,
       height: height,
       useCORS: true // 【重要】开启跨域配置
     };
-
     html2canvas(target, opts).then((canvas2: any) => {
       const context: any = canvas2.getContext('2d');
       // 【重要】关闭抗锯齿
@@ -160,13 +216,10 @@ export class PrintableQuizComponent implements OnInit {
       // context.webkitImageSmoothingEnabled = false;
       // context.msImageSmoothingEnabled = false;
       context.imageSmoothingEnabled = false;
-
       // // 【重要】默认转化的格式为png,也可设置为其他格式
       // var img = Canvas2Image.convertToJPEG(canvas, canvas.width, canvas.height);
-
       const contentWidth = canvas2.width;
       const contentHeight = canvas2.height;
-
       // 一页pdf显示html页面生成的canvas高度;
       const pageHeight = contentWidth / 592.28 * 841.89;
       // 未生成pdf的html页面高度
@@ -176,19 +229,16 @@ export class PrintableQuizComponent implements OnInit {
       // A4纸的尺寸[595.28, 841.89]，html页面生成的canvas在pdf中图片的宽高
       const imgWidth = 595.28;
       const imgHeight = 592.28 / contentWidth * contentHeight;
-
       const pageData = canvas2.toDataURL('image/jpeg', 1.0);
-
       const pdf = new jsPDF('', 'pt', 'a4');
       // pdf.setFontSize(this.fontSize);
-
       // 有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
       // 当内容未超过pdf一页显示的范围，无需分页
       if (leftHeight < pageHeight) {
         pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight);
       } else {
         while (leftHeight > 0) {
-          pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
+          pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight);
           leftHeight -= pageHeight;
           position -= 841.89;
           // 避免添加空白页
@@ -197,8 +247,11 @@ export class PrintableQuizComponent implements OnInit {
           }
         }
       }
-
       pdf.save('quiz.pdf');
+
+      this._eventPDF.emit(true);
+    }, (error: any) => {
+      this._eventPDF.error(error.toString());
     });
   }
 

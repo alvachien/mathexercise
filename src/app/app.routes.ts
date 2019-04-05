@@ -20,7 +20,6 @@ import { EnwordReciteExerciseComponent } from './enword-recite-exercise';
 import { CnwordReciteExerciseComponent } from './cnword-recite-exercise';
 import { QuestionBankComponent } from './question-bank';
 import { QuestionBankDetailComponent } from './question-bank-detail';
-import { PrintableQuizGeneratorComponent } from './printable-quiz-generator';
 import { PrintableQuizComponent } from './printable-quiz';
 
 export const AppRoutes: Routes = [
@@ -40,7 +39,6 @@ export const AppRoutes: Routes = [
   { path: 'award-plan', component: AwardPlanComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateGuard] },
   { path: 'award-bal', component: AwardBalanceComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateGuard] },
   // { path: 'print-quiz', component: PrintableQuizGeneratorComponent, canActivate: [AuthGuard] },
-  // { path: 'print-quiz', component: PrintableQuizGeneratorComponent,  },
   { path: 'print-quiz', component: PrintableQuizComponent,  },
   { path: 'qtnbnk-list', component: QuestionBankComponent, canActivate: [AuthGuard] },
   { path: 'qtnbnk-detail', component: QuestionBankDetailComponent, canActivate: [AuthGuard] },
