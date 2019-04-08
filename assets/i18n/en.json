@@ -166,7 +166,10 @@
     "AddDatePart": "Add Date part",
     "CustomizeHeader": "Customize Header",
     "Content": "Content",
-    "PrintSetting": "Print Setting"
+    "PrintSetting": "Print Setting",
+    "Next": "Next",
+    "Previous": "Previous",
+    "PrintPreview": "Print Preview"
   },
   "Math": {
     "Sum": "Sum",
