@@ -71,6 +71,7 @@ import { QuestionBankComponent } from './question-bank';
 import { QuestionBankDetailComponent } from './question-bank-detail';
 import { PrintableQuizSectionComponent } from './printable-quiz-section';
 import { PrintableQuizComponent } from './printable-quiz';
+import { AboutComponent } from './about';
 
 @NgModule({
   exports: [
@@ -83,6 +84,7 @@ import { PrintableQuizComponent } from './printable-quiz';
     MatTooltipModule, MatFormFieldModule, MatExpansionModule, MatNativeDateModule,
     CdkTableModule, FlexLayoutModule
   ],
+  declarations: [],
 })
 export class DSMaterialModule { }
 
@@ -131,6 +133,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     QuestionBankDetailComponent,
     PrintableQuizComponent,
     PrintableQuizSectionComponent,
+    AboutComponent,
   ],
   entryComponents: [
     QuizFailureDlgComponent,

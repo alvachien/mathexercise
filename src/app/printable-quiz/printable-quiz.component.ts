@@ -4,6 +4,7 @@ import { MatHorizontalStepper, MatSnackBar } from '@angular/material';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import * as jsPDF from 'jspdf';
 import * as html2canvas from 'html2canvas';
+import * as math from 'mathjs';
 
 @Component({
   selector: 'app-printable-quiz',
@@ -136,14 +137,7 @@ export class PrintableQuizComponent implements OnInit {
     // Multipy.
     this._generateMulQuizs(mulamt, endnr, bgnnr, dcmplace, randminput);
     // Mixed operators
-    const arMixOpQuiz: any[] = [];
-    let idx = 0;
-    if (mopamt > 0) {
-      idx = 0;
-      do {
-        idx++;
-      } while (idx < mopamt);
-    }
+    this._generateMixOpQuiz(mopamt, endnr, bgnnr, dcmplace, randminput, this.contentFormGroup.get('mixOpsCtrl').value);
   }
 
   public onGenerate(): void {
@@ -261,18 +255,9 @@ export class PrintableQuizComponent implements OnInit {
     if (mulamt > 0) {
       idx = 0;
       do {
-        let rnum1 = Math.random() * (endnr - bgnnr) + bgnnr;
-        let rnum2 = Math.random() * (endnr - bgnnr) + bgnnr;
-        if (dcmplace > 0) {
-          rnum1 = parseFloat(rnum1.toFixed(dcmplace));
-        } else {
-          rnum1 = Math.round(rnum1);
-        }
-        if (dcmplace > 0) {
-          rnum2 = parseFloat(rnum2.toFixed(dcmplace));
-        } else {
-          rnum2 = Math.round(rnum2);
-        }
+        const rnum1 = this._generateNumber(endnr, bgnnr, dcmplace);
+        const rnum2 = this._generateNumber(endnr, bgnnr, dcmplace);
+
         if (randminput) {
           let rnum3 = rnum1 * rnum2;
           if (dcmplace > 0) {
@@ -310,18 +295,9 @@ export class PrintableQuizComponent implements OnInit {
     if (subamt > 0) {
       idx = 0;
       do {
-        let rnum1 = Math.random() * (endnr - bgnnr) + bgnnr;
-        let rnum2 = Math.random() * (endnr - bgnnr) + bgnnr;
-        if (dcmplace > 0) {
-          rnum1 = parseFloat(rnum1.toFixed(dcmplace));
-        } else {
-          rnum1 = Math.round(rnum1);
-        }
-        if (dcmplace > 0) {
-          rnum2 = parseFloat(rnum2.toFixed(dcmplace));
-        } else {
-          rnum2 = Math.round(rnum2);
-        }
+        let rnum1 = this._generateNumber(endnr, bgnnr, dcmplace);
+        let rnum2 = this._generateNumber(endnr, bgnnr, dcmplace);
+
         if (randminput) {
           let rnum3 = rnum1 - rnum2;
           if (dcmplace > 0) {
@@ -366,18 +342,9 @@ export class PrintableQuizComponent implements OnInit {
     if (addamt > 0) {
       idx = 0;
       do {
-        let rnum1 = Math.random() * (endnr - bgnnr) + bgnnr;
-        let rnum2 = Math.random() * (endnr - bgnnr) + bgnnr;
-        if (dcmplace > 0) {
-          rnum1 = parseFloat(rnum1.toFixed(dcmplace));
-        } else {
-          rnum1 = Math.round(rnum1);
-        }
-        if (dcmplace > 0) {
-          rnum2 = parseFloat(rnum2.toFixed(dcmplace));
-        } else {
-          rnum2 = Math.round(rnum2);
-        }
+        const rnum1 = this._generateNumber(endnr, bgnnr, dcmplace);
+        const rnum2 = this._generateNumber(endnr, bgnnr, dcmplace);
+
         if (randminput) {
           let rnum3 = rnum1 + rnum2;
           if (dcmplace > 0) {
@@ -406,6 +373,109 @@ export class PrintableQuizComponent implements OnInit {
       } else {
         this.arAddQuizFinal.push([arAddQuiz[i]]);
       }
+    }
+  }
+
+  private _generateMixOpQuiz(mixamt: number, endnr: number, bgnnr: number, dcmplace: number, randminput: boolean,
+      oplist: string[]) {
+    if (oplist.length <= 0) {
+      return;
+    }
+
+    const arMixOpQuiz: any[] = [];
+
+    if (mixamt > 0) {
+      do {
+        const numlist: number[] = [];
+        const arops: string[] = [];
+
+        // Prepare the number list and operation list
+        for (let i = 0; i <= oplist.length; i++) {
+          numlist.push(this._generateNumber(endnr, bgnnr, dcmplace));
+        }
+        arops.push(...oplist);
+        // Randomize the operation list
+        this._shuffleArray(arops);
+
+        let finformat = '';
+        let bneg = false;
+
+        for (let i = 0; i < numlist.length; i++) {
+          if (i === 0) {
+            finformat += numlist[i].toString();
+          } else {
+            finformat += (arops[i - 1] + numlist[i].toString());
+            if (math.eval(finformat) < 0) {
+              bneg = true;
+            }
+          }
+        }
+
+        if (!bneg) {
+          const rst = math.eval(finformat);
+          numlist.push(rst);
+          arops.push('=');
+          console.log(finformat + '=' + rst.toString());
+
+          const arformat: any[] = [];
+
+          let nRandom = -1;
+          if (randminput) {
+            nRandom = Math.round(Math.random() * numlist.length);
+          }
+
+          for (let i = 0; i < numlist.length; i++) {
+            if (i === 0) {
+              if (nRandom === 0) {
+                arformat.push(undefined);
+              } else {
+                arformat.push(numlist[i]);
+              }
+            } else {
+              arformat.push(arops[i - 1]);
+              if (nRandom === i) {
+                arformat.push(undefined);
+              } else {
+                arformat.push(numlist[i]);
+              }
+            }
+          }
+
+          arMixOpQuiz.push(arformat);
+        }
+      } while (arMixOpQuiz.length < mixamt);
+
+      for (let i = 0; i < mixamt; i += 2) {
+        if (i < mixamt - 1) {
+          this.arMixOpQuizFinal.push([arMixOpQuiz[i], arMixOpQuiz[i + 1]]);
+        } else {
+          this.arMixOpQuizFinal.push([arMixOpQuiz[i]]);
+        }
+      }
+    }
+  }
+
+  // Generate a number
+  private _generateNumber(endnr: number, bgnnr: number, dcmplace: number) {
+    let rnum1 = Math.random() * (endnr - bgnnr) + bgnnr;
+    if (dcmplace > 0) {
+      rnum1 = parseFloat(rnum1.toFixed(dcmplace));
+    } else {
+      rnum1 = Math.round(rnum1);
+    }
+    return rnum1;
+  }
+  private _shuffleArray(arr: any[]) {
+    let i = 0
+      , j = 0
+      , temp: any;
+
+    for (i = arr.length - 1; i > 0; i -= 1) {
+      j = Math.floor(Math.random() * (i + 1));
+
+      temp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = temp;
     }
   }
 }

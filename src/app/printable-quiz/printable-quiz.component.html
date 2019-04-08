@@ -133,6 +133,32 @@
           <div *ngIf="arMixOpQuizFinal && arMixOpQuizFinal.length > 0">
             <p style="padding-left: 15px;">{{'Home.MixedOperations' | translate}}</p>
             <div fxLayout="row" fxLayoutAlign="space-around center" *ngFor="let quiz of arMixOpQuizFinal">
+              <div fxFlex="48" style="padding-top: 2px; padding-bottom: 2px;">
+                <div *ngIf="quiz.length > 0">
+                  <span *ngFor="let quizitem of quiz[0]; let idx = index">
+                    <!-- operator -->
+                    <span *ngIf="idx % 2 !== 0">&nbsp;{{quizitem}}&nbsp;</span>
+                    <!-- number -->
+                    <span *ngIf="idx % 2 ===0 && quizitem !== undefined">&nbsp;{{quizitem}}&nbsp;</span>
+                    <span *ngIf="idx % 2 ===0 && quizitem === undefined">
+                      <span *ngFor="let ph of arPlaceHolder">{{ph}}</span>
+                    </span>
+                  </span>
+                </div>
+              </div>
+              <div fxFlex="48" style="padding-top: 2px; padding-bottom: 2px;">
+                <div *ngIf="quiz.length > 1">
+                  <span *ngFor="let quizitem of quiz[1]; let idx = index">
+                    <!-- operator -->
+                    <span *ngIf="idx % 2 !== 0">&nbsp;{{quizitem}}&nbsp;</span>
+                    <!-- number -->
+                    <span *ngIf="idx % 2 ===0 && quizitem !== undefined">&nbsp;{{quizitem}}&nbsp;</span>
+                    <span *ngIf="idx % 2 ===0 && quizitem === undefined">
+                      <span *ngFor="let ph of arPlaceHolder">{{ph}}</span>
+                    </span>
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

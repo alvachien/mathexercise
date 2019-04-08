@@ -21,6 +21,7 @@ import { CnwordReciteExerciseComponent } from './cnword-recite-exercise';
 import { QuestionBankComponent } from './question-bank';
 import { QuestionBankDetailComponent } from './question-bank-detail';
 import { PrintableQuizComponent } from './printable-quiz';
+import { AboutComponent } from './about';
 
 export const AppRoutes: Routes = [
   { path: '', component: Home },
@@ -44,4 +45,5 @@ export const AppRoutes: Routes = [
   { path: 'qtnbnk-detail', component: QuestionBankDetailComponent, canActivate: [AuthGuard] },
   { path: 'enword-recite', component: EnwordReciteExerciseComponent, canActivate: [AuthGuard] },
   { path: 'cnword-recite', component: CnwordReciteExerciseComponent, canActivate: [AuthGuard] },
+  { path: 'about', component: AboutComponent,  },
 ];
