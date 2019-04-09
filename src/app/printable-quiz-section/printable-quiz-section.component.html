@@ -1,52 +1,20 @@
 <div fxLayout="row" fxLayoutAlign="space-around center" *ngFor="let quiz of arQuiz">
   <div fxFlex="28" style="padding-top: 2px; padding-bottom: 2px;">
     <div *ngIf="quiz.length > 0">
-      <span *ngIf="quiz[0][0]">&nbsp;{{quiz[0][0]}}&nbsp;</span>
-      <span *ngIf="!quiz[0][0]">
-        <span *ngFor="let ph of arPlaceHolder">{{ph}}</span>
-      </span>
-      <span>&nbsp;{{quiz[0][1]}}&nbsp;</span>
-      <span *ngIf="quiz[0][2]">&nbsp;{{quiz[0][2]}}&nbsp;</span>
-      <span *ngIf="!quiz[0][2]">
-        <span *ngFor="let ph of arPlaceHolder">{{ph}}</span>
-      </span>
-      <span>&nbsp;{{quiz[0][3]}}&nbsp;</span>
-      <span *ngIf="quiz[0][4]">&nbsp;{{quiz[0][4]}}&nbsp;</span>
-      <span *ngIf="!quiz[0][4]">
-        <span *ngFor="let ph of arPlaceHolder">{{ph}}</span>
-      </span>
+      <app-printable-quiz-section-item [quizSection]="quiz[0]" [arPlaceHolder]="arPlaceHolder">        
+      </app-printable-quiz-section-item>
     </div>
   </div>
   <div fxFlex="28" style="padding-top: 2px; padding-bottom: 2px;">
     <div *ngIf="quiz.length > 1">
-      <span *ngIf="quiz[1][0]">&nbsp;{{quiz[1][0]}}&nbsp;</span>
-      <span *ngIf="!quiz[1][0]">
-        <span *ngFor="let ph of arPlaceHolder">{{ph}}</span>
-      </span>
-      <span>&nbsp;{{quiz[1][1]}}&nbsp;</span>
-      <span *ngIf="quiz[1][2]">&nbsp;{{quiz[1][2]}}&nbsp;</span>
-      <span *ngIf="!quiz[1][2]"><span *ngFor="let ph of arPlaceHolder">{{ph}}</span></span>
-      <span>&nbsp;{{quiz[1][3]}}&nbsp;</span>
-      <span *ngIf="quiz[1][4]">&nbsp;{{quiz[1][4]}}&nbsp;</span>
-      <span *ngIf="!quiz[1][4]"><span *ngFor="let ph of arPlaceHolder">{{ph}}</span></span>
-    </div>
+      <app-printable-quiz-section-item [quizSection]="quiz[1]" [arPlaceHolder]="arPlaceHolder">        
+        </app-printable-quiz-section-item>
+      </div>
   </div>
   <div fxFlex="28" style="padding-top: 2px; padding-bottom: 2px;">
     <div *ngIf="quiz.length > 2">
-      <span *ngIf="quiz[2][0]">&nbsp;{{quiz[2][0]}}&nbsp;</span>
-      <span *ngIf="!quiz[2][0]">
-        <span *ngFor="let ph of arPlaceHolder">{{ph}}</span>
-      </span>
-      <span>&nbsp;{{quiz[2][1]}}&nbsp;</span>
-      <span *ngIf="quiz[2][2]">&nbsp;{{quiz[2][2]}}&nbsp;</span>
-      <span *ngIf="!quiz[2][2]">
-        <span *ngFor="let ph of arPlaceHolder">{{ph}}</span>
-      </span>
-      <span>&nbsp;{{quiz[2][3]}}&nbsp;</span>
-      <span *ngIf="quiz[2][4]">&nbsp;{{quiz[2][4]}}&nbsp;</span>
-      <span *ngIf="!quiz[2][4]">
-        <span *ngFor="let ph of arPlaceHolder">{{ph}}</span>
-      </span>
-    </div>
+      <app-printable-quiz-section-item [quizSection]="quiz[2]" [arPlaceHolder]="arPlaceHolder">        
+        </app-printable-quiz-section-item>
+      </div>
   </div>
 </div>

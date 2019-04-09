@@ -169,7 +169,13 @@
     "PrintSetting": "Print Setting",
     "Next": "Next",
     "Previous": "Previous",
-    "PrintPreview": "Print Preview"
+    "PrintPreview": "Print Preview",
+    "GeneratePDF": "Generate PDF file",
+    "InvalidMixOperators": "Invalid mixed operators, select at least two operators",
+    "InvalidQuizAmount": "Invalid quiz amount, total quiz amount shall larger than zero",
+    "InvalidNumberRange": "Invalid number range",
+    "InvalidNumberOfCopy": "Invalid number of copy, input a positive number",
+    "InvalidFontSize": "Invalid font size, input a number between 10-30"    
   },
   "Math": {
     "Sum": "Sum",

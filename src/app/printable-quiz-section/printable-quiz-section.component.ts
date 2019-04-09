@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, } from '@angular/core';
+import { Component, Input, } from '@angular/core';
 
 @Component({
   selector: 'app-printable-quiz-section',
   templateUrl: './printable-quiz-section.component.html',
-  styleUrls: ['./printable-quiz-section.component.scss']
+  styleUrls: ['./printable-quiz-section.component.scss'],
 })
 export class PrintableQuizSectionComponent {
 

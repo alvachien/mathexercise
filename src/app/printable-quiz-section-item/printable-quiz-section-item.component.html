@@ -1,0 +1,10 @@
+<span *ngFor="let quizitem of quizSection; let idx = index">
+  <!-- operator -->
+  <span *ngIf="idx % 2 !== 0">&nbsp;{{quizitem}}&nbsp;</span>
+  <!-- number -->
+  <span *ngIf="idx % 2 === 0 && quizitem !== undefined">&nbsp;{{quizitem}}&nbsp;</span>
+  <!-- blank -->
+  <span *ngIf="idx % 2 === 0 && quizitem === undefined">
+    <span *ngFor="let ph of arPlaceHolder">{{ph}}</span>
+  </span>
+</span>

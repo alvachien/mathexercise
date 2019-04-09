@@ -49,9 +49,9 @@
           </div>
 
           <mat-divider></mat-divider>
-          <mat-error *ngIf="contentFormGroup.hasError('invalidmixoperators')"><div class="mat-h3">Invalid mixed operators</div></mat-error>
-          <mat-error *ngIf="contentFormGroup.hasError('invalidamount')"><div class="mat-h3">Invalid amount</div></mat-error>
-          <mat-error *ngIf="contentFormGroup.hasError('invalidrange')"><div class="mat-h3">Invalid number range></div></mat-error>
+          <mat-error *ngIf="contentFormGroup.hasError('invalidmixoperators')"><div class="mat-h3">{{'Home.InvalidMixOperators' | translate}}</div></mat-error>
+          <mat-error *ngIf="contentFormGroup.hasError('invalidamount')"><div class="mat-h3">{{'Home.InvalidQuizAmount' | translate}}</div></mat-error>
+          <mat-error *ngIf="contentFormGroup.hasError('invalidrange')"><div class="mat-h3">{{'Home.InvalidNumberRange' | translate}}</div></mat-error>
 
           <div>
             <button mat-button matStepperNext>{{'Home.Next' | translate}}</button>
@@ -87,8 +87,8 @@
           </mat-form-field>
 
           <mat-divider></mat-divider>
-          <mat-error *ngIf="quizFormGroup.hasError('invalidcopyamount')"><div class="mat-h3">Invalid number of copy, input a positive number</div></mat-error>
-          <mat-error *ngIf="quizFormGroup.hasError('invalidfontsize')"><div class="mat-h3">Invalid font size, input a number between 10-30</div></mat-error>
+          <mat-error *ngIf="quizFormGroup.hasError('invalidcopyamount')"><div class="mat-h3">{{'Home.InvalidNumberOfCopy' | translate}}</div></mat-error>
+          <mat-error *ngIf="quizFormGroup.hasError('invalidfontsize')"><div class="mat-h3">{{'Home.InvalidFontSize' | translate}}</div></mat-error>
 
           <div>
             <button mat-button matStepperPrevious>{{'Home.Previous' | translate}}</button>
@@ -135,28 +135,14 @@
             <div fxLayout="row" fxLayoutAlign="space-around center" *ngFor="let quiz of arMixOpQuizFinal">
               <div fxFlex="48" style="padding-top: 2px; padding-bottom: 2px;">
                 <div *ngIf="quiz.length > 0">
-                  <span *ngFor="let quizitem of quiz[0]; let idx = index">
-                    <!-- operator -->
-                    <span *ngIf="idx % 2 !== 0">&nbsp;{{quizitem}}&nbsp;</span>
-                    <!-- number -->
-                    <span *ngIf="idx % 2 ===0 && quizitem !== undefined">&nbsp;{{quizitem}}&nbsp;</span>
-                    <span *ngIf="idx % 2 ===0 && quizitem === undefined">
-                      <span *ngFor="let ph of arPlaceHolder">{{ph}}</span>
-                    </span>
-                  </span>
+                  <app-printable-quiz-section-item [quizSection]="quiz[0]" [arPlaceHolder]="arPlaceHolder">        
+                  </app-printable-quiz-section-item>
                 </div>
               </div>
               <div fxFlex="48" style="padding-top: 2px; padding-bottom: 2px;">
                 <div *ngIf="quiz.length > 1">
-                  <span *ngFor="let quizitem of quiz[1]; let idx = index">
-                    <!-- operator -->
-                    <span *ngIf="idx % 2 !== 0">&nbsp;{{quizitem}}&nbsp;</span>
-                    <!-- number -->
-                    <span *ngIf="idx % 2 ===0 && quizitem !== undefined">&nbsp;{{quizitem}}&nbsp;</span>
-                    <span *ngIf="idx % 2 ===0 && quizitem === undefined">
-                      <span *ngFor="let ph of arPlaceHolder">{{ph}}</span>
-                    </span>
-                  </span>
+                  <app-printable-quiz-section-item [quizSection]="quiz[1]" [arPlaceHolder]="arPlaceHolder">        
+                  </app-printable-quiz-section-item>
                 </div>
               </div>
             </div>
@@ -166,7 +152,7 @@
         <div>
           <button mat-button matStepperPrevious>{{'Home.Previous' | translate}}</button>
           <button mat-button (click)="onReset()" color="warning">{{'Home.Reset' | translate}}</button>
-          <button mat-button matStepperPrevious color="primary" (click)="onGenerate()">Generate PDF file</button>
+          <button mat-button matStepperPrevious color="primary" (click)="onGenerate()">{{'Home.GeneratePDF' | translate}}</button>
         </div>
       </mat-step>
     </mat-horizontal-stepper>

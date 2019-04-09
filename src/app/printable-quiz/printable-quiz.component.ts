@@ -274,7 +274,7 @@ export class PrintableQuizComponent implements OnInit {
             arMulQuiz.push([undefined, 'X', rnum2, '=', rnum3]);
           }
         } else {
-          arMulQuiz.push([rnum1, 'X', rnum2, '=']);
+          arMulQuiz.push([rnum1, 'X', rnum2, '=', undefined]);
         }
       } while (idx++ < mulamt);
     }
@@ -320,7 +320,7 @@ export class PrintableQuizComponent implements OnInit {
             arSubQuiz.push([undefined, '-', rnum2, '=', rnum3]);
           }
         } else {
-          arSubQuiz.push([rnum1, '-', rnum2, '=']);
+          arSubQuiz.push([rnum1, '-', rnum2, '=', undefined]);
         }
       } while (idx++ < subamt);
     }
@@ -361,7 +361,7 @@ export class PrintableQuizComponent implements OnInit {
             arAddQuiz.push([undefined, '+', rnum2, '=', rnum3]);
           }
         } else {
-          arAddQuiz.push([rnum1, '+', rnum2, '=']);
+          arAddQuiz.push([rnum1, '+', rnum2, '=', undefined]);
         }
       } while (idx++ < addamt);
     }

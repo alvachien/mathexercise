@@ -72,6 +72,7 @@ import { QuestionBankDetailComponent } from './question-bank-detail';
 import { PrintableQuizSectionComponent } from './printable-quiz-section';
 import { PrintableQuizComponent } from './printable-quiz';
 import { AboutComponent } from './about';
+import { PrintableQuizSectionItemComponent } from './printable-quiz-section-item';
 
 @NgModule({
   exports: [
@@ -133,6 +134,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     QuestionBankDetailComponent,
     PrintableQuizComponent,
     PrintableQuizSectionComponent,
+    PrintableQuizSectionItemComponent,
     AboutComponent,
   ],
   entryComponents: [
