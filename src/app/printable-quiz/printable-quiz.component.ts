@@ -404,9 +404,27 @@ export class PrintableQuizComponent implements OnInit {
           if (i === 0) {
             finformat += numlist[i].toString();
           } else {
-            finformat += (arops[i - 1] + numlist[i].toString());
-            if (math.eval(finformat) < 0) {
+            finformat += ((arops[i - 1] === 'X' ? '*' : arops[i - 1]) + numlist[i].toString());
+
+            const midrst = math.eval(finformat);
+            if (midrst < 0) {
               bneg = true;
+              break;
+            } else {
+              const midrststring = midrst.toString();
+              const dotidx = midrststring.indexOf('.');
+              if (dcmplace > 0) {
+                if (dotidx === -1
+                  || (dotidx !== -1 && midrststring.length > dotidx + dcmplace + 1)) {
+                  bneg = true;
+                  break;
+                }
+              } else {
+                if (dotidx !== -1) {
+                  bneg = true;
+                  break;
+                }
+              }
             }
           }
         }
@@ -415,7 +433,6 @@ export class PrintableQuizComponent implements OnInit {
           const rst = math.eval(finformat);
           numlist.push(rst);
           arops.push('=');
-          console.log(finformat + '=' + rst.toString());
 
           const arformat: any[] = [];
 
