@@ -169,7 +169,13 @@
     "PrintSetting": "打印设置",
     "Next": "下一步",
     "Previous": "上一步",
-    "PrintPreview": "打印预览"
+    "PrintPreview": "打印预览",
+    "GeneratePDF": "生成PDF文件",
+    "InvalidMixOperators": "无效的预算符，请选择两个以上的运算符",
+    "InvalidQuizAmount": "无效的习题数量，请确保总习题数量大于0",
+    "InvalidNumberRange": "无效的数字范围",
+    "InvalidNumberOfCopy": "无效的拷贝份数，请输入一个正数",
+    "InvalidFontSize": "无效的字体大小，请输入一个10-30之间的数值"
   },
   "Math": {
     "Sum": "和",
