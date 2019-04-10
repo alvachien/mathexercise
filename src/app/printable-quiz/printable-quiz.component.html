@@ -28,6 +28,10 @@
               <mat-option *ngFor="let op of mixOpList" [value]="op">{{op}}</mat-option>
             </mat-select>
           </mat-form-field>
+          <mat-form-field class="control-full-width">
+            <input matInput type="number" placeholder="{{'Home.FractionExercises' | translate}}"
+            formControlName="amountFractCtrl">
+          </mat-form-field>
           <div class="control-full-width">
             <mat-slide-toggle formControlName="randomInputCtrl">
               {{'Home.RandomizeInputPosition' | translate}}
@@ -143,6 +147,22 @@
                 <div *ngIf="quiz.length > 1">
                   <app-printable-quiz-section-item [quizSection]="quiz[1]" [arPlaceHolder]="arPlaceHolder">        
                   </app-printable-quiz-section-item>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="arFractQuizFinal && arFractQuizFinal.length > 0">
+            <p style="padding-left: 15px;">{{'Home.FractionExercises' | translate}}</p>
+            <div fxLayout="row" fxLayoutAlign="space-around center" *ngFor="let quiz of arFractQuizFinal">
+              <div fxFlex="48" style="padding-top: 2px; padding-bottom: 2px;">
+                <div *ngIf="quiz.length > 0">
+                  <ng-katex [equation]="quiz[0]"></ng-katex>
+                </div>
+              </div>
+              <div fxFlex="48" style="padding-top: 2px; padding-bottom: 2px;">
+                <div *ngIf="quiz.length > 1">
+                  <ng-katex [equation]="quiz[1]"></ng-katex>
                 </div>
               </div>
             </div>

@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, ValidatorFn, ValidationErrors, Validators, } from '@angular/forms';
 import { MatHorizontalStepper, MatSnackBar } from '@angular/material';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import { generateNumber } from '../model';
 import * as jsPDF from 'jspdf';
 import * as html2canvas from 'html2canvas';
 import * as math from 'mathjs';
@@ -23,6 +24,7 @@ export class PrintableQuizComponent implements OnInit {
   arSubQuizFinal: any[] = [];
   arMulQuizFinal: any[] = [];
   arMixOpQuizFinal: any[] = [];
+  arFractQuizFinal: any[] = [];
 
   get amountMixOp(): number {
     return this.contentFormGroup.get('amountMixOpCtrl') && +this.contentFormGroup.get('amountMixOpCtrl').value;
@@ -57,6 +59,7 @@ export class PrintableQuizComponent implements OnInit {
       amountSubCtrl: new FormControl(),
       amountMulCtrl: new FormControl(),
       amountMixOpCtrl: new FormControl(),
+      amountFractCtrl: new FormControl(),
       mixOpsCtrl: new FormControl(['+', '-']),
       randomInputCtrl: new FormControl(true),
       decimalPlacesCtrl: new FormControl(),
@@ -80,9 +83,10 @@ export class PrintableQuizComponent implements OnInit {
     const subamt: number = +group.get('amountSubCtrl').value;
     const mulamt: number = +group.get('amountMulCtrl').value;
     const mopamt: number = +group.get('amountMixOpCtrl').value;
+    const frtamt: number = +group.get('amountFractCtrl').value;
     const mops: any[] = group.get('mixOpsCtrl').value;
-    if ((addamt <= 0 && subamt <= 0 && mulamt <= 0 && mopamt <= 0)
-      || (addamt + subamt + mulamt + mopamt) <= 0) {
+    if ((addamt <= 0 && subamt <= 0 && mulamt <= 0 && mopamt <= 0 && frtamt <= 0)
+      || (addamt + subamt + mulamt + mopamt + frtamt) <= 0) {
       return { invalidamount: true };
     }
     if (mopamt > 0) {
@@ -122,6 +126,7 @@ export class PrintableQuizComponent implements OnInit {
     const subamt: number = +this.contentFormGroup.get('amountSubCtrl').value;
     const mulamt: number = +this.contentFormGroup.get('amountMulCtrl').value;
     const mopamt: number = +this.contentFormGroup.get('amountMixOpCtrl').value;
+    const frtamt: number = +this.contentFormGroup.get('amountFractCtrl').value;
     const bgnnr: number = +this.contentFormGroup.get('numberBeginCtrl').value;
     const endnr: number = +this.contentFormGroup.get('numberEndCtrl').value;
     const dcmplace: number = +this.contentFormGroup.get('decimalPlacesCtrl').value;
@@ -138,6 +143,8 @@ export class PrintableQuizComponent implements OnInit {
     this._generateMulQuizs(mulamt, endnr, bgnnr, dcmplace, randminput);
     // Mixed operators
     this._generateMixOpQuiz(mopamt, endnr, bgnnr, dcmplace, randminput, this.contentFormGroup.get('mixOpsCtrl').value);
+    // Fraction
+    this._generatFractQuiz(frtamt, endnr, bgnnr);
   }
 
   public onGenerate(): void {
@@ -255,8 +262,8 @@ export class PrintableQuizComponent implements OnInit {
     if (mulamt > 0) {
       idx = 0;
       do {
-        const rnum1 = this._generateNumber(endnr, bgnnr, dcmplace);
-        const rnum2 = this._generateNumber(endnr, bgnnr, dcmplace);
+        const rnum1 = generateNumber(endnr, bgnnr, dcmplace);
+        const rnum2 = generateNumber(endnr, bgnnr, dcmplace);
 
         if (randminput) {
           let rnum3 = rnum1 * rnum2;
@@ -295,8 +302,8 @@ export class PrintableQuizComponent implements OnInit {
     if (subamt > 0) {
       idx = 0;
       do {
-        let rnum1 = this._generateNumber(endnr, bgnnr, dcmplace);
-        let rnum2 = this._generateNumber(endnr, bgnnr, dcmplace);
+        let rnum1 = generateNumber(endnr, bgnnr, dcmplace);
+        let rnum2 = generateNumber(endnr, bgnnr, dcmplace);
 
         if (randminput) {
           let rnum3 = rnum1 - rnum2;
@@ -342,8 +349,8 @@ export class PrintableQuizComponent implements OnInit {
     if (addamt > 0) {
       idx = 0;
       do {
-        const rnum1 = this._generateNumber(endnr, bgnnr, dcmplace);
-        const rnum2 = this._generateNumber(endnr, bgnnr, dcmplace);
+        const rnum1 = generateNumber(endnr, bgnnr, dcmplace);
+        const rnum2 = generateNumber(endnr, bgnnr, dcmplace);
 
         if (randminput) {
           let rnum3 = rnum1 + rnum2;
@@ -391,7 +398,7 @@ export class PrintableQuizComponent implements OnInit {
 
         // Prepare the number list and operation list
         for (let i = 0; i <= oplist.length; i++) {
-          numlist.push(this._generateNumber(endnr, bgnnr, dcmplace));
+          numlist.push(generateNumber(endnr, bgnnr, dcmplace));
         }
         arops.push(...oplist);
         // Randomize the operation list
@@ -472,16 +479,30 @@ export class PrintableQuizComponent implements OnInit {
     }
   }
 
-  // Generate a number
-  private _generateNumber(endnr: number, bgnnr: number, dcmplace: number) {
-    let rnum1 = Math.random() * (endnr - bgnnr) + bgnnr;
-    if (dcmplace > 0) {
-      rnum1 = parseFloat(rnum1.toFixed(dcmplace));
-    } else {
-      rnum1 = Math.round(rnum1);
+  private _generatFractQuiz(frtamt: number, endnr: number, bgnnr: number) {
+    const arFractQuiz: any[] = [];
+
+    if (frtamt > 0) {
+      do {
+        const mid = Math.round((endnr - bgnnr) / 2);
+        const num1 = generateNumber(mid, bgnnr, 0);
+        const num2 = generateNumber(endnr, mid, 0);
+        const num3 = generateNumber(mid, bgnnr, 0);
+        const num4 = generateNumber(endnr, mid, 0);
+        arFractQuiz.push('{' + num1.toString() + ' \\over ' + num2.toString() + ' }' + '+' 
+          + '{' + num3.toString() + ' \\over ' + num4.toString() + ' } = ');
+      } while (arFractQuiz.length < frtamt);
+
+      for (let i = 0; i < frtamt; i += 2) {
+        if (i < frtamt - 1) {
+          this.arFractQuizFinal.push([arFractQuiz[i], arFractQuiz[i + 1]]);
+        } else {
+          this.arFractQuizFinal.push([arFractQuiz[i]]);
+        }
+      }
     }
-    return rnum1;
   }
+
   private _shuffleArray(arr: any[]) {
     let i = 0
       , j = 0

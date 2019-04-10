@@ -16,3 +16,4 @@ export * from './puzzlegamequiz';
 export * from './award';
 export * from './dictation';
 export * from './uicommon';
+export * from './mathutility';
