@@ -30,7 +30,7 @@
           </mat-form-field>
           <mat-form-field class="control-full-width">
             <input matInput type="number" placeholder="{{'Home.FractionExercises' | translate}}"
-            formControlName="amountFractCtrl">
+              formControlName="amountFractCtrl">
           </mat-form-field>
           <div class="control-full-width">
             <mat-slide-toggle formControlName="randomInputCtrl">
@@ -169,6 +169,7 @@
           </div>
         </div>
 
+        <mat-divider></mat-divider>
         <div>
           <button mat-button matStepperPrevious>{{'Home.Previous' | translate}}</button>
           <button mat-button (click)="onReset()" color="warning">{{'Home.Reset' | translate}}</button>

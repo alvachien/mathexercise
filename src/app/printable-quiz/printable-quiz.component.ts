@@ -484,13 +484,16 @@ export class PrintableQuizComponent implements OnInit {
 
     if (frtamt > 0) {
       do {
-        const mid = Math.round((endnr - bgnnr) / 2);
-        const num1 = generateNumber(mid, bgnnr, 0);
-        const num2 = generateNumber(endnr, mid, 0);
-        const num3 = generateNumber(mid, bgnnr, 0);
-        const num4 = generateNumber(endnr, mid, 0);
-        arFractQuiz.push('{' + num1.toString() + ' \\over ' + num2.toString() + ' }' + '+' 
-          + '{' + num3.toString() + ' \\over ' + num4.toString() + ' } = ');
+        const num1 = generateNumber(endnr, bgnnr, 0);
+        const num2 = generateNumber(endnr, bgnnr, 0);
+        const num3 = generateNumber(endnr, bgnnr, 0);
+        const num4 = generateNumber(endnr, bgnnr, 0);
+        if (num1 !== 0 && num2 !== 0 && num3 !== 0 && num4 !== 0) {
+          arFractQuiz.push('{' + (num1 > num2 ? num2 : num1).toString() + ' \\over '
+            + (num1 > num2 ? num1 : num2).toString() + ' } + {'
+            + (num3 > num4 ? num4 : num3).toString() + ' \\over '
+            + (num3 > num4 ? num3 : num4).toString() + ' } = ');
+        }
       } while (arFractQuiz.length < frtamt);
 
       for (let i = 0; i < frtamt; i += 2) {
