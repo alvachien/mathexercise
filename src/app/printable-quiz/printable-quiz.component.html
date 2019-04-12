@@ -23,14 +23,14 @@
             <input matInput type="number" placeholder="{{'Home.MixedOperations' | translate}}"
             formControlName="amountMixOpCtrl">
           </mat-form-field>
-          <mat-form-field *ngIf="amountMixOp">
-            <mat-select placeholder="Operators" formControlName="mixOpsCtrl" multiple>
-              <mat-option *ngFor="let op of mixOpList" [value]="op">{{op}}</mat-option>
-            </mat-select>
-          </mat-form-field>
           <mat-form-field class="control-full-width">
             <input matInput type="number" placeholder="{{'Home.FractionExercises' | translate}}"
               formControlName="amountFractCtrl">
+          </mat-form-field>
+          <mat-form-field *ngIf="amountMixOp || amountFract">
+            <mat-select placeholder="{{'Home.Operator' | translate}}" formControlName="mixOpsCtrl" multiple>
+              <mat-option *ngFor="let op of mixOpList" [value]="op">{{op}}</mat-option>
+            </mat-select>
           </mat-form-field>
           <div class="control-full-width">
             <mat-slide-toggle formControlName="randomInputCtrl">

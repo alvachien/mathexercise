@@ -87,6 +87,7 @@
     "YouWin": "你赢了",
     "YouLose": "你输了",
     "NumberOfOperators": "操作符数量",
+    "Operator": "操作符",
     "AllowNegative": "允许运算过程和结果中有负数",
     "AllowDecimal": "允许运算过程和结果中有小数",
     "Result": "结果",

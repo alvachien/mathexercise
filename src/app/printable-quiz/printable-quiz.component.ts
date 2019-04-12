@@ -29,6 +29,9 @@ export class PrintableQuizComponent implements OnInit {
   get amountMixOp(): number {
     return this.contentFormGroup.get('amountMixOpCtrl') && +this.contentFormGroup.get('amountMixOpCtrl').value;
   }
+  get amountFract(): number {
+    return this.contentFormGroup.get('amountFractCtrl') && +this.contentFormGroup.get('amountFractCtrl').value;
+  }
   get fontSize(): number {
     return this.quizFormGroup && this.quizFormGroup.get('fontSizeCtrl') && +this.quizFormGroup.get('fontSizeCtrl').value;
   }
@@ -89,7 +92,7 @@ export class PrintableQuizComponent implements OnInit {
       || (addamt + subamt + mulamt + mopamt + frtamt) <= 0) {
       return { invalidamount: true };
     }
-    if (mopamt > 0) {
+    if (mopamt > 0 || frtamt > 0) {
       if (mops.length <= 1) {
         return { invalidmixoperators: true };
       }
@@ -144,7 +147,7 @@ export class PrintableQuizComponent implements OnInit {
     // Mixed operators
     this._generateMixOpQuiz(mopamt, endnr, bgnnr, dcmplace, randminput, this.contentFormGroup.get('mixOpsCtrl').value);
     // Fraction
-    this._generatFractQuiz(frtamt, endnr, bgnnr);
+    this._generatFractQuiz(frtamt, endnr, bgnnr, this.contentFormGroup.get('mixOpsCtrl').value);
   }
 
   public onGenerate(): void {
@@ -195,46 +198,42 @@ export class PrintableQuizComponent implements OnInit {
 
   private _pdfFileGenerate() {
     const target: any = document.getElementById('id_result');
-    const width = target.offsetWidth; // 获取dom 宽度
-    const height = target.offsetHeight; // 获取dom 高度
-    const canvas = document.createElement('canvas'); // 创建一个canvas节点
-    const scale = 2; // 定义任意放大倍数 支持小数
-    canvas.width = width * scale; // 定义canvas 宽度 * 缩放
-    canvas.height = height * scale; // 定义canvas高度 *缩放
-    canvas.getContext('2d').scale(scale, scale); // 获取context,设置scale
+    const width = target.offsetWidth;
+    const height = target.offsetHeight;
+
+    // Create a canvas
+    const canvas = document.createElement('canvas');
+    const scale = 2;
+    canvas.width = width * scale;
+    canvas.height = height * scale;
+    canvas.getContext('2d').scale(scale, scale);
     const opts: any = {
       scale: scale,
       canvas: canvas,
-      // logging: true, //日志开关，便于查看html2canvas的内部执行流程
+      // logging: true,
       width: width,
       height: height,
-      useCORS: true // 【重要】开启跨域配置
+      useCORS: true
     };
     html2canvas(target, opts).then((canvas2: any) => {
       const context: any = canvas2.getContext('2d');
-      // 【重要】关闭抗锯齿
       // context.mozImageSmoothingEnabled = false;
       // context.webkitImageSmoothingEnabled = false;
       // context.msImageSmoothingEnabled = false;
       context.imageSmoothingEnabled = false;
-      // // 【重要】默认转化的格式为png,也可设置为其他格式
       // var img = Canvas2Image.convertToJPEG(canvas, canvas.width, canvas.height);
       const contentWidth = canvas2.width;
       const contentHeight = canvas2.height;
-      // 一页pdf显示html页面生成的canvas高度;
       const pageHeight = contentWidth / 592.28 * 841.89;
-      // 未生成pdf的html页面高度
       let leftHeight = contentHeight;
-      // 页面偏移
       let position = 0;
-      // A4纸的尺寸[595.28, 841.89]，html页面生成的canvas在pdf中图片的宽高
+      // A4 - [595.28, 841.89]
       const imgWidth = 595.28;
       const imgHeight = 592.28 / contentWidth * contentHeight;
       const pageData = canvas2.toDataURL('image/jpeg', 1.0);
       const pdf = new jsPDF('', 'pt', 'a4');
       // pdf.setFontSize(this.fontSize);
-      // 有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
-      // 当内容未超过pdf一页显示的范围，无需分页
+
       if (leftHeight < pageHeight) {
         pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight);
       } else {
@@ -242,7 +241,7 @@ export class PrintableQuizComponent implements OnInit {
           pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight);
           leftHeight -= pageHeight;
           position -= 841.89;
-          // 避免添加空白页
+
           if (leftHeight > 0) {
             pdf.addPage();
           }
@@ -479,18 +478,23 @@ export class PrintableQuizComponent implements OnInit {
     }
   }
 
-  private _generatFractQuiz(frtamt: number, endnr: number, bgnnr: number) {
+  private _generatFractQuiz(frtamt: number, endnr: number, bgnnr: number, oplist: string[]) {
     const arFractQuiz: any[] = [];
 
     if (frtamt > 0) {
+
       do {
         const num1 = generateNumber(endnr, bgnnr, 0);
         const num2 = generateNumber(endnr, bgnnr, 0);
         const num3 = generateNumber(endnr, bgnnr, 0);
         const num4 = generateNumber(endnr, bgnnr, 0);
+        const randop: number = Math.floor(Math.random() * oplist.length);
+        console.log(randop);
+
         if (num1 !== 0 && num2 !== 0 && num3 !== 0 && num4 !== 0) {
           arFractQuiz.push('{' + (num1 > num2 ? num2 : num1).toString() + ' \\over '
-            + (num1 > num2 ? num1 : num2).toString() + ' } + {'
+            + (num1 > num2 ? num1 : num2).toString() + ' } '
+            + oplist[randop] + ' {'
             + (num3 > num4 ? num4 : num3).toString() + ' \\over '
             + (num3 > num4 ? num3 : num4).toString() + ' } = ');
         }

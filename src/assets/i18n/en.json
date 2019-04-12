@@ -87,6 +87,7 @@
     "YouWin": "You Win",
     "YouLose": "You Lose",
     "NumberOfOperators": "Number of operators",
+    "Operator": "Operator",
     "AllowNegative": "Allow Negative",
     "AllowDecimal": "Allow Decimal",
     "Result": "Result",
