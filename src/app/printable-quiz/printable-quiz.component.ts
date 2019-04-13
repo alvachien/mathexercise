@@ -134,10 +134,7 @@ export class PrintableQuizComponent implements OnInit {
     const endnr: number = +this.contentFormGroup.get('numberEndCtrl').value;
     const dcmplace: number = +this.contentFormGroup.get('decimalPlacesCtrl').value;
     const randminput: boolean = this.contentFormGroup.get('randomInputCtrl').value;
-    this.arAddQuizFinal = [];
-    this.arSubQuizFinal = [];
-    this.arMulQuizFinal = [];
-    this.arMixOpQuizFinal = [];
+
     // Add.
     this._generateAddQuizs(addamt, endnr, bgnnr, dcmplace, randminput);
     // Sub.
@@ -256,6 +253,8 @@ export class PrintableQuizComponent implements OnInit {
   }
 
   private _generateMulQuizs(mulamt: number, endnr: number, bgnnr: number, dcmplace: number, randminput: boolean) {
+    this.arMulQuizFinal = [];
+
     const arMulQuiz: any[] = [];
     let idx = 0;
     if (mulamt > 0) {
@@ -296,6 +295,8 @@ export class PrintableQuizComponent implements OnInit {
   }
 
   private _generateSubQuizs(subamt: number, endnr: number, bgnnr: number, dcmplace: number, randminput: boolean) {
+    this.arSubQuizFinal = [];
+
     const arSubQuiz: any[] = [];
     let idx = 0;
     if (subamt > 0) {
@@ -342,6 +343,8 @@ export class PrintableQuizComponent implements OnInit {
   }
 
   private _generateAddQuizs(addamt: number, endnr: number, bgnnr: number, dcmplace: number, randminput: boolean) {
+    this.arAddQuizFinal = [];
+
     const arAddQuiz: any[] = [];
     let idx = 0;
 
@@ -384,6 +387,7 @@ export class PrintableQuizComponent implements OnInit {
 
   private _generateMixOpQuiz(mixamt: number, endnr: number, bgnnr: number, dcmplace: number, randminput: boolean,
       oplist: string[]) {
+    this.arMixOpQuizFinal = [];
     if (oplist.length <= 0) {
       return;
     }
@@ -444,7 +448,7 @@ export class PrintableQuizComponent implements OnInit {
 
           let nRandom = -1;
           if (randminput) {
-            nRandom = Math.round(Math.random() * numlist.length);
+            nRandom = Math.floor(Math.random() * numlist.length);
           }
 
           for (let i = 0; i < numlist.length; i++) {
@@ -479,6 +483,8 @@ export class PrintableQuizComponent implements OnInit {
   }
 
   private _generatFractQuiz(frtamt: number, endnr: number, bgnnr: number, oplist: string[]) {
+    this.arFractQuizFinal = [];
+
     const arFractQuiz: any[] = [];
 
     if (frtamt > 0) {
@@ -494,7 +500,7 @@ export class PrintableQuizComponent implements OnInit {
         if (num1 !== 0 && num2 !== 0 && num3 !== 0 && num4 !== 0) {
           arFractQuiz.push('{' + (num1 > num2 ? num2 : num1).toString() + ' \\over '
             + (num1 > num2 ? num1 : num2).toString() + ' } '
-            + oplist[randop] + ' {'
+            + (oplist[randop] === 'X' ? '\\times' : oplist[randop]) + ' {'
             + (num3 > num4 ? num4 : num3).toString() + ' \\over '
             + (num3 > num4 ? num3 : num4).toString() + ' } = ');
         }

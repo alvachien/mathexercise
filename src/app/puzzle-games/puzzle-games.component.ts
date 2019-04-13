@@ -15,6 +15,7 @@ import { DialogService } from '../services/dialog.service';
 import { PgSummaryDlgInfo, PgSummaryDlgComponent } from '../pg-summary-dlg';
 import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } from '../message-dialog';
 import { QuizService } from '../services/quiz.service';
+import * as math from 'mathjs';
 
 /**
  * UI for degree of difficulity
@@ -267,7 +268,7 @@ export class PuzzleGamesComponent implements OnInit {
     try {
       let realstring = this.Cal24Input.replace('×', '*');
       realstring = realstring.replace('÷', '/');
-      rst = <number>eval(realstring);
+      rst = <number>math.eval(realstring);
     } catch (exp) {
       errmsg = exp.toString();
     }
@@ -379,7 +380,7 @@ export class PuzzleGamesComponent implements OnInit {
       this._dialog.open(PgSummaryDlgComponent, {
         width: '500px',
         data: di
-      }).afterClosed().subscribe((x) => {
+      }).afterClosed().subscribe((x2: any) => {
         if (di.haveARetry) {
           this.OnCal24Start();
         }

@@ -3,5 +3,9 @@
     <mat-card-title>{{'Home.QuestionBank' | translate}}</mat-card-title>
   </mat-card-header>
   <mat-card-content>
+    <div *ngFor="let qtn of arQuestions">
+      <div>{{qtn.question}}</div>
+      <!-- <div>{{qtn.answer}}</div> -->
+    </div>
   </mat-card-content>
 </mat-card>
