@@ -10,7 +10,6 @@ import * as moment from 'moment';
 import 'moment/locale/zh-cn';
 import { DateAdapter } from '@angular/material';
 import { Observable, forkJoin, Subscription } from 'rxjs';
-import { map, merge, startWith } from 'rxjs/operators';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
 
@@ -45,6 +44,10 @@ export class Home {
   getBackgroundImage() {
     return this._sanitizer.bypassSecurityTrustStyle('url(' + this.backgroundimage + ')');
   }
+
+  // get backgroundImage(): string {
+  //   // return this._sanitizer.bypassSecurityTrustStyle('url(' + this.backgroundimage + ')');
+  // }
 }
 
 @Component({

@@ -2,7 +2,7 @@
   <mat-card-header>
     <mat-card-title>{{'Home.HomePage' | translate}}</mat-card-title>
   </mat-card-header>
-  <!-- <img mat-card-image src="{{getBackgroundImage()}}" alt="Photos"> -->
+  <img mat-card-image [src]="backgroundimage" alt="Photos">
   <mat-card-content>
     <div class="mat-headline">{{'Home.WelcomeTitle' | translate}}</div>
     <p class="mat-body">{{'Home.WelcomeDetail' | translate}}</p>
