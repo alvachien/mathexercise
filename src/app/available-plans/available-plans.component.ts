@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, AfterViewInit, Input } from '@angular/core';
-import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { AwardPlan, QuizTypeEnum, QuizTypeEnum2UIString, LogLevel, DateFormat, UserDetailInfo, UIMode } from '../model';
 import { AwardPlanService, QuizAttendUser, UserDetailService, DialogService, AuthService, NavigationService } from '../services';

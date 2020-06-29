@@ -1,7 +1,7 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, DivisionQuizItem,
   DefaultQuizAmount, DefaultFailedQuizFactor, QuizTypeEnum, LogLevel, PrimarySchoolMathFAOControl } from '../model';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogService } from '../services/dialog.service';
 import { NavigationService } from '../services/navigation.service';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
@@ -14,7 +14,7 @@ import {
   animate,
   transition
 } from '@angular/animations';
-import { PageEvent } from '@angular/material';
+import { PageEvent } from '@angular/material/paginator';
 import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } from '../message-dialog';
 import { environment } from '../../environments/environment';
 

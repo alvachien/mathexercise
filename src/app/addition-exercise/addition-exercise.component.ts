@@ -3,9 +3,9 @@ import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, AdditionQuizItem,
   DefaultQuizAmount, DefaultFailedQuizFactor, QuizTypeEnum,
   LogLevel, UserAuthInfo, PrimarySchoolMathFAOControl
 } from '../model';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { PageEvent } from '@angular/material';
+import { PageEvent } from '@angular/material/paginator';
 import { DialogService } from '../services/dialog.service';
 import { NavigationService } from '../services/navigation.service';
 import { QuizSummaryComponent } from '../quiz-summary/quiz-summary.component';

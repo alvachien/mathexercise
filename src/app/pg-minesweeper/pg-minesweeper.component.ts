@@ -5,7 +5,7 @@ import {
 } from '../model';
 import { MatrixPosIntf } from 'actslib';
 import { environment } from '../../environments/environment';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 enum MineSweeperCellType {
   // Blank = 0

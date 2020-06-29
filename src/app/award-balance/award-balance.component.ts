@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
-import { MatDialog, MatPaginator } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { Observable, merge } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { environment } from '../../environments/environment';

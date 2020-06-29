@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { AwardBalanceComponent } from './award-balance.component';
 import { DSMaterialModule } from "../app.module";
 import { DialogService } from '../services/dialog.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { BrowserModule } from '@angular/platform-browser';

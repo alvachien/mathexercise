@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../services/auth.service';
 import { DialogService } from '../services/dialog.service';

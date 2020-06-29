@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef, AfterContentInit, NgZone, OnInit, HostListener, ViewChildren, QueryList, Renderer2 } from '@angular/core';
-import { MatTabChangeEvent } from '@angular/material';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import {
   RPN, SudouUnit, Sudou, generateValidSudou, SudouSize,
   PrimarySchoolMathQuiz, QuizTypeEnum, PrimarySchoolMathQuizItem, QuizBasicControl,

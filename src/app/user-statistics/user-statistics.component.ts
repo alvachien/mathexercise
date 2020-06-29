@@ -11,7 +11,9 @@ import { BehaviorSubject, Observable, merge } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { QuizAttendUser, UserDetailService } from '../services/userdetail.service';
 import { DataSource } from '@angular/cdk/collections';
-import { MatDialog, MatPaginator, MatSort } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import * as moment from 'moment';
 
 @Component({

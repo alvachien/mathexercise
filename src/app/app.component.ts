@@ -8,7 +8,7 @@ import { environment } from '../environments/environment';
 import { LogLevel, AppLanguage, AppNavItem, AppNavItemGroupEnum } from './model';
 import * as moment from 'moment';
 import 'moment/locale/zh-cn';
-import { DateAdapter } from '@angular/material';
+import { DateAdapter } from '@angular/material/core';
 import { Observable, forkJoin, Subscription } from 'rxjs';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';

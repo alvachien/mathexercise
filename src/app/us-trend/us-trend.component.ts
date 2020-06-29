@@ -9,7 +9,9 @@ import {
 } from '../model';
 import { AuthService, QuizAttendUser, UserDetailService } from '../services';
 import { environment } from '../../environments/environment';
-import { MatDialog, MatPaginator, MatSort } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { Observable, forkJoin, BehaviorSubject } from 'rxjs';
 import * as moment from 'moment';
 import { map, merge, startWith } from 'rxjs/operators';

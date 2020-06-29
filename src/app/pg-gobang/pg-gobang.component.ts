@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter, AfterContentInit,
   HostListener } from '@angular/core';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { PrimarySchoolMathQuiz, QuizTypeEnum, PrimarySchoolMathQuizItem, CanvasCellPositionInf, 
   Cal24QuizItem, LogLevel, QuizDegreeOfDifficulity, Gobang, getCanvasMouseEventPosition, getCanvasCellPosition
 } from '../model';

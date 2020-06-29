@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PgGobangComponent } from './pg-gobang.component';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgModule } from '@angular/core';
 
 describe('PgGobangComponent', () => {

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, ValidatorFn, ValidationErrors, Validators, } from '@angular/forms';
-import { MatHorizontalStepper, MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatHorizontalStepper } from '@angular/material/stepper';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { generateNumber } from '../model';
 import * as jsPDF from 'jspdf';

@@ -3,14 +3,14 @@ import { PrimarySchoolMathQuiz, PrimarySchoolMathQuizSection, MultiplicationQuiz
   DefaultQuizAmount, DefaultFailedQuizFactor, QuizTypeEnum,
   LogLevel, UserAuthInfo, PrimarySchoolMathFAOControl
 } from '../model';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogService } from '../services/dialog.service';
 import { NavigationService } from '../services/navigation.service';
 import { QuizFailureDlgComponent } from '../quiz-failure-dlg/quiz-failure-dlg.component';
 import { QuizSummaryComponent } from '../quiz-summary/quiz-summary.component';
 import { Router } from '@angular/router';
 import { slideInOutAnimation } from '../animation';
-import { PageEvent } from '@angular/material';
+import { PageEvent } from '@angular/material/paginator';
 import { environment } from '../../environments/environment';
 import { MessageDialogButtonEnum, MessageDialogInfo, MessageDialogComponent } from '../message-dialog';
 
