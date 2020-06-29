@@ -1,7 +1,4 @@
-import {
-  Component, ViewChild, ElementRef, AfterContentInit, OnDestroy, NgZone, Input, Output,
-  OnInit, Renderer, HostListener, EventEmitter
-} from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterContentInit, OnDestroy, NgZone, Input, Output, OnInit, HostListener, EventEmitter, Renderer2 } from '@angular/core';
 import {
   RPN, SudouUnit, Sudou, generateValidSudou, SudouSize,
   PrimarySchoolMathQuiz, QuizTypeEnum, PrimarySchoolMathQuizItem,

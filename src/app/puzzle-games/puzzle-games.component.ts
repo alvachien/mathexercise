@@ -1,7 +1,4 @@
-import {
-  Component, ViewChild, ElementRef, AfterContentInit, NgZone,
-  OnInit, Renderer, HostListener, ViewChildren, QueryList
-} from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterContentInit, NgZone, OnInit, HostListener, ViewChildren, QueryList, Renderer2 } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
