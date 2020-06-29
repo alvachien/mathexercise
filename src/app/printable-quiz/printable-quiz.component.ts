@@ -213,6 +213,7 @@ export class PrintableQuizComponent implements OnInit {
       height: height,
       useCORS: true
     };
+
     html2canvas(target, opts).then((canvas2: any) => {
       const context: any = canvas2.getContext('2d');
       // context.mozImageSmoothingEnabled = false;
@@ -417,7 +418,7 @@ export class PrintableQuizComponent implements OnInit {
           } else {
             finformat += ((arops[i - 1] === 'X' ? '*' : arops[i - 1]) + numlist[i].toString());
 
-            const midrst = math.eval(finformat);
+            const midrst = math.evaluate(finformat);
             if (midrst < 0) {
               bneg = true;
               break;
@@ -441,7 +442,7 @@ export class PrintableQuizComponent implements OnInit {
         }
 
         if (!bneg) {
-          const rst = math.eval(finformat);
+          const rst = math.evaluate(finformat);
           numlist.push(rst);
           arops.push('=');
 

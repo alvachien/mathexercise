@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
 import { DataSource } from '@angular/cdk/collections';
-import { TranslateService } from '@ngx-translate/core';
 import {
   QuizTypeEnum, PrimarySchoolMathQuizItem, QuizTypeEnum2UIString, LogLevel, APIQuizSection, APIQuizFailLog, APIQuiz,
   AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem, DateFormat, QuizTypeUI, DateRangeUI,
@@ -15,6 +14,8 @@ import { MatSort } from '@angular/material/sort';
 import { Observable, forkJoin, BehaviorSubject } from 'rxjs';
 import * as moment from 'moment';
 import { map, merge, startWith } from 'rxjs/operators';
+import { quantileSeq } from 'mathjs';
+import { translate } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-us-trend',
@@ -39,7 +40,6 @@ export class UsTrendComponent implements OnInit {
   viewGraph: any[] = [700, 400];
 
   constructor(private _http: HttpClient,
-    private _tranService: TranslateService,
     private _authService: AuthService,
     private _userDetailService: UserDetailService) {
     // Get Quiz type display string
@@ -50,15 +50,9 @@ export class UsTrendComponent implements OnInit {
     });
 
     // Translate for quiz type
-    this._tranService.get(arstrs).subscribe(x => {
-      for (const tran of x) {
-        for (const qtu of this.listqtype) {
-          if (tran === qtu.i18term) {
-            qtu.display = x[tran];
-          }
-        }
-      }
-    });
+    for (const qtu of this.listqtype) {
+      qtu.display = translate(qtu.i18term);
+    }
 
     // Get date range display tring
     this.listRanges = getAllStaticsDateRangeEnumStrings();

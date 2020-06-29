@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewEncapsulation, NgZone, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl, SafeUrl  } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from './services/auth.service';
 import { UserDetailService } from './services/userdetail.service';
 import { environment } from '../environments/environment';
@@ -82,7 +81,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   constructor(private _element: ElementRef,
-    private _translate: TranslateService,
     private _authService: AuthService,
     private _userDetailService: UserDetailService,
     private _zone: NgZone,
@@ -163,13 +161,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const deflang = 'zh';
-    this._translate.setDefaultLang(deflang);
-    this._translate.use(deflang).subscribe(() => {
-      this._selLanguage = deflang;
-      this._dateAdapter.setLocale('zh-cn');
-      this.updateDocumentTitle();
-    });
+    // const deflang = 'zh';
+    // this.updateDocumentTitle();
   }
 
   ngOnDestroy() {
@@ -226,25 +219,25 @@ export class AppComponent implements OnInit, OnDestroy {
     this.onLanguageChanged();
   }
   public onLanguageChanged(): void {
-    if (this._translate.currentLang !== this._selLanguage &&
-      this._selLanguage !== undefined) {
-      this._translate.use(this._selLanguage);
+    // if (this._translate.currentLang !== this._selLanguage &&
+    //   this._selLanguage !== undefined) {
+    //   this._translate.use(this._selLanguage);
 
-      if (this._selLanguage === 'zh') {
-        moment.locale('zh-cn');
-        this._dateAdapter.setLocale('zh-cn');
-      } else if (this._selLanguage === 'en') {
-        moment.locale('en');
-        this._dateAdapter.setLocale('en');
-      }
+    //   if (this._selLanguage === 'zh') {
+    //     moment.locale('zh-cn');
+    //     this._dateAdapter.setLocale('zh-cn');
+    //   } else if (this._selLanguage === 'en') {
+    //     moment.locale('en');
+    //     this._dateAdapter.setLocale('en');
+    //   }
 
-      this.updateDocumentTitle();
-    }
+    //   this.updateDocumentTitle();
+    // }
   }
 
   private updateDocumentTitle() {
-    this._translate.get('Home.AppTitle').subscribe(x => {
-      document.title = x;
-    });
+    // this._translate.get('Home.AppTitle').subscribe(x => {
+    //   document.title = x;
+    // });
   }
 }

@@ -17,7 +17,7 @@ const AuthSettings: any = {
   silent_redirect_uri: environment.AppLoginSlientRevewCallbackUrl,
   automaticSilentRenew: true,
   accessTokenExpiringNotificationTime: 4,
-  //silentRequestTimeout:10000,
+  // silentRequestTimeout:10000,
 
   filterProtocolClaims: true,
   loadUserInfo: true
@@ -52,8 +52,7 @@ export class AuthService {
 
         // Broadcast event
         that.userLoadededEvent.emit(u);
-      }
-      else {
+      } else {
         that.authSubject.value.cleanContent();
       }
 
@@ -65,7 +64,7 @@ export class AuthService {
       }
     });
 
-    this.mgr.events.addUserUnloaded((e) => {
+    this.mgr.events.addUserUnloaded(() => {
       if (environment.LoggingLevel >= LogLevel.Debug) {
         console.log('ACMathExercies Log [Debug]: User unloaded');
       }
@@ -74,12 +73,12 @@ export class AuthService {
       that.authSubject.next(that.authSubject.value);
     });
 
-    this.mgr.events.addAccessTokenExpiring(function () {
+    this.mgr.events.addAccessTokenExpiring(() => {
       if (environment.LoggingLevel >= LogLevel.Debug) {
         console.warn('ACMathExercies Log: token expiring');
       }
     });
-    this.mgr.events.addAccessTokenExpired(function () {
+    this.mgr.events.addAccessTokenExpired(() => {
       if (environment.LoggingLevel >= LogLevel.Debug) {
         console.error('ACMathExercies Log: token expired');
       }

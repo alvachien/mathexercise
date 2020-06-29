@@ -3,14 +3,15 @@ export const environment = {
   DebugLogging: false,
   LoggingLevel: 1, // Crash
   LoginRequired: true,
+  DefaultLanguage: 'zh',
 
-  IDServerUrl: 'http://118.178.58.187:5100',
-  APIBaseUrl: 'http://118.178.58.187:5330/api/',
-  AppLoginCallbackUrl: 'http://118.178.58.187:5230/logincallback.html',
-  AppLoginSlientRevewCallbackUrl: 'http://118.178.58.187:5230/silentrenewcallback.html',
-  AppLogoutCallbackUrl: 'http://118.178.58.187:5230',
-  AppHost: 'http://118.178.58.187:5230',
+  IDServerUrl: 'https://www.alvachien.com/idserver',
+  APIBaseUrl: 'https://www.alvachien.com/quizapi/api/',
+  AppLoginCallbackUrl: 'https://www.alvachien.com/math/logincallback.html',
+  AppLoginSlientRevewCallbackUrl: 'https://www.alvachien.com/math/silentrenewcallback.html',
+  AppLogoutCallbackUrl: 'https://www.alvachien.com/math',
+  AppHost: 'https://www.alvachien.com/math',
 
-  AppGallery: 'http://118.178.58.187:5210',
-  AppHIH: 'http://118.178.58.187:5200',
+  AppGallery: 'https://www.alvachien.com/gallery',
+  AppHIH: 'https://www.alvachien.com/hih',
 };

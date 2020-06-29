@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
 import { DataSource } from '@angular/cdk/collections';
-import { TranslateService } from '@ngx-translate/core';
 import {
   QuizTypeEnum, PrimarySchoolMathQuizItem, QuizTypeEnum2UIString, LogLevel, APIQuizSection, APIQuizFailLog, APIQuiz,
   AdditionQuizItem, SubtractionQuizItem, MultiplicationQuizItem, DivisionQuizItem, DateFormat, QuizTypeUI, DateRangeUI,
@@ -15,6 +14,8 @@ import { MatSort } from '@angular/material/sort';
 import { Observable, BehaviorSubject, from, of, merge } from 'rxjs';
 import { concatAll, every, last as lastValue, map, mergeAll } from 'rxjs/operators';
 import * as moment from 'moment';
+import { translate } from '@ngneat/transloco';
+import { quantileSeq } from 'mathjs';
 
 /**
  * Quiz data source
@@ -133,7 +134,6 @@ export class UsNormalComponent implements OnInit, AfterViewInit {
   dataItemAmountByType: any[] = [];
 
   constructor(private _http: HttpClient,
-    private _tranService: TranslateService,
     private _authService: AuthService,
     private _userDetailService: UserDetailService) {
     // Get Quiz type display string
@@ -144,31 +144,21 @@ export class UsNormalComponent implements OnInit, AfterViewInit {
     });
 
     // Translate for quiz type
-    this._tranService.get(arstrs).subscribe(x => {
-      if (x instanceof Array) {
-        for (const tran of x) {
-          for (const qtu of this.listqtype) {
-            if (tran === qtu.i18term) {
-              qtu.display = x[tran];
-            }
-          }
-        }
-      }
-    });
+    for (const qtu of this.listqtype) {
+      qtu.display = translate(qtu.i18term);
+    }
 
     // Get date range display tring
     this.listRanges = getAllStaticsDateRangeEnumStrings();
 
     // Other strings
     arstrs = ['Home.Amount', 'Home.Type', 'Home.Date', 'Home.CorrectedAmount', 'FailedAmount'];
-    this._tranService.get(arstrs).subscribe(x => {
-      this.xAxisLabelQuizAmountByDate = x['Home.Date'];
-      this.yAxisLabelQuizAmountByDate = x['Home.Amount'];
-      this.xAxisLabelItemAmountByDate = x['Home.Date'];
-      this.yAxisLabelItemAmountByDate = x['Home.Amount'];
-      this.xAxisLabelItemAmountByType = x['Home.Type'];
-      this.yAxisLabelItemAmountByType = x['Home.Amount'];
-    });
+    this.xAxisLabelQuizAmountByDate = translate('Home.Date');
+    this.yAxisLabelQuizAmountByDate = translate('Home.Amount');
+    this.xAxisLabelItemAmountByDate = translate('Home.Date');
+    this.yAxisLabelItemAmountByDate = translate('Home.Amount');
+    this.xAxisLabelItemAmountByType = translate('Home.Type');
+    this.yAxisLabelItemAmountByType = translate('Home.Amount');
 
     // Attended user
     this._userDetailService.fetchAllUsers().subscribe((listUsrs) => {

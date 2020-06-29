@@ -265,7 +265,7 @@ export class PuzzleGamesComponent implements OnInit {
     try {
       let realstring = this.Cal24Input.replace('×', '*');
       realstring = realstring.replace('÷', '/');
-      rst = <number>math.eval(realstring);
+      rst = <number>math.evaluate(realstring);
     } catch (exp) {
       errmsg = exp.toString();
     }

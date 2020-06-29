@@ -37,10 +37,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CdkTableModule } from '@angular/cdk/table';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { KatexModule } from 'ng-katex';
+import { TranslocoModule, translocoConfig, TRANSLOCO_CONFIG } from '@ngneat/transloco';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 
 import { AppRoutes } from './app.routes';
@@ -94,6 +93,7 @@ import { PrintableQuizSectionComponent } from './printable-quiz-section';
 import { PrintableQuizComponent } from './printable-quiz';
 import { AboutComponent } from './about';
 import { PrintableQuizSectionItemComponent } from './printable-quiz-section-item';
+import { environment } from 'environments/environment';
 
 @NgModule({
   exports: [
@@ -109,11 +109,6 @@ import { PrintableQuizSectionItemComponent } from './printable-quiz-section-item
   declarations: [],
 })
 export class DSMaterialModule { }
-
-// For translate
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-}
 
 @NgModule({
   declarations: [
@@ -173,13 +168,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgxChartsModule,
     HttpClientModule,
     KatexModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      }
-    })
+    TranslocoModule,
   ],
   providers: [
     MAT_DATE_LOCALE_PROVIDER,
@@ -196,6 +185,16 @@ export function HttpLoaderFactory(http: HttpClient) {
     PgService,
     ChessAiService,
     NavigationService,
+    {
+      provide: TRANSLOCO_CONFIG,
+      useValue: translocoConfig({
+        availableLangs: ['en', 'zh'],
+        defaultLang: environment.DefaultLanguage ? environment.DefaultLanguage : 'en',
+        reRenderOnLangChange: true,
+        prodMode: environment.production,
+      })
+    },
+    TranslocoModule,
   ],
   bootstrap: [AppComponent]
 })

@@ -1,6 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { HttpParams, HttpClient, HttpHeaders, HttpResponse, HttpRequest } from '@angular/common/http';
-import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../services/auth.service';
 import {
   QuizTypeEnum, PrimarySchoolMathQuizItem, QuizTypeEnum2UIString, LogLevel, APIQuizSection, APIQuizFailLog, APIQuiz,
@@ -29,7 +28,6 @@ export class UserStatisticsComponent implements OnInit, AfterViewInit {
   selectedView: number;
 
   constructor(private _http: HttpClient,
-    private _tranService: TranslateService,
     private _authService: AuthService,
     private _userDetailService: UserDetailService) {
     this.selectedView = 1;

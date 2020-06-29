@@ -3,6 +3,7 @@ export const environment = {
   DebugLogging: false,
   LoggingLevel: 1, // Crash
   LoginRequired: false,
+  DefaultLanguage: 'en',
 
   IDServerUrl: '',
   APIBaseUrl: '',
